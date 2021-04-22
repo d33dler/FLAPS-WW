@@ -1,2 +1,4 @@
-package nl.rug.oop.rpg;public class Room {
+package nl.rug.oop.rpg;
+
+public class Room {
 }

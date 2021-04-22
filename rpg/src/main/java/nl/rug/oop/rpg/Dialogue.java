@@ -1,2 +1,3 @@
-package nl.rug.oop.rpg;public class Dialogue {
+package nl.rug.oop.rpg;
+public class Dialogue {
 }

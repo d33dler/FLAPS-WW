@@ -1,4 +1,4 @@
 package nl.rug.oop.rpg;
 
-public class MMenu {
+public class Mainmenu {
 }

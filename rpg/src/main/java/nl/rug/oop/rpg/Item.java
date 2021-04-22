@@ -1,2 +1,3 @@
-package nl.rug.oop.rpg;public class Item {
+package nl.rug.oop.rpg;
+public class Item {
 }

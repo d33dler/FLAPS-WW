@@ -1,2 +1,3 @@
-package nl.rug.oop.rpg;public enum Materials {
+package nl.rug.oop.rpg;
+public enum Materials {
 }

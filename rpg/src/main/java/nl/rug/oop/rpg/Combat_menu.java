@@ -1,2 +1,4 @@
-package nl.rug.oop.rpg;public class Combat_menu {
+package nl.rug.oop.rpg;
+
+public class Combat_menu {
 }
