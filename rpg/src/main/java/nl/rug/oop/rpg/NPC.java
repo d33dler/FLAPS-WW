@@ -1,3 +1,6 @@
 package nl.rug.oop.rpg;
-public class NPC {
+
+public class NPC extends Entity {
+
+
 }

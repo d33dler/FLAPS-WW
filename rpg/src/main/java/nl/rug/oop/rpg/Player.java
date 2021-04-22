@@ -1,4 +1,5 @@
 package nl.rug.oop.rpg;
 
-public class Player {
+public class Player extends Entity{
+
 }
