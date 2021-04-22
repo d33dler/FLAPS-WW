@@ -1,18 +1,19 @@
 package nl.rug.oop.rpg;
-import java.security.SecureRandom;
 import java.util.List;
 
 public class Room {
     protected String color,atr;
     protected List<Door> doors;
     protected Item item;
+    protected WeaponsDb weapon;
     protected boolean obj, company;
 
-
-    private static final SecureRandom random = new SecureRandom();
-
-    public static <T extends Enum<?>> T randomEnum(Class<T> clazz){
-        int x = random.nextInt(clazz.getEnumConstants().length);
-        return clazz.getEnumConstants()[x];
+    enum days {
+        first("first"),
+        second("second");
+        private final String s;
+        days(String s) {
+            this.s = s;
+        }
     }
 }

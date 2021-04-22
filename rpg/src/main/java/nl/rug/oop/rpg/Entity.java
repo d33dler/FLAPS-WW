@@ -43,4 +43,6 @@ public abstract class Entity {
     public void setLocation(Room location) {
         this.location = location;
     }
+
+
 }
