@@ -3,19 +3,55 @@ package nl.rug.oop.rpg;
 public enum Materials {
 }
 
-enum ColorsDb {
-    red("red"),
-    blue("blue"),
-    black("black"),
-    gray("gray"),
-    cyan("cyan");
+enum DoorcolorsDb {
+    red(" red"),
+    blue(" blue"),
+    black(" black"),
+    gray(" gray"),
+    cyan(" cyan");
     private final String cname;
-    ColorsDb(String cname) {
+
+    DoorcolorsDb(String cname) {
         this.cname = cname;
     }
 
     public String getCname() {
         return cname;
+    }
+}
+
+enum Attr1room {
+    r(" ruined"),
+    l(" large"),
+    n(" narrow"),
+    wl(" well-lighted"),
+    d(" dark"),
+    s(" strange");
+
+    private final String att1;
+    Attr1room(String att1) {
+        this.att1 = att1;
+    }
+    public String getAtt1() {
+        return att1;
+    }
+}
+
+enum Attr2room {
+    r(" full of hi-tech operation tables"),
+    l(" with quantum computers"),
+    n(" and it's empty"),
+    wl(" with working stations"),
+    d(" with a pile of wires"),
+    s(" and there is a strong magnetic field here"),
+    s2(" and there is a strong magnetic field here, as well"),
+    s3(" and there is a strong magnetic field here. Lot's of them, eh?");
+    private final String att2;
+    Attr2room(String att2) {
+        this.att2 = att2;
+    }
+    public String getAtt2() {
+        return att2;
     }
 }
 
@@ -27,13 +63,16 @@ enum WeaponsDb {
     pl_gun("Plasma Gun", 28);
     private final String wname;
     private final int dmg;
+
     WeaponsDb(String wname, int dmg) {
         this.wname = wname;
         this.dmg = dmg;
     }//inspect constr application
+
     public String getWname() {
         return wname;
     }
+
     public int getDmg() {
         return dmg;
     }
@@ -47,19 +86,48 @@ enum ConsumablesDb {
     tp("Titanium", 11);
     private final String consid;
     private final int health;
+
     ConsumablesDb(String consid, int health) {
-        this.consid=consid;
-        this.health=health;
+        this.consid = consid;
+        this.health = health;
     }//inspect constructor app
 
     public String getConsid() {
         return consid;
     }
+
     public int getHealth() {
         return health;
     }
 }
 
-enum Species {
+enum SpeciesDb {
+    cyb("Cyborg doll", 40, 10),
+    sb("Sentry bot", 50, 12),
+    sent("Sentinel", 80, 24),
+    fl("Flesher", 18, 10);
+    private final String spname;
+    private final int damage, health;
+
+    SpeciesDb(String spname, int health, int damage) {
+        this.spname = spname;
+        this.health = health;
+        this.damage = damage;
+    }
+
+    public String getSpname() {
+        return spname;
+    }
+
+    public int getDamage() {
+        return damage;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+}
+
+enum Items {
 
 }

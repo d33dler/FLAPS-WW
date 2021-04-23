@@ -1,9 +1,11 @@
 package nl.rug.oop.rpg;
 
+import java.util.List;
+
 public abstract class Entity {
     protected String name;
     protected int health,damage,money;
-    protected Item[] inventory;
+    protected List<Item> inventory;
     protected Room location;
 
     public String getName() {
@@ -24,10 +26,10 @@ public abstract class Entity {
     public void setHealth(int health) {
         this.health = health;
     }
-    public Item[] getInventory() {
+    public List<Item> getInventory() {
         return inventory;
     }
-    public void setInventory(Item[] inventory) {
+    public void setInventory(List<Item> inventory) {
         this.inventory = inventory;
     }
     public void setDamage(int damage) {
@@ -39,10 +41,8 @@ public abstract class Entity {
     public Room getLocation() {
         return location;
     }
-
     public void setLocation(Room location) {
         this.location = location;
     }
-
 
 }

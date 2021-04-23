@@ -1,10 +1,13 @@
 package nl.rug.oop.rpg;
 
-public class Door {
-    protected Room exit,enter;
-    protected String color, atr;
-    protected boolean open, locked;
-    /** key- requires hashmap sharing key with door*/
+public class Door implements Inspectable{
+    protected Prmtdoor parameters;
 
+    public Door (Prmtdoor parameters){
+        this.parameters = parameters;
+    }
+    @Override
+    public void inspect() {
 
+    }
 }

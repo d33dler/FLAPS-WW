@@ -1,19 +1,22 @@
 package nl.rug.oop.rpg;
-import java.util.List;
+import java.util.*;
 
-public class Room {
-    protected String color,atr;
+public class Room implements Inspectable{
+    protected Attr1room atr1; //string might suffice, check
+    protected Attr2room atr2;
     protected List<Door> doors;
-    protected Item item;
-    protected WeaponsDb weapon;
-    protected boolean obj, company;
+    protected boolean company;
+    protected ConsumablesDb loot; //variety of loot wep/etc
+    protected NPC npc;
+    public void inspect() {
 
-    enum days {
-        first("first"),
-        second("second");
-        private final String s;
-        days(String s) {
-            this.s = s;
-        }
+    }
+
+    public Room (Prmtroom parameters){
+        this.atr1 = parameters.atr1;
+        this.atr2 = parameters.atr2;
+        this.doors = parameters.doors;
+        this.company = parameters.company;
+        this.loot = parameters.loot;
     }
 }
