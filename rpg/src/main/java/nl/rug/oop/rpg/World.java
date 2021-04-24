@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class World {
-    protected int links = 10;//edit for requirement
+    protected int links = 35;//edit for requirement
 
     protected Map<Room, List<Room>> roomConnects;
     private static final SecureRandom random = new SecureRandom();
@@ -44,6 +44,8 @@ public class World {
                 .create();
         out.doors.add(door); //these two might be redundant
         goin.doors.add(door);
+        out.cdors++;
+        goin.cdors++;
         map.roomConnects.get(out).add(goin);
         map.roomConnects.get(goin).add(out);
     }

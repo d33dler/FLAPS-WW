@@ -21,12 +21,12 @@ enum DoorcolorsDb {
 }
 
 enum Attr1room {
-    r(" ruined"),
-    l(" large"),
-    n(" narrow"),
-    wl(" well-lighted"),
-    d(" dark"),
-    s(" strange");
+    r(" ruined "),
+    l(" large "),
+    n(" narrow "),
+    wl(" well-lighted "),
+    d(" dark "),
+    s(" strange ");
 
     private final String att1;
     Attr1room(String att1) {
