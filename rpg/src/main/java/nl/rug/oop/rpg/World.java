@@ -5,7 +5,7 @@ import java.security.SecureRandom;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class World {
-    protected int links = 35;//edit for requirement
+    protected int links = 30;//edit for requirement
 
     protected Map<Room, List<Room>> roomConnects;
     private static final SecureRandom random = new SecureRandom();
@@ -77,7 +77,7 @@ public class World {
             //System.out.print("roomA att:" + rA.atr1.getAtt1()+ rA.atr2.getAtt2()); //debug
             Room rB = mutate.randomRoom(allrooms);
             //System.out.println("roomB att:" + rB.atr1.getAtt1() + rB.atr2.getAtt2());
-            if (!rA.id.equals(rB.id) && !map.roomConnects.get(rA).contains(rB)) {
+            if (!rA.id.equals(rB.id) && !map.roomConnects.get(rA).contains(rB)) { //self loop issue
                 if (rA.cdors < 3 && rB.cdors < 3) {
                     genDoor(rA, rB, map);
                     i++; //inspect process flow
