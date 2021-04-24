@@ -11,10 +11,12 @@ class Initroom extends Parameters {
     protected String id;
     protected Attr1room atr1; //string might suffice, check
     protected Attr2room atr2;
+    protected int ndors;
     protected List<Door> doors;
     protected boolean company;
     protected ConsumablesDb loot;
     protected SpeciesDb npc;
+
 
     public Initroom id(String id) {
         this.id = id;
@@ -24,6 +26,11 @@ class Initroom extends Parameters {
     public Initroom describe(Attr1room atr1, Attr2room atr2) {
         this.atr1 = atr1;
         this.atr2 = atr2;
+        return this;
+    }
+
+    public Initroom nrdors(int cdors) {
+        this.ndors = cdors;
         return this;
     }
 

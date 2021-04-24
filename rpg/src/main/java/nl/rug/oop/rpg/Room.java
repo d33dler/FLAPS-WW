@@ -6,6 +6,7 @@ public class Room implements Inspectable{
     protected String id;
     protected Attr1room atr1; //string might suffice, check
     protected Attr2room atr2;
+    protected int cdors;
     protected List<Door> doors;
     protected boolean company;
     protected ConsumablesDb loot; //variety of loot wep/etc
@@ -18,6 +19,7 @@ public class Room implements Inspectable{
         this.id = parameters.id;
         this.atr1 = parameters.atr1;
         this.atr2 = parameters.atr2;
+        this.cdors = parameters.ndors;
         this.doors = parameters.doors;
         this.company = parameters.company;
         this.loot = parameters.loot;

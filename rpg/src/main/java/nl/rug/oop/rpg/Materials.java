@@ -40,7 +40,7 @@ enum Attr1room {
 enum Attr2room {
     r(" full of hi-tech operation tables"),
     l(" with quantum computers"),
-    n(" and it's empty"),
+    n(" and it's almost empty"),
     wl(" with working stations"),
     d(" with a pile of wires"),
     s(" and there is a strong magnetic field here"),
