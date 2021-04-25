@@ -30,6 +30,7 @@ public class Mainmenu {
             Gameplay start = new Gameplay();
             start.Launch();
         } else {
+            rdtxt.close();
             System.exit(0);
         }
 
