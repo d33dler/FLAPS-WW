@@ -1,6 +1,7 @@
 package nl.rug.oop.rpg;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 public class Gameplay {
 
@@ -12,43 +13,87 @@ public class Gameplay {
         World morph = new World();
         World map = morph.createMap();
         List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
-
         Explore(map, player, listrm);
-
-
     }
 
     public void Explore(World map, Player player, List<Room> listrm) {
+        EnumMap<Explrptions, String> exoptns = Explrptions.getExmn();
+        HashMap<String, Mcommands> comms = new HashMap<>();
+        setComms(comms);
         player.location = listrm.get(0);
         Room r = listrm.get(0);
+        String input = "y";
         Scanner rdtxt = new Scanner(System.in);
-        Room check;
-        do {
-            System.out.println(" You are in a" + r.atr1.getAtt1() + "room" + r.atr2.getAtt2());
-            System.out.println(" There are " + r.cdors + " doors here ");
-            for (int i = 0; i < r.doors.size(); i++) {
-                System.out.println(" Door " + (i + 1) + " is " + r.doors.get(i).color);
+        Mcommands pick;
+        printExpmenu(exoptns);
+        while (!input.equals("exit")) {
+            input = rdtxt.nextLine();
+            pick = comms.get(input);
+            if (pick != null) {
+                pick.exec(player);
+                printExpmenu(exoptns);
             }
-            System.out.println(" Pick one");
-            int input = Integer.parseInt(rdtxt.nextLine());
-            check = r.doors.get(input).enter;
-            if(!check.id.equals(r.id)) {
-                r = r.doors.get(input).enter;
-            } else {
-                r = r.doors.get(input).exit;
-            }
-        } while (rdtxt.hasNextLine());
-        rdtxt.close();
-
-        for (int i = 0; i < r.doors.size(); i++) {
-            System.out.println(" Door " + (i + 1) + " is " + r.doors.get(i).color);
-            Room nxt = r.doors.get(i).enter;
-            System.out.println(" Checking out: You see a " + nxt.atr1.getAtt1() + " room " + nxt.atr2.getAtt2());
-            System.out.println(" THis room has " + nxt.cdors + "doors");
         }
+        rdtxt.close();
     }
 
-    public void printRoom(){
+    public void printExpmenu(EnumMap<Explrptions, String> exoptns) {
+        System.out.println(exoptns.values()); //fix brackets
+    }
+
+    public void setComms(HashMap<String, Mcommands> comms) {
+        comms.put("a", new Roomcheck());
+        comms.put("b", new Doorcheck());
+        comms.put("c", new Npccheck());
+        comms.put("d", new Itemcheck());
+        comms.put("e", new Inventorycheck());
+    }
+
+}
+
+class Roomcheck implements Mcommands {
+
+    @Override
+    public void exec(Player x) {
+        Room r = x.location;
+        r.inspect(r);
+    }
+}
+
+class Doorcheck implements Mcommands {
+
+    @Override
+    public void exec(Player x) {
+        Room r = x.location;
+        Door inst = r.doors.get(0);
+        inst.inspect(r);
+        inst.interact(x);
+    }
+}
+
+
+class Itemcheck implements Mcommands {
+
+    @Override
+    public void exec(Player x) {
+        Room r = x.location;
+        // Item loot = r.loot; item hierarchy
+    }
+}
+
+class Npccheck implements Mcommands {
+
+    @Override
+    public void exec(Player x) {
+        Room r = x.location;
+        // r.npc.inspect(); enum use to create instance npc
+    }
+}
+
+class Inventorycheck implements Mcommands {
+
+    @Override
+    public void exec(Player x) {
 
     }
 }

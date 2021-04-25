@@ -1,5 +1,8 @@
 package nl.rug.oop.rpg;
 
+import java.lang.reflect.Method;
+import java.util.EnumMap;
+
 public enum Materials {
 }
 
@@ -29,9 +32,11 @@ enum Attr1room {
     s(" strange ");
 
     private final String att1;
+
     Attr1room(String att1) {
         this.att1 = att1;
     }
+
     public String getAtt1() {
         return att1;
     }
@@ -47,9 +52,11 @@ enum Attr2room {
     s2(" and there is a strong magnetic field here, as well"),
     s3(" and there is a strong magnetic field here. Lot's of them, eh?");
     private final String att2;
+
     Attr2room(String att2) {
         this.att2 = att2;
     }
+
     public String getAtt2() {
         return att2;
     }
@@ -126,6 +133,58 @@ enum SpeciesDb {
     public int getHealth() {
         return health;
     }
+}
+
+enum Explrptions {
+    a, b, c, d, e;
+
+    Explrptions() {
+    }
+
+    public static EnumMap<Explrptions, String> getExmn() {
+        EnumMap<Explrptions, String> commands = new EnumMap<>(Explrptions.class);
+        commands.put(Explrptions.a, "a) Scan room environment\n");
+        commands.put(Explrptions.b, "b) Check available portals\n");
+        commands.put(Explrptions.c, "c) Check for other beings\n");
+        commands.put(Explrptions.d, "d) Search room for resources\n");
+        commands.put(Explrptions.e, "e) Inventory \n");
+        return commands;
+    }
+}
+
+enum Npcintract {
+    n("Initialize:\n"),
+    a("  a) conversation"),
+    b("  b) attack"),
+    c("  c) trade");
+    private final String option;
+
+    Npcintract(String option) {
+        this.option = option;
+    }
+
+    public String getOption() {
+        return option;
+    }
+}
+
+enum Cmbtoptions {
+    a("a) Attack"),
+    b("b) Defend"),
+    c("c) Flee");
+    private final String option;
+
+    Cmbtoptions(String option) {
+        this.option = option;
+    }
+
+    public String getOption() {
+        return option;
+    }
+}
+
+enum Inventoryopt {
+
 }
 
 enum Items {

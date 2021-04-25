@@ -29,6 +29,7 @@ public class Mainmenu {
         if(rdtxt.nextLine().equals("y")) {
             Gameplay start = new Gameplay();
             start.Launch();
+            rdtxt.close();
         } else {
             rdtxt.close();
             System.exit(0);
