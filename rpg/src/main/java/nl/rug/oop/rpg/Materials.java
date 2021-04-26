@@ -161,17 +161,13 @@ enum Npcinteract {
 }
 
 enum Cmbtoptions {
-    a("a) Attack"),
-    b("b) Defend"),
-    c("c) Flee");
-    private final String option;
-
-    Cmbtoptions(String option) {
-        this.option = option;
-    }
-
-    public String getOption() {
-        return option;
+    a, b, c;
+    public static EnumMap<Cmbtoptions,String> setMoves() {
+        EnumMap<Cmbtoptions, String> commands = new EnumMap<>(Cmbtoptions.class);
+        commands.put(Cmbtoptions.a, "   a) Attack");
+        commands.put(Cmbtoptions.b, "   b) Defend");
+        commands.put(Cmbtoptions.c, "   c) Flee");
+        return commands;
     }
 }
 

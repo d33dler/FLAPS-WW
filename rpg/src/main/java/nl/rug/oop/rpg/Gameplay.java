@@ -1,5 +1,4 @@
 package nl.rug.oop.rpg;
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -43,7 +42,7 @@ public class Gameplay {
 
             option = menu.get(input);
             if (option != null) {
-                option.exec(player,txtIn,trmenu.submenus.get(input).menunode);
+                option.exec(player,txtIn,trmenu.submenus.get(input).menunode, trmenu);
 
                 printExpmenu(exoptns);
             }
@@ -53,6 +52,7 @@ public class Gameplay {
     public void printExpmenu(EnumMap<Explrptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
     }
+
     public void reachSubMenu(HashMap<String, HashMap<String,Commands>> allMenus, String input) { //prob loop
 
 
