@@ -1,5 +1,5 @@
 package nl.rug.oop.rpg;
 
-public interface Mcommands {
+public interface Commands {
     void exec(Player x);
 }

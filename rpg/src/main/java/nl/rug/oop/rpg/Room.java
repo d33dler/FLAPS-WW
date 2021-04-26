@@ -11,7 +11,7 @@ public class Room implements Inspectable {
     protected List<Door> doors;
     protected boolean company;
     protected ConsumablesDb loot; //variety of loot wep/etc
-    protected SpeciesDb npc;
+    protected NPC npc;
 
     public void inspect() {
 
@@ -19,7 +19,7 @@ public class Room implements Inspectable {
 
     private static final SecureRandom random = new SecureRandom();
 
-    public Room(Initroom parameters) {
+    public Room(InitRoom parameters) {
         this.id = parameters.id;
         this.atr1 = parameters.atr1;
         this.atr2 = parameters.atr2;
@@ -30,9 +30,17 @@ public class Room implements Inspectable {
         this.npc = parameters.npc;
     }
 
+    public String getId() {
+        return id;
+    }
+
     protected Room randomRoom(List<Room> set) {
         int x = random.nextInt(set.size());
         return set.get(x);
+    }
+
+    public NPC getNpc() {
+        return this.npc;
     }
 
     @Override

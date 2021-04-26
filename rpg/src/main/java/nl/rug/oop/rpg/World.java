@@ -17,13 +17,21 @@ public class World {
     }
 
     public void genRoom(World map) {
-        List<Door> doors = new ArrayList<>(); //needs list of doors, and number(possibly)
+        List<Door> doors = new ArrayList<>();
         Attr1room att1 = randomMtrl(Attr1room.class);
         Attr2room att2 = randomMtrl(Attr2room.class);
-        SpeciesDb npc = randomMtrl(SpeciesDb.class); //optional basedamage++=random?; //2.more npcs per room
+        SpeciesDb npcdata = randomMtrl(SpeciesDb.class);
+        Enemies npc = new InitEntity() //presence of npc may be randomized
+                .name(npcdata.getSpname())
+                .hdm(npcdata.getHealth(),
+                        npcdata.getDamage() + ThreadLocalRandom.current().nextInt(2,
+                                10), ThreadLocalRandom.current().nextInt(0, 15))
+                .loc(null)
+                .inv(null) //get this man his shield
+                .createn();
         ConsumablesDb loot = randomMtrl(ConsumablesDb.class); // needs random loot wep/consum/etc..
         boolean company = npc != null;
-        Room room = new Initroom()
+        Room room = new InitRoom()
                 .id(roomID.generateId())
                 .describe(att1, att2)
                 .nrdors(0)
@@ -32,17 +40,18 @@ public class World {
                 .gNPC(npc)
                 .lLoot(loot)
                 .create();
+        npc.location = room;
         map.roomConnects.put(room, new ArrayList<>());
     }
 
     public void genDoor(Room out, Room goin, World map) {
         DoorcolorsDb clr = randomMtrl(DoorcolorsDb.class);
-        Door door = new Prmtdoor()
+        Door door = new PrmtDoor()
                 .exit(out)
                 .enter(goin)
                 .clr(clr)
                 .create();
-        out.doors.add(door); //these two might be redundant
+        out.doors.add(door);
         goin.doors.add(door);
         out.cdors++;
         goin.cdors++;
@@ -65,22 +74,14 @@ public class World {
             map.genRoom(map);
         }
         List<Room> allrooms = new ArrayList<>(map.roomConnects.keySet());
-       /* for (Room x : allrooms) {
-       /     System.out.println("Description:" + x.atr1.getAtt1() + x.atr2.getAtt2());
-        }
-
-        */
-        Room mutate = new Room(new Initroom());
-
+        Room mutate = new Room(new InitRoom());
         for (int i = 0; i < links; ) {
             Room rA = mutate.randomRoom(allrooms);
-         //   System.out.println("roomA att:" + rA.atr1.getAtt1()+ rA.atr2.getAtt2()); //debug
             Room rB = mutate.randomRoom(allrooms);
-           // System.out.println("roomB att:" + rB.atr1.getAtt1() + rB.atr2.getAtt2());
-            if (!rA.id.equals(rB.id) && !map.roomConnects.get(rA).contains(rB)) { //self loop issue
+            if (!rA.id.equals(rB.id) && !map.roomConnects.get(rA).contains(rB)) {
                 if (rA.cdors < 3 && rB.cdors < 3) {
                     genDoor(rA, rB, map);
-                    i++; //inspect process flow
+                    i++;
                 } else {
                     removeRooms(rA, rB, allrooms);
                 }

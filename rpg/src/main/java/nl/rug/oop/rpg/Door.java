@@ -6,7 +6,7 @@ public class Door implements Inspectable, Interactable {
     protected DoorcolorsDb color;
     protected Room exit, enter;
 
-    public Door(Prmtdoor parameters) {
+    public Door(PrmtDoor parameters) {
         this.color = parameters.color;
         this.exit = parameters.exit;
         this.enter = parameters.enter;
@@ -35,7 +35,6 @@ public class Door implements Inspectable, Interactable {
             r = r.doors.get(input).exit;
         }
         ava.location = r;
-        System.out.println("Entering portal...");
-        //rdtxt.close();
+        System.out.println("Entering portal...\n");
     }
 }

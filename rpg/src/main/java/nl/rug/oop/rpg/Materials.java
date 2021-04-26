@@ -1,6 +1,5 @@
 package nl.rug.oop.rpg;
 
-import java.lang.reflect.Method;
 import java.util.EnumMap;
 
 public enum Materials {
@@ -43,14 +42,14 @@ enum Attr1room {
 }
 
 enum Attr2room {
-    r(" full of hi-tech operation tables"),
-    l(" with quantum computers"),
-    n(" and it's almost empty"),
-    wl(" with working stations"),
-    d(" with a pile of wires"),
-    s(" and there is a strong magnetic field here"),
-    s2(" and there is a strong magnetic field here, as well"),
-    s3(" and there is a strong magnetic field here. Lot's of them, eh?");
+    r(" full of hi-tech operation tables."),
+    l(" with quantum computers."),
+    n(" and it's almost empty."),
+    wl(" with working stations."),
+    d(" with a pile of wires."),
+    s(" and there is a strong magnetic field here."),
+    s2(" and there is a strong magnetic field here, as well."),
+    s3(" and there is a strong magnetic field here. Lot's of them, eh?.");
     private final String att2;
 
     Attr2room(String att2) {
@@ -143,28 +142,27 @@ enum Explrptions {
 
     public static EnumMap<Explrptions, String> getExmn() {
         EnumMap<Explrptions, String> commands = new EnumMap<>(Explrptions.class);
-        commands.put(Explrptions.a, "a) Scan room environment\n");
-        commands.put(Explrptions.b, "b) Check available portals\n");
-        commands.put(Explrptions.c, "c) Check for other beings\n");
-        commands.put(Explrptions.d, "d) Search room for resources\n");
-        commands.put(Explrptions.e, "e) Inventory \n");
+        commands.put(Explrptions.a, "a) Scan room environment");
+        commands.put(Explrptions.b, "b) Check available portals");
+        commands.put(Explrptions.c, "c) Check for other beings");
+        commands.put(Explrptions.d, "d) Search room for resources");
+        commands.put(Explrptions.e, "e) Inventory ");
         return commands;
     }
 }
 
-enum Npcintract {
-    n("Initialize:\n"),
-    a("  a) conversation"),
-    b("  b) attack"),
-    c("  c) trade");
-    private final String option;
-
-    Npcintract(String option) {
-        this.option = option;
+enum Npcinteract {
+    n, a, b, c, d;
+    Npcinteract() {
     }
-
-    public String getOption() {
-        return option;
+    public static EnumMap<Npcinteract, String > getCompany(){
+        EnumMap<Npcinteract,String> commands = new EnumMap<>(Npcinteract.class);
+        commands.put(Npcinteract.n, "Initialize: ");
+        commands.put(Npcinteract.a, "   a) conversation");
+        commands.put(Npcinteract.b, "   b) attack");
+        commands.put(Npcinteract.c, "   c) trade");
+        commands.put(Npcinteract.d, "   d) Back");
+        return commands;
     }
 }
 

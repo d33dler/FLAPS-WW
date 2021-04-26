@@ -2,7 +2,7 @@ package nl.rug.oop.rpg;
 
 import java.util.Scanner;
 
-public class Mainmenu {
+public class MainMenu {
 
     public void poeticPause(String verse, int pause) {
         System.out.println(verse);

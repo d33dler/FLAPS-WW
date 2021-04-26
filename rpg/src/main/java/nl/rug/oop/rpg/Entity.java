@@ -8,6 +8,7 @@ public abstract class Entity {
     protected List<Item> inventory;
     protected Room location;
 
+
     public String getName() {
         return name;
     }
