@@ -1,5 +1,5 @@
 package nl.rug.oop.rpg;
 
 public interface Interactable {
-    void interact(Player a);
+    void interact(Player a, int x);
 }

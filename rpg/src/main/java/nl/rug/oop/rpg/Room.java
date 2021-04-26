@@ -45,7 +45,7 @@ public class Room implements Inspectable {
 
     @Override
     public void inspect(Room r) {
-        System.out.println(" You are in a" + r.atr1.getAtt1() + "room" + r.atr2.getAtt2());
-        System.out.println(" There are " + r.cdors + " doors here ");
+        System.out.println("\n You are in a" + r.atr1.getAtt1() + "room" + r.atr2.getAtt2());
+        System.out.println(" There are " + r.cdors + " doors here.\n ");
     }
 }

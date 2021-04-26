@@ -13,26 +13,26 @@ public class Door implements Inspectable, Interactable {
     }
 
     public void inspect(Room r) {
+        //insert poetic analysis typewriter effect
         for (int i = 0; i < r.doors.size(); i++) {
-            System.out.println(" Door " + i + " is " + r.doors.get(i).color);
+            System.out.println(" Door " + (i+1) + " is " + r.doors.get(i).color);
         }
-        System.out.println("(8) Back");
+        System.out.println("(y/Y)   Access a portal? ");
+        System.out.println("(back)  Return");
     }
 
     @Override
-    public void interact(Player ava) {
-        Scanner rdtxt = new Scanner(System.in);
-        int input = rdtxt.nextInt();
-        if (input == 8) {
+    public void interact(Player ava, int x) {
+        if (x == 8) {
             return;
         }
         Room check;
         Room r = ava.location;
-        check = r.doors.get(input).enter;
+        check = r.doors.get(x).enter;
         if (!check.id.equals(r.id)) {
-            r = r.doors.get(input).enter;
+            r = r.doors.get(x).enter;
         } else {
-            r = r.doors.get(input).exit;
+            r = r.doors.get(x).exit;
         }
         ava.location = r;
         System.out.println("Entering portal...\n");

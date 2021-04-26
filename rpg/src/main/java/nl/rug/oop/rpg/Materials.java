@@ -136,10 +136,6 @@ enum SpeciesDb {
 
 enum Explrptions {
     a, b, c, d, e;
-
-    Explrptions() {
-    }
-
     public static EnumMap<Explrptions, String> getExmn() {
         EnumMap<Explrptions, String> commands = new EnumMap<>(Explrptions.class);
         commands.put(Explrptions.a, "a) Scan room environment");
@@ -153,15 +149,13 @@ enum Explrptions {
 
 enum Npcinteract {
     n, a, b, c, d;
-    Npcinteract() {
-    }
     public static EnumMap<Npcinteract, String > getCompany(){
         EnumMap<Npcinteract,String> commands = new EnumMap<>(Npcinteract.class);
         commands.put(Npcinteract.n, "Initialize: ");
         commands.put(Npcinteract.a, "   a) conversation");
-        commands.put(Npcinteract.b, "   b) attack");
-        commands.put(Npcinteract.c, "   c) trade");
-        commands.put(Npcinteract.d, "   d) Back");
+        commands.put(Npcinteract.b, "   b) trade");
+        commands.put(Npcinteract.c, "   c) combat");
+        commands.put(Npcinteract.d, "   (back) Return");
         return commands;
     }
 }
@@ -179,6 +173,11 @@ enum Cmbtoptions {
     public String getOption() {
         return option;
     }
+}
+
+enum Trading {
+    n,a,b;
+
 }
 
 enum Inventoryopt {

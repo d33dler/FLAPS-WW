@@ -1,6 +1,8 @@
 package nl.rug.oop.rpg;
-
+import java.awt.*;
 import java.util.*;
+import java.util.List;
+
 
 public class Gameplay {
 
@@ -14,110 +16,51 @@ public class Gameplay {
         List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
         Player player = new InitEntity()
                 .name(name)
-                .hdm(100,10,30)
+                .hdm(100, 10, 30)
                 .inv(inv)
                 .loc(listrm.get(0))
                 .protagonist();
+
         Explore(map, player, listrm);
     }
 
     public void Explore(World map, Player player, List<Room> listrm) {
-        EnumMap<Explrptions, String> exoptns = Explrptions.getExmn();
-        HashMap<String, Commands> comms = new HashMap<>();
-        setComms(comms);
-        String input = "y";
-        Scanner rdtxt = new Scanner(System.in);
+        Scanner txtIn = new Scanner(System.in);
+        UtilCommands.getUserName(player,txtIn);
+        HashMap<String, Commands> menu;
+        MenuTree trmenu = UtilCommands.buildMenuTree();
         Commands option;
-        System.out.println("You are: " + player.name);
+       // HashMap<String, HashMap<String,Commands>> allMenus = UtilCommands.getAllMenus();
+        EnumMap<Explrptions, String> exoptns = Explrptions.getExmn();
+
+        String input = "y";
+
+        System.out.println("Greetings, " + player.name + "!\n\\");
         printExpmenu(exoptns);
+        menu = trmenu.root.menunode;
         while (!input.equals("exit sim")) {
-            input = rdtxt.nextLine();
-            option = comms.get(input);
+            input = txtIn.nextLine();
+
+            option = menu.get(input);
             if (option != null) {
-                option.exec(player);
+                option.exec(player,txtIn,trmenu.submenus.get(input).menunode);
+
                 printExpmenu(exoptns);
             }
         }
-        rdtxt.close();
+        txtIn.close();
     }
-
     public void printExpmenu(EnumMap<Explrptions, String> exoptns) {
-    exoptns.values().forEach(System.out::println);
+        exoptns.values().forEach(System.out::println);
     }
+    public void reachSubMenu(HashMap<String, HashMap<String,Commands>> allMenus, String input) { //prob loop
 
-    public void setComms(HashMap<String, Commands> comms) {
-        comms.put("a", new Roomcheck()); //get methods here???
-        comms.put("b", new Doorcheck());
-        comms.put("c", new Npccheck());
-        comms.put("d", new Itemcheck());
-        comms.put("e", new Inventorycheck());
+
     }
 
 }
 
-class Roomcheck implements Commands {
-
-    @Override
-    public void exec(Player x) {
-        Room r = x.location;
-        r.inspect(r);
-    }
-}
-
-class Doorcheck implements Commands {
-
-    @Override
-    public void exec(Player x) {
-        Room r = x.location;
-        Door inst = r.doors.get(0);
-        inst.inspect(r);
-        inst.interact(x);
-    }
-}
 
 
-class Itemcheck implements Commands {
 
-    @Override
-    public void exec(Player x) {
-        Room r = x.location;
-        // Item loot = r.loot; item hierarchy
-    }
-}
 
-class Npccheck implements Commands {
-
-    @Override
-    public void exec(Player x) {
-        Room r = x.location;
-        r.npc.inspect(r);
-        EnumMap<Npcinteract,String> npcint = Npcinteract.getCompany();
-
-    }
-}
-
-class Npcconv implements Commands {
-    @Override
-    public void exec(Player x) {
-
-    }
-}
-class Npcatt implements Commands {
-    @Override
-    public void exec(Player x) {
-
-    }
-}
-class Npctrade implements Commands {
-    @Override
-    public void exec(Player x) {
-
-    }
-}
-class Inventorycheck implements Commands {
-
-    @Override
-    public void exec(Player x) {
-
-    }
-}
