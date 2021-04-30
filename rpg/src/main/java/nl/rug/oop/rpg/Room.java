@@ -10,12 +10,9 @@ public class Room implements Inspectable {
     protected int cdors;
     protected List<Door> doors;
     protected boolean company;
-    protected ConsumablesDb loot; //variety of loot wep/etc
+    protected Item loot; //variety of loot wep/etc
     protected NPC npc;
-
-    public void inspect() {
-
-    }
+    protected Holders storage;
 
     private static final SecureRandom random = new SecureRandom();
 
@@ -28,6 +25,7 @@ public class Room implements Inspectable {
         this.company = parameters.company;
         this.loot = parameters.loot;
         this.npc = parameters.npc;
+        this.storage = parameters.storage;
     }
 
     public String getId() {

@@ -1,35 +1,32 @@
 package nl.rug.oop.rpg;
 
 import java.util.*;
-import java.security.SecureRandom;
 import java.util.concurrent.ThreadLocalRandom;
+
+import static nl.rug.oop.rpg.Randomizers.randomMtrl;
 
 public class World {
     protected int links = 50;//edit for requirement
-
     protected Map<Room, List<Room>> roomConnects;
-    private static final SecureRandom random = new SecureRandom();
-    private static final RandomID roomID = new RandomID(7, ThreadLocalRandom.current());
-
-    protected <T extends Enum<?>> T randomMtrl(Class<T> set) {
-        int x = random.nextInt(set.getEnumConstants().length);
-        return set.getEnumConstants()[x];
-    }
+    private static final Randomizers roomID = new Randomizers(7, ThreadLocalRandom.current());
 
     public void generateRoom(World map) {
         List<Door> doors = new ArrayList<>();
+        String roomId = roomID.generateId();
         Attr1room att1 = randomMtrl(Attr1room.class);
         Attr2room att2 = randomMtrl(Attr2room.class);
-        ConsumablesDb loot = randomMtrl(ConsumablesDb.class); // needs random loot wep/consum/etc..
+        Holders storage = randomMtrl(Holders.class);
+        Item loot = generateItem(roomId);
         NPC npc = generateNpc();
         boolean company = npc != null;
         Room room = new InitRoom()
-                .id(roomID.generateId())
+                .id(roomId)
                 .describe(att1, att2)
                 .nrdors(0)
                 .lDoors(doors)
                 .pComp(company)
                 .gNPC(npc)
+                .storage(storage)
                 .lLoot(loot)
                 .create();
         npc.location = room;
@@ -50,24 +47,48 @@ public class World {
         map.roomConnects.get(out).add(goin);
         map.roomConnects.get(goin).add(out);
     }
+
     public NPC generateNpc() {
         SpeciesDb npcdata = randomMtrl(SpeciesDb.class);
+        Inventory inventory = new Inventory().generateInv();
         Enemies npc = new InitEntity() //presence of npc may be randomized
                 .name(npcdata.getSpname())
                 .hdm(npcdata.getHealth(),
                         npcdata.getDamage() + ThreadLocalRandom.current().nextInt(2,
                                 10), ThreadLocalRandom.current().nextInt(0, 15))
                 .loc(null)
-                .inv(null) //get this man his shield
+                .inv(inventory)
+                .ith(null)//get this man his shield
                 .createn();
         return npc;
     }
+
     public void removeRooms(Room rA, Room rB, List<Room> allrooms) {
         if (rA.doors.size() < 3) {
             allrooms.remove(rA);
         } else {
             allrooms.remove(rB);
         }
+    }
+
+    public Item generateItem(String in) {
+        Item item;
+        if (roomID.itemInsert(in)) {
+            ConsumablesDb loot = randomMtrl(ConsumablesDb.class);
+            item = new InitItem()
+                    .name(loot.getConsid())
+                    .hh(loot.getHealth())
+                    .val(loot.getValue())
+                    .createCons();
+        } else {
+            WeaponsDb loot = randomMtrl(WeaponsDb.class);
+            item = new InitItem()
+                    .name(loot.getWname())
+                    .dmg(loot.getDmg())
+                    .val(loot.getValue())
+                    .createWep();
+        }
+        return item;
     }
 
     World createMap() {
@@ -90,7 +111,7 @@ public class World {
                     removeRooms(rA, rB, allrooms);
                 }
             }
-             if( allrooms.size()==0) {
+            if (allrooms.size() == 0) {
                 break;
             }
         }

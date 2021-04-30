@@ -62,21 +62,27 @@ enum Attr2room {
 }
 
 enum WeaponsDb {
-    crowbar("Crowbar", 9),
-    wrench("Wrench", 8),
-    laser_gun("Laser gun", 25),
-    gauss("Gauss Rifle", 33),
-    pl_gun("Plasma Gun", 28);
+    crowbar("Crowbar", 9,6),
+    wrench("Wrench", 8,7),
+    laser_gun("Laser gun", 25,28),
+    gauss("Gauss Rifle", 33,45),
+    pl_gun("Plasma Gun", 28,30);
     private final String wname;
-    private final int dmg;
+    private final int dmg, value;
 
-    WeaponsDb(String wname, int dmg) {
+    WeaponsDb(String wname, int dmg,int value) {
         this.wname = wname;
         this.dmg = dmg;
+        this.value = value;
+
     }//inspect constr application
 
     public String getWname() {
         return wname;
+    }
+
+    public int getValue() {
+        return value;
     }
 
     public int getDmg() {
@@ -85,17 +91,18 @@ enum WeaponsDb {
 }
 
 enum ConsumablesDb {
-    qfet("QFE-transistor", 7),
-    carc("Paladium cell", 10),
-    cpu("Q-Processors", 14),
-    wr("Wires", 5),
-    tp("Titanium", 11);
+    qfet("QFE-transistor", 7,5),
+    carc("Paladium cell", 10,9),
+    cpu("Q-Processors", 14,11),
+    wr("Wires", 5,4),
+    tp("Titanium", 11,12);
     private final String consid;
-    private final int health;
+    private final int health, value;
 
-    ConsumablesDb(String consid, int health) {
+    ConsumablesDb(String consid, int health, int value) {
         this.consid = consid;
         this.health = health;
+        this.value = value;
     }//inspect constructor app
 
     public String getConsid() {
@@ -105,8 +112,30 @@ enum ConsumablesDb {
     public int getHealth() {
         return health;
     }
-}
 
+    public int getValue() {
+        return value;
+    }
+}
+enum Holders {
+    f("steel case"),
+    x("aluminium case"),
+    n("strange container, made of an unknown material type."),
+    s("borosylicate crate"),
+    q("polycarbonate crate"),
+    z("iridium box"),
+    a("chromium box"),
+    k("aluminium box"),
+    i("osmium crate");
+    private final String name;
+    Holders(String name) {
+    this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+}
 enum SpeciesDb {
     cyb("Cyborg doll", 40, 10),
     sb("Sentry bot", 50, 12),
@@ -167,6 +196,18 @@ enum Cmbtoptions {
         commands.put(Cmbtoptions.a, "   a) Attack");
         commands.put(Cmbtoptions.b, "   b) Defend");
         commands.put(Cmbtoptions.c, "   c) Flee");
+        return commands;
+    }
+}
+
+enum ItemOptions {
+    a, b, c,d;
+    public static EnumMap<ItemOptions,String> getItem() {
+        EnumMap<ItemOptions, String> commands = new EnumMap<>(ItemOptions.class);
+        commands.put(ItemOptions.a, "   a) Inspect");
+        commands.put(ItemOptions.b, "   b) Recycle");
+        commands.put(ItemOptions.c, "   c) Collect");
+        commands.put(ItemOptions.d, "   (back) Return");
         return commands;
     }
 }

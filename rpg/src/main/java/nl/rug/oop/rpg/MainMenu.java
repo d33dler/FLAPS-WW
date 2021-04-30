@@ -4,14 +4,7 @@ import java.util.Scanner;
 
 public class MainMenu {
 
-    public void poeticPause(String verse, int pause) {
-        System.out.println(verse);
-        try {
-            Thread.sleep(pause);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
+
 
     public void initMenu() {
        /* poeticPause("Initiating porting with remote node...", 100); //move all to materials
@@ -20,20 +13,20 @@ public class MainMenu {
             poeticPause(".", 1000);
         }
         */ //unlock later
-
-        poeticPause("Connection succesfully established", 1000);
-        poeticPause("",0);
-        poeticPause("(y) PROCEED?",0);
-        poeticPause("(n) Exit",0);
+        Typewriter tw = new Typewriter();
+      //  tw.type("Connection succesfully established");
+        tw.poeticPause("",0);
+        tw.poeticPause("(y) PROCEED?",0);
+        tw.poeticPause("(n) Exit",0);
         Scanner rdtxt = new Scanner(System.in);
-        if(rdtxt.nextLine().equals("y")) {
+        String input = rdtxt.nextLine();
+        if(input.equals("y")) {
             Gameplay start = new Gameplay();
-            start.Launch();
-            rdtxt.close();
+            start.Launch(rdtxt);
         } else {
             rdtxt.close();
             System.exit(0);
         }
-
+        rdtxt.close();
     }
 }
