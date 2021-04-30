@@ -217,10 +217,36 @@ enum Trading {
 
 }
 
-enum Inventoryopt {
-
+enum InventoryOpt {
+   n, a,b,c,d;
+    public static EnumMap<InventoryOpt, String> getInv() {
+        EnumMap<InventoryOpt, String> commands = new EnumMap<>(InventoryOpt.class);
+        commands.put(InventoryOpt.n, " List: ");
+        commands.put(InventoryOpt.a, "   w) Weapons");
+        commands.put(InventoryOpt.b, "   c) Consumables");
+        commands.put(InventoryOpt.c, "   (back) Return");
+        return commands;
+    }
 }
-
-enum Items {
-
+enum InvConsumOptions {
+        a,b,c,d;
+    public static EnumMap<InvConsumOptions, String> getSubInv() {
+        EnumMap<InvConsumOptions, String> commands = new EnumMap<>(InvConsumOptions.class);
+        commands.put(InvConsumOptions.a, "   a) Consume");
+        commands.put(InvConsumOptions.b, "   b) Recycle");
+        commands.put(InvConsumOptions.c, "   c) Throw away");
+        commands.put(InvConsumOptions.d, "   (back) Return");
+        return commands;
+    }
+}
+enum InvWeaponOptions {
+    a,b,c,d;
+    public static EnumMap<InvWeaponOptions, String> getSubInv() {
+        EnumMap<InvWeaponOptions, String> commands = new EnumMap<>(InvWeaponOptions.class);
+        commands.put(InvWeaponOptions.a, "   a) Equip");
+        commands.put(InvWeaponOptions.b, "   b) Recycle");
+        commands.put(InvWeaponOptions.c, "   c) Throw away");
+        commands.put(InvWeaponOptions.d, "   (back) Return");
+        return commands;
+    }
 }

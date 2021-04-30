@@ -5,7 +5,7 @@ public class Typewriter {
         for (int i = 0; i < input.length(); i++) {
             System.out.printf("%c", input.charAt(i));
             try {
-                Thread.sleep(100);
+                Thread.sleep(80);
             } catch (InterruptedException ex) {
                 Thread.currentThread().interrupt();
             }

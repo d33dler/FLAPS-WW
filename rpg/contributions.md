@@ -1,7 +1,20 @@
 # Work Distribution
 
-<!-- 
-Write here a short summary of how you divided the work. 
-This can be very short. Unless the situation is very complex, one or two sentences are sufficient. 
-If you encounter any issues with your teammate that you do not feel comfortable sharing here, you can send an email to n.a.bugel@rug.nl
--->
+Radu Rebeja :
+World generation
+NPC generation
+Combat System
+Door, Room features
+Item scattering
+Randomizer
+Materials
+Builders
+
+
+Eugen Falca:
+
+Menu Tree System
+TypeWriter Feature
+Player System
+Inventory System
+Materials

@@ -7,14 +7,14 @@ public class MainMenu {
 
 
     public void initMenu() {
-       /* poeticPause("Initiating porting with remote node...", 100); //move all to materials
-        poeticPause("Routing in progress...", 2000);
-        for (int i = 0; i < 3; i++) {
-            poeticPause(".", 1000);
-        }
-        */ //unlock later
         Typewriter tw = new Typewriter();
-      //  tw.type("Connection succesfully established");
+       tw.type("Initiating porting with remote node..."); //move all to materials
+        tw.poeticPause("Routing in progress...", 2000);
+        for (int i = 0; i < 3; i++) {
+            tw.poeticPause(".", 1000);
+        }
+
+      tw.type("Connection succesfully established");
         tw.poeticPause("",0);
         tw.poeticPause("(y) PROCEED?",0);
         tw.poeticPause("(n) Exit",0);

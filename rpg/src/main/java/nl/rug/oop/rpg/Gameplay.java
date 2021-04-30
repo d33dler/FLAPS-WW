@@ -7,23 +7,11 @@ import java.util.List;
 public class Gameplay {
 
     public void Launch(Scanner input) {
-        String name = "user";
-        //script intro methods go here
-        //intro dialogue tree (optional)
+        Dialogue intro = new Dialogue();
+        intro.Comunication();
         World morph = new World();
         World map = morph.createMap();
-        Inventory inv = new Inventory().generateInv(); //verify integrity
-
-        List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
-        Player player = new InitEntity()
-                .name(name)
-                .hdm(100, 10, 30)
-                .inv(inv)
-                .loc(listrm.get(0))
-                .fl(false)
-                .ith(new InitItem().name("Raygun").dmg(14).val(10).createWep())
-                .protagonist();
-
+        Player player = generatePlayer(map);
         Explore(player, input);
     }
 
@@ -54,9 +42,25 @@ public class Gameplay {
 
     public void reachSubMenu(HashMap<String, HashMap<String, GameCommands>> allMenus, String input) { //prob loop
 
-
     }
 
+    public Player generatePlayer(World map) {
+        Inventory inv = new Inventory().generateInv(); //verify integrity
+        List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
+        Player player = new InitEntity()
+                .name("user")
+                .hdm(100, 10, 30)
+                .inv(inv)
+                .loc(listrm.get(0))
+                .fl(false)
+                .ith(new InitItem().name("Raygun").dmg(14).val(10).createWep())
+                .protagonist();
+        Item itemc = map.generateItem("11a");
+        Item itemw = map.generateItem("Xz");
+        player.inventory.wList.put(itemw.getName(), (Weapons) itemw);
+        player.inventory.cList.put(itemc.getName(), (Consumables) itemc);
+        return player;
+    }
 }
 
 

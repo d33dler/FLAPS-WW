@@ -1,5 +1,9 @@
 package nl.rug.oop.rpg;
 
+import java.util.EnumMap;
+import java.util.HashMap;
+import java.util.Scanner;
+
 public abstract class Item implements Inspectable, Interactable {
     protected String name;
     protected int value;
@@ -26,6 +30,13 @@ public abstract class Item implements Inspectable, Interactable {
         } else {
             tw.type("There is " + ava.location.loot.name + " here \n");
         }
+    }
+    public Item SelectItem(HashMap<String, ? extends Item> invlist, Scanner in) {
+
+        Typewriter tw = new Typewriter();
+        tw.type(" *(name) Select item   \n");
+        Item item = invlist.get(in.nextLine());
+        return item;
     }
 
     public Item(InitItem parameters) {
@@ -79,6 +90,91 @@ public abstract class Item implements Inspectable, Interactable {
         x = new InitItem().name("nothing").createNull();
     }
 
+    public String getName() {
+        return name;
+    }
+
+    static class ItemCheck implements GameCommands {
+        @Override
+        public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+            GameCommands option;
+            String input;
+            Room r = x.location;
+            Item item = r.loot;
+            EnumMap<ItemOptions, String> iteminter = ItemOptions.getItem();
+            do {
+                iteminter.values().forEach(System.out::println);
+                input = in.nextLine();
+                option = menu.get(input);
+                option.exec(x, in, menu, menuTr);
+            } while (!input.equals("back") && !item.name.equals("nothing"));
+        }
+    }
+
+    static class ItemInteraction {
+
+        static class ItemInspect implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                r.loot.inspect(r);
+            }
+        }
+
+        static class ItemPick implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                r.loot.interact(x, 0);
+            }
+        }
+
+        static class ItemConsume implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                x.hold = r.loot;
+                r.loot.Recycle(x);
+            }
+        }
+
+        static class ItemInvThrow implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                r.loot.interact(x, 0);
+            }
+        }
+
+        static class ItemInvConsume implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                x.hold = r.loot;
+                r.loot.Recycle(x);
+
+            }
+        }
+        static class ItemInvEquip implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+                Room r = x.location;
+                x.hold = r.loot;
+                r.loot.Recycle(x);
+
+            }
+        }
+
+        static class ItemInvRecycle implements GameCommands {
+            @Override
+            public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
+
+            }
+
+            
+        }
+
+    }
 }
 
 class Weapons extends Item {
