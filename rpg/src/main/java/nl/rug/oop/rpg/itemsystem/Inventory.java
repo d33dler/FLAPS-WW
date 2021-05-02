@@ -5,7 +5,7 @@ import nl.rug.oop.rpg.Typewriter;
 import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.usersystem.AvatarInterface;
 import nl.rug.oop.rpg.worldsystem.Player;
-import nl.rug.oop.rpg.usersystem.PlayerInterface;
+import nl.rug.oop.rpg.usersystem.PlayerInterfaceBuilder;
 import nl.rug.oop.rpg.worldsystem.Room;
 
 
@@ -15,8 +15,7 @@ import java.util.Scanner;
 
 public class Inventory extends AvatarInterface {
 
-
-    public Inventory(PlayerInterface parameters) {
+    public Inventory(PlayerInterfaceBuilder parameters) {
         super(parameters);
     }
 
@@ -27,7 +26,7 @@ public class Inventory extends AvatarInterface {
     public Inventory generateInv() {
         HashMap<String, Weapons> wlist = new HashMap<>();
         HashMap<String, Consumables> clist = new HashMap<>();
-        return new PlayerInterface().
+        return new PlayerInterfaceBuilder().
                 weaponInv(wlist).
                 consumInv(clist).
                 createInv();

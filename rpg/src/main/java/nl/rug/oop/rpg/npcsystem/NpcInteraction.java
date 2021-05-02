@@ -8,7 +8,7 @@ import nl.rug.oop.rpg.worldsystem.Player;
 import java.util.HashMap;
 import java.util.Scanner;
 
-public class Ncpinteraction {
+public class NpcInteraction {
     public static class Npcconv implements GameCommands {
         @Override
         public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {

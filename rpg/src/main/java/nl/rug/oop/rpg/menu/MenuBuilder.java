@@ -1,11 +1,10 @@
 package nl.rug.oop.rpg.menu;
 
-import nl.rug.oop.rpg.*;
 import nl.rug.oop.rpg.game.GameCommands;
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.itemsystem.ItemInteraction;
-import nl.rug.oop.rpg.npcsystem.Ncpinteraction;
+import nl.rug.oop.rpg.npcsystem.NpcInteraction;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 import java.util.HashMap;
@@ -32,18 +31,18 @@ public class MenuBuilder {
 
     public HashMap<String, GameCommands> setNpcCommands() {
         HashMap<String, GameCommands> npccomm = new HashMap<>();
-        npccomm.put("a", new Ncpinteraction.Npcconv());
-        npccomm.put("b", new Ncpinteraction.Npctrade());
-        npccomm.put("c", new Ncpinteraction.Npcatt());
+        npccomm.put("a", new NpcInteraction.Npcconv());
+        npccomm.put("b", new NpcInteraction.Npctrade());
+        npccomm.put("c", new NpcInteraction.Npcatt());
         npccomm.put("back", new WorldInteraction.goBack());
         return npccomm;
     }
 
     public  HashMap<String, GameCommands> setCombatCommands() {
         HashMap<String, GameCommands> npccomm = new HashMap<>();
-        npccomm.put("a", new Ncpinteraction.Npcatt.Attack());
-        npccomm.put("b", new Ncpinteraction.Npcatt.Defend());
-        npccomm.put("c", new Ncpinteraction.Npcatt.Flee());
+        npccomm.put("a", new NpcInteraction.Npcatt.Attack());
+        npccomm.put("b", new NpcInteraction.Npcatt.Defend());
+        npccomm.put("c", new NpcInteraction.Npcatt.Flee());
         return npccomm;
     }
 

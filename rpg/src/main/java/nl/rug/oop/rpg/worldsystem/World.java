@@ -3,7 +3,7 @@ package nl.rug.oop.rpg.worldsystem;
 import nl.rug.oop.rpg.*;
 import nl.rug.oop.rpg.itemsystem.*;
 import nl.rug.oop.rpg.npcsystem.Enemies;
-import nl.rug.oop.rpg.npcsystem.InitEntity;
+import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 
 import java.util.*;
@@ -25,7 +25,7 @@ public class World {
         Item loot = generateItem(roomId);
         NPC npc = generateNpc();
         boolean company = npc != null;
-        Room room = new InitRoom()
+        Room room = new RoomBuilder()
                 .id(roomId)
                 .describe(att1, att2)
                 .nrdors(0)
@@ -41,15 +41,15 @@ public class World {
 
     public void generateDoor(Room out, Room goin, World map) {
         DoorcolorsDb clr = randomMtrl(DoorcolorsDb.class);
-        Door door = new PrmtDoor()
+        Door door = new DoorBuilder()
                 .exit(out)
                 .enter(goin)
                 .clr(clr)
                 .create();
         out.doors.add(door);
         goin.doors.add(door);
-        out.cdors++;
-        goin.cdors++;
+        out.ndors++;
+        goin.ndors++;
         map.roomConnects.get(out).add(goin);
         map.roomConnects.get(goin).add(out);
     }
@@ -57,7 +57,7 @@ public class World {
     public NPC generateNpc() {
         SpeciesDb npcdata = randomMtrl(SpeciesDb.class);
         Inventory inventory = new Inventory().generateInv();
-        Enemies npc = new InitEntity() //presence of npc may be randomized
+        Enemies npc = new EntityBuilder() //presence of npc may be randomized
                 .name(npcdata.getSpname())
                 .hdm(npcdata.getHealth(),
                         npcdata.getDamage() + ThreadLocalRandom.current().nextInt(2,
@@ -99,7 +99,7 @@ public class World {
     public Player generatePlayer(World map) {
         Inventory inv = new Inventory().generateInv(); //verify integrity
         List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
-        Player player = new InitEntity()
+        Player player = new EntityBuilder()
                 .name("user")
                 .hdm(100, 10, 30)
                 .inv(inv)
@@ -121,12 +121,12 @@ public class World {
             map.generateRoom(map);
         }
         List<Room> allrooms = new ArrayList<>(map.roomConnects.keySet());
-        Room mutate = new Room(new InitRoom());
+        Room mutate = new Room();
         for (int i = 0; i < links; ) {
             Room rA = mutate.randomRoom(allrooms);
             Room rB = mutate.randomRoom(allrooms);
             if (!rA.id.equals(rB.id) && !map.roomConnects.get(rA).contains(rB)) {
-                if (rA.cdors < 3 && rB.cdors < 3) {
+                if (rA.ndors < 3 && rB.ndors < 3) {
                     generateDoor(rA, rB, map);
                     i++;
                 } else {

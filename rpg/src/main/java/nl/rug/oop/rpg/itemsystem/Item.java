@@ -1,5 +1,5 @@
 package nl.rug.oop.rpg.itemsystem;
-
+import java.util.*;
 import nl.rug.oop.rpg.*;
 import nl.rug.oop.rpg.game.GameCommands;
 import nl.rug.oop.rpg.game.Inspectable;
@@ -7,10 +7,6 @@ import nl.rug.oop.rpg.game.Interactable;
 import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
-
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public abstract class Item implements Inspectable, Interactable {
     protected String name;
@@ -31,7 +27,7 @@ public abstract class Item implements Inspectable, Interactable {
     public void interact(Player ava, int x) {
         Item item = ava.getLocation().getLoot();
         if (!item.name.equals("nothing")) {
-           tw.type("You picked a " + item.name + "\n Storing in inventory...\n");
+            tw.type("You picked a " + item.name + "\n Storing in inventory...\n");
             DepositInv(ava, item); //needs each weapon to have class indicated for matching by string
             removeItemRoom(ava.getLocation());
             removeItemPlayer(ava);
@@ -39,6 +35,7 @@ public abstract class Item implements Inspectable, Interactable {
             tw.type("There is " + ava.getLocation().getLoot().name + " here \n");
         }
     }
+
     public Item SelectItem(HashMap<String, ? extends Item> invlist, Scanner in) {
 
         Typewriter tw = new Typewriter();
@@ -50,6 +47,8 @@ public abstract class Item implements Inspectable, Interactable {
     public Item(ItemBuilder parameters) {
         this.name = parameters.name; //
         this.value = parameters.value;
+    }
+    public Item(){
     }
 
     public void use(Player ava) {
@@ -118,8 +117,6 @@ public abstract class Item implements Inspectable, Interactable {
             } while (!input.equals("back") && !item.name.equals("nothing"));
         }
     }
-
-
 }
 
 class Nothing extends Item {

@@ -11,7 +11,7 @@ public abstract class AvatarInterface {
     protected HashMap<String, Weapons> wList;
     protected HashMap<String, Consumables> cList;
 
-    public AvatarInterface(PlayerInterface parameters) {
+    public AvatarInterface(PlayerInterfaceBuilder parameters) {
         this.wList = parameters.wList;
         this.cList = parameters.cList;
     }

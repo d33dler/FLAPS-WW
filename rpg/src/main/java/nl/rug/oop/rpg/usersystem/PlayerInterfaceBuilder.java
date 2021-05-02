@@ -3,20 +3,16 @@ package nl.rug.oop.rpg.usersystem;
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Consumables;
 import nl.rug.oop.rpg.itemsystem.Weapons;
-import nl.rug.oop.rpg.worldsystem.Builders;
 
 import java.util.HashMap;
 
-public class PlayerInterface extends Builders {
-    protected HashMap<String, Weapons> wList;
-    protected HashMap<String, Consumables> cList;
-
-    public PlayerInterface weaponInv(HashMap<String, Weapons> wList) {
+public class PlayerInterfaceBuilder extends AvatarInterface {
+    public PlayerInterfaceBuilder weaponInv(HashMap<String, Weapons> wList) {
         this.wList = wList;
         return this;
     }
 
-    public PlayerInterface consumInv(HashMap<String, Consumables> cList) {
+    public PlayerInterfaceBuilder consumInv(HashMap<String, Consumables> cList) {
         this.cList = cList;
         return this;
     }

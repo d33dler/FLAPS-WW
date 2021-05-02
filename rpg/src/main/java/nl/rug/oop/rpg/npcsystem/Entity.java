@@ -10,8 +10,8 @@ public abstract class Entity {
     protected Inventory inventory;
     protected Room location;
     protected Item hold;
-
-    public Entity(InitEntity parameters) {
+    protected boolean flee;
+    public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
         this.location = parameters.location;
         this.health = parameters.health;
@@ -19,8 +19,11 @@ public abstract class Entity {
         this.inventory = parameters.inventory;
         this.money = parameters.money;
         this.hold = parameters.hold;
+        this.flee = parameters.flee;
     }
+    public Entity(){
 
+    }
     public String getName() {
         return name;
     }

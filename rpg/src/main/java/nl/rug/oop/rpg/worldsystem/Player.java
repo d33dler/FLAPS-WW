@@ -1,7 +1,9 @@
 package nl.rug.oop.rpg.worldsystem;
 
 import nl.rug.oop.rpg.npcsystem.Entity;
-import nl.rug.oop.rpg.npcsystem.InitEntity;
+import nl.rug.oop.rpg.npcsystem.EntityBuilder;
+
+import java.util.Scanner;
 
 public class Player extends Entity {
    protected boolean flee;
@@ -14,11 +16,16 @@ public class Player extends Entity {
         return flee;
     }
 
-    public Player(InitEntity parameters) {
+    public Player(EntityBuilder parameters) {
         super(parameters);
     }
 
     public String getName() {
         return this.name;
+    }
+
+    public void getUserName(Player x, Scanner in) {
+        System.out.println("Please authenticate yourself: ");
+        x.setName(in.nextLine());
     }
 }

@@ -7,12 +7,13 @@ public class Door implements Inspectable, Interactable {
     protected DoorcolorsDb color;
     protected Room exit, enter;
 
-    public Door(PrmtDoor parameters) {
+    public Door(DoorBuilder parameters) {
         this.color = parameters.color;
         this.exit = parameters.exit;
         this.enter = parameters.enter;
     }
-
+    public Door(){
+    }
     public void inspect(Room r) {
         //insert poetic analysis typewriter effect
         for (int i = 0; i < r.doors.size(); i++) {

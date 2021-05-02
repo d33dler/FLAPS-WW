@@ -5,7 +5,7 @@ import nl.rug.oop.rpg.worldsystem.Room;
 
 public abstract class NPC extends Entity implements Inspectable {
 
-    public NPC(InitEntity parameters) {
+    public NPC(EntityBuilder parameters) {
         super(parameters);
     }
 

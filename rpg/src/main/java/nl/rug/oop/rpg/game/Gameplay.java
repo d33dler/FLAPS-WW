@@ -1,6 +1,5 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.Utilities;
 import nl.rug.oop.rpg.menu.MenuBuilder;
 import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.worldsystem.ExploreOptions;
@@ -22,7 +21,7 @@ public class Gameplay {
     }
 
     public void Explore(Player player, Scanner txtIn) {
-        Utilities.getUserName(player, txtIn);
+        player.getUserName(player, txtIn);
         MenuBuilder menubuild = new MenuBuilder();
         MenuTree trMenu = menubuild.buildMenuTree();
         HashMap<String, GameCommands> menu;

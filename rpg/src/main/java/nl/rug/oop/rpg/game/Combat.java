@@ -13,7 +13,7 @@ public class Combat {
     public void duel(Player x, NPC foe, HashMap<String, GameCommands> cmenu, Scanner in, MenuTree mtree) {
         String input = "user";
         GameCommands option;
-        EnumMap<Cmbtoptions, String> combopt = Cmbtoptions.setMoves();
+        EnumMap<CombatOptions, String> combopt = CombatOptions.setMoves();
         while (foe.getHealth() > 0 && x.getHealth() > 0 && !input.equals("c")) {
             System.out.println("< ╬ > System Health Status ::: " +
                     x.getName() + ": " + x.getHealth() + "  ▓▓▓▓   " + foe.getName() + ": " + foe.getHealth());
@@ -34,7 +34,7 @@ public class Combat {
         }
     }
 
-    public void printFightmenu(EnumMap<Cmbtoptions, String> exoptns) {
+    public void printFightmenu(EnumMap<CombatOptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
     }
 }
