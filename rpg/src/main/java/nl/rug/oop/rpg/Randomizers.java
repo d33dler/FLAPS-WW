@@ -28,7 +28,7 @@ public class Randomizers {
             strand[idx] = chars[random.nextInt(chars.length)];
         return new String(strand);
     }
-    public static <T extends Enum<?>> T randomMtrl(Class<T> set) {
+    public static <T extends Enum<?>> T randomMaterial(Class<T> set) {
         int x = rand.nextInt(set.getEnumConstants().length);
         return set.getEnumConstants()[x];
     }

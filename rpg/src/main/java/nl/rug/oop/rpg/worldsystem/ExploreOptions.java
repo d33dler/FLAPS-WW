@@ -11,7 +11,7 @@ public enum ExploreOptions {
         commands.put(ExploreOptions.b, "b) Check available portals");
         commands.put(ExploreOptions.c, "c) Check for other beings");
         commands.put(ExploreOptions.d, "d) Search room for resources");
-        commands.put(ExploreOptions.e, "e) Inventory ");
+        commands.put(ExploreOptions.e, "e) Inventory\n");
         return commands;
     }
 }

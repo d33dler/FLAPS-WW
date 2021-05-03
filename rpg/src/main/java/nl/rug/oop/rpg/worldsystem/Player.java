@@ -12,6 +12,9 @@ public class Player extends Entity {
     protected boolean flee;
     protected MenuTree mTree = new MenuBuilder().buildMenuTree();
     protected Scanner rdtxt = new Scanner(System.in);
+    protected WorldInteraction winter = new WorldInteraction();
+    protected String input;
+
     public void setFlee(boolean flee) {
         this.flee = flee;
     }
@@ -22,6 +25,22 @@ public class Player extends Entity {
 
     public Player(EntityBuilder parameters) throws NoSuchMethodException {
         super(parameters);
+    }
+
+    public String getInput() {
+        return input;
+    }
+
+    public void setInput(String input) {
+        this.input = input;
+    }
+
+    public void setmTree(MenuTree mTree) {
+        this.mTree = mTree;
+    }
+
+    public WorldInteraction getWinter() {
+        return winter;
     }
 
     public NPC getNpccontact() {

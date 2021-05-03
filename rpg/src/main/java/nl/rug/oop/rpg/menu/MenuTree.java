@@ -10,7 +10,7 @@ public class MenuTree {
     protected HashMap<String, MenuTree> submenus;
     protected EnumMap<?, String> optionlist;
 
-    MenuTree(mNodeBuilder params) {
+    MenuTree(MenuNodeBuilder params) {
         this.root = params.root;
         this.menunode = params.menunode;
         this.submenus = params.submenus;
@@ -19,6 +19,18 @@ public class MenuTree {
 
     public MenuTree() {
 
+    }
+
+    public EnumMap<?, String> getOptionlist() {
+        return optionlist;
+    }
+
+    public void setSubmenus(HashMap<String, MenuTree> submenus) {
+        this.submenus = submenus;
+    }
+
+    public void setRoot(MenuTree root) {
+        this.root = root;
     }
 
     public HashMap<String, Method> getMenunode() {

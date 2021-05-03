@@ -1,22 +1,21 @@
 package nl.rug.oop.rpg.npcsystem;
 
-import java.awt.*;
 import java.util.*;
 import java.lang.reflect.*;
 
-import nl.rug.oop.rpg.menu.MenuTree;
+import nl.rug.oop.rpg.Typewriter;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.game.Combat;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 
 public class NpcInteraction extends WorldInteraction implements PlayerNpcAction {
+    Typewriter tw = new Typewriter();
+
     public NpcInteraction() {
     }
-
-    public void engageNpc(Player x) throws InvocationTargetException, IllegalAccessException {
+    public void engageNpc(Player x) {
         Scanner in = x.getRdtxt();
-
         if (lifeCheck(x)) {
             return;
         }
@@ -25,22 +24,19 @@ public class NpcInteraction extends WorldInteraction implements PlayerNpcAction 
         if (input.equals("back")) {
             return;
         }
-        HashMap<String, Method> cmenu = x.getmTree().getSubmenus().get("c").getSubmenus().get(input).getMenunode();
+        x.setmTree(x.getmTree().getSubmenus().get(input));
         Combat initFight = new Combat();
-        try {
-            initFight.duel(x, x.getLocation().getNpc(), cmenu, in, x.getmTree());
-        } catch (NoSuchMethodException | InstantiationException e) {
-            e.printStackTrace();
-        }
+        initFight.duel(x, x.npccontact, x.getmTree());
     }
 
     public void conversePlayer(Player x) {
-        System.out.println("Hey, unknown entity, are you friendly?");
+        tw.type(x.name + ": Hey, unknown entity, are you friendly?\n");
         lifeCheck(x);
     }
 
     public void attackPlayer(Player x) {
-        System.out.println("Engaging enemy. . .\n ");
+        tw.poeticPause(x.name + " :",800);
+        tw.type(" Engaging enemy. . .\n");
         NPC foe = x.getNpccontact();
         foe.setHealth(foe.getHealth() - x.getDamage());
         x.setHealth(x.getHealth() - foe.getDamage());
@@ -59,13 +55,15 @@ public class NpcInteraction extends WorldInteraction implements PlayerNpcAction 
     }
 
     public void tradePlayer(Player x) {
-        System.out.println("Wanna trade? ");
+        tw.type(x.name + ": Wanna trade?\n ");
+        lifeCheck(x);
     }
 
     public boolean lifeCheck(Player x) {
 
         if (x.getLocation().getNpc().getHealth() <= 0) {
-            System.out.println("Its avatar is not functioning. It is not responding.\n");
+            tw.poeticPause("SysCheck: ",1500);
+            tw.type(" Its avatar is not functioning. It is not responding.\n");
             return true;
         } else {
             return false;

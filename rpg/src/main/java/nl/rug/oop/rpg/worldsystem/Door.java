@@ -50,6 +50,6 @@ public class Door implements Inspectable, Interactable {
             r = r.doors.get(x).exit;
         }
         ava.setLocation(r);
-        System.out.println("Entering portal...\n");
+        System.out.println("Entering portal...\n \n");
     }
 }

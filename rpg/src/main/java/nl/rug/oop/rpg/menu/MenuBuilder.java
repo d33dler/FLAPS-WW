@@ -64,8 +64,8 @@ public class MenuBuilder {
 
     public HashMap<String, Method> setInventoryCommands() throws NoSuchMethodException {
         HashMap<String, Method> inv = new HashMap<>();
-        inv.put("w", invInter.getClass().getMethod("getInvWeapons", Player.class));
-        inv.put("c", invInter.getClass().getMethod("getInvConsum", Player.class));
+        inv.put("w", invInter.getClass().getMethod("listInvItems", Player.class));
+        inv.put("c", invInter.getClass().getMethod("listInvItems", Player.class));
         inv.put("back", worldInter.getClass().getMethod("goBack", Player.class));
         return inv;
     }
@@ -84,7 +84,11 @@ public class MenuBuilder {
         invsub.put("a", itemInter.getClass().getMethod("equipInvItem", Player.class));
         return invsub;
     }
-
+    public HashMap<String, Method> setReturnCommand() throws NoSuchMethodException {
+        HashMap<String, Method> retcomm = setConsumInventoryCommands();
+        retcomm.put("back", worldInter.getClass().getMethod("goBack", Player.class));
+        return retcomm;
+    }
     public MenuTree buildMenuTree() throws NoSuchMethodException {
 
         HashMap<String, Method> explcomm = setMainCommands();
@@ -95,21 +99,22 @@ public class MenuBuilder {
         HashMap<String, Method> invcomm = setInventoryCommands();
         HashMap<String, Method> invconsomm = setConsumInventoryCommands();
         HashMap<String, Method> invwepcomm = setWeaponInventoryCommands();
-        MenuTree rootmenu = new mNodeBuilder().root(null).mNode(explcomm).subM(null).
+        HashMap<String, Method> retcomm = setReturnCommand();
+        MenuTree rootmenu = new MenuNodeBuilder().root(null).mNode(explcomm).subM(null).
                 optL(ExploreOptions.getExmn()).buildtree();
-        MenuTree doormenu = new mNodeBuilder().root(rootmenu).mNode(doorcomm).subM(null).
+        MenuTree doormenu = new MenuNodeBuilder().root(rootmenu).mNode(doorcomm).subM(null).
                 optL(null).buildtree();
-        MenuTree npcmenu = new mNodeBuilder().root(rootmenu).mNode(npccomm).subM(null).
+        MenuTree npcmenu = new MenuNodeBuilder().root(rootmenu).mNode(npccomm).subM(null).
                 optL(NpcOptions.getCompany()).buildtree();
-        MenuTree combatmenu = new mNodeBuilder().root(npcmenu).mNode(combatcomm).subM(null).
+        MenuTree combatmenu = new MenuNodeBuilder().root(npcmenu).mNode(combatcomm).subM(null).
                 optL(CombatOptions.setMoves()).buildtree();
-        MenuTree itemenu = new mNodeBuilder().root(rootmenu).mNode(itemcomm).subM(null).
+        MenuTree itemenu = new MenuNodeBuilder().root(rootmenu).mNode(itemcomm).subM(null).
                 optL(ItemOptions.getItem()).buildtree();
-        MenuTree invmenu = new mNodeBuilder().root(rootmenu).mNode(invcomm).subM(null).
+        MenuTree invmenu = new MenuNodeBuilder().root(rootmenu).mNode(invcomm).subM(null).
                 optL(InventoryOpt.getInv()).buildtree();
-        MenuTree invconsmenu = new mNodeBuilder().root(invmenu).mNode(invconsomm).subM(null).
+        MenuTree invconsmenu = new MenuNodeBuilder().root(invmenu).mNode(invconsomm).subM(null).
                 optL(InvConsumOptions.getSubInv()).buildtree();
-        MenuTree invwepmenu = new mNodeBuilder().root(invmenu).mNode(invwepcomm).subM(null).
+        MenuTree invwepmenu = new MenuNodeBuilder().root(invmenu).mNode(invwepcomm).subM(null).
                 optL(InvWeaponOptions.getSubInv()).buildtree();
         HashMap<String, MenuTree> rootSubMenus = new HashMap<>();
         rootSubMenus.put("a", rootmenu);
@@ -117,18 +122,22 @@ public class MenuBuilder {
         rootSubMenus.put("c", npcmenu);
         rootSubMenus.put("d", itemenu);
         rootSubMenus.put("e", invmenu);
+
         HashMap<String, MenuTree> npcCsubMenu = new HashMap<>();
         HashMap<String, MenuTree> invSubMenu = new HashMap<>();
-        invSubMenu.put("w", invconsmenu);
-        invSubMenu.put("c", invwepmenu);
-        invSubMenu.put("back", rootmenu);
+        HashMap<String, MenuTree> invSubSubMenu = new HashMap<>();
+        invSubSubMenu.put("back",invmenu);
+        invSubMenu.put("c", invconsmenu);
+        invSubMenu.put("w", invwepmenu);
+        invSubMenu.put("back", invmenu);
         npcCsubMenu.put("x", combatmenu);
         npcCsubMenu.put("back", rootmenu);
+        invconsmenu.submenus = invSubSubMenu;
+        invwepmenu.submenus = invSubSubMenu;
         invmenu.submenus = invSubMenu;
         npcmenu.submenus = npcCsubMenu;
-        MenuTree trmenu = new mNodeBuilder().root(rootmenu).mNode(explcomm).subM(rootSubMenus).
-                optL(ExploreOptions.getExmn()).buildtree();
-        trmenu.root.menunode = explcomm;
-        return trmenu;
+        rootmenu.setSubmenus(rootSubMenus);
+        rootmenu.setRoot(rootmenu);
+        return rootmenu;
     }
 }

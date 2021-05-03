@@ -31,12 +31,12 @@ public abstract class Item implements Inspectable, Interactable {
     public void interact(Player ava, int x) {
         Item item = ava.getLocation().getLoot();
         if (!item.name.equals("nothing")) {
-            tw.type("You picked a " + item.name + "\n Storing in inventory...\n");
+            tw.type("You picked an object: " + item.name + "\nStoring in inventory...\n");
             DepositInv(ava, item); //needs each weapon to have class indicated for matching by string
             removeItemRoom(ava.getLocation());
             removeItemPlayer(ava);
         } else {
-            tw.type("There is " + ava.getLocation().getLoot().name + " here \n");
+            tw.type("Found  " + ava.getLocation().getLoot().name + " here \n");
         }
     }
 
@@ -105,9 +105,6 @@ public abstract class Item implements Inspectable, Interactable {
     public String getName() {
         return name;
     }
-
-
-
 
 }
 

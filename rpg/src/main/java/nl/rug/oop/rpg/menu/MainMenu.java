@@ -18,8 +18,8 @@ public class MainMenu {
   //      }
   //      tw.type("Connection succesfully established");
   //      tw.poeticPause("", 0);
-       tw.poeticPause("(y) PROCEED?", 0);
-       tw.poeticPause("(n) Exit", 0);
+       tw.poeticPause("(y) PROCEED?\n", 0);
+       tw.poeticPause("(n) Exit\n", 0);
 
         String input = rdtxt.nextLine();
         if (input.equals("y")) {

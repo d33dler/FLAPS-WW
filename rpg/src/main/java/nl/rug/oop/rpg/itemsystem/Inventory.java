@@ -30,22 +30,5 @@ public class Inventory extends AvatarInterface {
                 consumInv(clist).
                 createInv();
     }
-
-
-/*
-    public void renderMenu(Player x, Scanner in, HashMap<String, Method> menu, MenuTree menuTr, Item item) {
-        Method option;
-        String input;
-        Room r = x.getLocation();
-        EnumMap<InvConsumOptions, String> invopt = InvConsumOptions.getSubInv();
-        do {
-            invopt.values().forEach(System.out::println);
-            input = in.nextLine();
-            option = menu.get(input);
-            option.exec(x, in, menu, menuTr);
-        } while (!input.equals("back"));
-    }
-
- */
 }
 

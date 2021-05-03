@@ -12,29 +12,7 @@ public class ItemInteraction extends WorldInteraction implements ItemCommands {
     public ItemInteraction() {
     }
 
-    public void itemCheck(Player x)
-            throws InvocationTargetException,
-            NoSuchMethodException,
-            InstantiationException,
-            IllegalAccessException {
-        WorldInteraction winter = new WorldInteraction();
-        Scanner in = x.getRdtxt();
-        Method option;
-        String input;
-        Room r = x.getLocation();
-        Item item = r.getLoot();
-        EnumMap<ItemOptions, String> iteminter = ItemOptions.getItem();
-        do {
-            iteminter.values().forEach(System.out::println);
-            input = in.nextLine();
-            option = x.getmTree().getSubmenus().get("d").getMenunode().get(input);
-            Object interact = winter.getActionType(option);
-            try {
-                option.invoke(interact, x);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        } while (!input.equals("back") && !item.name.equals("nothing"));
+    public void itemCheck(Player x) {
     }
 
     public void inspectItem(Player x) {
@@ -73,8 +51,6 @@ public class ItemInteraction extends WorldInteraction implements ItemCommands {
     public void equipInvItem(Player x) {
         Room r = x.getLocation();
         x.setHold(r.getLoot());
-        r.getLoot().Recycle(x);
-
     }
 
 

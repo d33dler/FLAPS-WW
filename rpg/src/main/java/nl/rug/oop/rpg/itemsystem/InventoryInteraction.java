@@ -15,53 +15,26 @@ public class InventoryInteraction extends WorldInteraction implements InventoryC
     }
 
     public void inventoryCheck(Player x) {
-        WorldInteraction winter = new WorldInteraction();
-        Scanner in = x.getRdtxt();
-        Method option;
-        String input;
-        Room r = x.getLocation();
-        EnumMap<InventoryOpt, String> invopt = InventoryOpt.getInv();
-        do {
-            invopt.values().forEach(System.out::println);
-            input = in.nextLine();
-            option =  x.getmTree().getSubmenus().get("e").getMenunode().get(input);
-            try {
-                option.invoke(winter, x);
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                e.printStackTrace();
-            }
-        } while (!input.equals("back"));
     }
 
-    public void getInvWeapons(Player x) {
-        Scanner in = x.getRdtxt();
+    public void listInvItems(Player x) {
         Typewriter tw = new Typewriter();
-        tw.type("-Weapons---------------\n");
+        getItemType(x,tw);
         x.getInventory().getwList().keySet().forEach(System.out::println);
         tw.type("-----------------------\n");
-        tw.type("(w) Interact \n (back) Return \n");
-        String input = in.nextLine();
-        if (input.equals("back")) {
-            return;
-        }
-        HashMap<String, Method> cmenu = x.getmTree().getSubmenus().get("e").getSubmenus().get(input).getMenunode();
-        Item item = x.getHold().SelectItem(x.getInventory().getwList(), in);
-       // renderMenu(x, in, cmenu, menuTr, item);
+        tw.type("(w) Interact\n(back) Return \n");
     }
 
-    public void getInvConsum(Player x) {
-        Scanner in = x.getRdtxt();
-        Typewriter tw = new Typewriter();
-        tw.type("-Consumables-----------\n");
-        x.getInventory().getcList().keySet().forEach(System.out::println);
-        tw.type("-----------------------\n");
-        tw.type("(c) Interact \n (back) Return \n");
-        String input = in.nextLine();
-        if (input.equals("back")) {
-            return;
+    public void getItemType(Player x, Typewriter tw){
+        switch (x.getInput()){
+            case "w":
+                tw.type("-Weapons---------------\n");
+                return;
+            case "c": tw.type("-Consumables-----------\n");
+                return;
+            default: tw.type("-eRrooo00r-----------\n");
         }
-        HashMap<String, Method> cmenu = x.getmTree().getSubmenus().get("e").getSubmenus().get(input).getMenunode();
-        Item item = x.getHold().SelectItem(x.getInventory().getcList(), in);
-       // renderMenu(x, in, cmenu, menuTr, item);
     }
+
+
 }

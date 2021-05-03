@@ -9,19 +9,19 @@ import nl.rug.oop.rpg.npcsystem.NPC;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static nl.rug.oop.rpg.Randomizers.randomMtrl;
+import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
 public class World {
-    protected int links = 50;//edit for requirement
+    protected int links = 45;//edit for requirement
     protected Map<Room, List<Room>> roomConnects;
     private static final Randomizers roomID = new Randomizers(7, ThreadLocalRandom.current());
 
     public void generateRoom(World map) {
         List<Door> doors = new ArrayList<>();
         String roomId = roomID.generateId();
-        Attr1room att1 = randomMtrl(Attr1room.class);
-        Attr2room att2 = randomMtrl(Attr2room.class);
-        Holders storage = randomMtrl(Holders.class);
+        Attr1room att1 = randomMaterial(Attr1room.class);
+        Attr2room att2 = randomMaterial(Attr2room.class);
+        Holders storage = randomMaterial(Holders.class);
         Item loot = generateItem(roomId);
         NPC npc = generateNpc();
         boolean company = npc != null;
@@ -40,7 +40,7 @@ public class World {
     }
 
     public void generateDoor(Room out, Room goin, World map) {
-        DoorcolorsDb clr = randomMtrl(DoorcolorsDb.class);
+        DoorcolorsDb clr = randomMaterial(DoorcolorsDb.class);
         Door door = new DoorBuilder()
                 .exit(out)
                 .enter(goin)
@@ -55,7 +55,7 @@ public class World {
     }
 
     public NPC generateNpc() {
-        SpeciesDb npcdata = randomMtrl(SpeciesDb.class);
+        SpeciesDb npcdata = randomMaterial(SpeciesDb.class);
         Inventory inventory = new Inventory().generateInv();
         Enemies npc = new EntityBuilder() //presence of npc may be randomized
                 .name(npcdata.getSpname())
@@ -80,14 +80,14 @@ public class World {
     public Item generateItem(String in) {
         Item item;
         if (roomID.itemInsert(in)) {
-            ConsumablesDb loot = randomMtrl(ConsumablesDb.class);
+            ConsumablesDb loot = randomMaterial(ConsumablesDb.class);
             item = new ItemBuilder()
                     .name(loot.getConsid())
                     .hh(loot.getHealth())
                     .val(loot.getValue())
                     .createCons();
         } else {
-            WeaponsDb loot = randomMtrl(WeaponsDb.class);
+            WeaponsDb loot = randomMaterial(WeaponsDb.class);
             item = new ItemBuilder()
                     .name(loot.getWname())
                     .dmg(loot.getDmg())
