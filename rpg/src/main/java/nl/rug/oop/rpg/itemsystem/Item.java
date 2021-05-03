@@ -1,7 +1,11 @@
 package nl.rug.oop.rpg.itemsystem;
+
 import java.util.*;
+
 import nl.rug.oop.rpg.*;
-import nl.rug.oop.rpg.game.GameCommands;
+
+import java.lang.reflect.*;
+
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
 import nl.rug.oop.rpg.menu.MenuTree;
@@ -48,7 +52,8 @@ public abstract class Item implements Inspectable, Interactable {
         this.name = parameters.name; //
         this.value = parameters.value;
     }
-    public Item(){
+
+    public Item() {
     }
 
     public void use(Player ava) {
@@ -101,22 +106,9 @@ public abstract class Item implements Inspectable, Interactable {
         return name;
     }
 
-    public static class ItemCheck implements GameCommands {
-        @Override
-        public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
-            GameCommands option;
-            String input;
-            Room r = x.getLocation();
-            Item item = r.getLoot();
-            EnumMap<ItemOptions, String> iteminter = ItemOptions.getItem();
-            do {
-                iteminter.values().forEach(System.out::println);
-                input = in.nextLine();
-                option = menu.get(input);
-                option.exec(x, in, menu, menuTr);
-            } while (!input.equals("back") && !item.name.equals("nothing"));
-        }
-    }
+
+
+
 }
 
 class Nothing extends Item {

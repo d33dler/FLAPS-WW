@@ -1,8 +1,9 @@
 package nl.rug.oop.rpg.game;
-
+import java.lang.reflect.*;
 import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
+import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -10,17 +11,24 @@ import java.util.Scanner;
 
 public class Combat {
 
-    public void duel(Player x, NPC foe, HashMap<String, GameCommands> cmenu, Scanner in, MenuTree mtree) {
+    public void duel(Player x, NPC foe, HashMap<String, Method> cmenu, Scanner in, MenuTree mtree)
+            throws InvocationTargetException,
+            IllegalAccessException,
+            NoSuchMethodException,
+            InstantiationException {
         String input = "user";
-        GameCommands option;
+        Method option;
+        WorldInteraction wInter = new WorldInteraction();
         EnumMap<CombatOptions, String> combopt = CombatOptions.setMoves();
+
         while (foe.getHealth() > 0 && x.getHealth() > 0 && !input.equals("c")) {
             System.out.println("< ╬ > System Health Status ::: " +
                     x.getName() + ": " + x.getHealth() + "  ▓▓▓▓   " + foe.getName() + ": " + foe.getHealth());
             printFightmenu(combopt);
             input = in.nextLine();
             option = cmenu.get(input);
-            option.exec(x, in, cmenu, mtree);
+            Object interaction = wInter.getActionType(option);
+            option.invoke(interaction, x);
         }
         if (foe.getHealth() <= 0) {
             x.getLocation().setCompany(false);

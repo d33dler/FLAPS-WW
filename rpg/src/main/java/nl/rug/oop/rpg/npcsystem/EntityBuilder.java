@@ -38,8 +38,11 @@ public class EntityBuilder extends Entity {
         this.hold = hold;
         return this;
     }
-
-    public Player protagonist() {
+    public EntityBuilder npcc(NPC cont) {
+        this.npccontact = cont;
+        return this;
+    }
+    public Player protagonist() throws NoSuchMethodException {
         return new Player(this);
     }
 

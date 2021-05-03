@@ -99,14 +99,20 @@ public class World {
     public Player generatePlayer(World map) {
         Inventory inv = new Inventory().generateInv(); //verify integrity
         List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
-        Player player = new EntityBuilder()
-                .name("user")
-                .hdm(100, 10, 30)
-                .inv(inv)
-                .loc(listrm.get(0))
-                .fl(false)
-                .ith(new ItemBuilder().name("Raygun").dmg(14).val(10).createWep())
-                .protagonist();
+        Player player = null;
+        try {
+            player = new EntityBuilder()
+                    .name("user")
+                    .hdm(100, 10, 30)
+                    .inv(inv)
+                    .loc(listrm.get(0))
+                    .fl(false)
+                    .ith(new ItemBuilder().name("Raygun").dmg(14).val(10).createWep())
+                    .npcc(listrm.get(0).getNpc())
+                    .protagonist();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
         Item itemc = map.generateItem("11a");
         Item itemw = map.generateItem("Xz");
         player.getInventory().getwList().put(itemw.getName(), (Weapons) itemw);

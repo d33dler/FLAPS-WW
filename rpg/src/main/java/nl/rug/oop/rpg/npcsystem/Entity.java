@@ -11,6 +11,8 @@ public abstract class Entity {
     protected Room location;
     protected Item hold;
     protected boolean flee;
+    protected NPC npccontact;
+
     public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
         this.location = parameters.location;
@@ -20,10 +22,11 @@ public abstract class Entity {
         this.money = parameters.money;
         this.hold = parameters.hold;
         this.flee = parameters.flee;
+        this.npccontact = parameters.npccontact;
     }
     public Entity(){
-
     }
+
     public String getName() {
         return name;
     }

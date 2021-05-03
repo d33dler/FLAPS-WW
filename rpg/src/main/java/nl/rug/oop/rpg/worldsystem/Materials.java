@@ -145,32 +145,8 @@ enum SpeciesDb {
     }
 }
 
-enum Npcinteract {
-    n, a, b, c, d;
-    public static EnumMap<Npcinteract, String > getCompany(){
-        EnumMap<Npcinteract,String> commands = new EnumMap<>(Npcinteract.class);
-        commands.put(Npcinteract.n, "Initialize: ");
-        commands.put(Npcinteract.a, "   a) conversation");
-        commands.put(Npcinteract.b, "   b) trade");
-        commands.put(Npcinteract.c, "   c) combat");
-        commands.put(Npcinteract.d, "   (back) Return");
-        return commands;
-    }
-}
-
 enum Trading {
     n,a,b;
 
 }
 
-enum InvWeaponOptions {
-    a,b,c,d;
-    public static EnumMap<InvWeaponOptions, String> getSubInv() {
-        EnumMap<InvWeaponOptions, String> commands = new EnumMap<>(InvWeaponOptions.class);
-        commands.put(InvWeaponOptions.a, "   a) Equip");
-        commands.put(InvWeaponOptions.b, "   b) Recycle");
-        commands.put(InvWeaponOptions.c, "   c) Throw away");
-        commands.put(InvWeaponOptions.d, "   (back) Return");
-        return commands;
-    }
-}

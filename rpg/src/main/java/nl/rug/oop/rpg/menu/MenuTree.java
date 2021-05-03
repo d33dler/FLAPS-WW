@@ -1,20 +1,27 @@
 package nl.rug.oop.rpg.menu;
 
-import nl.rug.oop.rpg.game.GameCommands;
-
+import java.lang.reflect.*;
+import java.util.EnumMap;
 import java.util.HashMap;
 
 public class MenuTree {
     protected MenuTree root;
-    protected HashMap<String, GameCommands> menunode;
+    protected HashMap<String, Method> menunode;
     protected HashMap<String, MenuTree> submenus;
-        MenuTree(MenuTree root, HashMap<String, GameCommands> menunode, HashMap<String, MenuTree> submenus) {
-            this.root = root;
-            this.menunode = menunode;
-            this.submenus = submenus;
-        }
+    protected EnumMap<?, String> optionlist;
 
-    public HashMap<String, GameCommands> getMenunode() {
+    MenuTree(mNodeBuilder params) {
+        this.root = params.root;
+        this.menunode = params.menunode;
+        this.submenus = params.submenus;
+        this.optionlist = params.optionlist;
+    }
+
+    public MenuTree() {
+
+    }
+
+    public HashMap<String, Method> getMenunode() {
         return menunode;
     }
 

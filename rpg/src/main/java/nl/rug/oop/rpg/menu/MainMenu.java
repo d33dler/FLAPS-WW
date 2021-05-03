@@ -24,7 +24,7 @@ public class MainMenu {
         String input = rdtxt.nextLine();
         if (input.equals("y")) {
             Gameplay start = new Gameplay();
-            start.Launch(rdtxt);
+            start.Launch();
         } else {
             rdtxt.close();
             System.exit(0);
