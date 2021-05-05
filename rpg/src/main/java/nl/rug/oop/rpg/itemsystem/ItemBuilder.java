@@ -1,7 +1,5 @@
 package nl.rug.oop.rpg.itemsystem;
 
-import nl.rug.oop.rpg.worldsystem.Builders;
-
 public class ItemBuilder extends Item {
 
     protected int dmg;

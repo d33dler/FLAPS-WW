@@ -5,23 +5,6 @@ import java.util.EnumMap;
 public enum Materials {
 }
 
-enum DoorcolorsDb {
-    red(" red"),
-    blue(" blue"),
-    black(" black"),
-    gray(" gray"),
-    cyan(" cyan");
-    private final String cname;
-
-    DoorcolorsDb(String cname) {
-        this.cname = cname;
-    }
-
-    public String getCname() {
-        return cname;
-    }
-}
-
 enum Attr1room {
     r(" ruined "),
     l(" large "),

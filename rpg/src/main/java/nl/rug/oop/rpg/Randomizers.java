@@ -1,6 +1,7 @@
 package nl.rug.oop.rpg;
 import java.util.*;
 import java.security.SecureRandom;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Randomizers {
     /**
@@ -39,4 +40,8 @@ public class Randomizers {
     public boolean itemInsert(String in) {
         return in.matches("^[0-9|a-z].*$");
     }
+    public static int getRandom(int min, int max) {
+        return ThreadLocalRandom.current().nextInt(min, max + 1);
+    }
 }
+

@@ -1,7 +1,7 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.worldsystem.Room;
+import nl.rug.oop.rpg.worldsystem.Player;
 
 public interface Inspectable {
-   void inspect(Room x);
+   void inspect(Player x);
 }

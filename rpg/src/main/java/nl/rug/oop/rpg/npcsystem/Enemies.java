@@ -1,8 +1,26 @@
 package nl.rug.oop.rpg.npcsystem;
 
-public class Enemies extends NPC {
+import nl.rug.oop.rpg.game.Inspectable;
+import nl.rug.oop.rpg.game.Interactable;
+import nl.rug.oop.rpg.worldsystem.Player;
+
+public class Enemies extends NPC implements Interactable, Inspectable,Attackable {
 
     public Enemies(EntityBuilder parameters) {
         super(parameters);
+    }
+
+    /**
+     *  @param a
+     *
+     */
+
+    @Override
+    public void interact(Player a) {
+    }
+
+    @Override
+    public void receiveattack(Player x) {
+
     }
 }

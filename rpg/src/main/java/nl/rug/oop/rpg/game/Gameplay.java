@@ -12,7 +12,7 @@ public class Gameplay {
 
     public void Launch() {
         //Dialogue intro = new Dialogue();
-        // intro.Comunication();
+    //     intro.Comunication();
         World morph = new World();
         World map = morph.createMap();
         Player player = morph.generatePlayer(map);
@@ -24,9 +24,6 @@ public class Gameplay {
         Scanner txtIn = player.getRdtxt();
         player.getUserName(player, txtIn);
         System.out.println("Greetings, " + player.getName() + "!\n \n");
-
-        // printExpmenu(exoptns);
-
         try {
             renderMenu(player, txtIn, wInter);
         } catch (InvocationTargetException
@@ -35,14 +32,6 @@ public class Gameplay {
                 | IllegalAccessException e) {
             e.printStackTrace();
         }
-        // txtIn.close();
-    }
-
-    public void printExpmenu(EnumMap<ExploreOptions, String> exoptns) {
-        exoptns.values().forEach(System.out::println);
-    }
-
-    public void reachSubMenu(HashMap<String, HashMap<String, Method>> allMenus, String input) { //prob loop
     }
 
     public void renderMenu(Player player, Scanner in, WorldInteraction wInter)
@@ -60,7 +49,7 @@ public class Gameplay {
                 options.values().forEach(System.out::println);
             }
             input = readInput(in);
-            player.setInput(input);
+            player.setSinput(input);
             option = menuTree.getMenunode().get(input);
             if (menuTree.getSubmenus() != null && menuTree.getSubmenus().get(input) != null) {
                 player.setmTree(menuTree.getSubmenus().get(input));

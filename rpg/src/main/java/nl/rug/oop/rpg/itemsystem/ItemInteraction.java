@@ -2,10 +2,6 @@ package nl.rug.oop.rpg.itemsystem;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.EnumMap;
-import java.util.Scanner;
 
 
 public class ItemInteraction extends WorldInteraction implements ItemCommands {
@@ -17,13 +13,13 @@ public class ItemInteraction extends WorldInteraction implements ItemCommands {
 
     public void inspectItem(Player x) {
         Room r = x.getLocation();
-        r.getLoot().inspect(r);
+        r.getLoot().inspect(x);
     }
 
 
     public void pickItem(Player x) {
         Room r = x.getLocation();
-        r.getLoot().interact(x, 0);
+        r.getLoot().interact(x);
     }
 
 
@@ -36,7 +32,7 @@ public class ItemInteraction extends WorldInteraction implements ItemCommands {
 
     public void purgeItem(Player x) {
         Room r = x.getLocation();
-        r.getLoot().interact(x, 0);
+        r.getLoot().interact(x);
     }
 
 

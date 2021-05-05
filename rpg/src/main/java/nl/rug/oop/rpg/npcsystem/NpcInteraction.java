@@ -14,6 +14,12 @@ public class NpcInteraction extends WorldInteraction implements PlayerNpcAction 
 
     public NpcInteraction() {
     }
+
+    /**
+     *
+     * @param x
+     *
+     */
     public void engageNpc(Player x) {
         Scanner in = x.getRdtxt();
         if (lifeCheck(x)) {

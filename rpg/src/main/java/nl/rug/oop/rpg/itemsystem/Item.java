@@ -4,11 +4,8 @@ import java.util.*;
 
 import nl.rug.oop.rpg.*;
 
-import java.lang.reflect.*;
-
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
-import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
@@ -18,17 +15,17 @@ public abstract class Item implements Inspectable, Interactable {
     protected Typewriter tw = new Typewriter();
 
     @Override
-    public void inspect(Room r) {
-        if (r.getLoot() instanceof Nothing) {
+    public void inspect(Player r) {
+        Room now = r.getLocation();
+        if (now.getLoot() instanceof Nothing) {
             tw.type("The room doesn't contain resources\n");
         } else {
-            tw.type("You see a " + r.getLoot().name + " in a " + r.getStorage().getName() + "\n"); //random holder
+            tw.type("You see a " + now.getLoot().name + " in a " + now.getStorage().getName() + "\n"); //random holder
         }
-
     }
 
     @Override
-    public void interact(Player ava, int x) {
+    public void interact(Player ava) {
         Item item = ava.getLocation().getLoot();
         if (!item.name.equals("nothing")) {
             tw.type("You picked an object: " + item.name + "\nStoring in inventory...\n");

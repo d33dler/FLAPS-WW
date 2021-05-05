@@ -2,7 +2,6 @@ package nl.rug.oop.rpg.npcsystem;
 
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
-import nl.rug.oop.rpg.worldsystem.Builders;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
@@ -42,7 +41,7 @@ public class EntityBuilder extends Entity {
         this.npccontact = cont;
         return this;
     }
-    public Player protagonist() throws NoSuchMethodException {
+    public Player protagonist() {
         return new Player(this);
     }
 

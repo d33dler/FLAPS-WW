@@ -2,13 +2,7 @@ package nl.rug.oop.rpg.itemsystem;
 
 import nl.rug.oop.rpg.Typewriter;
 import nl.rug.oop.rpg.worldsystem.Player;
-import nl.rug.oop.rpg.worldsystem.Room;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
-
-import java.lang.reflect.*;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Scanner;
 
 public class InventoryInteraction extends WorldInteraction implements InventoryCommands {
     public InventoryInteraction() {
@@ -26,7 +20,7 @@ public class InventoryInteraction extends WorldInteraction implements InventoryC
     }
 
     public void getItemType(Player x, Typewriter tw){
-        switch (x.getInput()){
+        switch (x.getSinput()){
             case "w":
                 tw.type("-Weapons---------------\n");
                 return;

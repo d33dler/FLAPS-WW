@@ -11,15 +11,16 @@ public class MainMenu {
     public void initMenu() {
         Typewriter tw = new Typewriter();
         Scanner rdtxt = new Scanner(System.in);
-   //     tw.type("Initiating porting with remote node..."); //move all to materials
-   //     tw.poeticPause("Routing in progress...", 2000);
- //       for (int i = 0; i < 3; i++) {
-  //          tw.poeticPause(".", 1000);
-  //      }
-  //      tw.type("Connection succesfully established");
-  //      tw.poeticPause("", 0);
-       tw.poeticPause("(y) PROCEED?\n", 0);
-       tw.poeticPause("(n) Exit\n", 0);
+   /*     tw.type("Initiating porting with remote node..."); //move all to materials
+        tw.poeticPause("Routing in progress...", 2000);
+        for (int i = 0; i < 3; i++) {
+            tw.poeticPause(".", 1000);
+        }
+        tw.type("Connection succesfully established");
+    */
+        tw.poeticPause("", 0);
+        tw.poeticPause("(y) PROCEED?\n", 0);
+        tw.poeticPause("(n) Exit\n", 0);
 
         String input = rdtxt.nextLine();
         if (input.equals("y")) {

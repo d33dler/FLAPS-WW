@@ -1,5 +1,4 @@
 package nl.rug.oop.rpg.menu;
-
 import java.lang.reflect.*;
 import java.util.EnumMap;
 import java.util.HashMap;

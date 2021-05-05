@@ -12,7 +12,6 @@ public abstract class Entity {
     protected Item hold;
     protected boolean flee;
     protected NPC npccontact;
-
     public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
         this.location = parameters.location;
