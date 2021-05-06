@@ -7,12 +7,13 @@ import java.io.IOException;
 public class QkSavingLoading extends SavingSystem{
     @Override
     public void save(Player x) {
-        x.setSavefile("quicksave.ser");
+        x.setSavefile("quicksave");
         super.save(x);
     }
 
     @Override
     public void setupLoad(Player x) {
+        x.setSavefile("quicksave");
         super.setupLoad(x);
     }
 }
