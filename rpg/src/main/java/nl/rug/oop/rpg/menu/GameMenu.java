@@ -17,7 +17,7 @@ public class GameMenu {
         String input;
         WorldInteraction wi = player.getWinter();
         do {
-            MenuTree menuTree = getMenu(player);
+            MenuTree menuTree = player.getmTree();
             EnumMap<?, String> options = menuTree.getOptionlist();
             if (options != null) {
                 options.values().forEach(System.out::println);
@@ -38,15 +38,5 @@ public class GameMenu {
     }
 
     public void switchSaveMenu(Player player) {
-        player.setSavemenu(!player.isSavemenu());
-
-    }
-
-    public MenuTree getMenu(Player player) {
-        if (player.isSavemenu()) {
-            return player.getsMenu();
-        } else {
-            return player.getmTree();
-        }
     }
 }

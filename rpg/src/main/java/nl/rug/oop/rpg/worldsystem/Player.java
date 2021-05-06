@@ -14,48 +14,63 @@ import nl.rug.oop.rpg.worldsystem.doors.Door;
 
 import java.util.Scanner;
 
-public class Player extends Entity implements Serializable,Cloneable {
+public class Player extends Entity implements Serializable, Cloneable {
     private static final long serialVersionUID = 10L;
-    protected World map;
+    public World map;
     protected boolean flee;
     protected String sinput;
     protected int intin;
     protected int travel = 1;
     protected boolean hostile;
     protected Door used;
-    protected  MenuTree mTree;
-    protected  MenuTree sMenu;
+    protected transient MenuTree mTree;
+    protected transient MenuTree sMenu;
     protected int energycells;
     protected Door focus;
     protected boolean rabbit;
-    protected boolean savemenu = false;
-    protected transient Scanner rdtxt = new Scanner(System.in);
+    protected boolean savemenu;
+    public transient Scanner rdtxt = new Scanner(System.in);
     protected transient WorldInteraction winter = new WorldInteraction();
     transient Typewriter tw = new Typewriter();
 
     {
         try {
             mTree = new MenuBuilder().buildGameMenu();
-            sMenu = new SaveMenuBuilder().setMainCommands();
         } catch (NoSuchMethodException e) {
             tw.type("Error generating menu tree");
         }
     }
+
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
     }
+
     public void getUserName(Player x, Scanner in) {
         System.out.println("Please authenticate yourself: ");
         x.setName(in.nextLine());
     }
-    public Player clone() throws CloneNotSupportedException{
+
+    public void setTw(Typewriter tw) {
+        this.tw = tw;
+    }
+
+    public void setWinter(WorldInteraction winter) {
+        this.winter = winter;
+    }
+
+    public Player clone() throws CloneNotSupportedException {
         Player player = (Player) super.clone();
         player.used = (Door) used.clone();
         player.focus = (Door) focus.clone();
         player.map = (World) map.clone();
         return player;
     }
+
+    public void setRdtxt(Scanner rdtxt) {
+        this.rdtxt = rdtxt;
+    }
+
     public void setFlee(boolean flee) {
         this.flee = flee;
     }

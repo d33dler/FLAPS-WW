@@ -127,6 +127,10 @@ public class MenuBuilder {
     }
 */
     public MenuTree buildGameMenu() throws NoSuchMethodException {
-        return setWeaponInventoryCommands();
+        MenuTree rootmenu = setWeaponInventoryCommands();
+        MenuTree sMenu = new SaveMenuBuilder().setMainCommands();
+        sMenu.setRoot(rootmenu);
+        rootmenu.getSubmenus().put("f",sMenu);
+        return rootmenu;
     }
 }
