@@ -1,13 +1,11 @@
 package nl.rug.oop.rpg.menu.builders;
 
-import nl.rug.oop.rpg.game.CombatOptions;
+import nl.rug.oop.rpg.menu.options.*;
 import nl.rug.oop.rpg.itemsystem.*;
 import nl.rug.oop.rpg.menu.GameMenu;
 import nl.rug.oop.rpg.npcsystem.NpcInteraction;
-import nl.rug.oop.rpg.worldsystem.ExploreOptions;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
-import nl.rug.oop.rpg.npcsystem.NpcOptions;
 
 import java.lang.reflect.*;
 import java.util.HashMap;
@@ -53,7 +51,7 @@ public class GameMenuBuilder {
         npccomm.put("c", action.getClass().getMethod("engageNpc", Player.class));
         npccomm.put("back", worldInter.getClass().getMethod("goBack", Player.class));
         MenuTree npcmenu = new MenuNodeBuilder().root(rootmenu).mNode(npccomm).subM(new HashMap<>()).
-                optL(NpcOptions.getCompany()).buildtree();
+                optL(NpcMenuOptions.getCompany()).buildtree();
         rootmenu.submenus.put("c", npcmenu);
         return rootmenu;
     }
@@ -65,7 +63,7 @@ public class GameMenuBuilder {
         combatcomm.put("b", action.getClass().getMethod("defendPlayer", Player.class));
         combatcomm.put("c", action.getClass().getMethod("fleePlayer", Player.class));
         MenuTree combatmenu = new MenuNodeBuilder().root(rootmenu.submenus.get("c")).mNode(combatcomm).
-                subM(new HashMap<>()).optL(CombatOptions.setMoves()).buildtree();
+                subM(new HashMap<>()).optL(CombatMenuOptions.setMoves()).buildtree();
         rootmenu.submenus.get("c").submenus.put("x", combatmenu);
         return rootmenu;
     }
@@ -90,7 +88,7 @@ public class GameMenuBuilder {
         invcomm.put("c", invInter.getClass().getMethod("listInvItems", Player.class));
         invcomm.put("back", worldInter.getClass().getMethod("goBack", Player.class));
         MenuTree invmenu = new MenuNodeBuilder().root(rootmenu).mNode(invcomm).subM(new HashMap<>()).
-                optL(InventoryOpt.getInv()).buildtree();
+                optL(InventoryOptions.getInv()).buildtree();
         rootmenu.submenus.put("e", invmenu);
         return rootmenu;
     }
@@ -121,17 +119,11 @@ public class GameMenuBuilder {
         return rootmenu;
     }
 
- /*   public HashMap<String, Method> setReturnCommand() throws NoSuchMethodException {
-        HashMap<String, Method> retcomm = setConsumInventoryCommands();
-        retcomm.put("back", worldInter.getClass().getMethod("goBack", Player.class));
-        return retcomm;
-    }
-*/
     public MenuTree buildGameMenu() throws NoSuchMethodException {
-        MenuTree rootmenu = setWeaponInventoryCommands();
-        MenuTree sMenu = new SaveMenuBuilder().setMainCommands();
-        sMenu.setRoot(rootmenu);
-        rootmenu.getSubmenus().put("f",sMenu);
-        return rootmenu;
+        MenuTree rootMenu = setWeaponInventoryCommands();
+        MenuTree saveMenu = new SaveMenuBuilder().setMainCommands();
+        saveMenu.setRoot(rootMenu);
+        rootMenu.getSubmenus().put("f",saveMenu);
+        return rootMenu;
     }
 }

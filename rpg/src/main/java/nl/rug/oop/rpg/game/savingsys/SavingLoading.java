@@ -1,19 +1,24 @@
 package nl.rug.oop.rpg.game.savingsys;
-
+import nl.rug.oop.rpg.game.FileSearch;
 import nl.rug.oop.rpg.worldsystem.Player;
+import java.io.File;
 
-import java.io.IOException;
 
 public class SavingLoading extends SavingSystem {
     @Override
     public void save(Player x) {
+        createSaveDir(x);
         getSaveName(x);
-        super.save(x);
+        if (!x.getSavefile().equals("back")) {
+            super.save(x);
+        }
     }
 
     @Override
     public void setupLoad(Player x) {
-        listSaveFiles();
+        FileSearch fs = new FileSearch();
+        String abspath = "/home/radubereja/Desktop/Object-Oriented Programming/a0/2021_Team_060/rpg/savedgames/saves/";
+        fs.listSaveFiles("savedgames/saves", ".ser", abspath);
         getSaveName(x);
         if (!x.getSavefile().equals("back")) {
             super.setupLoad(x);
@@ -23,6 +28,11 @@ public class SavingLoading extends SavingSystem {
     public void getSaveName(Player x) {
         x.getTw().type("Choose a save file & input name\n");
         System.out.println("(back) Back");
-        x.setSavefile(x.rdtxt.nextLine());
+        x.setSavefile("saves/" + x.rdtxt.nextLine());
+    }
+
+    public void createSaveDir(Player x) {
+        File saveDir = new File("savedgames/saves");
+        saveDir.mkdir();
     }
 }

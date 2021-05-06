@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg;
 
-import nl.rug.oop.rpg.menu.MainMenu;
+import nl.rug.oop.rpg.menu.RPG;
 
 public class Main {
 
@@ -9,7 +9,7 @@ public class Main {
      * @param args
      */
 
-    public static void main(String[] args) {
-    new MainMenu().initMenu();
+    public static void main(String[] args) throws NoSuchMethodException {
+    new RPG().MainMenu();
     }
 }

@@ -1,5 +1,4 @@
 package nl.rug.oop.rpg.npcsystem;
-
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.worldsystem.Player;

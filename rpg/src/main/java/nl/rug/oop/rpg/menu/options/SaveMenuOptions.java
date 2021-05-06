@@ -1,4 +1,4 @@
-package nl.rug.oop.rpg.menu;
+package nl.rug.oop.rpg.menu.options;
 import java.util.EnumMap;
 
 public enum SaveMenuOptions {

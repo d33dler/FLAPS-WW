@@ -1,20 +1,20 @@
 package nl.rug.oop.rpg.worldsystem;
 import nl.rug.oop.rpg.*;
 import nl.rug.oop.rpg.itemsystem.*;
-import nl.rug.oop.rpg.npcsystem.Enemies;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.*;
+
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
 import static nl.rug.oop.rpg.Randomizers.getRandom;
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
 public class World implements Serializable {
     private static final long serialVersionUID = 33L;
-    protected int links = 100;
+
     protected Map<Room, List<Room>> roomConnects;
     private transient static final Randomizers roomID = new Randomizers(7, ThreadLocalRandom.current());
 
@@ -37,15 +37,13 @@ public class World implements Serializable {
                 .storage(storage)
                 .lLoot(loot)
                 .create();
+        assert npc != null;
         npc.setLocation(room);
         map.roomConnects.put(room, new ArrayList<>());
     }
 
     public void generateDoor(Room out, Room goin, World map, DoorCollection<Object> doorcoll)
-            throws InstantiationException,
-            IllegalAccessException,
-            NoSuchMethodException,
-            InvocationTargetException {
+            throws Exception {
         Object randoor = doorcoll.extractDoor();
         Class<?> dtype = randoor.getClass();
         Door door = (Door) dtype.getDeclaredConstructor().newInstance();
@@ -60,22 +58,22 @@ public class World implements Serializable {
     }
 
 
-    public DoorCollection<Object> genDoorTypeCollection() {
+    public DoorCollection<Object> genDoorTypeCollection(Properties configs) {
         CloningDoor cd = new CloningDoor();
         UltraDoor ud = new UltraDoor();
         SecureDoor sd = new SecureDoor();
         Door gdoor = new Door();
         return new DoorCollection<>()
-                .add(cd.getProbab(), cd)
-                .add(ud.getProbab(), ud)
-                .add(sd.getProbab(), sd)
-                .add(gdoor.getProbab(), gdoor);
+                .add(Integer.parseInt(configs.getProperty("copy%")), cd)
+                .add(Integer.parseInt(configs.getProperty("ultra%")), ud)
+                .add(Integer.parseInt(configs.getProperty("crypt%")), sd)
+                .add(Integer.parseInt(configs.getProperty("door%")), gdoor);
     }
 
     public NPC generateNpc() {
         SpeciesDb npcdata = randomMaterial(SpeciesDb.class);
         Inventory inventory = new Inventory().generateInv();
-        Enemies npc = new EntityBuilder()
+        return new EntityBuilder()
                 .name(npcdata.getSpname())
                 .hdm(npcdata.getHealth(),
                         npcdata.getDamage() + ThreadLocalRandom.current().nextInt(2,
@@ -84,7 +82,6 @@ public class World implements Serializable {
                 .inv(inventory)
                 .ith(null)
                 .createn();
-        return npc;
     }
 
     public Item generateItem(String in) {
@@ -107,20 +104,23 @@ public class World implements Serializable {
         return item;
     }
 
-    public Player generatePlayer(World map) {
-        Inventory inv = new Inventory().generateInv(); //verify integrity
-        List<Room> listrm = new ArrayList<>(map.roomConnects.keySet());
-        Player player;
-        player = new EntityBuilder()
+    public Player generatePlayer() {
+        Inventory inv = new Inventory().generateInv();
+        Player player = new EntityBuilder()
                 .name("user")
                 .hdm(100, 15, 30)
                 .inv(inv)
-                .loc(listrm.get(0))
                 .fl(false)
                 .ith(new ItemBuilder().name("Raygun").dmg(14).val(10).createWep())
-                .npcc(listrm.get(0).getNpc())
                 .protagonist();
         player.setEnergycells(getRandom(200, 350));
+        return player;
+    }
+
+    public Player setupPlayer(Player player, World map) {
+        List<Room> listrm = new ArrayList<>(map.getRoomConnects().keySet());
+        player.setLocation(listrm.get(0));
+        player.setNpccontact(listrm.get(0).getNpc());
         player.setUsed(listrm.get(0).getDoors().get(0));
         Item itemc = map.generateItem("11a");
         Item itemw = map.generateItem("Xz");
@@ -130,21 +130,23 @@ public class World implements Serializable {
     }
 
     /**
+     * @param player carries the configurations files needed for map parameter settings.
      * @return Map structure, mapping a room to a list of rooms which can be reached through
      * doors which serve as "edges" in this graph-structure based map.
      * Rooms are picked randomly and assigned uniformly (2 - 3) branching doors.
      * No self-loops.
      */
 
-    public World createMap() {
+    public World createMap(Player player) {
+        Properties configs = player.getConfigs();
         World map = new World();
-        int rooms = 50;
+        int rooms = Integer.parseInt(configs.getProperty("roomNr"));
+        int links = rooms * 2 - 20;
         map.roomConnects = new HashMap<>();
         for (int i = 0; i < rooms; i++) {
             map.generateRoom(map);
         }
-        DoorCollection<Object> dcoll = genDoorTypeCollection();
-
+        DoorCollection<Object> dcoll = genDoorTypeCollection(configs);
         List<Room> allrooms = new ArrayList<>(map.roomConnects.keySet());
         Room mutate = new Room();
         for (int i = 0; i < links; ) {
@@ -154,8 +156,7 @@ public class World implements Serializable {
                 if (rA.ndors < 4 && rB.ndors < 4) {
                     try {
                         generateDoor(rA, rB, map, dcoll);
-                    } catch (InstantiationException | IllegalAccessException |
-                            NoSuchMethodException | InvocationTargetException e) {
+                    } catch (Exception e) {
                         System.out.println("Error generating world.");
                     }
                     i++;
@@ -177,7 +178,8 @@ public class World implements Serializable {
             allrooms.remove(rA);
         }
     }
-    public Object clone() throws CloneNotSupportedException{
-        return super.clone();
+
+    public Map<Room, List<Room>> getRoomConnects() {
+        return roomConnects;
     }
 }

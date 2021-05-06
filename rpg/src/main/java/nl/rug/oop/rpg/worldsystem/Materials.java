@@ -84,7 +84,7 @@ enum ConsumablesDb {
         this.consid = consid;
         this.health = health;
         this.value = value;
-    }//inspect constructor app
+    }
 
     public String getConsid() {
         return consid;

@@ -1,18 +1,10 @@
 package nl.rug.oop.rpg.game.savingsys;
-
 import nl.rug.oop.rpg.worldsystem.Player;
-
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
-import java.util.stream.Stream;
-
 
 public class SavingSystem implements Save, Serializable {
     private final static long serialVersionUID = 3292L;
-    Player player;
+    protected Player player;
 
     public void save(Player x) {
         File saveDir = new File("savedgames");
@@ -24,19 +16,25 @@ public class SavingSystem implements Save, Serializable {
             store.flush();
             store.close();
             fstream.close();
+            System.out.println("Save was created successfully");
         } catch (Exception e) {
             System.out.println("error saving");
         }
     }
 
-    public Player load(Player x)
-            throws IOException,
-            ClassNotFoundException {
-        FileInputStream fstream = new FileInputStream("savedgames/" + x.getSavefile() + ".ser");
-        ObjectInputStream objectStream = new ObjectInputStream(fstream);
-        this.player = (Player) objectStream.readObject();
-        objectStream.close();
-        fstream.close();
+    public Player load(Player x) {
+
+        try{
+            FileInputStream fstream = new FileInputStream("savedgames/" + x.getSavefile() + ".ser");
+            ObjectInputStream objectStream = new ObjectInputStream(fstream);
+            this.player = (Player) objectStream.readObject();
+            objectStream.close();
+            fstream.close();
+            System.out.println("Save was loaded successfully");
+        } catch (Exception e) {
+            System.out.println("Error loading the save.");
+            return x;
+        }
         transferTransientData(player, x);
         return player;
     }
@@ -52,38 +50,11 @@ public class SavingSystem implements Save, Serializable {
         player.setRdtxt(x.getRdtxt());
     }
 
-    public Player updatePlayer(Player x) throws
-            IOException,
-            ClassNotFoundException {
+    public Player updatePlayer(Player x) {
         if (x.isLoadfile()) {
             x = load(x);
             x.setLoad(false);
         }
         return x;
-    }
-
-    public void listSaveFiles() {
-        File save = new File("savedgames/");
-        FilenameFilter serf = (file, s) -> s.endsWith(".ser");
-        File[] list = save.listFiles(serf);
-
-        if (list != null) {
-            Stream<File> stream = Stream.of(list);
-            stream.forEach(str -> {
-                try {
-                    System.out.println(" ■ " + str.getName() + " ─ Created on : " + getCreateDate(str.getName()));
-                } catch (IOException e) {
-                    System.out.println("Error fetching file metadata");
-                }
-            });
-        } else {
-            System.out.println("Save files path is empty");
-        }
-    }
-
-    public String getCreateDate(String name) throws IOException {
-        Path files = Paths.get("/home/radubereja/Desktop/Object-Oriented Programming/a0/2021_Team_060/rpg/savedgames/" + name);
-        BasicFileAttributes att = Files.readAttributes(files, BasicFileAttributes.class);
-        return String.valueOf(att.creationTime());
     }
 }

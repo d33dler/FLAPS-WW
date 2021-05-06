@@ -3,52 +3,46 @@ package nl.rug.oop.rpg.worldsystem;
 import java.io.Serializable;
 
 import nl.rug.oop.rpg.Typewriter;
-import nl.rug.oop.rpg.menu.builders.GameMenuBuilder;
+import nl.rug.oop.rpg.game.configsys.Configurations;
 import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
+import java.util.Properties;
 import java.util.Scanner;
+
 
 public class Player extends Entity implements Serializable, Cloneable {
     private static final long serialVersionUID = 10L;
     public World map;
-    protected String sinput;
-    protected String savefile;
-    protected int energycells;
-    protected int intin;
-    protected int travel;
-    protected Door focus;
-    protected Door used;
-    protected boolean flee;
-    protected boolean hostile;
-    protected boolean rabbit;
-    protected boolean loadfile;
+    protected String sinput, savefile,configfile;
+    protected int energycells, intin, travel, qs;
+    protected Door focus, used;
+    protected boolean flee, hostile, rabbit;
+    transient protected boolean  loadfile, loadconfig, defconfig;
     protected transient MenuTree mTree;
-    protected transient MenuTree sMenu;
     public transient Scanner rdtxt;
     protected transient WorldInteraction winter;
+    protected transient Properties rpgprop;
     transient Typewriter tw;
-
-    {
-        try {
-            mTree = new GameMenuBuilder().buildGameMenu();
-        } catch (NoSuchMethodException e) {
-            tw.type("Error generating menu tree");
-        }
-    }
 
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
         this.loadfile = false;
+        this.defconfig = false;
+        this.loadconfig = false;
         this.winter = new WorldInteraction();
         this.rdtxt = new Scanner(System.in);
         this.tw = new Typewriter();
         this.savefile = "default.ser";
+        this.sinput = "default";
+        this.configfile = "default";
         this.travel = 1;
+        this.qs = 0;
+        // this.tw.setSpeed(50);
     }
 
     public void getUserName(Player x, Scanner in) {
@@ -58,6 +52,30 @@ public class Player extends Entity implements Serializable, Cloneable {
 
     public String getSavefile() {
         return savefile;
+    }
+
+    public boolean isLoadconfig() {
+        return loadconfig;
+    }
+
+    public void setLoadconfig(boolean loadconfig) {
+        this.loadconfig = loadconfig;
+    }
+
+    public String getConfigfile() {
+        return configfile;
+    }
+
+    public void setConfigfile(String configfile) {
+        this.configfile = configfile;
+    }
+
+    public Properties getConfigs() {
+        return rpgprop;
+    }
+
+    public void setConfigs(Properties rpgprop) {
+        this.rpgprop = rpgprop;
     }
 
     public void setSavefile(String savefile) {
@@ -80,6 +98,22 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.loadfile = quickload;
     }
 
+    public boolean isDefconfig() {
+        return defconfig;
+    }
+
+    public void setDefconfig(boolean defconfig) {
+        this.defconfig = defconfig;
+    }
+
+    public int getQs() {
+        return qs;
+    }
+
+    public void setQs(int qs) {
+        this.qs = qs;
+    }
+
     public void setRdtxt(Scanner rdtxt) {
         this.rdtxt = rdtxt;
     }
@@ -96,13 +130,6 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.used = used;
     }
 
-    public MenuTree getsMenu() {
-        return sMenu;
-    }
-
-    public void setsMenu(MenuTree sMenu) {
-        this.sMenu = sMenu;
-    }
 
     public Door getFocus() {
         return focus;

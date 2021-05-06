@@ -3,6 +3,7 @@ package nl.rug.oop.rpg.game;
 import java.lang.reflect.*;
 
 import nl.rug.oop.rpg.menu.builders.MenuTree;
+import nl.rug.oop.rpg.menu.options.CombatMenuOptions;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
@@ -16,11 +17,11 @@ public class Combat {
         String input;
         Scanner in = x.getRdtxt();
         Method option;
-        EnumMap<CombatOptions, String> combopt = CombatOptions.setMoves();
+        EnumMap<CombatMenuOptions, String> combopt = CombatMenuOptions.setMoves();
         x.setHostile(true);
+
         do {
-            System.out.println("< ╬ > System Health Status ::: " +
-                    x.getName() + ": " + x.getHealth() + "  ▓   " + foe.getName() + ": " + foe.getHealth() + " < ╬ >\n");
+            printObnoxiousText(x,foe);
             printFightmenu(combopt);
             input = in.nextLine();
             option = mtree.getMenunode().get(input);
@@ -51,8 +52,18 @@ public class Combat {
         }
     }
 
-    public void printFightmenu(EnumMap<CombatOptions, String> exoptns) {
+    public void printFightmenu(EnumMap<CombatMenuOptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
+    }
+    public void printObnoxiousText(Player x, NPC foe){
+        System.out.println("< ╬ >  :::::::::::: SysHealth :::::::::::: < ╬ >\n" + spL("", 8) +
+                x.getName() + ": " + x.getHealth() + " ::: " + foe.getName() + ": " + foe.getHealth());
+        System.out.println("< ╬ >  ::::::::::::   Damage  :::::::::::: < ╬ >\n" + spL("", 8) +
+                spL(String.valueOf(x.getDamage()), x.getName().length()) +
+                " ::: " + spL(String.valueOf(foe.getDamage()), foe.getName().length()));
+    }
+    public static String spL(String str, int len) {
+        return String.format("%1$" + (len + 5) + "s", str);
     }
 
     public void switchMenu(Player x) {
