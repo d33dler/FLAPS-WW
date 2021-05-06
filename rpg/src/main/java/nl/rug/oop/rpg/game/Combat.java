@@ -2,7 +2,7 @@ package nl.rug.oop.rpg.game;
 
 import java.lang.reflect.*;
 
-import nl.rug.oop.rpg.menu.MenuTree;
+import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
@@ -17,6 +17,7 @@ public class Combat {
         Scanner in = x.getRdtxt();
         Method option;
         EnumMap<CombatOptions, String> combopt = CombatOptions.setMoves();
+        x.setHostile(true);
         do {
             System.out.println("< ╬ > System Health Status ::: " +
                     x.getName() + ": " + x.getHealth() + "  ▓   " + foe.getName() + ": " + foe.getHealth() + " < ╬ >\n");

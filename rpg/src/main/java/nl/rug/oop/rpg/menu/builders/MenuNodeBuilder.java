@@ -1,4 +1,4 @@
-package nl.rug.oop.rpg.menu;
+package nl.rug.oop.rpg.menu.builders;
 
 import java.lang.reflect.Method;
 import java.util.EnumMap;

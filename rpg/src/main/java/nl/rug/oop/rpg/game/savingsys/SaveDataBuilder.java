@@ -1,4 +1,4 @@
-package nl.rug.oop.rpg.game;
+package nl.rug.oop.rpg.game.savingsys;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.World;
 

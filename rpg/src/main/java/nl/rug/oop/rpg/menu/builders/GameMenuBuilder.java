@@ -1,7 +1,8 @@
-package nl.rug.oop.rpg.menu;
+package nl.rug.oop.rpg.menu.builders;
 
 import nl.rug.oop.rpg.game.CombatOptions;
 import nl.rug.oop.rpg.itemsystem.*;
+import nl.rug.oop.rpg.menu.GameMenu;
 import nl.rug.oop.rpg.npcsystem.NpcInteraction;
 import nl.rug.oop.rpg.worldsystem.ExploreOptions;
 import nl.rug.oop.rpg.worldsystem.Player;
@@ -12,7 +13,7 @@ import java.lang.reflect.*;
 import java.util.HashMap;
 
 
-public class MenuBuilder {
+public class GameMenuBuilder {
     NpcInteraction action = new NpcInteraction();
     WorldInteraction worldInter = new WorldInteraction();
     ItemInteraction itemInter = new ItemInteraction();

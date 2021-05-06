@@ -1,5 +1,6 @@
 package nl.rug.oop.rpg.game;
 
+import java.io.IOException;
 import java.lang.reflect.*;
 
 import nl.rug.oop.rpg.menu.GameMenu;
@@ -26,12 +27,14 @@ public class Gameplay {
         player.getUserName(player, txtIn);
         System.out.println("Greetings, " + player.getName() + "!\n \n");
         try {
-            gmenu.renderMenu(player);
+            gmenu.fetchMenu(player);
         } catch (InvocationTargetException
                 | NoSuchMethodException
                 | InstantiationException
-                | IllegalAccessException e) {
-            e.printStackTrace();
+                | IllegalAccessException
+                | IOException
+                | ClassNotFoundException e) {
+            System.out.println("Error generating exploring menu. Exiting.");
         }
     }
 

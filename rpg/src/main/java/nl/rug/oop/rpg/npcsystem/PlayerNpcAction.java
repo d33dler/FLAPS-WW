@@ -1,10 +1,7 @@
 package nl.rug.oop.rpg.npcsystem;
 import java.lang.reflect.*;
-import nl.rug.oop.rpg.menu.MenuTree;
-import nl.rug.oop.rpg.worldsystem.Player;
 
-import java.util.HashMap;
-import java.util.Scanner;
+import nl.rug.oop.rpg.worldsystem.Player;
 
 public interface PlayerNpcAction {
     void engageNpc(Player x) throws InvocationTargetException, IllegalAccessException;

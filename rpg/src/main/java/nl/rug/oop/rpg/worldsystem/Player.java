@@ -1,12 +1,10 @@
 package nl.rug.oop.rpg.worldsystem;
 
-import java.awt.*;
 import java.io.Serializable;
 
 import nl.rug.oop.rpg.Typewriter;
-import nl.rug.oop.rpg.menu.MenuBuilder;
-import nl.rug.oop.rpg.menu.MenuTree;
-import nl.rug.oop.rpg.menu.SaveMenuBuilder;
+import nl.rug.oop.rpg.menu.builders.GameMenuBuilder;
+import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
@@ -17,25 +15,26 @@ import java.util.Scanner;
 public class Player extends Entity implements Serializable, Cloneable {
     private static final long serialVersionUID = 10L;
     public World map;
-    protected boolean flee;
     protected String sinput;
+    protected String savefile;
+    protected int energycells;
     protected int intin;
-    protected int travel = 1;
-    protected boolean hostile;
+    protected int travel;
+    protected Door focus;
     protected Door used;
+    protected boolean flee;
+    protected boolean hostile;
+    protected boolean rabbit;
+    protected boolean loadfile;
     protected transient MenuTree mTree;
     protected transient MenuTree sMenu;
-    protected int energycells;
-    protected Door focus;
-    protected boolean rabbit;
-    protected boolean savemenu;
-    public transient Scanner rdtxt = new Scanner(System.in);
-    protected transient WorldInteraction winter = new WorldInteraction();
-    transient Typewriter tw = new Typewriter();
+    public transient Scanner rdtxt;
+    protected transient WorldInteraction winter;
+    transient Typewriter tw;
 
     {
         try {
-            mTree = new MenuBuilder().buildGameMenu();
+            mTree = new GameMenuBuilder().buildGameMenu();
         } catch (NoSuchMethodException e) {
             tw.type("Error generating menu tree");
         }
@@ -44,11 +43,25 @@ public class Player extends Entity implements Serializable, Cloneable {
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
+        this.loadfile = false;
+        this.winter = new WorldInteraction();
+        this.rdtxt = new Scanner(System.in);
+        this.tw = new Typewriter();
+        this.savefile = "default.ser";
+        this.travel = 1;
     }
 
     public void getUserName(Player x, Scanner in) {
         System.out.println("Please authenticate yourself: ");
         x.setName(in.nextLine());
+    }
+
+    public String getSavefile() {
+        return savefile;
+    }
+
+    public void setSavefile(String savefile) {
+        this.savefile = savefile;
     }
 
     public void setTw(Typewriter tw) {
@@ -59,12 +72,12 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.winter = winter;
     }
 
-    public Player clone() throws CloneNotSupportedException {
-        Player player = (Player) super.clone();
-        player.used = (Door) used.clone();
-        player.focus = (Door) focus.clone();
-        player.map = (World) map.clone();
-        return player;
+    public boolean isLoadfile() {
+        return loadfile;
+    }
+
+    public void setLoad(boolean quickload) {
+        this.loadfile = quickload;
     }
 
     public void setRdtxt(Scanner rdtxt) {
@@ -149,14 +162,6 @@ public class Player extends Entity implements Serializable, Cloneable {
 
     public void setHostile(boolean hostile) {
         this.hostile = hostile;
-    }
-
-    public boolean isSavemenu() {
-        return savemenu;
-    }
-
-    public void setSavemenu(boolean savemenu) {
-        this.savemenu = savemenu;
     }
 
     public int getIntin() {

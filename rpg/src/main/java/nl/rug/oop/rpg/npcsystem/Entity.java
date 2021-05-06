@@ -28,14 +28,7 @@ public abstract class Entity implements Serializable {
     }
     public Entity(){
     }
-    public Object clone() throws CloneNotSupportedException{
-        Entity npc = (Entity) super.clone();
-        npc.location = (Room) location.clone();
-        npc.inventory = (Inventory) inventory.clone();
-        npc.hold = (Item) hold.clone();
-        npc.npccontact = (NPC) npccontact.clone();
-        return npc;
-    }
+
     public String getName() {
         return name;
     }

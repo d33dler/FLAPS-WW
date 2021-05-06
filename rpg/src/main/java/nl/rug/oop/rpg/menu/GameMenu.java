@@ -1,22 +1,29 @@
 package nl.rug.oop.rpg.menu;
 
+import nl.rug.oop.rpg.game.savingsys.SavingSystem;
+import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.EnumMap;
 
 public class GameMenu {
-    public void renderMenu(Player player)
+    public void fetchMenu(Player player)
             throws InvocationTargetException,
             NoSuchMethodException,
             InstantiationException,
-            IllegalAccessException {
+            IllegalAccessException,
+            IOException,
+            ClassNotFoundException {
         Method option;
         String input;
-        WorldInteraction wi = player.getWinter();
+        SavingSystem saves = new SavingSystem();
+
         do {
+            player = saves.updatePlayer(player);
             MenuTree menuTree = player.getmTree();
             EnumMap<?, String> options = menuTree.getOptionlist();
             if (options != null) {
@@ -39,4 +46,5 @@ public class GameMenu {
 
     public void switchSaveMenu(Player player) {
     }
+
 }

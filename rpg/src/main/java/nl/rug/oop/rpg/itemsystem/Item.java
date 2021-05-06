@@ -104,10 +104,6 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
     public String getName() {
         return name;
     }
-    public Object clone() throws CloneNotSupportedException{
-        Item item = (Item) super.clone();
-        return item;
-    }
 }
 
 class Nothing extends Item implements Serializable {
