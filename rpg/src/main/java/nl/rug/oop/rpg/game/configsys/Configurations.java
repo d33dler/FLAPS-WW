@@ -66,7 +66,7 @@ public class Configurations implements Serializable {
         if (x.isDefconfig()) {
             x.setConfigfile("default");
             rpgProp = setupDefaultConfig(rpgProp);
-            x.getTw().type(x.isDefconfig()+ "Loading default config file\n");
+            x.getTw().type("Loading default config file\n");
         } else if (!x.isLoadconfig()){
             listConfigFiles();
             getConfigName(x);
