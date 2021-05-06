@@ -1,10 +1,11 @@
 package nl.rug.oop.rpg.itemsystem;
 import nl.rug.oop.rpg.usersystem.AvatarInterface;
 import nl.rug.oop.rpg.usersystem.PlayerInterfaceBuilder;
+import java.io.Serializable;
 import java.util.HashMap;
 
-
-public class Inventory extends AvatarInterface {
+public class Inventory extends AvatarInterface implements Serializable {
+    private static final long serialVersionUID = 3003L;
 
     public Inventory(PlayerInterfaceBuilder parameters) {
         super(parameters);

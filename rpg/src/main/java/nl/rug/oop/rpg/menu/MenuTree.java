@@ -1,12 +1,15 @@
 package nl.rug.oop.rpg.menu;
+
+import java.io.Serializable;
 import java.lang.reflect.*;
 import java.util.EnumMap;
 import java.util.HashMap;
 
-public class MenuTree {
+public class MenuTree implements Serializable {
+    private static final long serialVersionUID =  653;
     protected MenuTree root;
-    protected HashMap<String, Method> menunode;
-    protected HashMap<String, MenuTree> submenus;
+    protected HashMap<String, Method> menunode = new HashMap<>();
+    protected HashMap<String, MenuTree> submenus = new HashMap<>();
     protected EnumMap<?, String> optionlist;
 
     MenuTree(MenuNodeBuilder params) {
@@ -17,8 +20,9 @@ public class MenuTree {
     }
 
     public MenuTree() {
-
     }
+
+
 
     public EnumMap<?, String> getOptionlist() {
         return optionlist;

@@ -1,13 +1,14 @@
 package nl.rug.oop.rpg.worldsystem.doors;
-
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
+
+import java.io.Serializable;
 
 import static nl.rug.oop.rpg.Randomizers.getRandom;
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
-public class SecureDoor extends Door {
-
+public class SecureDoor extends Door implements Serializable {
+    private static final long serialVersionUID = 102;
     public SecureDoor(DoorBuilder parameters) {
         super(parameters);
         this.cost = getRandom(5, 100);

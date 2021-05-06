@@ -4,7 +4,10 @@ import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.worldsystem.Room;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+public abstract class Entity implements Serializable {
+    private static final long serialVersionUID = 1998L;
     protected String name;
     protected int health, damage, money;
     protected Inventory inventory;
@@ -25,7 +28,14 @@ public abstract class Entity {
     }
     public Entity(){
     }
-
+    public Object clone() throws CloneNotSupportedException{
+        Entity npc = (Entity) super.clone();
+        npc.location = (Room) location.clone();
+        npc.inventory = (Inventory) inventory.clone();
+        npc.hold = (Item) hold.clone();
+        npc.npccontact = (NPC) npccontact.clone();
+        return npc;
+    }
     public String getName() {
         return name;
     }

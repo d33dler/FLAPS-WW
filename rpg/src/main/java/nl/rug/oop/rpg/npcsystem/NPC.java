@@ -1,12 +1,15 @@
 package nl.rug.oop.rpg.npcsystem;
-
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
+import nl.rug.oop.rpg.worldsystem.doors.Door;
 
-public abstract class NPC extends Entity implements Inspectable, Interactable {
+import java.io.Serializable;
+import java.util.ArrayList;
 
+public abstract class NPC extends Entity implements Inspectable, Interactable, Serializable {
+    private static final long serialVersionUID = 77L;
     public NPC(EntityBuilder parameters) {
         super(parameters);
     }

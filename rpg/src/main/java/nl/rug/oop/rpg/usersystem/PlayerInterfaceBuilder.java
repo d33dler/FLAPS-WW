@@ -7,6 +7,7 @@ import nl.rug.oop.rpg.itemsystem.Weapons;
 import java.util.HashMap;
 
 public class PlayerInterfaceBuilder extends AvatarInterface {
+    private static final long serialVersionUID = 3001L;
     public PlayerInterfaceBuilder weaponInv(HashMap<String, Weapons> wList) {
         this.wList = wList;
         return this;

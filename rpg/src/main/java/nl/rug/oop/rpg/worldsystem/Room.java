@@ -6,15 +6,17 @@ import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
+import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 
-public class Room implements Inspectable {
+public class Room implements Inspectable, Serializable {
+    private static final long serialVersionUID = 60L;
     protected String id;
     protected Attr1room atr1; //string might suffice, check
     protected Attr2room atr2;
     protected int ndors;
-    protected List<Door> doors;
+    protected ArrayList<Door> doors;
     protected boolean company;
     protected Item loot; //variety of loot wep/etc
     protected NPC npc;
@@ -46,7 +48,7 @@ public class Room implements Inspectable {
         return set.get(x);
     }
 
-    public List<Door> getDoors() {
+    public ArrayList<Door> getDoors() {
         return doors;
     }
 
@@ -77,7 +79,7 @@ public class Room implements Inspectable {
         this.loot = loot;
     }
 
-    public void setDoors(List<Door> doors) {
+    public void setDoors(ArrayList<Door> doors) {
         this.doors = doors;
     }
 
@@ -88,4 +90,11 @@ public class Room implements Inspectable {
     public void setCompany(boolean company) {
         this.company = company;
     }
+    public Object clone() throws CloneNotSupportedException{
+        Room room = (Room) super.clone();
+       // Iterator<Door> iter = this.doors;
+      //  room.setDoors((ArrayList<Door>) this.getDoors().clone());
+        return room;
+    }
+
 }

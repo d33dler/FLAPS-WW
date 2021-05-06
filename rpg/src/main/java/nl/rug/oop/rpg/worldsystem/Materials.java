@@ -1,7 +1,5 @@
 package nl.rug.oop.rpg.worldsystem;
 
-import java.util.EnumMap;
-
 public enum Materials {
 }
 
@@ -130,6 +128,5 @@ enum SpeciesDb {
 
 enum Trading {
     n,a,b;
-
 }
 

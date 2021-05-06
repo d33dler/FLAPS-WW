@@ -1,26 +1,25 @@
 package nl.rug.oop.rpg.worldsystem;
-
 import nl.rug.oop.rpg.*;
 import nl.rug.oop.rpg.itemsystem.*;
 import nl.rug.oop.rpg.npcsystem.Enemies;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.*;
-
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
 import static nl.rug.oop.rpg.Randomizers.getRandom;
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
-public class World {
-    protected int links = 100;//edit for requirement
+public class World implements Serializable {
+    private static final long serialVersionUID = 33L;
+    protected int links = 100;
     protected Map<Room, List<Room>> roomConnects;
-    private static final Randomizers roomID = new Randomizers(7, ThreadLocalRandom.current());
+    private transient static final Randomizers roomID = new Randomizers(7, ThreadLocalRandom.current());
 
     public void generateRoom(World map) {
-        List<Door> doors = new ArrayList<>();
+        ArrayList<Door> doors = new ArrayList<>();
         String roomId = roomID.generateId();
         Attr1room att1 = randomMaterial(Attr1room.class);
         Attr2room att2 = randomMaterial(Attr2room.class);
@@ -47,9 +46,7 @@ public class World {
             IllegalAccessException,
             NoSuchMethodException,
             InvocationTargetException {
-
         Object randoor = doorcoll.extractDoor();
-      //  System.out.println("Door class: " + randoor.getClass().getName() );
         Class<?> dtype = randoor.getClass();
         Door door = (Door) dtype.getDeclaredConstructor().newInstance();
         door = door.initConstructor(out, goin);
@@ -64,7 +61,7 @@ public class World {
 
 
     public DoorCollection<Object> genDoorTypeCollection() {
-        CloneDoor cd = new CloneDoor();
+        CloningDoor cd = new CloningDoor();
         UltraDoor ud = new UltraDoor();
         SecureDoor sd = new SecureDoor();
         Door gdoor = new Door();
@@ -78,14 +75,14 @@ public class World {
     public NPC generateNpc() {
         SpeciesDb npcdata = randomMaterial(SpeciesDb.class);
         Inventory inventory = new Inventory().generateInv();
-        Enemies npc = new EntityBuilder() //presence of npc may be randomized
+        Enemies npc = new EntityBuilder()
                 .name(npcdata.getSpname())
                 .hdm(npcdata.getHealth(),
                         npcdata.getDamage() + ThreadLocalRandom.current().nextInt(2,
                                 10), ThreadLocalRandom.current().nextInt(0, 15))
                 .loc(null)
                 .inv(inventory)
-                .ith(null)//get this man his shield
+                .ith(null)
                 .createn();
         return npc;
     }
@@ -180,6 +177,7 @@ public class World {
             allrooms.remove(rA);
         }
     }
-
-
+    public Object clone() throws CloneNotSupportedException{
+        return super.clone();
+    }
 }

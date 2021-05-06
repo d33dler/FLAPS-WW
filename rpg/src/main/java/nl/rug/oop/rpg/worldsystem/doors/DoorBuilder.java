@@ -28,7 +28,7 @@ public class DoorBuilder extends Door {
     }
     public UltraDoor createUd(){ return new UltraDoor(this);}
     public SecureDoor createSd() {return new SecureDoor(this);}
-    public CloneDoor createCd(){return new CloneDoor(this);}
+    public CloningDoor createCd(){return new CloningDoor(this);}
 
     // public Prmtdoor(boolean open) {
     //     this.open = open;

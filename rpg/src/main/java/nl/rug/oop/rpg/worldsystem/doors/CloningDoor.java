@@ -1,26 +1,23 @@
 package nl.rug.oop.rpg.worldsystem.doors;
-
-import nl.rug.oop.rpg.npcsystem.Allies;
-import nl.rug.oop.rpg.npcsystem.Enemies;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
-
+import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
-
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
-public class CloneDoor extends Door implements DoorClass {
+public class CloningDoor extends Door implements DoorClass, Serializable {
+    private static final long serialVersionUID = 101L;
     protected boolean used;
 
-    public CloneDoor(DoorBuilder parameters) {
+    public CloningDoor(DoorBuilder parameters) {
         super(parameters);
         this.dtype = "CopyGate";
         this.used = false;
     }
 
-    public CloneDoor() {
+    public CloningDoor() {
         this.probab = 10;
     }
 
@@ -33,7 +30,7 @@ public class CloneDoor extends Door implements DoorClass {
 
     @Override
     public void interact(Player x) {
-        CloneDoor door = (CloneDoor) x.getFocus();
+        CloningDoor door = (CloningDoor) x.getFocus();
         if (!x.isRabbit() && !door.isUsed()) {
             Room room = x.getLocation();
             if (x.isHostile()) {

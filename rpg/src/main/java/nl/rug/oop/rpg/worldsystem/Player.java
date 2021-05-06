@@ -1,8 +1,12 @@
 package nl.rug.oop.rpg.worldsystem;
-import java.util.concurrent.ThreadLocalRandom;
+
+import java.awt.*;
+import java.io.Serializable;
+
 import nl.rug.oop.rpg.Typewriter;
 import nl.rug.oop.rpg.menu.MenuBuilder;
 import nl.rug.oop.rpg.menu.MenuTree;
+import nl.rug.oop.rpg.menu.SaveMenuBuilder;
 import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
@@ -10,43 +14,66 @@ import nl.rug.oop.rpg.worldsystem.doors.Door;
 
 import java.util.Scanner;
 
-public class Player extends Entity {
+public class Player extends Entity implements Serializable,Cloneable {
+    private static final long serialVersionUID = 10L;
+    protected World map;
     protected boolean flee;
-    protected Scanner rdtxt = new Scanner(System.in);
-    protected WorldInteraction winter = new WorldInteraction();
     protected String sinput;
     protected int intin;
     protected int travel = 1;
     protected boolean hostile;
     protected Door used;
-    protected MenuTree mTree;
-    Typewriter tw = new Typewriter();
+    protected  MenuTree mTree;
+    protected  MenuTree sMenu;
     protected int energycells;
     protected Door focus;
     protected boolean rabbit;
-
-    public void setFlee(boolean flee) {
-        this.flee = flee;
-    }
+    protected boolean savemenu = false;
+    protected transient Scanner rdtxt = new Scanner(System.in);
+    protected transient WorldInteraction winter = new WorldInteraction();
+    transient Typewriter tw = new Typewriter();
 
     {
         try {
-            mTree = new MenuBuilder().buildMenuTree();
+            mTree = new MenuBuilder().buildGameMenu();
+            sMenu = new SaveMenuBuilder().setMainCommands();
         } catch (NoSuchMethodException e) {
             tw.type("Error generating menu tree");
         }
     }
-
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
     }
+    public void getUserName(Player x, Scanner in) {
+        System.out.println("Please authenticate yourself: ");
+        x.setName(in.nextLine());
+    }
+    public Player clone() throws CloneNotSupportedException{
+        Player player = (Player) super.clone();
+        player.used = (Door) used.clone();
+        player.focus = (Door) focus.clone();
+        player.map = (World) map.clone();
+        return player;
+    }
+    public void setFlee(boolean flee) {
+        this.flee = flee;
+    }
+
     public Door getUsed() {
         return used;
     }
 
     public void setUsed(Door used) {
         this.used = used;
+    }
+
+    public MenuTree getsMenu() {
+        return sMenu;
+    }
+
+    public void setsMenu(MenuTree sMenu) {
+        this.sMenu = sMenu;
     }
 
     public Door getFocus() {
@@ -77,7 +104,13 @@ public class Player extends Entity {
         return flee;
     }
 
+    public World getMap() {
+        return map;
+    }
 
+    public void setMap(World map) {
+        this.map = map;
+    }
 
     public boolean isHostile() {
         return hostile;
@@ -97,6 +130,18 @@ public class Player extends Entity {
 
     public Typewriter getTw() {
         return tw;
+    }
+
+    public void setHostile(boolean hostile) {
+        this.hostile = hostile;
+    }
+
+    public boolean isSavemenu() {
+        return savemenu;
+    }
+
+    public void setSavemenu(boolean savemenu) {
+        this.savemenu = savemenu;
     }
 
     public int getIntin() {
@@ -139,30 +184,7 @@ public class Player extends Entity {
         return rdtxt;
     }
 
-    public void getUserName(Player x, Scanner in) {
-        System.out.println("Please authenticate yourself: ");
-        x.setName(in.nextLine());
-    }
-
-
-    public void attackPlayer() {
-
-    }
-
-    public void defendPlayer() {
-
-    }
-
-    public void fleePlayer() {
-
-    }
-
-    public void tradePlayer() {
-
-    }
-
     public boolean lifeCheck() {
         return false;
     }
-
 }

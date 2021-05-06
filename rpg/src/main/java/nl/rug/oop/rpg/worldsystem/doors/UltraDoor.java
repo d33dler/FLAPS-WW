@@ -6,7 +6,7 @@ import nl.rug.oop.rpg.worldsystem.Room;
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
 public class UltraDoor extends Door implements DoorClass {
-
+    private static final long serialVersionUID = 100L;
     public UltraDoor(DoorBuilder parameters) {
         super(parameters);
         this.dtype = "RàBIT";

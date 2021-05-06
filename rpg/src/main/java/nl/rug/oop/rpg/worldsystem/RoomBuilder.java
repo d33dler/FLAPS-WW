@@ -5,6 +5,7 @@ import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RoomBuilder extends Room{
@@ -25,7 +26,7 @@ public class RoomBuilder extends Room{
         return this;
     }
 
-    public RoomBuilder lDoors(List<Door> doors) {
+    public RoomBuilder lDoors(ArrayList<Door> doors) {
         this.doors = doors;
         return this;
     }

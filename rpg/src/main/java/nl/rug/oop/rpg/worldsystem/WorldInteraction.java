@@ -34,15 +34,21 @@ public class WorldInteraction {
         r.getNpc().inspect(x);
     }
 
-
     public void enterDoor(Player x) {
         Scanner in = x.getRdtxt();
         Room r = x.getLocation();
         System.out.println(": Choose a door :");
         int input = in.nextInt() - 1;
-        x.setFocus(r.getDoors().get(input));
-        telePort(x, x.getLocation().getDoors().get(input), input);
         x.rdtxt.nextLine();
+        try {
+            x.setFocus(r.getDoors().get(input));
+        } catch (IndexOutOfBoundsException e) {
+            x.getTw().type("Unknown door number, please try again\n");
+            x.setmTree(x.getmTree().getRoot());
+            return;
+        }
+        telePort(x, x.getLocation().getDoors().get(input), input);
+
         x.setNpccontact(x.getLocation().getNpc());
         x.setmTree(x.getmTree().getRoot());
     }
@@ -50,18 +56,17 @@ public class WorldInteraction {
     public void telePort(Player x, Door door, int n) {
         x.setIntin(n);
         x.setFocus(door);
-        if(!x.isRabbit()){
+        if (!x.isRabbit()) {
             x.setTravel(x.getTravelBuff() + 1);
         }
         door.interact(x);
     }
 
-
     public void goBack(Player x) {
         x.setmTree(x.getmTree().getRoot());
     }
 
-    public Object getActionType(Method action)
+    public static Object getActionType(Method action)
             throws NoSuchMethodException,
             InvocationTargetException,
             InstantiationException,

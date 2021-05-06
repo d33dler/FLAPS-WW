@@ -4,25 +4,23 @@ import java.util.*;
 
 public class DoorCollection<T> {
     private final NavigableMap<Double, T> collect = new TreeMap<Double, T>();
-    private final Random random;
-    private double total = 0;
-
+    private final Random rand;
+    private double cumulative = 0;
     public DoorCollection() {
         this(new Random());
     }
-
     public DoorCollection(Random random) {
-        this.random = random;
+        this.rand = random;
     }
 
-    public DoorCollection<T> add(double probab, T doortype) {
-        if (probab <= 0) return this;
-        total += probab;
-        collect.put(total, doortype);
+    public DoorCollection<T> add(double probability, T doortype) {
+        if (probability <= 0) return this;
+        cumulative += probability;
+        collect.put(cumulative, doortype);
         return this;
     }
     public T extractDoor() {
-        double value = random.nextDouble() * total;
+        double value = rand.nextDouble() * cumulative;
         return collect.higherEntry(value).getValue();
     }
 }

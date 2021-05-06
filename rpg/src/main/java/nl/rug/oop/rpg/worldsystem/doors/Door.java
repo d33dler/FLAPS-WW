@@ -1,13 +1,13 @@
 package nl.rug.oop.rpg.worldsystem.doors;
-
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
-
+import java.io.Serializable;
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
-public class Door implements Inspectable, Interactable,DoorClass {
+public class Door implements Inspectable, Interactable,DoorClass, Serializable {
+    private static final long serialVersionUID = 99L;
     protected DoorcolorsDB color;
     protected Room exit, enter;
     protected String dtype;
@@ -29,9 +29,8 @@ public class Door implements Inspectable, Interactable,DoorClass {
     public void inspect(Player r) {
         int i = r.getIntin();
         Door insD = r.getFocus();
-        r.getTw().type("╠ < "+ (i + 1)+ ">A " + insD.dtype  + "portal which is " + insD.color +"\n");
+        r.getTw().type("╠ ("+ (i + 1)+ ") A " + insD.dtype  + " portal which is " + insD.color +"\n");
     }
-
     @Override
     public void interact(Player ava) {
         int x = ava.getIntin();
@@ -47,7 +46,23 @@ public class Door implements Inspectable, Interactable,DoorClass {
         ava.setLocation(room);
         ava.getTw().type("Entering portal...\n\n");
     }
+    public Door initConstructor(Room out, Room goin) {
+        DoorcolorsDB clr = randomMaterial(DoorcolorsDB.class);
+        return new DoorBuilder()
+                .exit(out)
+                .enter(goin)
+                .clr(clr)
+                .create();
+    }
+    public void notifyHalt(Player x){
+        x.getTw().poeticPause("Unexpected halt \n",1000);
+        x.getTw().type(". . .\n" + "0 compatible portal links found\nAborting RaBIT current\n");
+    }
+    public Object clone() throws CloneNotSupportedException{
+        Door door = (Door) super.clone();
 
+        return door;
+    }
     public Room getExit() {
         return exit;
     }
@@ -81,22 +96,5 @@ public class Door implements Inspectable, Interactable,DoorClass {
 
     public int getProbab() {
         return probab;
-    }
-
-    public Door initConstructor(Room out, Room goin) {
-        DoorcolorsDB clr = randomMaterial(DoorcolorsDB.class);
-        return new DoorBuilder()
-                .exit(out)
-                .enter(goin)
-                .clr(clr)
-                .create();
-    }
-    public void setProbab(int probab) {
-        this.probab = probab;
-    }
-
-    public void notifyHalt(Player x){
-        x.getTw().poeticPause("Unexpected halt \n",1000);
-        x.getTw().type(". . .\n" + "0 compatible portal links found\nAborting RaBIT current\n");
     }
 }
