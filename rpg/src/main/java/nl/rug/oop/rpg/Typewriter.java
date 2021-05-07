@@ -20,7 +20,9 @@ public class Typewriter {
             e.printStackTrace();
         }
     }
-
+    public void aI(){
+        poeticPause("x-256 Ai: ", 1000);
+    }
     public int getSpeed() {
         return speed;
     }

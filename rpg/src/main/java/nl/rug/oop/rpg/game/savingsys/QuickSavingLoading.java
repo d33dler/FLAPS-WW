@@ -2,7 +2,7 @@ package nl.rug.oop.rpg.game.savingsys;
 import nl.rug.oop.rpg.worldsystem.Player;
 import java.io.File;
 
-public class QkSavingLoading extends SavingSystem {
+public class QuickSavingLoading extends SavingSystem {
     @Override
     public void save(Player x) {
         createQsDir(x);

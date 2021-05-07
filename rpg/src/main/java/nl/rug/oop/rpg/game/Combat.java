@@ -13,55 +13,57 @@ import java.util.Scanner;
 
 public class Combat {
 
-    public void duel(Player x, NPC foe, MenuTree mtree) {
+    public void duel(Player player, NPC foe, MenuTree mtree) {
         String input;
-        Scanner in = x.getRdtxt();
+        Scanner in = player.getRdtxt();
         Method option;
         EnumMap<CombatMenuOptions, String> combopt = CombatMenuOptions.setMoves();
-        x.setHostile(true);
-
+        player.setHostile(true);
         do {
-            printObnoxiousText(x, foe);
-            printFightmenu(combopt);
+            Dialogue.printObnoxiousCombatMenu(player, foe);
+            printFightMenu(combopt);
             input = in.nextLine();
+            if (player.isForcedcomb() && input.equals("c")) {
+                Dialogue.notifyFfC(player);
+                continue;
+            }
             option = mtree.getMenunode().get(input);
+            Dialogue.combatLog();
             try {
                 Object interact = WorldInteraction.getActionType(option);
-                option.invoke(interact, x);
+                option.invoke(interact, player);
             } catch (Exception e) {
-                x.getTw().type("No such option\n");
+                player.getTw().type("No such option\n");
             }
-        } while (foe.getHealth() > 0 && x.getHealth() > 0 && !input.equals("c"));
+            Dialogue.combatLog();
+            checkCombat(player, foe);
+        } while (foe.getHealth() > 0 && player.getHealth() > 0 && (!input.equals("c") || player.isForcedcomb()));
+        duelConclusion(player, foe);
+    }
 
+    public void duelConclusion(Player player, NPC foe) {
         if (foe.getHealth() <= 0) {
-            x.getLocation().setCompany(false);
-            x.getTw().type(foe.getName() + " was eliminated successfully!\nProceeding further.\n");
-            x.getTw().type(". . . .\n");
-            switchMenu(x);
-        } else if (x.getHealth() <= 0) {
-            x.getTw().type("The " + foe.getName() + " eliminated your android's gestalt from the test environment. \n Your avatar archive is being returned to the nearest Polis checkpoint server.");
+            player.getLocation().setCompany(false);
+            Dialogue.notifySuccess(player, foe);
+            switchMenu(player);
+        } else if (player.getHealth() <= 0) {
+            Dialogue.notifyCessation(player, foe);
             System.exit(0);
-        } else if (x.isFlee()) {
-            x.getTw().type("Fleeing combat & exiting room\n");
-            x.setFlee(false);
-            switchMenu(x);
+        } else if (player.isFlee()) {
+            player.getTw().type("Fleeing combat & exiting room\n");
+            player.setFlee(false);
+            switchMenu(player);
         }
     }
 
-    public void printFightmenu(EnumMap<CombatMenuOptions, String> exoptns) {
+    public void printFightMenu(EnumMap<CombatMenuOptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
     }
 
-    public void printObnoxiousText(Player x, NPC foe) {
-        System.out.println("< ╬ >  :::::::::::: SysHealth :::::::::::: < ╬ >\n" + spL("", 8) +
-                x.getName() + ": " + x.getHealth() + " ::: " + foe.getName() + ": " + foe.getHealth());
-        System.out.println("< ╬ >  ::::::::::::   Damage  :::::::::::: < ╬ >\n" + spL("", 8) +
-                spL(String.valueOf(x.getDamage()), x.getName().length()) +
-                " ::: " + spL(String.valueOf(foe.getDamage()), foe.getName().length()));
-    }
-
-    public static String spL(String str, int len) {
-        return String.format("%1$" + (len + 5) + "s", str);
+    public void checkCombat(Player player, NPC foe) {
+        if (foe.getHealth() < 0 || player.getHealth() < 0) {
+            player.setForcedcomb(false);
+        }
     }
 
     public void switchMenu(Player x) {

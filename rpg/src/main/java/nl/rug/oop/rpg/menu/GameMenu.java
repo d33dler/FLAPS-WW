@@ -15,8 +15,8 @@ public class GameMenu {
         do {
             player = saves.updatePlayer(player);
             MenuTree menuTree = player.getmTree();
-            Method option = fetchOptions(player, menuTree);
             try {
+                Method option = fetchOptions(player, menuTree);
                 Object interact = WorldInteraction.getActionType(option);
                 option.invoke(interact, player);
             } catch (NullPointerException e) {
@@ -30,7 +30,13 @@ public class GameMenu {
         if (options != null) {
             options.values().forEach(System.out::println);
         }
-        String input = player.getRdtxt().nextLine();
+        String input;
+        try{
+            input = player.getRdtxt().nextLine();
+        } catch (IllegalStateException e) {
+            System.out.println("\n");
+            input = "a";
+        }
         player.setSinput(input);
         Method option = menuTree.getMenunode().get(input);
         if (menuTree.getSubmenus() != null && menuTree.getSubmenus().get(input) != null) {

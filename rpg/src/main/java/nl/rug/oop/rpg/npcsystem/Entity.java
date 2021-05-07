@@ -2,6 +2,7 @@ package nl.rug.oop.rpg.npcsystem;
 
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
+import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
 import java.io.Serializable;
@@ -15,6 +16,7 @@ public abstract class Entity implements Serializable {
     protected Item hold;
     protected boolean flee;
     protected NPC npccontact;
+
     public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
         this.location = parameters.location;
@@ -26,7 +28,8 @@ public abstract class Entity implements Serializable {
         this.flee = parameters.flee;
         this.npccontact = parameters.npccontact;
     }
-    public Entity(){
+
+    public Entity() {
     }
 
     public String getName() {
@@ -55,18 +58,6 @@ public abstract class Entity implements Serializable {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
     }
 
     public Room getLocation() {

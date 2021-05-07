@@ -1,5 +1,4 @@
-package nl.rug.oop.rpg.game;
-
+package nl.rug.oop.rpg.game.configsys;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;

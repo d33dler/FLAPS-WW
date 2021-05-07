@@ -1,7 +1,5 @@
 package nl.rug.oop.rpg.npcsystem;
-
 import nl.rug.oop.rpg.Randomizers;
-import nl.rug.oop.rpg.game.Combat;
 import nl.rug.oop.rpg.game.Dialogue;
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
@@ -10,35 +8,37 @@ import nl.rug.oop.rpg.worldsystem.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Allies extends NPC implements Interactable, Inspectable,NpcTypology, Attackable {
-    private static final long serialVersionUID = 312L;
 
-    public Allies(EntityBuilder parameters) {
+public class ExchangeBots extends NPC implements Inspectable, Interactable,Attackable, NpcTypology {
+    private static final long serialVersionUID = 333L;
+    public ExchangeBots(EntityBuilder parameters) {
         super(parameters);
     }
-    public Allies(){
-        this.probability = 40;
-    }
 
-    @Override
-    public Allies initConstructor(){
-        AlliesDatabase allyDatabase = Randomizers.randomMaterial(AlliesDatabase.class);
-        return new EntityBuilder()
-                .name(allyDatabase.getSpname())
-                .hdm(allyDatabase.getHealth(),
-                        allyDatabase.getDamage() + ThreadLocalRandom.current().nextInt(2,
-                                30), ThreadLocalRandom.current().nextInt(0, 25))
-                .loc(null)
-                .inv(new Inventory().generateInv())
-                .ith(null)
-                .createFriend();
+    public ExchangeBots(){
+        this.probability = 10;
     }
 
     @Override
     public void inspect(Player player) {
         super.inspect(player);
-        Dialogue.allyInspect(player);
+        Dialogue.exchangeBotInspect(player);
     }
+
+    @Override
+    public ExchangeBots initConstructor(){
+        ExBOTs exBotsDatabase = Randomizers.randomMaterial(ExBOTs.class);
+        return new EntityBuilder()
+                .name(exBotsDatabase.getSpname())
+                .hdm(exBotsDatabase.getHealth(),
+                        exBotsDatabase.getDamage() + ThreadLocalRandom.current().nextInt(2,
+                                30), ThreadLocalRandom.current().nextInt(0, 25))
+                .loc(null)
+                .inv(new Inventory().generateInv())
+                .ith(null)
+                .createExBots();
+    }
+
 
     @Override
     public void interact(Player player) {
@@ -55,25 +55,25 @@ public class Allies extends NPC implements Interactable, Inspectable,NpcTypology
             default:
         }
     }
-
     public void acceptCombat(Player player) {
-        Dialogue.introCombatAlly(player, player.getNpcFocus());
-        player.setmTree(player.getmTree().getSubmenus().get(player.getSinput()));
-        Combat initFight = new Combat();
-        initFight.duel(player, player.npccontact, player.getmTree());
+        Dialogue.dialogueAttackExBot(player);
+        try {
+            Thread.sleep(100000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     public void dialogueResponse(Player player) {
-        Dialogue.dialogueAlly(player, player.getNpcFocus());
+        Dialogue.dialogueExBot(player);
     }
 
     public void tradeResponse(Player player) {
-        Dialogue.tradeAlly(player, player.getNpcFocus());
+        Dialogue.dialogueTradeExBot(player);
     }
 
     @Override
     public void receiveAttack(Entity attacker, Entity victim) {
-        super.receiveAttack(attacker, victim);
-        Dialogue.notifyAllyAttack((Player) attacker, victim);
+
     }
 }

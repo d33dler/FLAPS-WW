@@ -1,5 +1,5 @@
 package nl.rug.oop.rpg.game.savingsys;
-import nl.rug.oop.rpg.game.FileSearch;
+import nl.rug.oop.rpg.game.configsys.FileSearch;
 import nl.rug.oop.rpg.worldsystem.Player;
 import java.io.File;
 

@@ -25,6 +25,7 @@ public class GameMenuBuilder {
         explcomm.put("d", itemInter.getClass().getMethod("itemCheck", Player.class));
         explcomm.put("e", invInter.getClass().getMethod("inventoryCheck", Player.class));
         explcomm.put("f", gmenu.getClass().getMethod("switchSaveMenu", Player.class));
+        explcomm.put("back", worldInter.getClass().getMethod("roomCheck", Player.class));
         MenuTree rootmenu = new MenuNodeBuilder().root(null).mNode(explcomm).subM(new HashMap<>()).
                 optL(ExploreOptions.getExmn()).buildtree();
         rootmenu.submenus.put("a", rootmenu);

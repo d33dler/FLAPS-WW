@@ -3,6 +3,7 @@ package nl.rug.oop.rpg.worldsystem;
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.itemsystem.Holders;
 import nl.rug.oop.rpg.itemsystem.Item;
+import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
@@ -17,7 +18,7 @@ public class Room implements Inspectable, Serializable {
     protected Attr2room atr2;
     protected int ndors;
     protected ArrayList<Door> doors;
-    protected boolean company;
+    protected boolean visited, company;
     protected Item loot; //variety of loot wep/etc
     protected NPC npc;
     protected Holders storage;
@@ -34,6 +35,7 @@ public class Room implements Inspectable, Serializable {
         this.loot = parameters.loot;
         this.npc = parameters.npc;
         this.storage = parameters.storage;
+        this.visited = false;
     }
 
     public Room() {
@@ -89,12 +91,6 @@ public class Room implements Inspectable, Serializable {
 
     public void setCompany(boolean company) {
         this.company = company;
-    }
-    public Object clone() throws CloneNotSupportedException{
-        Room room = (Room) super.clone();
-       // Iterator<Door> iter = this.doors;
-      //  room.setDoors((ArrayList<Door>) this.getDoors().clone());
-        return room;
     }
 
 }

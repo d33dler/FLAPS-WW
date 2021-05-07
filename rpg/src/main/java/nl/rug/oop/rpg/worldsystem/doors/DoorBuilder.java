@@ -3,7 +3,6 @@ package nl.rug.oop.rpg.worldsystem.doors;
 import nl.rug.oop.rpg.worldsystem.Room;
 
 public class DoorBuilder extends Door {
-    /* key- requires hashmap sharing key with door*/
     public DoorBuilder exit(Room exit) {
         this.exit = exit;
         return this;
@@ -14,23 +13,39 @@ public class DoorBuilder extends Door {
         return this;
     }
 
-    public DoorBuilder clr(DoorcolorsDB color) {
+    public DoorBuilder clr(String color) {
         this.color = color;
         return this;
     }
-    public DoorBuilder type(String type){
-        this.dtype = type;
+
+    public DoorBuilder type(String type) {
+        this.doorType = type;
+        return this;
+    }
+
+    public DoorBuilder vis(boolean vis) {
+        this.visited = vis;
+        return this;
+    }
+
+    public DoorBuilder open(Boolean open) {
+        this.open = open;
         return this;
     }
 
     public Door create() {
         return new Door(this);
     }
-    public UltraDoor createUd(){ return new UltraDoor(this);}
-    public SecureDoor createSd() {return new SecureDoor(this);}
-    public CloningDoor createCd(){return new CloningDoor(this);}
 
-    // public Prmtdoor(boolean open) {
-    //     this.open = open;
-    // }
+    public RabitDoor createUd() {
+        return new RabitDoor(this);
+    }
+
+    public SecureDoor createSd() {
+        return new SecureDoor(this);
+    }
+
+    public CloningDoor createCd() {
+        return new CloningDoor(this);
+    }
 }

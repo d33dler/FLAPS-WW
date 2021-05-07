@@ -1,20 +1,21 @@
 package nl.rug.oop.rpg.worldsystem.doors;
+
 import nl.rug.oop.rpg.npcsystem.EntityBuilder;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
+
 import java.io.Serializable;
 import java.util.concurrent.ThreadLocalRandom;
+
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
-public class CloningDoor extends Door implements DoorClass, Serializable {
+public class CloningDoor extends Door implements DoorTypology, Serializable {
     private static final long serialVersionUID = 101L;
-    protected boolean used;
 
     public CloningDoor(DoorBuilder parameters) {
         super(parameters);
-        this.dtype = "CopyGate";
-        this.used = false;
+        this.doorType = "CopyGate";
     }
 
     public CloningDoor() {
@@ -25,13 +26,17 @@ public class CloningDoor extends Door implements DoorClass, Serializable {
     public void inspect(Player x) {
         super.inspect(x);
         String variant = checkState(x);
-        x.getTw().type("It will leave a " + variant + " clone of yourself.\n");
+        if (!x.getDoorFocus().isVisited()) {
+            x.getTw().type("It will leave a " + variant + " clone of yourself here.\n");
+        } else{
+            x.getTw().type("You used this CG portal to create a " + variant + " clone.\n");
+        }
     }
 
     @Override
     public void interact(Player x) {
-        CloningDoor door = (CloningDoor) x.getFocus();
-        if (!x.isRabbit() && !door.isUsed()) {
+        CloningDoor door = (CloningDoor) x.getDoorFocus();
+        if (!x.isRabbit() && !door.isVisited()) {
             Room room = x.getLocation();
             if (x.isHostile()) {
                 room.setNpc(genHostileClone(x));
@@ -42,7 +47,7 @@ public class CloningDoor extends Door implements DoorClass, Serializable {
             String variant = checkState(x);
             x.getTw().poeticPause("Notification:\n", 1000);
             x.getTw().type(" CG synthesized a " + variant + " clone of yourself in room: " + room.getId() + "\n");
-            door.setUsed(true);
+            door.setVisited(true);
         } else {
             super.interact(x);
         }
@@ -55,7 +60,7 @@ public class CloningDoor extends Door implements DoorClass, Serializable {
                 .loc(x.getLocation())
                 .inv(x.getInventory())
                 .ith(x.getHold())
-                .createfr();
+                .createFriend();
     }
 
     public NPC genHostileClone(Player x) {
@@ -67,7 +72,7 @@ public class CloningDoor extends Door implements DoorClass, Serializable {
                 .loc(x.getLocation())
                 .inv(x.getInventory())
                 .ith(x.getHold())
-                .createn();
+                .createEnemy();
     }
 
     public String checkState(Player x) {
@@ -84,15 +89,10 @@ public class CloningDoor extends Door implements DoorClass, Serializable {
         return new DoorBuilder()
                 .exit(out)
                 .enter(goin)
-                .clr(clr)
+                .clr(clr.getCname())
+                .vis(false)
+                .open(false)
                 .createCd();
     }
 
-    public boolean isUsed() {
-        return used;
-    }
-
-    public void setUsed(boolean used) {
-        this.used = used;
-    }
 }

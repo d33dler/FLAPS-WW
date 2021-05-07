@@ -1,6 +1,5 @@
 package nl.rug.oop.rpg.game.configsys;
 
-import nl.rug.oop.rpg.game.FileSearch;
 import nl.rug.oop.rpg.worldsystem.Player;
 
 import java.io.*;
@@ -56,10 +55,10 @@ public class Configurations implements Serializable {
         rpgProp.setProperty("playerHealth", "100");
         rpgProp.setProperty("twSpeed", "50");
         rpgProp.setProperty("roomNr", "50");
-        rpgProp.setProperty("door%", "60");
+        rpgProp.setProperty("door%", "70");
         rpgProp.setProperty("crypt%", "20");
         rpgProp.setProperty("copy%", "10");
-        rpgProp.setProperty("ultra%", "10");
+        rpgProp.setProperty("ultra%", "20");
         return rpgProp;
     }
 

@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.menu.builders;
 
-import nl.rug.oop.rpg.game.savingsys.QkSavingLoading;
+import nl.rug.oop.rpg.game.savingsys.QuickSavingLoading;
 import nl.rug.oop.rpg.game.savingsys.SavingLoading;
 import nl.rug.oop.rpg.menu.options.SaveMenuOptions;
 import nl.rug.oop.rpg.worldsystem.Player;
@@ -10,7 +10,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 
 public class SaveMenuBuilder {
-    QkSavingLoading qksave = new QkSavingLoading();
+    QuickSavingLoading qksave = new QuickSavingLoading();
     SavingLoading saveload = new SavingLoading();
     WorldInteraction winter = new WorldInteraction();
 

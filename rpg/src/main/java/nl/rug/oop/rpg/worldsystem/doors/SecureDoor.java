@@ -1,4 +1,5 @@
 package nl.rug.oop.rpg.worldsystem.doors;
+
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
@@ -9,11 +10,11 @@ import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
 public class SecureDoor extends Door implements Serializable {
     private static final long serialVersionUID = 102;
+
     public SecureDoor(DoorBuilder parameters) {
         super(parameters);
         this.cost = getRandom(5, 100);
-        this.dtype = "CryPT";
-        this.open = false;
+        this.doorType = "CryPT";
     }
 
     public SecureDoor() {
@@ -23,8 +24,8 @@ public class SecureDoor extends Door implements Serializable {
     @Override
     public void inspect(Player r) {
         super.inspect(r);
-        if (!r.getFocus().open) {
-            int cost = r.getFocus().getCost();
+        if (!r.getDoorFocus().open) {
+            int cost = r.getDoorFocus().getCost();
             int lvl = cost / 20;
             r.getTw().type("Security Level:" + lvl + "\nRequires " + cost + " decryption-device super-cells for computing power\n");
 
@@ -35,19 +36,21 @@ public class SecureDoor extends Door implements Serializable {
 
     @Override
     public void interact(Player x) {
-        if (!x.isRabbit() || !x.getFocus().open) {
+        if (!x.isRabbit() && !x.getDoorFocus().open) {
             x.getTw().type("You have " + x.getEnergycells() + " cells\n");
-            if (x.getEnergycells() < x.getFocus().cost) {
+            if (x.getEnergycells() < x.getDoorFocus().cost) {
                 x.getTw().type("You don't have enough energy cells\n");
             } else {
-                x.getTw().type("Charging :  \n" + x.getFocus().cost + " energy cells.");
-                x.setEnergycells(x.getEnergycells() - x.getFocus().cost);
-                x.getFocus().setCost(0);
-                x.getFocus().setOpen(true);
+                x.getTw().type("Charging :  \n" + x.getDoorFocus().cost + " energy cells.");
+                x.setEnergycells(x.getEnergycells() - x.getDoorFocus().cost);
+                x.getDoorFocus().setCost(0);
+                x.getDoorFocus().setOpen(true);
                 super.interact(x);
             }
-        } else {
+        } else if (!x.isRabbit()) {
             super.interact(x);
+        } else {
+            notifyHalt(x);
         }
     }
 
@@ -56,7 +59,9 @@ public class SecureDoor extends Door implements Serializable {
         return new DoorBuilder()
                 .exit(out)
                 .enter(goin)
-                .clr(clr)
+                .clr(clr.getCname())
+                .vis(false)
+                .open(false)
                 .createSd();
     }
 }

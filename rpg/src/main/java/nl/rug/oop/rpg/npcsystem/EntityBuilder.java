@@ -40,15 +40,19 @@ public class EntityBuilder extends Entity {
         this.npccontact = cont;
         return this;
     }
-    public Player protagonist() {
+    public Player createProtagonist() {
         return new Player(this);
     }
 
-    public Enemies createn() {
+    public Enemies createEnemy() {
         return new Enemies(this);
     }
 
-    public Allies createfr() {
+    public Allies createFriend() {
         return new Allies(this);
     }
+    public ExchangeBots createExBots() {
+        return new ExchangeBots(this);
+    }
+
 }

@@ -1,75 +1,70 @@
 package nl.rug.oop.rpg.npcsystem;
 
 import java.util.*;
-import java.lang.reflect.*;
 
-import nl.rug.oop.rpg.Typewriter;
+import nl.rug.oop.rpg.game.Dialogue;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.game.Combat;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 
 public class NpcInteraction extends WorldInteraction implements PlayerNpcAction {
-    Typewriter tw = new Typewriter();
 
     public NpcInteraction() {
     }
 
     /**
-     *
-     * @param x
-     *
+     * @param player
      */
-    public void engageNpc(Player x) {
-        Scanner in = x.getRdtxt();
-        if (lifeCheck(x)) {
+    public void engageNpc(Player player) {
+        Scanner in = player.getRdtxt();
+        if (lifeCheck(player)) {
             return;
         }
-        System.out.println(" x) Confirm attack \n (back) Return");
-        String input = in.nextLine();
-        if (input.equals("back")) {
+        player.setIntent("combat");
+        Dialogue.confirmCombatInit();
+        player.setSinput(in.nextLine());
+        if (player.getSinput().equals("back")) {
             return;
         }
-        x.setmTree(x.getmTree().getSubmenus().get(input));
-        Combat initFight = new Combat();
-        initFight.duel(x, x.npccontact, x.getmTree());
+        player.getNpcFocus().interact(player);
     }
 
-    public void conversePlayer(Player x) {
-        tw.type(x.name + ": Hey, unknown entity, are you friendly?\n");
-        lifeCheck(x);
+    public void conversePlayer(Player player) {
+        player.setIntent("converse");
+        player.getNpcFocus().interact(player);
     }
 
-    public void attackPlayer(Player x) {
-        tw.poeticPause(x.name + " :",800);
-        tw.type(" Engaging enemy. . .\n");
-        NPC foe = x.getNpccontact();
-        foe.setHealth(foe.getHealth() - x.getDamage());
-        x.setHealth(x.getHealth() - foe.getDamage());
+    public void tradePlayer(Player player) {
+        player.setIntent("trade");
+        player.getNpcFocus().interact(player);
     }
 
-    public void defendPlayer(Player x) {
-        NPC foe = x.getLocation().getNpc();
+    public void attackPlayer(Player player) {
+        Dialogue.notifyAttackPlayer(player);
+        NPC foe = player.getNpccontact();
+        foe.receiveAttack(player, foe);
+        player.receiveAttack(foe, player);
+    }
+
+    public void defendPlayer(Player player) {
+        Dialogue.notifyDefendPlayer(player);
+        Entity foe = player.getLocation().getNpc();
         foe.setHealth(foe.getHealth() - 1);
-        x.setHealth(x.getHealth() - foe.getDamage() / 3);
+        player.setHealth(player.getHealth() - foe.getDamage() / 3);
     }
 
-    public void fleePlayer(Player x) {
-        x.setLocation(x.getLocation().getDoors().get(0).getExit());
-        x.setNpccontact(x.getLocation().getNpc());
-        x.setFlee(true);
+    public void fleePlayer(Player player) {
+        player.setLocation(player.getLocation().getDoors().get(0).getExit());
+        player.setNpccontact(player.getLocation().getNpc());
+        player.setFlee(true);
     }
 
-    public void tradePlayer(Player x) {
-        tw.type(x.name + ": Wanna trade?\n ");
-        lifeCheck(x);
-    }
 
-    public boolean lifeCheck(Player x) {
-
-        if (x.getLocation().getNpc().getHealth() <= 0) {
-            tw.poeticPause("SysCheck: ",1500);
-            tw.type(" Its avatar is not functioning. It is not responding.\n");
+    public boolean lifeCheck(Player player) {
+        if (player.getNpcFocus().getHealth() <= 0) {
+            player.getTw().poeticPause("SysCheck: ", 1500);
+            player.getTw().type(" Its avatar is not functioning. It is not responding.\n");
             return true;
         } else {
             return false;

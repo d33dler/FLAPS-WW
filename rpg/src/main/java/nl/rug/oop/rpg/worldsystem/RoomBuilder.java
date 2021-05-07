@@ -2,6 +2,7 @@ package nl.rug.oop.rpg.worldsystem;
 
 import nl.rug.oop.rpg.itemsystem.Holders;
 import nl.rug.oop.rpg.itemsystem.Item;
+import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 

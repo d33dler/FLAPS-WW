@@ -12,16 +12,14 @@ public class RPG {
         MenuTree mtree = new MainMenuBuilder().setMainCommands();
         Player player = generateAvatar(mtree);
         GameMenu gmenu = new GameMenu();
-
         try {
             gmenu.fetchMenu(player);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
-    public void initGame(Player player) {
+    public void initGame(Player player) throws Exception {
         Dialogue.promtBegin(player);
         String input = player.getRdtxt().nextLine();
         if (input.equals("y")) {

@@ -31,7 +31,7 @@ public class SavingSystem implements Save, Serializable {
             fstream.close();
             System.out.println("Save was loaded successfully");
         } catch (Exception e) {
-            System.out.println("Error loading the save. Filepath is empty");
+            System.out.println("Error loading the save.");
             return x;
         }
         transferTransientData(player, x);

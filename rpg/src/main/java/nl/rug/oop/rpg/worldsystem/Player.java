@@ -3,25 +3,24 @@ package nl.rug.oop.rpg.worldsystem;
 import java.io.Serializable;
 
 import nl.rug.oop.rpg.Typewriter;
-import nl.rug.oop.rpg.game.configsys.Configurations;
+import nl.rug.oop.rpg.game.Dialogue;
 import nl.rug.oop.rpg.menu.builders.MenuTree;
-import nl.rug.oop.rpg.npcsystem.Entity;
-import nl.rug.oop.rpg.npcsystem.EntityBuilder;
-import nl.rug.oop.rpg.npcsystem.NPC;
+import nl.rug.oop.rpg.npcsystem.*;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
 import java.util.Properties;
 import java.util.Scanner;
 
 
-public class Player extends Entity implements Serializable, Cloneable {
+public class Player extends NPC implements Serializable, Attackable {
     private static final long serialVersionUID = 10L;
     public World map;
-    protected String sinput, savefile,configfile;
+    protected String sinput, savefile, configfile, intent;
     protected int energycells, intin, travel, qs;
-    protected Door focus, used;
-    protected boolean flee, hostile, rabbit;
-    transient protected boolean  loadfile, loadconfig, defconfig;
+    protected Door doorFocus, used;
+    protected NPC npcFocus;
+    protected boolean flee, hostile, rabbit, forcedcomb;
+    transient protected boolean narrative, loadfile, loadconfig, defconfig;
     protected transient MenuTree mTree;
     public transient Scanner rdtxt;
     protected transient WorldInteraction winter;
@@ -40,14 +39,21 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.savefile = "default";
         this.sinput = "default";
         this.configfile = "default";
+        this.intent = "default";
         this.travel = 1;
         this.qs = 0;
-        // this.tw.setSpeed(50);
+        this.forcedcomb = false;
     }
 
     public void getUserName(Player x, Scanner in) {
         System.out.println("Please authenticate yourself: ");
         x.setName(in.nextLine());
+    }
+
+    public void cappingTravelBuff(Player player) {
+        if (player.getTravelBuff() > 5) {
+            player.setTravelBuff(5);
+        }
     }
 
     public String getSavefile() {
@@ -60,6 +66,14 @@ public class Player extends Entity implements Serializable, Cloneable {
 
     public void setLoadconfig(boolean loadconfig) {
         this.loadconfig = loadconfig;
+    }
+
+    public NPC getNpcFocus() {
+        return npcFocus;
+    }
+
+    public void setNpcFocus(NPC npcFocus) {
+        this.npcFocus = npcFocus;
     }
 
     public String getConfigfile() {
@@ -82,8 +96,24 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.savefile = savefile;
     }
 
+    public String getIntent() {
+        return intent;
+    }
+
+    public void setIntent(String intent) {
+        this.intent = intent;
+    }
+
     public void setTw(Typewriter tw) {
         this.tw = tw;
+    }
+
+    public boolean isForcedcomb() {
+        return forcedcomb;
+    }
+
+    public void setForcedcomb(boolean forcedcomb) {
+        this.forcedcomb = forcedcomb;
     }
 
     public void setWinter(WorldInteraction winter) {
@@ -131,8 +161,8 @@ public class Player extends Entity implements Serializable, Cloneable {
     }
 
 
-    public Door getFocus() {
-        return focus;
+    public Door getDoorFocus() {
+        return doorFocus;
     }
 
     public boolean isRabbit() {
@@ -143,8 +173,8 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.rabbit = rabbit;
     }
 
-    public void setFocus(Door focus) {
-        this.focus = focus;
+    public void setDoorFocus(Door doorFocus) {
+        this.doorFocus = doorFocus;
     }
 
     public int getEnergycells() {
@@ -175,7 +205,7 @@ public class Player extends Entity implements Serializable, Cloneable {
         return travel;
     }
 
-    public void setTravel(int travel) {
+    public void setTravelBuff(int travel) {
         this.travel = travel;
     }
 
@@ -231,7 +261,13 @@ public class Player extends Entity implements Serializable, Cloneable {
         return rdtxt;
     }
 
-    public boolean lifeCheck() {
-        return false;
+    public boolean lifeCheck(Player player) {
+        return new NpcInteraction().lifeCheck(player);
+    }
+
+    @Override
+    public void receiveAttack(Entity attacker, Entity victim) {
+        super.receiveAttack(attacker, victim);
+        Dialogue.notifyDamagePlayer((Player) victim);
     }
 }
