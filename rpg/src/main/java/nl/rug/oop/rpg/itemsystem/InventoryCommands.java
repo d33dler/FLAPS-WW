@@ -3,5 +3,6 @@ import nl.rug.oop.rpg.worldsystem.Player;
 
 public interface InventoryCommands {
     void inventoryCheck(Player x);
-    void listInvItems(Player x);
+    void listInvWeaponItems(Player x);
+    void listInvConsumableItems(Player x);
 }

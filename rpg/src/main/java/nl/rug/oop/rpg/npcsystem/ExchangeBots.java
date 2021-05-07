@@ -27,7 +27,7 @@ public class ExchangeBots extends NPC implements Inspectable, Interactable,Attac
 
     @Override
     public ExchangeBots initConstructor(){
-        ExBOTs exBotsDatabase = Randomizers.randomMaterial(ExBOTs.class);
+        ExBots exBotsDatabase = Randomizers.randomMaterial(ExBots.class);
         return new EntityBuilder()
                 .name(exBotsDatabase.getSpname())
                 .hdm(exBotsDatabase.getHealth(),

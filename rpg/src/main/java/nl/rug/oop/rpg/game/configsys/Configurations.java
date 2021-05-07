@@ -59,7 +59,9 @@ public class Configurations implements Serializable {
     }
 
     /**
-     * Default configuration data;
+     * Default configuration data. Includes: typewriter speed, number of rooms in the map,
+     * door types deployment probabilities
+     *
      */
     public Properties setupDefaultConfig(Properties rpgProp) {
         rpgProp.setProperty("playerName", "tassist");
@@ -75,8 +77,9 @@ public class Configurations implements Serializable {
 
     /**
      *
-     * @param player
-     * @return
+     * @param player holds the  boolean values (defconfig, loadconfig) that identify the choice of the player to load
+     *               a default config, or save a config, or start the game process with default config.
+     * @return returns the required variant of config file.
      */
     public Properties getConfig(Player player) {
         Properties rpgProp = new Properties();

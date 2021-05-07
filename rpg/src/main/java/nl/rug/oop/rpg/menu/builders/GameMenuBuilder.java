@@ -10,13 +10,26 @@ import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 import java.lang.reflect.*;
 import java.util.HashMap;
 
-
+/**
+ * Creates the Game Menu tree based on tree structure and uses Reflection
+ * and Class object introspection to map method objects to string values in
+ * Hashmaps.
+ *
+ */
 public class GameMenuBuilder {
     NpcInteraction action = new NpcInteraction();
     WorldInteraction worldInter = new WorldInteraction();
     ItemInteraction itemInter = new ItemInteraction();
     InventoryInteraction invInter = new InventoryInteraction();
     GameMenu gmenu  = new GameMenu();
+
+    /**
+     * The methods are chained, the bottom of the tree structure calls upon upper
+     * node creating methods to instantiate MenuTree nodes until the root is reached and
+     * created. Afterwards, the rest of the branches are created and connected.
+     * @return returns the Game Menu tree object
+     * @throws NoSuchMethodException
+     */
     public MenuTree setMainCommands() throws NoSuchMethodException {
         HashMap<String, Method> explcomm = new HashMap<>();
         explcomm.put("a", worldInter.getClass().getMethod("roomCheck", Player.class));
@@ -85,8 +98,8 @@ public class GameMenuBuilder {
     public MenuTree setInventoryCommands() throws NoSuchMethodException {
         MenuTree rootmenu = setItemCommands();
         HashMap<String, Method> invcomm = new HashMap<>();
-        invcomm.put("w", invInter.getClass().getMethod("listInvItems", Player.class));
-        invcomm.put("c", invInter.getClass().getMethod("listInvItems", Player.class));
+        invcomm.put("w", invInter.getClass().getMethod("listInvWeaponItems", Player.class));
+        invcomm.put("c", invInter.getClass().getMethod("listInvConsumableItems", Player.class));
         invcomm.put("back", worldInter.getClass().getMethod("goBack", Player.class));
         MenuTree invmenu = new MenuNodeBuilder().root(rootmenu).mNode(invcomm).subM(new HashMap<>()).
                 optL(InventoryOptions.getInv()).buildtree();

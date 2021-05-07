@@ -12,8 +12,8 @@ public class FileSearch {
     /**
      * Used to search in the paths of config or save files and print the list and the creation date of files.
      * @param path
-     * @param extension
-     * @param absolutepath
+     * @param extension extension variant : .ser or .properties
+     * @param absolutepath getting the full path to the files to be listed.
      */
     public void listSaveFiles(String path, String extension, String absolutepath) {
         File save = new File(path);

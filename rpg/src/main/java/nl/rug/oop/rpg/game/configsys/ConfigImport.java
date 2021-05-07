@@ -4,7 +4,7 @@ import nl.rug.oop.rpg.worldsystem.World;
 import java.util.Properties;
 
 /**
- * Used to import configuration data before the initialization of the game process.
+ * Used to import all configuration data and set up the world before the initialization of the game process.
  */
 
 public class ConfigImport extends Configurations {

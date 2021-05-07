@@ -1,9 +1,7 @@
 package nl.rug.oop.rpg.worldsystem;
-
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.itemsystem.Holders;
 import nl.rug.oop.rpg.itemsystem.Item;
-import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
@@ -11,15 +9,18 @@ import java.io.Serializable;
 import java.security.SecureRandom;
 import java.util.*;
 
+/**
+ * Room class holding all relevant data.
+ */
 public class Room implements Inspectable, Serializable {
     private static final long serialVersionUID = 60L;
     protected String id;
-    protected Attr1room atr1; //string might suffice, check
+    protected Attr1room atr1;
     protected Attr2room atr2;
     protected int ndors;
     protected ArrayList<Door> doors;
     protected boolean visited, company;
-    protected Item loot; //variety of loot wep/etc
+    protected Item loot;
     protected NPC npc;
     protected Holders storage;
 
@@ -37,18 +38,28 @@ public class Room implements Inspectable, Serializable {
         this.storage = parameters.storage;
         this.visited = false;
     }
-
-    public Room() {
-    }
-
-    public String getId() {
-        return id;
-    }
-
     protected Room randomRoom(List<Room> set) {
         int x = random.nextInt(set.size());
         return set.get(x);
     }
+    public Room() {
+    }
+
+    /**
+     *
+     * @param player
+     */
+    @Override
+    public void inspect(Player player) {
+        Room now = player.getLocation();
+        System.out.println("\n You are in a" + now.atr1.getAtt1() + "room" + now.atr2.getAtt2());
+        System.out.println(" There are " + now.ndors + " doors here.\n ");
+    }
+    public String getId() {
+        return id;
+    }
+
+
 
     public ArrayList<Door> getDoors() {
         return doors;
@@ -58,12 +69,6 @@ public class Room implements Inspectable, Serializable {
         return this.npc;
     }
 
-    @Override
-    public void inspect(Player r) {
-        Room now = r.getLocation();
-        System.out.println("\n You are in a" + now.atr1.getAtt1() + "room" + now.atr2.getAtt2());
-        System.out.println(" There are " + now.ndors + " doors here.\n ");
-    }
 
     public Item getLoot() {
         return loot;
@@ -83,10 +88,6 @@ public class Room implements Inspectable, Serializable {
 
     public void setDoors(ArrayList<Door> doors) {
         this.doors = doors;
-    }
-
-    public boolean isCompany() {
-        return company;
     }
 
     public void setCompany(boolean company) {

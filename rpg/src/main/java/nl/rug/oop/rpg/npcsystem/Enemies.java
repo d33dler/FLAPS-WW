@@ -20,6 +20,10 @@ public class Enemies extends NPC implements Interactable, Inspectable, Attackabl
         this.probability = 40;
     }
 
+    /**
+     *
+     * @return Instance of enemy object.
+     */
     @Override
     public Enemies initConstructor(){
         EnemyDatabase enemyDatabase = Randomizers.randomMaterial(EnemyDatabase.class);
@@ -43,7 +47,8 @@ public class Enemies extends NPC implements Interactable, Inspectable, Attackabl
     }
 
     /**
-     * @param player
+     * Overrides the default behaviour of interact() method , by forcing a the combatProcess method
+     *
      */
 
     @Override

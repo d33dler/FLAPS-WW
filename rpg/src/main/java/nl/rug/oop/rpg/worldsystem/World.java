@@ -150,6 +150,12 @@ public class World implements Serializable {
         return player;
     }
 
+    /**
+     *
+     * @param player is getting some additional field value set up
+     * @param map is used to locate and set the starting point for the player
+     * @return player with additional attributes updated (starting location, random inventory items)
+     */
     public Player setupPlayer(Player player, World map) {
         List<Room> listRooms = new ArrayList<>(map.getRoomConnects().keySet());
         player.setLocation(listRooms.get(0));
@@ -208,8 +214,8 @@ public class World implements Serializable {
 
     /**
      *
-     * @param rA room A
-     * @param rB room B
+     * @param rA room node A
+     * @param rB room node B
      * @param allrooms list of all rooms from which we eliminate rooms that already reached
      *                 the capped limit of 4 doors assigned to 1 room.
      */

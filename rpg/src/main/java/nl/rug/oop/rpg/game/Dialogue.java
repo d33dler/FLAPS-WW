@@ -6,16 +6,18 @@ import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
 
+/**
+ * Class holding various text outputs that communicate the user comical information or deliver necessary notifications.
+ */
 public class Dialogue {
     public static void Comunication() {
         Typewriter tw = new Typewriter();
-        /* tw.type("Initiating porting with remote node...\n"); //move all to materials
+        tw.type("Initiating porting with remote node...\n"); //move all to materials
         tw.poeticPause("Routing in progress...", 2000);
         for (int i = 0; i < 3; i++) {
             tw.poeticPause(".\n", 1000);
         }
         tw.type("Connection succesfully established\n");
-    */
 
         tw.type("Hello, stranger. You logged yourself onto one of our 'Glove x-256' androids.\n");
         tw.poeticPause("", 1000);
@@ -91,18 +93,22 @@ public class Dialogue {
             player.getTw().type("Unfortunately, you terminated this entity's life functions.\n");
         }
     }
+
     public static void dialogueExBot(Player player) {
         player.getTw().type("ExB0T: Greetings " + player.getName() + "! I'm an exchange B.0.T. terminal.\n");
     }
+
     public static void dialogueTradeExBot(Player player) {
         player.getTw().type("ExB0T: I provide buying, selling and exchanging of material, digital and meta-digital goods" +
                 "mostly, the latter!\n");
     }
+
     public static void dialogueAttackExBot(Player player) {
-        player.getTw().type( "ExB0T: It is unwise to engage me in combat,\n my security system teleports any aggressor to a remote prison" +
+        player.getTw().type("ExB0T: It is unwise to engage me in combat,\n my security system teleports any aggressor to a remote prison" +
                 ".\nEnjoy your break.\n");
 
     }
+
     public static void notifyFfC(Player player) {
         printAi(player);
         player.getTw().type("You are not able to flee from forced combats!\n");
@@ -133,22 +139,27 @@ public class Dialogue {
         player.getTw().poeticPause(player.getName() + " :", 800);
         player.getTw().type("Engaging enemy » " + player.getNpcFocus().getName() + "\n");
     }
+
     public static void notifyDefendPlayer(Player player) {
         player.getTw().poeticPause(player.getName() + " :", 800);
         player.getTw().type(" Initiating defence . \n");
     }
+
     public static void confirmCombatInit() {
         System.out.println(" x) Confirm attack\n(back) Return\n");
     }
+
     public static void dialogueAlly(Player player, NPC npc) {
         player.getTw().poeticPause(npc.getName() + " :", 800);
         player.getTw().type(" I come in peace " + player.getName()
                 + "! . We can exchange tech goods, if you wish.\n");
     }
+
     public static void tradeAlly(Player player, NPC npc) {
         player.getTw().poeticPause(npc.getName() + " :", 800);
         player.getTw().type(" Unfortunately, the trading feature will be included in the DLC.Bye\n");
     }
+
     public static void introCombatAlly(Player player, Entity foe) {
         player.getTw().type(foe.getName() + ": Warning,   " + player.getName() + ". My sensors identified the model of an " +
                 "attack algorithm pattern's inception.\n Please, reconfigure your system's program from combat mode to default." +

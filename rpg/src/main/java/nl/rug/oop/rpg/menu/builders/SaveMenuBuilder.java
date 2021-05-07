@@ -16,9 +16,9 @@ public class SaveMenuBuilder {
 
     public MenuTree setMainCommands() throws NoSuchMethodException {
         HashMap<String, Method> options = new HashMap<>();
-        options.put("a", qksave.getClass().getMethod("save", Player.class));
+        options.put("a", qksave.getClass().getMethod("saveSave", Player.class));
         options.put("b", qksave.getClass().getMethod("setupLoad", Player.class));
-        options.put("c", saveload.getClass().getMethod("save", Player.class));
+        options.put("c", saveload.getClass().getMethod("saveSave", Player.class));
         options.put("d", saveload.getClass().getMethod("setupLoad", Player.class));
         options.put("back", winter.getClass().getMethod("goBack", Player.class));
         return new MenuNodeBuilder().root(null).mNode(options).subM(new HashMap<>()).

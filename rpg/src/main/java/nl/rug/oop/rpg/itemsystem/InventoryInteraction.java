@@ -11,22 +11,30 @@ public class InventoryInteraction extends WorldInteraction implements InventoryC
     public void inventoryCheck(Player x) {
     }
 
-    public void listInvItems(Player x) {
-        Typewriter tw = new Typewriter();
-        getItemType(x,tw);
+    public void listInvWeaponItems(Player x) {
+        getItemType(x, x.getTw());
         x.getInventory().getwList().keySet().forEach(System.out::println);
-        tw.type("-----------------------\n");
-        tw.type("(w) Interact\n(back) Return \n");
+        x.getTw().type("-----------------------\n");
+        x.getTw().type("(w) Interact\n(back) Return \n");
     }
 
-    public void getItemType(Player x, Typewriter tw){
-        switch (x.getSinput()){
+    public void listInvConsumableItems(Player x) {
+        getItemType(x, x.getTw());
+        x.getInventory().getcList().keySet().forEach(System.out::println);
+        x.getTw().type("-----------------------\n");
+        x.getTw().type("(w) Interact\n(back) Return \n");
+    }
+
+    public void getItemType(Player x, Typewriter tw) {
+        switch (x.getSinput()) {
             case "w":
                 tw.type("-Weapons---------------\n");
                 return;
-            case "c": tw.type("-Consumables-----------\n");
+            case "c":
+                tw.type("-Consumables-----------\n");
                 return;
-            default: tw.type("-eRrooo00r-----------\n");
+            default:
+                tw.type("-eRrooo00r-----------\n");
         }
     }
 

@@ -11,6 +11,9 @@ import nl.rug.oop.rpg.worldsystem.doors.Door;
 import java.util.Properties;
 import java.util.Scanner;
 
+/**
+ * Player class holding all relevant fields for config files, save files, the world map etc.
+ */
 
 public class Player extends NPC implements Serializable, Attackable {
     private static final long serialVersionUID = 10L;
@@ -27,6 +30,11 @@ public class Player extends NPC implements Serializable, Attackable {
     protected transient Properties rpgprop;
     transient Typewriter tw;
 
+    /**
+     *
+     * @param parameters creating the player object using the builder pattern implementing constructors
+     *                   from the Entity Builder class
+     */
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
@@ -45,6 +53,16 @@ public class Player extends NPC implements Serializable, Attackable {
         this.forcedcomb = false;
     }
 
+    /**
+     *
+     * @param attacker Object that decreases the integer health field value of the victim object.
+     * @param victim   Object which has its health field value updated.
+     */
+    @Override
+    public void receiveAttack(Entity attacker, Entity victim) {
+        super.receiveAttack(attacker, victim);
+        Dialogue.notifyDamagePlayer((Player) victim);
+    }
     public void getUserName(Player x, Scanner in) {
         System.out.println("Please authenticate yourself: ");
         x.setName(in.nextLine());
@@ -189,10 +207,6 @@ public class Player extends NPC implements Serializable, Attackable {
         return flee;
     }
 
-    public World getMap() {
-        return map;
-    }
-
     public void setMap(World map) {
         this.map = map;
     }
@@ -265,9 +279,5 @@ public class Player extends NPC implements Serializable, Attackable {
         return new NpcInteraction().lifeCheck(player);
     }
 
-    @Override
-    public void receiveAttack(Entity attacker, Entity victim) {
-        super.receiveAttack(attacker, victim);
-        Dialogue.notifyDamagePlayer((Player) victim);
-    }
+
 }

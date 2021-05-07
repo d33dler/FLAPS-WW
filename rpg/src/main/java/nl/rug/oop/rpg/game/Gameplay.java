@@ -8,8 +8,7 @@ import nl.rug.oop.rpg.worldsystem.*;
 public class Gameplay {
 
     public void Configure(Player player) throws Exception{
-        //Dialogue intro = new Dialogue();
-        //intro.Comunication();
+        Dialogue.Comunication();
         player = new ConfigImport().setPlayerConfigs(player);
         Explore(player);
     }
