@@ -1,7 +1,5 @@
 package nl.rug.oop.rpg.game.savingsys;
-
 import nl.rug.oop.rpg.worldsystem.Player;
-
 import java.io.File;
 
 public class QkSavingLoading extends SavingSystem {
@@ -18,6 +16,8 @@ public class QkSavingLoading extends SavingSystem {
     }
 
     public void createQsDir(Player x) {
+        File saveDirparent = new File("savedgames");
+        saveDirparent.mkdir();
         File saveDir = new File("savedgames/quicksaves");
         if (!saveDir.mkdir()) {
             x.setSavefile("quicksaves/quicksave" + Integer.parseInt(String.valueOf(x.getQs() + 1)));

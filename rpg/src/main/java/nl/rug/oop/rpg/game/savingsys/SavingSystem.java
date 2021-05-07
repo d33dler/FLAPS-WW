@@ -1,5 +1,7 @@
 package nl.rug.oop.rpg.game.savingsys;
+
 import nl.rug.oop.rpg.worldsystem.Player;
+
 import java.io.*;
 
 public class SavingSystem implements Save, Serializable {
@@ -7,8 +9,6 @@ public class SavingSystem implements Save, Serializable {
     protected Player player;
 
     public void save(Player x) {
-        File saveDir = new File("savedgames");
-        saveDir.mkdir();
         try {
             FileOutputStream fstream = new FileOutputStream("savedgames/" + x.getSavefile() + ".ser");
             ObjectOutputStream store = new ObjectOutputStream(fstream);
@@ -23,8 +23,7 @@ public class SavingSystem implements Save, Serializable {
     }
 
     public Player load(Player x) {
-
-        try{
+        try {
             FileInputStream fstream = new FileInputStream("savedgames/" + x.getSavefile() + ".ser");
             ObjectInputStream objectStream = new ObjectInputStream(fstream);
             this.player = (Player) objectStream.readObject();
@@ -32,7 +31,7 @@ public class SavingSystem implements Save, Serializable {
             fstream.close();
             System.out.println("Save was loaded successfully");
         } catch (Exception e) {
-            System.out.println("Error loading the save.");
+            System.out.println("Error loading the save. Filepath is empty");
             return x;
         }
         transferTransientData(player, x);

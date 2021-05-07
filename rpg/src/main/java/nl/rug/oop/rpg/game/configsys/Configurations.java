@@ -12,7 +12,7 @@ public class Configurations implements Serializable {
 
     public void saveConfig(Player x) {
         File configDir = new File("config");
-        configDir.mkdir();
+        boolean info = !configDir.mkdir();
         x.setDefconfig(true);
         Properties config = getConfig(x);
         try {
@@ -25,7 +25,9 @@ public class Configurations implements Serializable {
         } catch (Exception e) {
             System.out.println("Error creating default config file");
         }
-        System.out.println("Default config file was created successfully.");
+        if (info) {
+            System.out.println("Default config file & path was created successfully.");
+        }
     }
 
     public Player loadConfig(Player x) {
@@ -66,8 +68,7 @@ public class Configurations implements Serializable {
         if (x.isDefconfig()) {
             x.setConfigfile("default");
             rpgProp = setupDefaultConfig(rpgProp);
-            x.getTw().type("Loading default config file\n");
-        } else if (!x.isLoadconfig()){
+        } else if (!x.isLoadconfig()) {
             listConfigFiles();
             getConfigName(x);
         }

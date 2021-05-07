@@ -4,6 +4,8 @@ import nl.rug.oop.rpg.game.savingsys.SavingSystem;
 import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
+
+import java.io.File;
 import java.lang.reflect.Method;
 import java.util.EnumMap;
 
@@ -37,6 +39,8 @@ public class GameMenu {
         return option;
     }
     public void switchSaveMenu(Player player) {
+        File saveDir = new File("savedgames");
+        saveDir.mkdir();
     }
 
 }

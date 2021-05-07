@@ -16,6 +16,7 @@ public class SavingLoading extends SavingSystem {
 
     @Override
     public void setupLoad(Player x) {
+        createSaveDir(x);
         FileSearch fs = new FileSearch();
         String abspath = "/home/radubereja/Desktop/Object-Oriented Programming/a0/2021_Team_060/rpg/savedgames/saves/";
         fs.listSaveFiles("savedgames/saves", ".ser", abspath);
@@ -27,7 +28,6 @@ public class SavingLoading extends SavingSystem {
 
     public void getSaveName(Player x) {
         x.getTw().type("Choose a save file & input name\n");
-        System.out.println("(back) Back");
         x.setSavefile("saves/" + x.rdtxt.nextLine());
     }
 

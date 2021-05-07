@@ -37,7 +37,7 @@ public class Player extends Entity implements Serializable, Cloneable {
         this.winter = new WorldInteraction();
         this.rdtxt = new Scanner(System.in);
         this.tw = new Typewriter();
-        this.savefile = "default.ser";
+        this.savefile = "default";
         this.sinput = "default";
         this.configfile = "default";
         this.travel = 1;

@@ -21,18 +21,14 @@ public class Combat {
         x.setHostile(true);
 
         do {
-            printObnoxiousText(x,foe);
+            printObnoxiousText(x, foe);
             printFightmenu(combopt);
             input = in.nextLine();
             option = mtree.getMenunode().get(input);
             try {
                 Object interact = WorldInteraction.getActionType(option);
                 option.invoke(interact, x);
-            } catch (NullPointerException
-                    | InvocationTargetException
-                    | NoSuchMethodException
-                    | InstantiationException
-                    | IllegalAccessException e) {
+            } catch (Exception e) {
                 x.getTw().type("No such option\n");
             }
         } while (foe.getHealth() > 0 && x.getHealth() > 0 && !input.equals("c"));
@@ -55,13 +51,15 @@ public class Combat {
     public void printFightmenu(EnumMap<CombatMenuOptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
     }
-    public void printObnoxiousText(Player x, NPC foe){
+
+    public void printObnoxiousText(Player x, NPC foe) {
         System.out.println("< ╬ >  :::::::::::: SysHealth :::::::::::: < ╬ >\n" + spL("", 8) +
                 x.getName() + ": " + x.getHealth() + " ::: " + foe.getName() + ": " + foe.getHealth());
         System.out.println("< ╬ >  ::::::::::::   Damage  :::::::::::: < ╬ >\n" + spL("", 8) +
                 spL(String.valueOf(x.getDamage()), x.getName().length()) +
                 " ::: " + spL(String.valueOf(foe.getDamage()), foe.getName().length()));
     }
+
     public static String spL(String str, int len) {
         return String.format("%1$" + (len + 5) + "s", str);
     }
