@@ -9,7 +9,12 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.stream.Stream;
 
 public class FileSearch {
-
+    /**
+     * Used to search in the paths of config or save files and print the list and the creation date of files.
+     * @param path
+     * @param extension
+     * @param absolutepath
+     */
     public void listSaveFiles(String path, String extension, String absolutepath) {
         File save = new File(path);
         FilenameFilter serf = (file, s) -> s.endsWith(extension);

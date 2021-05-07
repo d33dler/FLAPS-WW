@@ -12,8 +12,13 @@ import java.util.EnumMap;
 import java.util.Scanner;
 
 public class Combat {
-
-    public void duel(Player player, NPC foe, MenuTree mtree) {
+    /**
+     * The method is used to conduct the combat process;
+     * @param player
+     * @param foe NPC subclass
+     * @param mtree Menu Tree for the combat menu
+     */
+    public void duelProcess(Player player, NPC foe, MenuTree mtree) {
         String input;
         Scanner in = player.getRdtxt();
         Method option;
@@ -41,6 +46,11 @@ public class Combat {
         duelConclusion(player, foe);
     }
 
+    /**
+     * Updating player field values based on the outcome of the duelProcess method.
+     * @param player
+     * @param foe
+     */
     public void duelConclusion(Player player, NPC foe) {
         if (foe.getHealth() <= 0) {
             player.getLocation().setCompany(false);

@@ -1,11 +1,13 @@
 package nl.rug.oop.rpg.game.configsys;
-
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.World;
-
 import java.util.Properties;
 
-public class ConfigImport extends Configurations{
+/**
+ * Used to import configuration data before the initialization of the game process.
+ */
+
+public class ConfigImport extends Configurations {
     public Player setPlayerConfigs(Player player) throws Exception {
         Configurations config = new Configurations();
         player.setDefconfig(!player.isLoadconfig());

@@ -6,9 +6,18 @@ import nl.rug.oop.rpg.worldsystem.Room;
 
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
+/**
+ * RabitDoor is a Door subtype.
+ * It overrides the parent class' Door behaviour and implements its own constructor.
+ */
+
 public class RabitDoor extends Door implements DoorTypology {
     private static final long serialVersionUID = 100L;
 
+    /**
+     *
+     * @param parameters Builder pattern Class for doors.
+     */
     public RabitDoor(DoorBuilder parameters) {
         super(parameters);
         this.doorType = "RàBIT";
@@ -18,6 +27,29 @@ public class RabitDoor extends Door implements DoorTypology {
         this.probab = 10;
     }
 
+    /**
+     *
+     * @param out Room node A
+     * @param goin Room node B
+     * @return a rabit door that acts as an edge in the graph-structure based Map.
+     */
+    public Door initConstructor(Room out, Room goin) {
+        DoorcolorsDB clr = randomMaterial(DoorcolorsDB.class);
+        return new DoorBuilder()
+                .exit(out)
+                .enter(goin)
+                .clr(clr.getCname())
+                .vis(false)
+                .open(false)
+                .createUd();
+    }
+
+    /**
+     *
+     * @param player Player object holds the Door field value doorFocus -
+     *              which identifies the door that the player is currently viewing/interacting with.
+     *               inspect() Override, gives additional information regarding the door subtype.
+     */
     @Override
     public void inspect(Player player) {
         super.inspect(player);
@@ -29,6 +61,15 @@ public class RabitDoor extends Door implements DoorTypology {
         }
     }
 
+    /**
+     *
+     * @param player Player object holds the Door field value doorFocus.
+     *               interact method Override uses the default behaviour of parent class Door.
+     *               It adds additional side-effects. Here: a series (using a loop) of jumps through a number
+     *               of other doors - by automatically choosing doors that are compatible
+     *               for the travel. The process is halted if no available doors are found and
+     *               the user is informed.
+     */
     @Override
     public void interact(Player player) {
         Door door = player.getDoorFocus();
@@ -61,6 +102,11 @@ public class RabitDoor extends Door implements DoorTypology {
         }
     }
 
+    /**
+     *
+     * @param player is used to get the current location where the available doors are checked.
+     * @return is a door number if a compatible door is found. Else return = -1;
+     */
     public int checkRooms(Player player) {
         Room roomNow = player.getLocation();
         int i;
@@ -88,14 +134,5 @@ public class RabitDoor extends Door implements DoorTypology {
         }
     }
 
-    public Door initConstructor(Room out, Room goin) {
-        DoorcolorsDB clr = randomMaterial(DoorcolorsDB.class);
-        return new DoorBuilder()
-                .exit(out)
-                .enter(goin)
-                .clr(clr.getCname())
-                .vis(false)
-                .open(false)
-                .createUd();
-    }
+
 }

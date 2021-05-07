@@ -10,6 +10,10 @@ import nl.rug.oop.rpg.worldsystem.Player;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Allies subtype of NPCs implementing distinct behaviour on top of NPC default behaviour.
+ */
+
 public class Allies extends NPC implements Interactable, Inspectable,NpcTypology, Attackable {
     private static final long serialVersionUID = 312L;
 
@@ -20,6 +24,10 @@ public class Allies extends NPC implements Interactable, Inspectable,NpcTypology
         this.probability = 40;
     }
 
+    /**
+     *
+     * @return A random Ally NPC with the builder pattern implementing class
+     */
     @Override
     public Allies initConstructor(){
         AlliesDatabase allyDatabase = Randomizers.randomMaterial(AlliesDatabase.class);
@@ -34,12 +42,24 @@ public class Allies extends NPC implements Interactable, Inspectable,NpcTypology
                 .createFriend();
     }
 
+    /**
+     *
+     * @param player Object is used to identify the NPC object to be inspected.
+     *               Player contains NPC field for setting the NPC that is currently interacting with
+     *               This method overrides the default dialogue.
+     */
     @Override
     public void inspect(Player player) {
         super.inspect(player);
         Dialogue.allyInspect(player);
     }
 
+    /**
+     *
+     * @param player Parent class NPC interact function to execute common interaction
+     *               This method overrides the default behaviour, by offering different
+     *               interaction variants for the child class Ally.
+     */
     @Override
     public void interact(Player player) {
         switch (player.getIntent()) {
@@ -60,7 +80,7 @@ public class Allies extends NPC implements Interactable, Inspectable,NpcTypology
         Dialogue.introCombatAlly(player, player.getNpcFocus());
         player.setmTree(player.getmTree().getSubmenus().get(player.getSinput()));
         Combat initFight = new Combat();
-        initFight.duel(player, player.npccontact, player.getmTree());
+        initFight.duelProcess(player, player.npccontact, player.getmTree());
     }
 
     public void dialogueResponse(Player player) {

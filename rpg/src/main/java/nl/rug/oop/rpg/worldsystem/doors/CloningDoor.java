@@ -10,78 +10,27 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static nl.rug.oop.rpg.Randomizers.randomMaterial;
 
+/**
+ * CloningDoor is a Door subtype.
+ * It overrides the parent class' Door behaviour and implements its own constructor.
+ */
+
 public class CloningDoor extends Door implements DoorTypology, Serializable {
     private static final long serialVersionUID = 101L;
 
+    /**
+     * @param parameters Builder pattern Class for doors.
+     */
     public CloningDoor(DoorBuilder parameters) {
         super(parameters);
         this.doorType = "CopyGate";
     }
 
-    public CloningDoor() {
-        this.probab = 10;
-    }
-
-    @Override
-    public void inspect(Player x) {
-        super.inspect(x);
-        String variant = checkState(x);
-        if (!x.getDoorFocus().isVisited()) {
-            x.getTw().type("It will leave a " + variant + " clone of yourself here.\n");
-        } else{
-            x.getTw().type("You used this CG portal to create a " + variant + " clone.\n");
-        }
-    }
-
-    @Override
-    public void interact(Player x) {
-        CloningDoor door = (CloningDoor) x.getDoorFocus();
-        if (!x.isRabbit() && !door.isVisited()) {
-            Room room = x.getLocation();
-            if (x.isHostile()) {
-                room.setNpc(genHostileClone(x));
-            } else {
-                room.setNpc(genFriendlyClone(x));
-            }
-            super.interact(x);
-            String variant = checkState(x);
-            x.getTw().poeticPause("Notification:\n", 1000);
-            x.getTw().type(" CG synthesized a " + variant + " clone of yourself in room: " + room.getId() + "\n");
-            door.setVisited(true);
-        } else {
-            super.interact(x);
-        }
-    }
-
-    public NPC genFriendlyClone(Player x) {
-        return new EntityBuilder() //presence of npc may be randomized
-                .name("CG" + x.getName())
-                .hdm(x.getHealth(), x.getDamage(), x.getMoney())
-                .loc(x.getLocation())
-                .inv(x.getInventory())
-                .ith(x.getHold())
-                .createFriend();
-    }
-
-    public NPC genHostileClone(Player x) {
-        return new EntityBuilder() //presence of npc may be randomized
-                .name("CG" + x.getName())
-                .hdm(x.getHealth() + 30,
-                        x.getDamage() + ThreadLocalRandom.current().nextInt(2,
-                                10), x.getMoney())
-                .loc(x.getLocation())
-                .inv(x.getInventory())
-                .ith(x.getHold())
-                .createEnemy();
-    }
-
-    public String checkState(Player x) {
-        if (x.isHostile()) {
-            return ("hostile");
-        } else {
-            return ("friendly");
-        }
-    }
+    /**
+     * @param out  Room node A
+     * @param goin Room node B
+     * @return a rabit door that acts as an edge in the graph-structure based Map.
+     */
 
     @Override
     public Door initConstructor(Room out, Room goin) {
@@ -94,5 +43,96 @@ public class CloningDoor extends Door implements DoorTypology, Serializable {
                 .open(false)
                 .createCd();
     }
+
+    public CloningDoor() {
+        this.probab = 10;
+    }
+
+    /**
+     * @param player Player object holds the Door field value doorFocus -
+     *               which identifies the door that the player is currently viewing/interacting with.
+     *               inspect() Override, gives additional information regarding the door subtype.
+     */
+    @Override
+    public void inspect(Player player) {
+        super.inspect(player);
+        String variant = checkState(player);
+        if (!player.getDoorFocus().isVisited()) {
+            player.getTw().type("It will leave a " + variant + " clone of yourself here.\n");
+        } else {
+            player.getTw().type("You used this CG portal to create a " + variant + " clone.\n");
+        }
+    }
+
+    /**
+     * @param player uses the interact() method behaviour of the parent class Door,
+     *               and also adds side-effects: generating an NPC object that contains
+     *               identical field values as some of the player object - representing a
+     *               clone that is inspectable and interactable.
+     */
+    @Override
+    public void interact(Player player) {
+        CloningDoor door = (CloningDoor) player.getDoorFocus();
+        if (!player.isRabbit() && !door.isVisited()) {
+            Room room = player.getLocation();
+            if (player.isHostile()) {
+                room.setNpc(genHostileClone(player));
+            } else {
+                room.setNpc(genFriendlyClone(player));
+            }
+            super.interact(player);
+            String variant = checkState(player);
+            player.getTw().poeticPause("Notification:\n", 1000);
+            player.getTw().type(" CG synthesized a " + variant + " clone of yourself in room: " + room.getId() + "\n");
+            door.setVisited(true);
+        } else {
+            super.interact(player);
+        }
+    }
+
+    /**
+     * @param player delivers field values for the creation of an Ally NPC parent class subtype
+     * @return Ally (child of NPC class) instance .
+     */
+    public NPC genFriendlyClone(Player player) {
+        return new EntityBuilder() //presence of npc may be randomized
+                .name("CG" + player.getName())
+                .hdm(player.getHealth(), player.getDamage(), player.getMoney())
+                .loc(player.getLocation())
+                .inv(player.getInventory())
+                .ith(player.getHold())
+                .createFriend();
+    }
+
+    /**
+     * @param player delivers field values for the creation of an Enemy NPC parent class subtype
+     * @return Enemy (child of NPC class) instance .
+     */
+    public NPC genHostileClone(Player player) {
+        return new EntityBuilder() //presence of npc may be randomized
+                .name("CG" + player.getName())
+                .hdm(player.getHealth() + 30,
+                        player.getDamage() + ThreadLocalRandom.current().nextInt(2,
+                                10), player.getMoney())
+                .loc(player.getLocation())
+                .inv(player.getInventory())
+                .ith(player.getHold())
+                .createEnemy();
+    }
+
+    /**
+     * @param player is checked for its boolean field value for hostility. If
+     *               player enters combat - it is set to hostile, thus generating
+     *               Enemy NPC instances when using CloningDoors.
+     * @return boolean value;
+     */
+    public String checkState(Player player) {
+        if (player.isHostile()) {
+            return ("hostile");
+        } else {
+            return ("friendly");
+        }
+    }
+
 
 }

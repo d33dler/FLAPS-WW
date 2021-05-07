@@ -9,13 +9,17 @@ import java.util.Properties;
 public class Configurations implements Serializable {
     private final static long serialVersionUID = 1563L;
 
-    public void saveConfig(Player x) {
+    /**
+     * @param player Player class instance holds all the necessary configuration data fields
+     *               which are to be saved
+     */
+    public void saveConfig(Player player) {
         File configDir = new File("config");
         boolean info = !configDir.mkdir();
-        x.setDefconfig(true);
-        Properties config = getConfig(x);
+        player.setDefconfig(true);
+        Properties config = getConfig(player);
         try {
-            FileOutputStream fstream = new FileOutputStream("config/" + x.getConfigfile() + ".properties");
+            FileOutputStream fstream = new FileOutputStream("config/" + player.getConfigfile() + ".properties");
             ObjectOutputStream configs = new ObjectOutputStream(fstream);
             config.store(fstream, "RpgConfigFile");
             configs.flush();
@@ -29,27 +33,34 @@ public class Configurations implements Serializable {
         }
     }
 
-    public Player loadConfig(Player x) {
+    /**
+     * @param player holds the field value for the loaded configuration data properties
+     * @return player with new config data.
+     */
+    public Player loadConfig(Player player) {
         File configDir = new File("config");
         if (configDir.mkdir()) {
-            saveConfig(x);
+            saveConfig(player);
         }
-        Properties config = getConfig(x);
+        Properties config = getConfig(player);
         try {
-            FileInputStream fstream = new FileInputStream("config/" + x.getConfigfile() + ".properties");
+            FileInputStream fstream = new FileInputStream("config/" + player.getConfigfile() + ".properties");
             ObjectInputStream objectStream = new ObjectInputStream(fstream);
             config.load(fstream);
             objectStream.close();
             fstream.close();
             System.out.println("Config file was loaded successfully");
-            x.setConfigs(config);
-            x.setLoadconfig(true);
+            player.setConfigs(config);
+            player.setLoadconfig(true);
         } catch (Exception e) {
             System.out.println("Error loading config file");
         }
-        return x;
+        return player;
     }
 
+    /**
+     * Default configuration data;
+     */
     public Properties setupDefaultConfig(Properties rpgProp) {
         rpgProp.setProperty("playerName", "tassist");
         rpgProp.setProperty("playerHealth", "100");
@@ -62,14 +73,19 @@ public class Configurations implements Serializable {
         return rpgProp;
     }
 
-    public Properties getConfig(Player x) {
+    /**
+     *
+     * @param player
+     * @return
+     */
+    public Properties getConfig(Player player) {
         Properties rpgProp = new Properties();
-        if (x.isDefconfig()) {
-            x.setConfigfile("default");
+        if (player.isDefconfig()) {
+            player.setConfigfile("default");
             rpgProp = setupDefaultConfig(rpgProp);
-        } else if (!x.isLoadconfig()) {
+        } else if (!player.isLoadconfig()) {
             listConfigFiles();
-            getConfigName(x);
+            getConfigName(player);
         }
         return rpgProp;
     }

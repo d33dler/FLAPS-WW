@@ -5,6 +5,7 @@ import java.lang.reflect.*;
 import java.util.Scanner;
 
 public class WorldInteraction {
+
     public WorldInteraction() {
     }
 

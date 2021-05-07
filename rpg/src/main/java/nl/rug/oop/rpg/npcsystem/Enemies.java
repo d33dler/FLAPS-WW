@@ -35,10 +35,10 @@ public class Enemies extends NPC implements Interactable, Inspectable, Attackabl
     }
     
     @Override
-    public void inspect(Player x) {
-        super.inspect(x);
-        if (x.getNpcFocus().getHealth() > 0) {
-            Dialogue.enemyInspect(x);
+    public void inspect(Player player) {
+        super.inspect(player);
+        if (player.getNpcFocus().getHealth() > 0) {
+            Dialogue.enemyInspect(player);
         }
     }
 
@@ -58,7 +58,7 @@ public class Enemies extends NPC implements Interactable, Inspectable, Attackabl
         Dialogue.forcedCombat(player);
         Dialogue.introEnemy(player, player.getNpcFocus());
         player.setForcedcomb(true);
-        initFight.duel(player, player.npccontact, player.getmTree());
+        initFight.duelProcess(player, player.npccontact, player.getmTree());
     }
 
     @Override
