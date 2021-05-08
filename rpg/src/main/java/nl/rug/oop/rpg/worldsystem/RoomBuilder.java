@@ -1,13 +1,9 @@
 package nl.rug.oop.rpg.worldsystem;
-
 import nl.rug.oop.rpg.itemsystem.Holders;
 import nl.rug.oop.rpg.itemsystem.Item;
-import nl.rug.oop.rpg.npcsystem.Entity;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.doors.Door;
-
 import java.util.ArrayList;
-import java.util.List;
 
 public class RoomBuilder extends Room{
 
@@ -32,7 +28,7 @@ public class RoomBuilder extends Room{
         return this;
     }
 
-    public RoomBuilder pComp(boolean cmp) { //present company
+    public RoomBuilder pComp(boolean cmp) {
         this.company = cmp;
         return this;
     }

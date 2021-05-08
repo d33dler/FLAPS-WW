@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg.menu.builders;
 import nl.rug.oop.rpg.game.configsys.Configurations;
-import nl.rug.oop.rpg.menu.RPG;
+import nl.rug.oop.rpg.game.RPG;
 import nl.rug.oop.rpg.menu.options.MainMenuOptions;
 import nl.rug.oop.rpg.worldsystem.Player;
 import java.lang.reflect.Method;

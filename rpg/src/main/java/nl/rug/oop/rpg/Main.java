@@ -1,6 +1,6 @@
 package nl.rug.oop.rpg;
 
-import nl.rug.oop.rpg.menu.RPG;
+import nl.rug.oop.rpg.game.RPG;
 
 public class Main {
 

@@ -1,12 +1,15 @@
 package nl.rug.oop.rpg.npcsystem;
-
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
-import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
 import java.io.Serializable;
 
+/**
+ * Abstract class entity extends to both NPCs and the player as they share a list
+ * of data value fields. The same builder pattern constructor is applied to create NPCs
+ * and the player itself to reduce code duplication.
+ */
 public abstract class Entity implements Serializable {
     private static final long serialVersionUID = 1998L;
     protected String name;

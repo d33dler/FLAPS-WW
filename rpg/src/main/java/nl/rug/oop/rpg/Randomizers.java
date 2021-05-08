@@ -5,7 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Randomizers {
     /**
-     * Generate a random id for the room
+     * Generate a random alphanumeric id for the room. Used for both
+     * identification of rooms in the world construction methods and
+     * the scattering probability of item subtypes per room using RegEx patterns.
      */
     private static final SecureRandom rand = new SecureRandom();
     private final char[] strand;
@@ -37,6 +39,11 @@ public class Randomizers {
         this(length, random, allchar);
     }
 
+    /**
+     *
+     * @param in roomId string influences the Item type which is created in the room.
+     * @return true/false depending on the roomId pattern matching of the regEx pattern.
+     */
     public boolean itemInsert(String in) {
         return in.matches("^[0-9|a-z].*$");
     }

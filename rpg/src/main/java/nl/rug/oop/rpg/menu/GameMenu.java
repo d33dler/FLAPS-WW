@@ -45,8 +45,10 @@ public class GameMenu {
         return option;
     }
     public void switchSaveMenu(Player player) {
-        File saveDir = new File("savedgames");
-        saveDir.mkdir();
+        File saveDir = new File("savedgames/saves");
+        File quickSaveDir = new File("savedgames/quicksaves");
+        saveDir.mkdirs();
+        quickSaveDir.mkdirs();
     }
 
 }

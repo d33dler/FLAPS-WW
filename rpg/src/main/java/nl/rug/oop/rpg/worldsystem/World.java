@@ -23,18 +23,18 @@ public class World implements Serializable {
     /**
      *
      * @param map collects the newly generated room into the Map hashmap;
-     * @param npcCollection is the collection of all NPCs subtypes instances in different numbers
+     * @param worldObjectCollection is the collection of all NPCs subtypes instances in different numbers
      *                   based on creation probability of the NPC subtype.
      * @throws Exception
      */
-    public void generateRoom(World map, NpcCollection<Object> npcCollection) throws Exception {
+    public void generateRoom(World map, WorldObjectCollection<Object> worldObjectCollection) throws Exception {
         ArrayList<Door> doors = new ArrayList<>();
         String roomId = roomID.generateId();
         Attr1room att1 = randomMaterial(Attr1room.class);
         Attr2room att2 = randomMaterial(Attr2room.class);
         Holders storage = randomMaterial(Holders.class);
         Item loot = generateItem(roomId);
-        NPC npc = generateNpc(npcCollection);
+        NPC npc = generateNpc(worldObjectCollection);
         boolean company = npc != null;
         Room room = new RoomBuilder()
                 .id(roomId)
@@ -57,11 +57,10 @@ public class World implements Serializable {
      * @param goin Room node B
      * @param map Hashmap  World map
      * @param doorCollection collection of different Door subtypes and the parent Door type class instances;
-     * @throws Exception
      */
-    public void generateDoor(Room out, Room goin, World map, DoorCollection<Object> doorCollection)
+    public void generateDoor(Room out, Room goin, World map, WorldObjectCollection<Object> doorCollection)
             throws Exception {
-        Object randoor = doorCollection.extractDoor();
+        Object randoor = doorCollection.extractObject();
         Class<?> dtype = randoor.getClass();
         Door door = (Door) dtype.getDeclaredConstructor().newInstance();
         door = door.initConstructor(out, goin);
@@ -78,12 +77,12 @@ public class World implements Serializable {
      * @param configs Using config file to set up probabilities of Door types creation
      * @return
      */
-    public DoorCollection<Object> genDoorTypeCollection(Properties configs) {
+    public WorldObjectCollection<Object> genDoorTypeCollection(Properties configs) {
         CloningDoor cd = new CloningDoor();
         RabitDoor ud = new RabitDoor();
         SecureDoor sd = new SecureDoor();
         Door gdoor = new Door();
-        return new DoorCollection<>()
+        return new WorldObjectCollection<>()
                 .add(Integer.parseInt(configs.getProperty("copy%")), cd)
                 .add(Integer.parseInt(configs.getProperty("ultra%")), ud)
                 .add(Integer.parseInt(configs.getProperty("crypt%")), sd)
@@ -92,23 +91,23 @@ public class World implements Serializable {
 
     /**
      *
-     * @param npcCollection using the collection to generate randomly Npcs
+     * @param worldObjectCollection using the collection to generate randomly Npcs
      * @return NPC subclass instance
      * @throws Exception
      */
-    public NPC generateNpc(NpcCollection<Object> npcCollection) throws Exception {
-        Object randomNpc = npcCollection.extractNpc();
+    public NPC generateNpc(WorldObjectCollection<Object> worldObjectCollection) throws Exception {
+        Object randomNpc = worldObjectCollection.extractObject();
         Class<?> npcType = randomNpc.getClass();
         NPC npc = (NPC) npcType.getDeclaredConstructor().newInstance();
         npc = npc.initConstructor();
         return npc;
     }
 
-    public NpcCollection<Object> genNpcSpeciesCollection() {
+    public WorldObjectCollection<Object> genNpcSpeciesCollection() {
         Enemies enemy = new Enemies();
         Allies ally = new Allies();
         ExchangeBots exBots = new ExchangeBots();
-        return new NpcCollection<>().add(enemy.getProbability(), enemy)
+        return new WorldObjectCollection<>().add(enemy.getProbability(), enemy)
                 .add(ally.getProbability(), ally)
                 .add(exBots.getProbability(), exBots);
     }
@@ -179,13 +178,13 @@ public class World implements Serializable {
     public World createMap(Player player) throws Exception {
         Properties configs = player.getConfigs();
         World map = new World();
-        DoorCollection<Object> doorCollection = genDoorTypeCollection(configs);
-        NpcCollection<Object> npcCollection = genNpcSpeciesCollection();
+        WorldObjectCollection<Object> doorCollection = genDoorTypeCollection(configs);
+        WorldObjectCollection<Object> worldObjectCollection = genNpcSpeciesCollection();
         int rooms = Integer.parseInt(configs.getProperty("roomNr"));
         int links = rooms * 2 - 20;
         map.roomConnects = new HashMap<>();
         for (int i = 0; i < rooms; i++) {
-            map.generateRoom(map, npcCollection);
+            map.generateRoom(map, worldObjectCollection);
         }
 
         List<Room> allrooms = new ArrayList<>(map.roomConnects.keySet());

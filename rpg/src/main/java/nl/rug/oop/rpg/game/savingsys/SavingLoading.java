@@ -15,7 +15,6 @@ public class SavingLoading extends SavingSystem {
      */
     @Override
     public void saveSave(Player player) {
-        createSaveDir(player);
         getSaveName(player);
         if (!player.getSavefile().equals("back")) {
             super.saveSave(player);
@@ -31,7 +30,6 @@ public class SavingLoading extends SavingSystem {
      */
     @Override
     public void setupLoad(Player player) {
-        createSaveDir(player);
         FileSearch fs = new FileSearch();
         String abspath = "/home/radubereja/Desktop/Object-Oriented Programming/a0/2021_Team_060/rpg/savedgames/saves/";
         fs.listSaveFiles("savedgames/saves", ".ser", abspath);
@@ -46,8 +44,4 @@ public class SavingLoading extends SavingSystem {
         x.setSavefile("saves/" + x.rdtxt.nextLine());
     }
 
-    public void createSaveDir(Player x) {
-        File saveDir = new File("savedgames/saves");
-        saveDir.mkdir();
-    }
 }
