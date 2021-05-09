@@ -30,7 +30,7 @@ public class WorldInteraction {
         System.out.println("You found :");
         for (int i = 0; i < r.getDoors().size(); i++) {
             player.setDoorFocus(r.getDoors().get(i));
-            player.setIntin(i);
+            player.setIntIn(i);
             player.getDoorFocus().inspect(player);
             System.out.println("\n");
         }
@@ -59,7 +59,7 @@ public class WorldInteraction {
      *               hence giving different behaviour results.
      */
     public void enterDoor(Player player) {
-        Scanner in = player.getRdtxt();
+        Scanner in = player.getReadTxt();
         Room r = player.getLocation();
         System.out.println(": Choose a door :");
         int input = in.nextInt() - 1;
@@ -67,18 +67,18 @@ public class WorldInteraction {
             player.setDoorFocus(r.getDoors().get(input));
 
         } catch (IndexOutOfBoundsException e) {
-            player.getTw().type("Unknown door number, please try again\n");
+            player.gettW().type("Unknown door number, please try again\n");
             player.setmTree(player.getmTree().getRoot());
             return;
         }
         telePort(player, player.getLocation().getDoors().get(input), input);
         player.setNpccontact(player.getLocation().getNpc());
         player.setmTree(player.getmTree().getRoot());
-        player.rdtxt.nextLine();
+        player.readTxt.nextLine();
     }
 
     public void telePort(Player x, Door door, int n) {
-        x.setIntin(n);
+        x.setIntIn(n);
         if (!x.isRabbit()) {
             x.setTravelBuff(x.getTravelBuff() + 1);
         }

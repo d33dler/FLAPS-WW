@@ -15,7 +15,7 @@ public class SavingSystem implements Save, Serializable {
      */
     public void saveSave(Player player) {
         try {
-            FileOutputStream fstream = new FileOutputStream("savedgames/" + player.getSavefile() + ".ser");
+            FileOutputStream fstream = new FileOutputStream("savedgames/" + player.getSaveFile() + ".ser");
             ObjectOutputStream store = new ObjectOutputStream(fstream);
             store.writeObject(player);
             store.flush();
@@ -35,7 +35,7 @@ public class SavingSystem implements Save, Serializable {
      */
     public Player loadSave(Player player) {
         try {
-            FileInputStream fstream = new FileInputStream("savedgames/" + player.getSavefile() + ".ser");
+            FileInputStream fstream = new FileInputStream("savedgames/" + player.getSaveFile() + ".ser");
             ObjectInputStream objectStream = new ObjectInputStream(fstream);
             this.player = (Player) objectStream.readObject();
             objectStream.close();
@@ -61,9 +61,9 @@ public class SavingSystem implements Save, Serializable {
 
     public void transferTransientData(Player player, Player x) {
         player.setmTree(x.getmTree());
-        player.setTw(x.getTw());
-        player.setWinter(x.getWinter());
-        player.setRdtxt(x.getRdtxt());
+        player.settW(x.gettW());
+        player.setwInter(x.getwInter());
+        player.setReadTxt(x.getReadTxt());
     }
 
     /**
@@ -72,7 +72,7 @@ public class SavingSystem implements Save, Serializable {
      * @return updated player object
      */
     public Player updatePlayer(Player player) {
-        if (player.isLoadfile()) {
+        if (player.isLoadFile()) {
             player = loadSave(player);
             player.setLoad(false);
         }

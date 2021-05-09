@@ -18,7 +18,7 @@ public abstract class Entity implements Serializable {
     protected Room location;
     protected Item hold;
     protected boolean flee;
-    protected NPC npccontact;
+    protected NPC npcContact;
 
     public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
@@ -29,7 +29,7 @@ public abstract class Entity implements Serializable {
         this.money = parameters.money;
         this.hold = parameters.hold;
         this.flee = parameters.flee;
-        this.npccontact = parameters.npccontact;
+        this.npcContact = parameters.npcContact;
     }
 
     public Entity() {

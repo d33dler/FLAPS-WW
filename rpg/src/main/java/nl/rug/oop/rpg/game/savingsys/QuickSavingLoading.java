@@ -8,15 +8,15 @@ import nl.rug.oop.rpg.worldsystem.Player;
 public class QuickSavingLoading extends SavingSystem {
     @Override
     public void saveSave(Player player) {
-        player.setSavefile("quicksaves/quicksave" + (player.getQs()+1));
+        player.setSaveFile("quicksaves/quicksave" + (player.getQkSave()+1));
         super.saveSave(player);
-        player.setQs(player.getQs() + 1);
+        player.setQkSave(player.getQkSave() + 1);
     }
 
 
     @Override
     public void setupLoad(Player player) {
-        player.setSavefile("quicksaves/quicksave" + (player.getQs()));
+        player.setSaveFile("quicksaves/quicksave" + (player.getQkSave()));
         super.setupLoad(player);
     }
 }

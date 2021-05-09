@@ -16,10 +16,10 @@ public class Configurations implements Serializable {
     public void saveConfig(Player player) {
         File configDir = new File("config");
         boolean info = !configDir.mkdir();
-        player.setDefconfig(true);
+        player.setDefConfig(true);
         Properties config = getConfig(player);
         try {
-            FileOutputStream fstream = new FileOutputStream("config/" + player.getConfigfile() + ".properties");
+            FileOutputStream fstream = new FileOutputStream("config/" + player.getConfigFile() + ".properties");
             ObjectOutputStream configs = new ObjectOutputStream(fstream);
             config.store(fstream, "RpgConfigFile");
             configs.flush();
@@ -44,14 +44,14 @@ public class Configurations implements Serializable {
         }
         Properties config = getConfig(player);
         try {
-            FileInputStream fstream = new FileInputStream("config/" + player.getConfigfile() + ".properties");
+            FileInputStream fstream = new FileInputStream("config/" + player.getConfigFile() + ".properties");
             ObjectInputStream objectStream = new ObjectInputStream(fstream);
             config.load(fstream);
             objectStream.close();
             fstream.close();
             System.out.println("Config file was loaded successfully");
             player.setConfigs(config);
-            player.setLoadconfig(true);
+            player.setLoadConfig(true);
         } catch (Exception e) {
             System.out.println("Error loading config file");
         }
@@ -83,10 +83,10 @@ public class Configurations implements Serializable {
      */
     public Properties getConfig(Player player) {
         Properties rpgProp = new Properties();
-        if (player.isDefconfig()) {
-            player.setConfigfile("default");
+        if (player.isDefConfig()) {
+            player.setConfigFile("default");
             rpgProp = setupDefaultConfig(rpgProp);
-        } else if (!player.isLoadconfig()) {
+        } else if (!player.isLoadConfig()) {
             listConfigFiles();
             getConfigName(player);
         }
@@ -94,8 +94,8 @@ public class Configurations implements Serializable {
     }
 
     public void getConfigName(Player x) {
-        x.getTw().type("Choose a config file & input name\n");
-        x.setConfigfile(x.rdtxt.nextLine());
+        x.gettW().type("Choose a config file & input name\n");
+        x.setConfigFile(x.readTxt.nextLine());
     }
 
     public void listConfigFiles() {

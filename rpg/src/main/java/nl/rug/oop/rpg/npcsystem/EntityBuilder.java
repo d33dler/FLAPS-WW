@@ -37,7 +37,7 @@ public class EntityBuilder extends Entity {
         return this;
     }
     public EntityBuilder npcc(NPC cont) {
-        this.npccontact = cont;
+        this.npcContact = cont;
         return this;
     }
     public Player createProtagonist() {

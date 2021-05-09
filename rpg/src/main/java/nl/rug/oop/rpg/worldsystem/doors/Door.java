@@ -42,16 +42,16 @@ public class Door implements Inspectable, Interactable, DoorTypology, Serializab
     }
 
     public void inspect(Player r) {
-        int i = r.getIntin();
+        int i = r.getIntIn();
         Door insD = r.getDoorFocus();
         String a = vowelCheck(insD);
         String b = visitCheck(insD);
-        r.getTw().type("» (" + (i + 1) + ")" + a + insD.getColor() + " " + insD.doorType + " portal " + b + "\n");
+        r.gettW().type("» (" + (i + 1) + ")" + a + insD.getColor() + " " + insD.doorType + " portal " + b + "\n");
     }
 
     @Override
     public void interact(Player x) {
-        int door = x.getIntin();
+        int door = x.getIntIn();
         Room check;
         Room room = x.getLocation();
         x.getDoorFocus().setVisited(true);
@@ -63,14 +63,14 @@ public class Door implements Inspectable, Interactable, DoorTypology, Serializab
             room = room.getDoors().get(door).exit;
         }
         x.setLocation(room);
-        x.getTw().type("Entering portal...\n\n");
+        x.gettW().type("Entering portal...\n\n");
     }
 
 
 
     public void notifyHalt(Player x) {
-        x.getTw().poeticPause("Unexpected halt \n", 1000);
-        x.getTw().type(". . .\n" + "0 compatible portal links found\nAborting RaBIT current\n");
+        x.gettW().poeticPause("Unexpected halt \n", 1000);
+        x.gettW().type(". . .\n" + "0 compatible portal links found\nAborting RaBIT current\n");
     }
 
     public String vowelCheck(Door insD) {

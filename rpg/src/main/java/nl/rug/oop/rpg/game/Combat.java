@@ -20,7 +20,7 @@ public class Combat {
      */
     public void duelProcess(Player player, NPC foe, MenuTree mtree) {
         String input;
-        Scanner in = player.getRdtxt();
+        Scanner in = player.getReadTxt();
         Method option;
         EnumMap<CombatMenuOptions, String> combopt = CombatMenuOptions.setMoves();
         player.setHostile(true);
@@ -28,7 +28,7 @@ public class Combat {
             Dialogue.printObnoxiousCombatMenu(player, foe);
             printFightMenu(combopt);
             input = in.nextLine();
-            if (player.isForcedcomb() && input.equals("c")) {
+            if (player.isForcedCombat() && input.equals("c")) {
                 Dialogue.notifyFfC(player);
                 continue;
             }
@@ -38,11 +38,11 @@ public class Combat {
                 Object interact = WorldInteraction.getActionType(option);
                 option.invoke(interact, player);
             } catch (Exception e) {
-                player.getTw().type("No such option\n");
+                player.gettW().type("No such option\n");
             }
             Dialogue.combatLog();
             checkCombat(player, foe);
-        } while (foe.getHealth() > 0 && player.getHealth() > 0 && (!input.equals("c") || player.isForcedcomb()));
+        } while (foe.getHealth() > 0 && player.getHealth() > 0 && (!input.equals("c") || player.isForcedCombat()));
         duelConclusion(player, foe);
     }
 
@@ -60,7 +60,7 @@ public class Combat {
             Dialogue.notifyCessation(player, foe);
             System.exit(0);
         } else if (player.isFlee()) {
-            player.getTw().type("Fleeing combat & exiting room\n");
+            player.gettW().type("Fleeing combat & exiting room\n");
             player.setFlee(false);
             switchMenu(player);
         }
@@ -72,7 +72,7 @@ public class Combat {
 
     public void checkCombat(Player player, NPC foe) {
         if (foe.getHealth() < 0 || player.getHealth() < 0) {
-            player.setForcedcomb(false);
+            player.setForcedCombat(false);
         }
     }
 

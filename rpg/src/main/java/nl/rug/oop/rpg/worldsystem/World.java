@@ -145,7 +145,7 @@ public class World implements Serializable {
                 .fl(false)
                 .ith(new ItemBuilder().name("Raygun").dmg(14).val(10).createWep())
                 .createProtagonist();
-        player.setEnergycells(getRandom(200, 350));
+        player.setEnergyCells(getRandom(200, 350));
         return player;
     }
 

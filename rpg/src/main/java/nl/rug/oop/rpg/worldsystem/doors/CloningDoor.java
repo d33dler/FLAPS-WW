@@ -58,9 +58,9 @@ public class CloningDoor extends Door implements DoorTypology, Serializable {
         super.inspect(player);
         String variant = checkState(player);
         if (!player.getDoorFocus().isVisited()) {
-            player.getTw().type("It will leave a " + variant + " clone of yourself here.\n");
+            player.gettW().type("It will leave a " + variant + " clone of yourself here.\n");
         } else {
-            player.getTw().type("You used this CG portal to create a " + variant + " clone.\n");
+            player.gettW().type("You used this CG portal to create a " + variant + " clone.\n");
         }
     }
 
@@ -82,8 +82,8 @@ public class CloningDoor extends Door implements DoorTypology, Serializable {
             }
             super.interact(player);
             String variant = checkState(player);
-            player.getTw().poeticPause("Notification:\n", 1000);
-            player.getTw().type(" CG synthesized a " + variant + " clone of yourself in room: " + room.getId() + "\n");
+            player.gettW().poeticPause("Notification:\n", 1000);
+            player.gettW().type(" CG synthesized a " + variant + " clone of yourself in room: " + room.getId() + "\n");
             door.setVisited(true);
         } else {
             super.interact(player);

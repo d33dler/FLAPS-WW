@@ -10,7 +10,7 @@ import java.util.Properties;
 public class ConfigImport extends Configurations {
     public Player setPlayerConfigs(Player player) throws Exception {
         Configurations config = new Configurations();
-        player.setDefconfig(!player.isLoadconfig());
+        player.setDefConfig(!player.isLoadConfig());
         player = config.loadConfig(player);
         World morph = new World();
         World map = morph.createMap(player);
@@ -19,7 +19,7 @@ public class ConfigImport extends Configurations {
         Properties configs = player.getConfigs();
         player.setName(configs.getProperty("playerName"));
         player.setHealth(Integer.parseInt(configs.getProperty("playerHealth")));
-        player.getTw().setSpeed(Integer.parseInt(configs.getProperty("twSpeed")));
+        player.gettW().setSpeed(Integer.parseInt(configs.getProperty("twSpeed")));
         return player;
     }
 }

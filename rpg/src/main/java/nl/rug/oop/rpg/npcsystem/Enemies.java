@@ -57,13 +57,13 @@ public class Enemies extends NPC implements Interactable, Inspectable, Attackabl
             return;
         }
         super.interact(player);
-        player.getTw().type(player.name + ": Hello , are you friendly?\n");
+        player.gettW().type(player.name + ": Hello , are you friendly?\n");
         player.setmTree(player.getmTree().getSubmenus().get("x"));
         Combat initFight = new Combat();
         Dialogue.forcedCombat(player);
         Dialogue.introEnemy(player, player.getNpcFocus());
-        player.setForcedcomb(true);
-        initFight.duelProcess(player, player.npccontact, player.getmTree());
+        player.setForcedCombat(true);
+        initFight.duelProcess(player, player.npcContact, player.getmTree());
     }
 
     @Override

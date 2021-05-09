@@ -7,7 +7,6 @@ import nl.rug.oop.rpg.*;
 
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
-import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
@@ -20,9 +19,9 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
     public void inspect(Player x) {
         Room now = x.getLocation();
         if (now.getLoot() instanceof Nothing) {
-            x.getTw().type("The room doesn't contain resources\n");
+            x.gettW().type("The room doesn't contain resources\n");
         } else {
-            x.getTw().type("You see a " + now.getLoot().name + " in a " + now.getStorage().getName() + "\n"); //random holder
+            x.gettW().type("You see a " + now.getLoot().name + " in a " + now.getStorage().getName() + "\n");
         }
     }
 
@@ -30,21 +29,19 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
     public void interact(Player x) {
         Item item = x.getLocation().getLoot();
         if (!item.name.equals("nothing")) {
-            x.getTw().type("You picked an object: " + item.name + "\nStoring in inventory...\n");
+            x.gettW().type("You picked an object: " + item.name + "\nStoring in inventory...\n");
             DepositInv(x, item); //needs each weapon to have class indicated for matching by string
             removeItemRoom(x.getLocation());
             removeItemPlayer(x);
         } else {
-            x.getTw().type("Found  " + x.getLocation().getLoot().name + " here \n");
+            x.gettW().type("Found  " + x.getLocation().getLoot().name + " here \n");
         }
     }
 
     public Item SelectItem(HashMap<String, ? extends Item> invlist, Scanner in) {
-
         Typewriter tw = new Typewriter();
         tw.type(" *(name) Select item   \n");
-        Item item = invlist.get(in.nextLine());
-        return item;
+        return invlist.get(in.nextLine());
     }
 
     public Item(ItemBuilder parameters) {
@@ -61,9 +58,9 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
 
     public void Recycle(Player x) {
         if (x.getHold() instanceof Weapons) {
-            x.getTw().type("Recycling weapon for viable components & materials\n");
-            x.getTw().type("....\n");
-            x.getTw().type("Recycled: \n" + x.getHold().value + " units worth of materials.\n storing in inventory\n");
+            x.gettW().type("Recycling weapon for viable components & materials\n");
+            x.gettW().type("....\n");
+            x.gettW().type("Recycled: \n" + x.getHold().value + " units worth of materials.\n storing in inventory\n");
             Consumables item = new ItemBuilder()
                     .name("Titanium(R)")
                     .hh(7)
@@ -71,9 +68,9 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
                     .createCons();
             x.getInventory().getcList().put("Titanium(R)", item);
         } else if (x.getHold() instanceof Consumables) {
-            x.getTw().type("Recycling " + x.getHold().name + "\n");
+            x.gettW().type("Recycling " + x.getHold().name + "\n");
         } else if (x.getHold() instanceof Nothing) {
-            x.getTw().type("There is nothing here \n");
+            x.gettW().type("There is nothing here \n");
         }
         removeItemPlayer(x);
         removeItemRoom(x.getLocation());
@@ -85,7 +82,7 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
         } else if (item instanceof Consumables) {
             x.getInventory().getcList().put(item.name, (Consumables) item);
         } else if (item instanceof Nothing) {
-            x.getTw().type("There is nothing to collect\n");
+            x.gettW().type("There is nothing to collect\n");
         }
     }
 
@@ -95,10 +92,6 @@ public abstract class Item implements Inspectable, Interactable, Serializable {
 
     public void removeItemRoom(Room r) {
         r.setLoot(new ItemBuilder().name("nothing").createNull());
-    }
-
-    public void removeItem(Item x) {
-        x = new ItemBuilder().name("nothing").createNull();
     }
 
     public String getName() {
@@ -112,14 +105,3 @@ class Nothing extends Item implements Serializable {
         super(parameters);
     }
 }
-/*
-class Keycards extends Item {
-    protected int health;
-    public Keycards(String name, int health, int value) {
-        this.name= name;
-        this.health = health;
-        this.value = value;
-    }
-}
-
- */

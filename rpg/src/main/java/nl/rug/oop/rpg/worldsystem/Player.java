@@ -18,17 +18,17 @@ import java.util.Scanner;
 public class Player extends NPC implements Serializable, Attackable {
     private static final long serialVersionUID = 10L;
     public World map;
-    protected String sinput, savefile, configfile, intent;
-    protected int energycells, intin, travel, qs;
+    protected String strIn, saveFile, configFile, intent;
+    protected int energyCells, intIn, travel, qkSave;
     protected Door doorFocus, used;
     protected NPC npcFocus;
-    protected boolean flee, hostile, rabbit, forcedcomb;
-    transient protected boolean narrative, loadfile, loadconfig, defconfig;
+    protected boolean flee, hostile, rabbit, forcedCombat;
+    transient protected boolean loadFile, loadConfig, defConfig;
     protected transient MenuTree mTree;
-    public transient Scanner rdtxt;
-    protected transient WorldInteraction winter;
-    protected transient Properties rpgprop;
-    transient Typewriter tw;
+    public transient Scanner readTxt;
+    protected transient WorldInteraction wInter;
+    protected transient Properties rpgProper;
+    transient Typewriter tW;
 
     /**
      *
@@ -38,19 +38,19 @@ public class Player extends NPC implements Serializable, Attackable {
     public Player(EntityBuilder parameters) {
         super(parameters);
         this.rabbit = false;
-        this.loadfile = false;
-        this.defconfig = false;
-        this.loadconfig = false;
-        this.winter = new WorldInteraction();
-        this.rdtxt = new Scanner(System.in);
-        this.tw = new Typewriter();
-        this.savefile = "default";
-        this.sinput = "default";
-        this.configfile = "default";
+        this.loadFile = false;
+        this.defConfig = false;
+        this.loadConfig = false;
+        this.wInter = new WorldInteraction();
+        this.readTxt = new Scanner(System.in);
+        this.tW = new Typewriter();
+        this.saveFile = "default";
+        this.strIn = "default";
+        this.configFile = "default";
         this.intent = "default";
         this.travel = 1;
-        this.qs = 0;
-        this.forcedcomb = false;
+        this.qkSave = 0;
+        this.forcedCombat = false;
     }
 
     /**
@@ -74,16 +74,16 @@ public class Player extends NPC implements Serializable, Attackable {
         }
     }
 
-    public String getSavefile() {
-        return savefile;
+    public String getSaveFile() {
+        return saveFile;
     }
 
-    public boolean isLoadconfig() {
-        return loadconfig;
+    public boolean isLoadConfig() {
+        return loadConfig;
     }
 
-    public void setLoadconfig(boolean loadconfig) {
-        this.loadconfig = loadconfig;
+    public void setLoadConfig(boolean loadConfig) {
+        this.loadConfig = loadConfig;
     }
 
     public NPC getNpcFocus() {
@@ -94,24 +94,24 @@ public class Player extends NPC implements Serializable, Attackable {
         this.npcFocus = npcFocus;
     }
 
-    public String getConfigfile() {
-        return configfile;
+    public String getConfigFile() {
+        return configFile;
     }
 
-    public void setConfigfile(String configfile) {
-        this.configfile = configfile;
+    public void setConfigFile(String configFile) {
+        this.configFile = configFile;
     }
 
     public Properties getConfigs() {
-        return rpgprop;
+        return rpgProper;
     }
 
     public void setConfigs(Properties rpgprop) {
-        this.rpgprop = rpgprop;
+        this.rpgProper = rpgprop;
     }
 
-    public void setSavefile(String savefile) {
-        this.savefile = savefile;
+    public void setSaveFile(String saveFile) {
+        this.saveFile = saveFile;
     }
 
     public String getIntent() {
@@ -122,48 +122,48 @@ public class Player extends NPC implements Serializable, Attackable {
         this.intent = intent;
     }
 
-    public void setTw(Typewriter tw) {
-        this.tw = tw;
+    public void settW(Typewriter tW) {
+        this.tW = tW;
     }
 
-    public boolean isForcedcomb() {
-        return forcedcomb;
+    public boolean isForcedCombat() {
+        return forcedCombat;
     }
 
-    public void setForcedcomb(boolean forcedcomb) {
-        this.forcedcomb = forcedcomb;
+    public void setForcedCombat(boolean forcedCombat) {
+        this.forcedCombat = forcedCombat;
     }
 
-    public void setWinter(WorldInteraction winter) {
-        this.winter = winter;
+    public void setwInter(WorldInteraction wInter) {
+        this.wInter = wInter;
     }
 
-    public boolean isLoadfile() {
-        return loadfile;
+    public boolean isLoadFile() {
+        return loadFile;
     }
 
     public void setLoad(boolean quickload) {
-        this.loadfile = quickload;
+        this.loadFile = quickload;
     }
 
-    public boolean isDefconfig() {
-        return defconfig;
+    public boolean isDefConfig() {
+        return defConfig;
     }
 
-    public void setDefconfig(boolean defconfig) {
-        this.defconfig = defconfig;
+    public void setDefConfig(boolean defConfig) {
+        this.defConfig = defConfig;
     }
 
-    public int getQs() {
-        return qs;
+    public int getQkSave() {
+        return qkSave;
     }
 
-    public void setQs(int qs) {
-        this.qs = qs;
+    public void setQkSave(int qkSave) {
+        this.qkSave = qkSave;
     }
 
-    public void setRdtxt(Scanner rdtxt) {
-        this.rdtxt = rdtxt;
+    public void setReadTxt(Scanner readTxt) {
+        this.readTxt = readTxt;
     }
 
     public void setFlee(boolean flee) {
@@ -195,12 +195,12 @@ public class Player extends NPC implements Serializable, Attackable {
         this.doorFocus = doorFocus;
     }
 
-    public int getEnergycells() {
-        return energycells;
+    public int getEnergyCells() {
+        return energyCells;
     }
 
-    public void setEnergycells(int energycells) {
-        this.energycells = energycells;
+    public void setEnergyCells(int energyCells) {
+        this.energyCells = energyCells;
     }
 
     public boolean isFlee() {
@@ -223,40 +223,40 @@ public class Player extends NPC implements Serializable, Attackable {
         this.travel = travel;
     }
 
-    public String getSinput() {
-        return sinput;
+    public String getStrIn() {
+        return strIn;
     }
 
-    public Typewriter getTw() {
-        return tw;
+    public Typewriter gettW() {
+        return tW;
     }
 
     public void setHostile(boolean hostile) {
         this.hostile = hostile;
     }
 
-    public int getIntin() {
-        return intin;
+    public int getIntIn() {
+        return intIn;
     }
 
-    public void setIntin(int intin) {
-        this.intin = intin;
+    public void setIntIn(int intIn) {
+        this.intIn = intIn;
     }
 
-    public void setSinput(String sinput) {
-        this.sinput = sinput;
+    public void setStrIn(String strIn) {
+        this.strIn = strIn;
     }
 
     public void setmTree(MenuTree mTree) {
         this.mTree = mTree;
     }
 
-    public WorldInteraction getWinter() {
-        return winter;
+    public WorldInteraction getwInter() {
+        return wInter;
     }
 
     public NPC getNpccontact() {
-        return npccontact;
+        return npcContact;
     }
 
     public MenuTree getmTree() {
@@ -264,15 +264,15 @@ public class Player extends NPC implements Serializable, Attackable {
     }
 
     public void setNpccontact(NPC npccontact) {
-        this.npccontact = npccontact;
+        this.npcContact = npccontact;
     }
 
     public String getName() {
         return this.name;
     }
 
-    public Scanner getRdtxt() {
-        return rdtxt;
+    public Scanner getReadTxt() {
+        return readTxt;
     }
 
     public boolean lifeCheck(Player player) {

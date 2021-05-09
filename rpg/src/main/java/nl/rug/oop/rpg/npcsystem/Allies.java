@@ -78,9 +78,9 @@ public class Allies extends NPC implements Interactable, Inspectable,NpcTypology
 
     public void acceptCombat(Player player) {
         Dialogue.introCombatAlly(player, player.getNpcFocus());
-        player.setmTree(player.getmTree().getSubmenus().get(player.getSinput()));
+        player.setmTree(player.getmTree().getSubmenus().get(player.getStrIn()));
         Combat initFight = new Combat();
-        initFight.duelProcess(player, player.npccontact, player.getmTree());
+        initFight.duelProcess(player, player.npcContact, player.getmTree());
     }
 
     public void dialogueResponse(Player player) {

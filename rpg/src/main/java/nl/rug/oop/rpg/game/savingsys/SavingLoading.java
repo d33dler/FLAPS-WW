@@ -1,7 +1,6 @@
 package nl.rug.oop.rpg.game.savingsys;
 import nl.rug.oop.rpg.game.configsys.FileSearch;
 import nl.rug.oop.rpg.worldsystem.Player;
-import java.io.File;
 
 /**
  * Class SavingLoading used to save and load common saves.
@@ -16,7 +15,7 @@ public class SavingLoading extends SavingSystem {
     @Override
     public void saveSave(Player player) {
         getSaveName(player);
-        if (!player.getSavefile().equals("back")) {
+        if (!player.getSaveFile().equals("back")) {
             super.saveSave(player);
         }
     }
@@ -34,14 +33,14 @@ public class SavingLoading extends SavingSystem {
         String abspath = "/home/radubereja/Desktop/Object-Oriented Programming/a0/2021_Team_060/rpg/savedgames/saves/";
         fs.listSaveFiles("savedgames/saves", ".ser", abspath);
         getSaveName(player);
-        if (!player.getSavefile().equals("back")) {
+        if (!player.getSaveFile().equals("back")) {
             super.setupLoad(player);
         }
     }
 
     public void getSaveName(Player x) {
-        x.getTw().type("Choose a save file & input name\n");
-        x.setSavefile("saves/" + x.rdtxt.nextLine());
+        x.gettW().type("Choose a save file & input name\n");
+        x.setSaveFile("saves/" + x.readTxt.nextLine());
     }
 
 }

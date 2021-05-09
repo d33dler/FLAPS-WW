@@ -22,6 +22,13 @@ enum Attr1room {
 enum Attr2room {
     r(" full of hi-tech operation tables."),
     l(" with quantum computers."),
+    a(" and the level of radiation here is high. But the x-256 is invulnerable to it!"),
+    c(" there is somebody here surveying your movements. Caution is advised"),
+    b(" and there is a broken ancient nuclear reactor here"),
+    uh(" and it looks like a museum of old technology exemplars"),
+    e(" . The temperature here is over 100 degrees celsius. But you don't have to worry" +
+            ", x-256 are built with a titanium alloy and a wrapping tissue of cooling material which " +
+            "uses nanotechnology to maintain internal temperature and resist heated particles."),
     n(" and it's almost empty."),
     wl(" with working stations."),
     d(" with a pile of wires."),
@@ -53,7 +60,7 @@ enum WeaponsDb {
         this.dmg = dmg;
         this.value = value;
 
-    }//inspect constr application
+    }
 
     public String getWname() {
         return wname;
@@ -94,10 +101,5 @@ enum ConsumablesDb {
     public int getValue() {
         return value;
     }
-}
-
-
-enum Trading {
-    n,a,b;
 }
 

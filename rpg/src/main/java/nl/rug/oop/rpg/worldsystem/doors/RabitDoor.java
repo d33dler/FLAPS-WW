@@ -55,9 +55,9 @@ public class RabitDoor extends Door implements DoorTypology {
         super.inspect(player);
         int trBuff = player.getTravelBuff();
         if (!player.getDoorFocus().visited) {
-            player.getTw().type("It will bypass " + trBuff + " room(s)\n");
+            player.gettW().type("It will bypass " + trBuff + " room(s)\n");
         } else {
-            player.getTw().type("You already used the services of this RàBIT migration portal.");
+            player.gettW().type("You already used the services of this RàBIT migration portal.");
         }
     }
 
@@ -80,18 +80,19 @@ public class RabitDoor extends Door implements DoorTypology {
                 player.setRabbit(true);
                 Dialogue.rabitIntro(player);
                 for (int i = 0; i < player.getTravelBuff(); i++) {
-                    player.setIntin(checkRooms(player));
+                    player.setIntIn(checkRooms(player));
                     if (!confirmAvailability(player)) {
                         player.setRabbit(false);
                         notifyHalt(player);
                         return;
                     }
-                    Door drift = player.getLocation().getDoors().get(player.getIntin());
+                    Door drift = player.getLocation().getDoors().get(player.getIntIn());
                     player.setDoorFocus(drift);
                     Dialogue.rabitJumpNotice(player);
                     super.interact(player);
                     Dialogue.rabitJumpConfirm(player);
                 }
+                player.setTravelBuff(1);
                 player.setRabbit(false);
                 Dialogue.rabitService(player);
             } else {
@@ -126,8 +127,8 @@ public class RabitDoor extends Door implements DoorTypology {
     }
 
     public boolean confirmAvailability(Player player) {
-        if (player.getIntin() < 0) {
-            player.setIntin(1);
+        if (player.getIntIn() < 0) {
+            player.setIntIn(1);
             return false;
         } else {
             return true;

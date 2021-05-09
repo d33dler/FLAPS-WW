@@ -1,5 +1,4 @@
 package nl.rug.oop.rpg.menu;
-import nl.rug.oop.rpg.game.configsys.Configurations;
 import nl.rug.oop.rpg.game.savingsys.SavingSystem;
 import nl.rug.oop.rpg.menu.builders.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
@@ -22,7 +21,7 @@ public class GameMenu {
             } catch (NullPointerException e) {
                 System.out.println("No such option\n");
             }
-        } while (!player.getSinput().equals("exit sim"));
+        } while (!player.getStrIn().equals("exit sim"));
     }
 
     public Method fetchOptions(Player player, MenuTree menuTree) {
@@ -32,12 +31,12 @@ public class GameMenu {
         }
         String input;
         try{
-            input = player.getRdtxt().nextLine();
+            input = player.getReadTxt().nextLine();
         } catch (IllegalStateException e) {
             System.out.println("\n");
             input = "a";
         }
-        player.setSinput(input);
+        player.setStrIn(input);
         Method option = menuTree.getMenunode().get(input);
         if (menuTree.getSubmenus() != null && menuTree.getSubmenus().get(input) != null) {
             player.setmTree(menuTree.getSubmenus().get(input));

@@ -4,7 +4,6 @@ import java.util.*;
 
 import nl.rug.oop.rpg.game.Dialogue;
 import nl.rug.oop.rpg.worldsystem.Player;
-import nl.rug.oop.rpg.game.Combat;
 import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 /**
@@ -20,14 +19,14 @@ public class NpcInteraction extends WorldInteraction implements PlayerNpcAction 
      *  Helper method to initiate combat with NPCS
      */
     public void engageNpc(Player player) {
-        Scanner in = player.getRdtxt();
+        Scanner in = player.getReadTxt();
         if (lifeCheck(player)) {
             return;
         }
         player.setIntent("combat");
         Dialogue.confirmCombatInit();
-        player.setSinput(in.nextLine());
-        if (player.getSinput().equals("back")) {
+        player.setStrIn(in.nextLine());
+        if (player.getStrIn().equals("back")) {
             return;
         }
         player.getNpcFocus().interact(player);
@@ -91,8 +90,8 @@ public class NpcInteraction extends WorldInteraction implements PlayerNpcAction 
      */
     public boolean lifeCheck(Player player) {
         if (player.getNpcFocus().getHealth() <= 0) {
-            player.getTw().poeticPause("SysCheck: ", 1500);
-            player.getTw().type(" Its avatar is not functioning. It is not responding.\n");
+            player.gettW().poeticPause("SysCheck: ", 1500);
+            player.gettW().type(" Its avatar is not functioning. It is not responding.\n");
             return true;
         } else {
             return false;

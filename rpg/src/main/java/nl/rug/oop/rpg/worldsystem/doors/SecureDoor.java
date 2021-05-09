@@ -43,10 +43,10 @@ public class SecureDoor extends Door implements Serializable {
         if (!player.getDoorFocus().open) {
             int cost = player.getDoorFocus().getCost();
             int lvl = cost / 20;
-            player.getTw().type("Security Level:" + lvl + "\nRequires " + cost + " decryption-device super-cells for computing power\n");
+            player.gettW().type("Security Level:" + lvl + "\nRequires " + cost + " decryption-device super-cells for computing power\n");
 
         } else {
-            player.getTw().type("You have decrypted this door's lock\n");
+            player.gettW().type("You have decrypted this door's lock\n");
         }
     }
 
@@ -60,12 +60,12 @@ public class SecureDoor extends Door implements Serializable {
     @Override
     public void interact(Player player) {
         if (!player.isRabbit() && !player.getDoorFocus().open) {
-            player.getTw().type("You have " + player.getEnergycells() + " cells\n");
-            if (player.getEnergycells() < player.getDoorFocus().cost) {
-                player.getTw().type("You don't have enough energy cells\n");
+            player.gettW().type("You have " + player.getEnergyCells() + " cells\n");
+            if (player.getEnergyCells() < player.getDoorFocus().cost) {
+                player.gettW().type("You don't have enough energy cells\n");
             } else {
-                player.getTw().type("Charging :  \n" + player.getDoorFocus().cost + " energy cells.");
-                player.setEnergycells(player.getEnergycells() - player.getDoorFocus().cost);
+                player.gettW().type("Charging :  \n" + player.getDoorFocus().cost + " energy cells.");
+                player.setEnergyCells(player.getEnergyCells() - player.getDoorFocus().cost);
                 player.getDoorFocus().setCost(0);
                 player.getDoorFocus().setOpen(true);
                 super.interact(player);
