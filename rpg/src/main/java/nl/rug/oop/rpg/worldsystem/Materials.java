@@ -1,27 +1,5 @@
 package nl.rug.oop.rpg.worldsystem;
 
-import java.util.EnumMap;
-
-public enum Materials {
-}
-
-enum DoorcolorsDb {
-    red(" red"),
-    blue(" blue"),
-    black(" black"),
-    gray(" gray"),
-    cyan(" cyan");
-    private final String cname;
-
-    DoorcolorsDb(String cname) {
-        this.cname = cname;
-    }
-
-    public String getCname() {
-        return cname;
-    }
-}
-
 enum Attr1room {
     r(" ruined "),
     l(" large "),
@@ -44,6 +22,13 @@ enum Attr1room {
 enum Attr2room {
     r(" full of hi-tech operation tables."),
     l(" with quantum computers."),
+    a(" and the level of radiation here is high. But the x-256 is invulnerable to it!"),
+    c(" there is somebody here surveying your movements. Caution is advised"),
+    b(" and there is a broken ancient nuclear reactor here"),
+    uh(" and it looks like a museum of old technology exemplars"),
+    e(" . The temperature here is over 100 degrees celsius. But you don't have to worry" +
+            ", x-256 are built with a titanium alloy and a wrapping tissue of cooling material which " +
+            "uses nanotechnology to maintain internal temperature and resist heated particles."),
     n(" and it's almost empty."),
     wl(" with working stations."),
     d(" with a pile of wires."),
@@ -75,7 +60,7 @@ enum WeaponsDb {
         this.dmg = dmg;
         this.value = value;
 
-    }//inspect constr application
+    }
 
     public String getWname() {
         return wname;
@@ -103,7 +88,7 @@ enum ConsumablesDb {
         this.consid = consid;
         this.health = health;
         this.value = value;
-    }//inspect constructor app
+    }
 
     public String getConsid() {
         return consid;
@@ -118,59 +103,3 @@ enum ConsumablesDb {
     }
 }
 
-enum SpeciesDb {
-    cyb("Cyborg doll", 40, 10),
-    sb("Sentry bot", 50, 12),
-    sent("Sentinel", 80, 24),
-    fl("Flesher", 18, 10);
-    private final String spname;
-    private final int damage, health;
-
-    SpeciesDb(String spname, int health, int damage) {
-        this.spname = spname;
-        this.health = health;
-        this.damage = damage;
-    }
-
-    public String getSpname() {
-        return spname;
-    }
-
-    public int getDamage() {
-        return damage;
-    }
-
-    public int getHealth() {
-        return health;
-    }
-}
-
-enum Npcinteract {
-    n, a, b, c, d;
-    public static EnumMap<Npcinteract, String > getCompany(){
-        EnumMap<Npcinteract,String> commands = new EnumMap<>(Npcinteract.class);
-        commands.put(Npcinteract.n, "Initialize: ");
-        commands.put(Npcinteract.a, "   a) conversation");
-        commands.put(Npcinteract.b, "   b) trade");
-        commands.put(Npcinteract.c, "   c) combat");
-        commands.put(Npcinteract.d, "   (back) Return");
-        return commands;
-    }
-}
-
-enum Trading {
-    n,a,b;
-
-}
-
-enum InvWeaponOptions {
-    a,b,c,d;
-    public static EnumMap<InvWeaponOptions, String> getSubInv() {
-        EnumMap<InvWeaponOptions, String> commands = new EnumMap<>(InvWeaponOptions.class);
-        commands.put(InvWeaponOptions.a, "   a) Equip");
-        commands.put(InvWeaponOptions.b, "   b) Recycle");
-        commands.put(InvWeaponOptions.c, "   c) Throw away");
-        commands.put(InvWeaponOptions.d, "   (back) Return");
-        return commands;
-    }
-}

@@ -1,57 +1,54 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.Utilities;
-import nl.rug.oop.rpg.menu.MenuBuilder;
-import nl.rug.oop.rpg.menu.MenuTree;
-import nl.rug.oop.rpg.worldsystem.ExploreOptions;
-import nl.rug.oop.rpg.worldsystem.Player;
-import nl.rug.oop.rpg.worldsystem.World;
+import nl.rug.oop.rpg.game.configsys.ConfigImport;
+import nl.rug.oop.rpg.menu.GameMenu;
+import nl.rug.oop.rpg.menu.builders.GameMenuBuilder;
+import nl.rug.oop.rpg.menu.builders.MenuTree;
+import nl.rug.oop.rpg.worldsystem.*;
 
-import java.util.*;
-
-
+/**
+ * Gameplay class holds the methods that configure
+ * the world properties and initiate the game process
+ */
 public class Gameplay {
-
-    public void Launch(Scanner input) {
-        Dialogue intro = new Dialogue();
-       // intro.Comunication();
-        World morph = new World();
-        World map = morph.createMap();
-        Player player = morph.generatePlayer(map);
-        Explore(player, input);
+    /**
+     * @param player object has the loaded config file, and it is used to set up the game parameters.
+     * @throws Exception if config file is not loaded correctly/ extension issue/game world source code changes
+     *                   which were not imprinted in the config setup
+     */
+    public void Configure(Player player) throws Exception {
+        Dialogue.Comunication();
+        player = new ConfigImport().setPlayerConfigs(player);
+        Explore(player);
     }
 
-    public void Explore(Player player, Scanner txtIn) {
-        Utilities.getUserName(player, txtIn);
-        MenuBuilder menubuild = new MenuBuilder();
-        MenuTree trMenu = menubuild.buildMenuTree();
-        HashMap<String, GameCommands> menu;
-        GameCommands option;
-        EnumMap<ExploreOptions, String> exoptns = ExploreOptions.getExmn();
-        String input = "y";
+    /**
+     * @param player receives the MenuTree and the game menu class holding the menu loop method is
+     *               initiated;
+     */
+    public void Explore(Player player) {
+        player.setmTree(getMenuTree());
+        GameMenu gmenu = new GameMenu();
         System.out.println("Greetings, " + player.getName() + "!\n \n");
-        printExpmenu(exoptns);
-        menu = trMenu.getRoot().getMenunode();
-        while (!input.equals("exit sim")) {
-            input = txtIn.nextLine();
-            option = menu.get(input);
-            if (option != null) {
-                option.exec(player, txtIn, trMenu.getSubmenus().get(input).getMenunode(), trMenu);
-                printExpmenu(exoptns);
-            }
+        try {
+            gmenu.fetchMenu(player);
+        } catch (Exception e) {
+            System.out.println("Error generating exploring menu. Exiting.");
         }
-        txtIn.close();
     }
 
-    public void printExpmenu(EnumMap<ExploreOptions, String> exoptns) {
-        exoptns.values().forEach(System.out::println);
+    /**
+     * @return Menu Tree structure from class MenuTree
+     */
+    public MenuTree getMenuTree() {
+        MenuTree mTree = null;
+        try {
+            mTree = new GameMenuBuilder().buildGameMenu();
+        } catch (NoSuchMethodException e) {
+            System.out.println("Error generating menu tree");
+        }
+        return mTree;
     }
-
-    public void reachSubMenu(HashMap<String, HashMap<String, GameCommands>> allMenus, String input) { //prob loop
-
-    }
-
-
 }
 
 

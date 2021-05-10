@@ -1,17 +1,26 @@
 package nl.rug.oop.rpg.npcsystem;
-
 import nl.rug.oop.rpg.itemsystem.Inventory;
 import nl.rug.oop.rpg.itemsystem.Item;
 import nl.rug.oop.rpg.worldsystem.Room;
 
-public abstract class Entity {
+import java.io.Serializable;
+
+/**
+ * Abstract class entity extends to both NPCs and the player as they share a list
+ * of data value fields. The same builder pattern constructor is applied to create NPCs
+ * and the player itself to reduce code duplication.
+ */
+public abstract class Entity implements Serializable {
+    private static final long serialVersionUID = 1998L;
     protected String name;
     protected int health, damage, money;
     protected Inventory inventory;
     protected Room location;
     protected Item hold;
+    protected boolean flee;
+    protected NPC npcContact;
 
-    public Entity(InitEntity parameters) {
+    public Entity(EntityBuilder parameters) {
         this.name = parameters.name;
         this.location = parameters.location;
         this.health = parameters.health;
@@ -19,6 +28,11 @@ public abstract class Entity {
         this.inventory = parameters.inventory;
         this.money = parameters.money;
         this.hold = parameters.hold;
+        this.flee = parameters.flee;
+        this.npcContact = parameters.npcContact;
+    }
+
+    public Entity() {
     }
 
     public String getName() {
@@ -47,18 +61,6 @@ public abstract class Entity {
 
     public Inventory getInventory() {
         return inventory;
-    }
-
-    public void setInventory(Inventory inventory) {
-        this.inventory = inventory;
-    }
-
-    public void setDamage(int damage) {
-        this.damage = damage;
-    }
-
-    public void setMoney(int money) {
-        this.money = money;
     }
 
     public Room getLocation() {

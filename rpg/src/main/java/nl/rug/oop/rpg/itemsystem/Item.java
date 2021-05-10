@@ -1,50 +1,47 @@
 package nl.rug.oop.rpg.itemsystem;
 
+import java.io.Serializable;
+import java.util.*;
+
 import nl.rug.oop.rpg.*;
-import nl.rug.oop.rpg.game.GameCommands;
+
 import nl.rug.oop.rpg.game.Inspectable;
 import nl.rug.oop.rpg.game.Interactable;
-import nl.rug.oop.rpg.menu.MenuTree;
 import nl.rug.oop.rpg.worldsystem.Player;
 import nl.rug.oop.rpg.worldsystem.Room;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Scanner;
-
-public abstract class Item implements Inspectable, Interactable {
+public abstract class Item implements Inspectable, Interactable, Serializable {
+    private static final long serialVersionUID = 856L;
     protected String name;
     protected int value;
-    protected Typewriter tw = new Typewriter();
 
     @Override
-    public void inspect(Room r) {
-        if (r.getLoot() instanceof Nothing) {
-            tw.type("The room doesn't contain resources\n");
+    public void inspect(Player x) {
+        Room now = x.getLocation();
+        if (now.getLoot() instanceof Nothing) {
+            x.gettW().type("The room doesn't contain resources\n");
         } else {
-            tw.type("You see a " + r.getLoot().name + " in a " + r.getStorage().getName() + "\n"); //random holder
+            x.gettW().type("You see a " + now.getLoot().name + " in a " + now.getStorage().getName() + "\n");
         }
-
     }
 
     @Override
-    public void interact(Player ava, int x) {
-        Item item = ava.getLocation().getLoot();
+    public void interact(Player x) {
+        Item item = x.getLocation().getLoot();
         if (!item.name.equals("nothing")) {
-           tw.type("You picked a " + item.name + "\n Storing in inventory...\n");
-            DepositInv(ava, item); //needs each weapon to have class indicated for matching by string
-            removeItemRoom(ava.getLocation());
-            removeItemPlayer(ava);
+            x.gettW().type("You picked an object: " + item.name + "\nStoring in inventory...\n");
+            DepositInv(x, item); //needs each weapon to have class indicated for matching by string
+            removeItemRoom(x.getLocation());
+            removeItemPlayer(x);
         } else {
-            tw.type("There is " + ava.getLocation().getLoot().name + " here \n");
+            x.gettW().type("Found  " + x.getLocation().getLoot().name + " here \n");
         }
     }
-    public Item SelectItem(HashMap<String, ? extends Item> invlist, Scanner in) {
 
+    public Item SelectItem(HashMap<String, ? extends Item> invlist, Scanner in) {
         Typewriter tw = new Typewriter();
         tw.type(" *(name) Select item   \n");
-        Item item = invlist.get(in.nextLine());
-        return item;
+        return invlist.get(in.nextLine());
     }
 
     public Item(ItemBuilder parameters) {
@@ -52,37 +49,40 @@ public abstract class Item implements Inspectable, Interactable {
         this.value = parameters.value;
     }
 
+    public Item() {
+    }
+
     public void use(Player ava) {
 
     }
 
-    public void Recycle(Player ava) {
-        if (ava.getHold() instanceof Weapons) {
-            tw.type("Recycling weapon for viable components & materials\n");
-            tw.type("....\n");
-            tw.type("Recycled: \n" + ava.getHold().value + " units worth of materials.\n storing in inventory\n");
+    public void Recycle(Player x) {
+        if (x.getHold() instanceof Weapons) {
+            x.gettW().type("Recycling weapon for viable components & materials\n");
+            x.gettW().type("....\n");
+            x.gettW().type("Recycled: \n" + x.getHold().value + " units worth of materials.\n storing in inventory\n");
             Consumables item = new ItemBuilder()
                     .name("Titanium(R)")
                     .hh(7)
                     .val(5)
                     .createCons();
-            ava.getInventory().getcList().put("Titanium(R)", item);
-        } else if (ava.getHold() instanceof Consumables) {
-            tw.type("Recycling " + ava.getHold().name + "\n");
-        } else if (ava.getHold() instanceof Nothing) {
-            tw.type("There is nothing here \n");
+            x.getInventory().getcList().put("Titanium(R)", item);
+        } else if (x.getHold() instanceof Consumables) {
+            x.gettW().type("Recycling " + x.getHold().name + "\n");
+        } else if (x.getHold() instanceof Nothing) {
+            x.gettW().type("There is nothing here \n");
         }
-        removeItemPlayer(ava);
-        removeItemRoom(ava.getLocation());
+        removeItemPlayer(x);
+        removeItemRoom(x.getLocation());
     }
 
-    public void DepositInv(Player ava, Item item) {
+    public void DepositInv(Player x, Item item) {
         if (item instanceof Weapons) {
-            ava.getInventory().getwList().put(item.name, (Weapons) item);     //future change - to hashmap
+            x.getInventory().getwList().put(item.name, (Weapons) item);     //future change - to hashmap
         } else if (item instanceof Consumables) {
-            ava.getInventory().getcList().put(item.name, (Consumables) item);
+            x.getInventory().getcList().put(item.name, (Consumables) item);
         } else if (item instanceof Nothing) {
-            tw.type("There is nothing to collect\n");
+            x.gettW().type("There is nothing to collect\n");
         }
     }
 
@@ -94,47 +94,14 @@ public abstract class Item implements Inspectable, Interactable {
         r.setLoot(new ItemBuilder().name("nothing").createNull());
     }
 
-    public void removeItem(Item x) {
-        x = new ItemBuilder().name("nothing").createNull();
-    }
-
     public String getName() {
         return name;
     }
-
-    public static class ItemCheck implements GameCommands {
-        @Override
-        public void exec(Player x, Scanner in, HashMap<String, GameCommands> menu, MenuTree menuTr) {
-            GameCommands option;
-            String input;
-            Room r = x.getLocation();
-            Item item = r.getLoot();
-            EnumMap<ItemOptions, String> iteminter = ItemOptions.getItem();
-            do {
-                iteminter.values().forEach(System.out::println);
-                input = in.nextLine();
-                option = menu.get(input);
-                option.exec(x, in, menu, menuTr);
-            } while (!input.equals("back") && !item.name.equals("nothing"));
-        }
-    }
-
-
 }
 
-class Nothing extends Item {
+class Nothing extends Item implements Serializable {
+    private static final long serialVersionUID = 432;
     public Nothing(ItemBuilder parameters) {
         super(parameters);
     }
 }
-/*
-class Keycards extends Item {
-    protected int health;
-    public Keycards(String name, int health, int value) {
-        this.name= name;
-        this.health = health;
-        this.value = value;
-    }
-}
-
- */

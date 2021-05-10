@@ -1,10 +1,9 @@
 package nl.rug.oop.rpg.itemsystem;
 
-import nl.rug.oop.rpg.worldsystem.Builders;
+public class ItemBuilder extends Item {
 
-public class ItemBuilder extends Builders {
-    protected String name;
-    protected int dmg, health, value;
+    protected int dmg;
+    protected int health;
 
     public ItemBuilder name(String name) {
         this.name = name;

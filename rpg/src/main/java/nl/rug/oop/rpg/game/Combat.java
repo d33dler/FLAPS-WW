@@ -1,40 +1,82 @@
 package nl.rug.oop.rpg.game;
 
-import nl.rug.oop.rpg.menu.MenuTree;
+import java.lang.reflect.*;
+
+import nl.rug.oop.rpg.menu.builders.MenuTree;
+import nl.rug.oop.rpg.menu.options.CombatMenuOptions;
 import nl.rug.oop.rpg.npcsystem.NPC;
 import nl.rug.oop.rpg.worldsystem.Player;
+import nl.rug.oop.rpg.worldsystem.WorldInteraction;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Scanner;
 
 public class Combat {
-
-    public void duel(Player x, NPC foe, HashMap<String, GameCommands> cmenu, Scanner in, MenuTree mtree) {
-        String input = "user";
-        GameCommands option;
-        EnumMap<Cmbtoptions, String> combopt = Cmbtoptions.setMoves();
-        while (foe.getHealth() > 0 && x.getHealth() > 0 && !input.equals("c")) {
-            System.out.println("< ╬ > System Health Status ::: " +
-                    x.getName() + ": " + x.getHealth() + "  ▓▓▓▓   " + foe.getName() + ": " + foe.getHealth());
-            printFightmenu(combopt);
+    /**
+     * The method is used to conduct the combat process;
+     * @param player
+     * @param foe NPC subclass
+     * @param mtree Menu Tree for the combat menu
+     */
+    public void duelProcess(Player player, NPC foe, MenuTree mtree) {
+        String input;
+        Scanner in = player.getReadTxt();
+        Method option;
+        EnumMap<CombatMenuOptions, String> combopt = CombatMenuOptions.setMoves();
+        player.setHostile(true);
+        do {
+            Dialogue.printObnoxiousCombatMenu(player, foe);
+            printFightMenu(combopt);
             input = in.nextLine();
-            option = cmenu.get(input);
-            option.exec(x, in, cmenu, mtree);
-        }
-        if (foe.getHealth() <= 0) {
-            x.getLocation().setCompany(false);
-            System.out.println(foe.getName() + " was eliminated successfully! \n Proceeding further.\n");
-        } else if (x.getHealth() <= 0) {
-            System.out.println(foe.getName() + "eliminated your gestalt image. \n Your avatar archive is being returned to the nearest Polis checkpoint server.");
-            System.exit(0);
-        } else {
-            System.out.println("Fleeing combat & exiting room\n");
+            if (player.isForcedCombat() && input.equals("c")) {
+                Dialogue.notifyFfC(player);
+                continue;
+            }
+            option = mtree.getMenunode().get(input);
+            Dialogue.combatLog();
+            try {
+                Object interact = WorldInteraction.getActionType(option);
+                option.invoke(interact, player);
+            } catch (Exception e) {
+                player.gettW().type("No such option\n");
+            }
+            Dialogue.combatLog();
+            checkCombat(player, foe);
+        } while (foe.getHealth() > 0 && player.getHealth() > 0 && (!input.equals("c") || player.isForcedCombat()));
+        duelConclusion(player, foe);
+    }
 
+    /**
+     * Updating player field values based on the outcome of the duelProcess method.
+     * @param player
+     * @param foe
+     */
+    public void duelConclusion(Player player, NPC foe) {
+        if (foe.getHealth() <= 0) {
+            player.getLocation().setCompany(false);
+            Dialogue.notifySuccess(player, foe);
+            switchMenu(player);
+        } else if (player.getHealth() <= 0) {
+            Dialogue.notifyCessation(player, foe);
+            System.exit(0);
+        } else if (player.isFlee()) {
+            player.gettW().type("Fleeing combat & exiting room\n");
+            player.setFlee(false);
+            switchMenu(player);
         }
     }
 
-    public void printFightmenu(EnumMap<Cmbtoptions, String> exoptns) {
+    public void printFightMenu(EnumMap<CombatMenuOptions, String> exoptns) {
         exoptns.values().forEach(System.out::println);
+    }
+
+    public void checkCombat(Player player, NPC foe) {
+        if (foe.getHealth() < 0 || player.getHealth() < 0) {
+            player.setForcedCombat(false);
+        }
+    }
+
+    public void switchMenu(Player x) {
+        x.setmTree(x.getmTree().getRoot().getRoot());
     }
 }
