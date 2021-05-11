@@ -2,15 +2,12 @@ package nl.rug.oop.gui;
 
 import com.formdev.flatlaf.FlatDarculaLaf;
 import com.formdev.flatlaf.FlatIntelliJLaf;
+import nl.rug.oop.gui.view.GuiMain;
 
 public class Main {
 	public static void main(String[] args) {
-		/*
-		 * Makes the GUI look a bit nicer
-		 * - dark mode: FlatDarculaLaf.install();
-		 * - light mode: FlatIntelliJLaf.install();
-		 */
-		FlatDarculaLaf.install();
 
+		FlatDarculaLaf.install();
+		GuiMain gui = new GuiMain();
 	}
 }
