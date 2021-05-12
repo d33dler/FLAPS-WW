@@ -224,13 +224,13 @@ public class DataManager implements AutoCloseable {
     }
 
 
-    public ResultSet populateTable() {
+    public ResultSet getResultSet(String sql) {
         try {
-            String query = getQuery(SELECT_NPCS);
+            String query = getQuery(sql);
             PreparedStatement stmt = this.connection.prepareStatement(query);
             return stmt.executeQuery();
         } catch (SQLException e) {
-            System.out.println("Error populating the table");
+            System.out.println("Error executing the query.");
             return null;
         }
     }

@@ -1,36 +1,18 @@
-package nl.rug.oop.gui.view;
+package nl.rug.oop.gui.model;
 import nl.rug.oop.gui.util.DataManager;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class Table extends AbstractTableModel {
-    DataManager dm = new DataManager();
-    ResultSet rset = dm.populateTable();
-    DefaultTableModel table = TableBuilder.buildTable(rset);
+public class Table extends DefaultTableModel {
+    ResultSet rset;
+    DefaultTableModel table;
 
-
-    public Table() throws SQLException {
+    public Table(AppCore model) throws SQLException {
+        this.rset = model.getDm().getResultSet(model.getSearchQuery());
+        this.table = TableBuilder.buildTable(rset);
     }
-
-    @Override
-    public int getRowCount() {
-        return this.table.getRowCount();
-    }
-
-    @Override
-    public int getColumnCount() {
-       return this.table.getColumnCount();
-    }
-
-    @Override
-    public Object getValueAt(int i, int i1) {
-        return this.table.getValueAt(i,i1);
-    }
-
     public DefaultTableModel getTable() {
         return table;
     }
-
 }

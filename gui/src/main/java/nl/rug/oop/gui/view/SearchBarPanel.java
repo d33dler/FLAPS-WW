@@ -5,9 +5,9 @@ import java.awt.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
-public class SearchBar extends JTextField {
+public class SearchBarPanel extends JTextField {
 
-    public SearchBar() {
+    public SearchBarPanel() {
         setPreferredSize(new Dimension(300,25));
         addTextField();
         this.addKeyListener(new KeyAdapter() {
