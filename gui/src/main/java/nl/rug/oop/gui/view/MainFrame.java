@@ -6,10 +6,10 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class GuiMain extends JFrame {
+public class GuiMainFrame extends JFrame {
 
     @SneakyThrows
-    public GuiMain() {
+    public GuiMainFrame() {
         setLayout(new BorderLayout());
         Table tab = new Table();
         JTable table = new JTable(tab.getTable());
@@ -18,7 +18,6 @@ public class GuiMain extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(500,2000));
         pack();
-       add( new JButton("Destroy"), BorderLayout.LINE_END);
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
