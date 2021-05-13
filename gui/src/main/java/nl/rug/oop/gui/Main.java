@@ -8,8 +8,7 @@ import nl.rug.oop.gui.view.MainFrame;
 public class Main {
 	@SneakyThrows
 	public static void main(String[] args) {
-		AppCore model = new AppCore();
 		FlatDarculaLaf.install();
-		MainFrame gui = new MainFrame(model);
+		AppCore model = new AppCore();
 	}
 }

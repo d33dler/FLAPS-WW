@@ -1,5 +1,10 @@
 package nl.rug.oop.gui.view;
 
+import nl.rug.oop.gui.control.SearchListener;
+import nl.rug.oop.gui.model.AppCore;
+import nl.rug.oop.gui.util.UpdateListeners;
+import nl.rug.oop.gui.util.Updater;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -7,21 +12,27 @@ import java.awt.event.KeyEvent;
 
 public class SearchBarPanel extends JTextField {
 
-    public SearchBarPanel() {
-        setPreferredSize(new Dimension(300,25));
-        addTextField();
-        this.addKeyListener(new KeyAdapter() {
+    AppCore model;
+    JTextField txtField = new JTextField("placeholder", 40);
+
+    {
+        addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
                 super.keyReleased(e);
-                // I am called whenever the user types a new character
-                // doSomething();
+                //model.setSearchField();
             }
         });
     }
-    private void addTextField() {
-        JTextField txtField = new JTextField("", 40);
 
+    public SearchBarPanel(AppCore model) {
+        this.model = model;
+        setPreferredSize(new Dimension(300, 25));
+        addTextField(model);
+    }
+
+    private void addTextField(AppCore model) {
         add(txtField);
     }
+
 }

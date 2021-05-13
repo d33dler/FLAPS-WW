@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import java.util.Vector;
 import java.util.stream.Collectors;
 
 import lombok.SneakyThrows;
+import nl.rug.oop.gui.model.AppCore;
 
 import static java.nio.file.Files.lines;
 
@@ -73,9 +75,10 @@ public class DataManager implements AutoCloseable {
     private static final String dbUrl = "jdbc:sqlite:npcs.sqlite";
 
     // The following constants are defined for convenience.
-    public static final String SELECT_NPC = "sql/select_npc.sql";
-    public static final String SELECT_NPCS = "sql/select_npcs.sql";
-    public static final String SELECT_NPC_TYPES = "sql/select_npc_types.sql";
+    public static final String SELECT_NPC = "src/main/resources/sql/select_npc.sql";
+    public static final String SELECT_NPCS = "src/main/resources/sql/select_npcs.sql";
+    public static final String SELECT_NPC_TYPES = "src/main/resources/sql/select_npc_types.sql";
+    public static final String SEARCH_NPCS = "src/main/resources/sql/search_npcs.sql";
 
     private final Connection connection;
 
@@ -209,7 +212,7 @@ public class DataManager implements AutoCloseable {
     @SneakyThrows
     private String getQuery(String path) {
         try {
-            InputStream iStream = new FileInputStream("/home/radubereja/Desktop/Object-Oriented Programming/a3/gui/2021_Team_060/gui/src/main/resources/" + path);
+            InputStream iStream = new FileInputStream(path);
             ByteArrayOutputStream query = new ByteArrayOutputStream();
             byte[] buffer = new byte[1024];
             for (int length; (length = iStream.read(buffer)) != -1; ) {
@@ -222,16 +225,52 @@ public class DataManager implements AutoCloseable {
         }
         return null;
     }
+    private String getQueryPath(String sql) {
+        File queryFile = new File(sql);
+        File queryExtract = queryFile.getAbsoluteFile();
+        return queryExtract.getAbsolutePath();
+    }
 
-
-    public ResultSet getResultSet(String sql) {
+    @SneakyThrows
+    public ResultSet getResultSet(AppCore model, String sql) {
         try {
-            String query = getQuery(sql);
+            String query = getQuery(getQueryPath(sql));
             PreparedStatement stmt = this.connection.prepareStatement(query);
+            stmt = insertQuery(model,stmt);
             return stmt.executeQuery();
         } catch (SQLException e) {
             System.out.println("Error executing the query.");
             return null;
         }
     }
+
+    @SneakyThrows
+    public PreparedStatement  insertQuery(AppCore model , PreparedStatement stmt){
+        String query = model.getSearchField();
+        if (query!=null){
+            stmt.setString(1,query);
+        }
+       return stmt;
+    }
+    @SneakyThrows
+    public Vector<String> getColumns(ResultSetMetaData metaData) {
+        Vector<String> columnIds = new Vector<>();
+        for (int i = 1; i < metaData.getColumnCount(); i++) {
+            columnIds.add(metaData.getColumnName(i));
+        }
+        return columnIds;
+    }
+    @SneakyThrows
+    public Vector<Vector<Object>> getData(ResultSet rSet, ResultSetMetaData metaData) {
+        Vector<Vector<Object>> data = new Vector<>();
+        while (rSet.next()) {
+            Vector<Object> objData = new Vector<>();
+            for (int i = 1; i < metaData.getColumnCount(); i++) {
+                objData.add(rSet.getObject(i));
+            }
+            data.add(objData);
+        }
+        return data;
+    }
+
 }

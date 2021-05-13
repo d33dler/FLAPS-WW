@@ -9,21 +9,10 @@ import java.util.Vector;
 
 public class TableBuilder extends DefaultTableModel {
     @SneakyThrows
-    public static DefaultTableModel buildTable(ResultSet rSet) {
-        ResultSetMetaData mData = rSet.getMetaData();
-        Vector<String> columnId = new Vector<>();
-        for (int i = 1; i < mData.getColumnCount(); i++) {
-            columnId.add(mData.getColumnName(i));
-        }
-        Vector<Vector<Object>> data = new Vector<>();
-        while (rSet.next()) {
-            Vector<Object> objData = new Vector<>();
-            for (int i = 1; i < mData.getColumnCount(); i++) {
-                objData.add(rSet.getObject(i));
-            }
-            data.add(objData);
-        }
-        return new DefaultTableModel(data, columnId);
+    public DefaultTableModel buildTable(ResultSet rSet, AppCore model) {
+        ResultSetMetaData metaData = rSet.getMetaData();
+        Vector<String> columnIds = model.getDm().getColumns(metaData);
+        Vector<Vector<Object>> data = model.getDm().getData(rSet,metaData);
+        return new DefaultTableModel(data, columnIds);
     }
-
 }

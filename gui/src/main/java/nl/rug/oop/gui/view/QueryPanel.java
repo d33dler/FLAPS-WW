@@ -1,10 +1,12 @@
 package nl.rug.oop.gui.view;
 
+import nl.rug.oop.gui.model.AppCore;
+
 import javax.swing.*;
 import java.awt.*;
 
 public class QueryPanel extends JPanel  {
-    public QueryPanel(){
+    public QueryPanel(AppCore model){
         init();
     }
     public void init() {

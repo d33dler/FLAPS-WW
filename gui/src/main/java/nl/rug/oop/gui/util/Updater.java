@@ -1,5 +1,7 @@
 package nl.rug.oop.gui.util;
 
+import nl.rug.oop.gui.model.AppCore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,7 +16,7 @@ public class Updater {
         upMembers.add(newL);
     }
 
-    public void fireUpdate() {
-        upMembers.forEach(UpdateListeners::update);
+    public void fireUpdate(AppCore model) {
+        upMembers.forEach(updateListeners -> updateListeners.update(model));
     }
 }

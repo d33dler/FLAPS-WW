@@ -21,9 +21,8 @@ public class MainFrame extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         menuBar();
-        add(new SearchPanel(), BorderLayout.NORTH);
-        add(new TablePanel(model), BorderLayout.CENTER);
-        add(new QueryPanel(), BorderLayout.SOUTH);
+        add(new TablePanel(model), BorderLayout.NORTH);
+        add(new QueryPanel(model), BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -37,6 +36,4 @@ public class MainFrame extends JFrame {
         bar.add(menu);
         setJMenuBar(bar);
     }
-
-
 }

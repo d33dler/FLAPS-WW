@@ -1,18 +1,29 @@
 package nl.rug.oop.gui.model;
-import nl.rug.oop.gui.util.DataManager;
 import javax.swing.table.DefaultTableModel;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 public class Table extends DefaultTableModel {
     ResultSet rset;
     DefaultTableModel table;
 
-    public Table(AppCore model) throws SQLException {
-        this.rset = model.getDm().getResultSet(model.getSearchQuery());
-        this.table = TableBuilder.buildTable(rset);
+    public Table(AppCore model) {
+        this.rset = model.getDm().getResultSet(model, model.getSearchQuery());
+        this.table = new TableBuilder().buildTable(rset, model);
     }
+
+    public ResultSet getRset() {
+        return rset;
+    }
+
+    public void setRset(ResultSet rset) {
+        this.rset = rset;
+    }
+
     public DefaultTableModel getTable() {
         return table;
+    }
+
+    public void setTable(DefaultTableModel table) {
+        this.table = table;
     }
 }
