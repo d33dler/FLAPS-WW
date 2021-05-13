@@ -1,17 +1,22 @@
 package nl.rug.oop.gui.model;
 
+import lombok.Getter;
 import nl.rug.oop.gui.util.DataManager;
-import nl.rug.oop.gui.util.Updater;
+import nl.rug.oop.gui.util.DetailsUpdater;
+import nl.rug.oop.gui.util.TableUpdater;
 import nl.rug.oop.gui.view.MainFrame;
 
 import java.sql.SQLException;
 
-public class AppCore extends Updater {
+@Getter
+public class AppCore {
     private DataManager dm;
     private Table database;
     private String searchQuery;
     private String searchField;
     private MainFrame gui;
+    private DetailsUpdater detailsUpdater = new DetailsUpdater();
+    private TableUpdater tableUpdater = new TableUpdater();
 
     public AppCore() throws SQLException {
         this.dm = new DataManager();
@@ -25,43 +30,14 @@ public class AppCore extends Updater {
         this.searchField = ("%" + searchField + "%");
         System.out.println("i update sF" + searchField);
         this.database = new Table(this);
-        fireUpdate(this);
-    }
-
-    public Table getDatabase() {
-        return database;
-    }
-
-    public void setDatabase(Table database) {
-        this.database = database;
-    }
-
-    public String getSearchQuery() {
-        return searchQuery;
-    }
-
-    public void setSearchQuery(String searchQuery) {
-        this.searchQuery = searchQuery;
-    }
-
-    public DataManager getDm() {
-        return dm;
-    }
-
-    public void setDm(DataManager dm) {
-        this.dm = dm;
-    }
-
-    public String getSearchField() {
-        return searchField;
-    }
-
-
-    public MainFrame getGui() {
-        return gui;
+        tableUpdater.fireUpdate(this);
     }
 
     public void setGui(MainFrame gui) {
         this.gui = gui;
+    }
+
+    public void setRequestData() {
+        detailsUpdater.fireUpdate(this);
     }
 }

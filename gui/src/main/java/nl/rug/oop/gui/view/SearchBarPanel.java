@@ -1,9 +1,6 @@
 package nl.rug.oop.gui.view;
 
-import nl.rug.oop.gui.control.SearchListener;
 import nl.rug.oop.gui.model.AppCore;
-import nl.rug.oop.gui.util.UpdateListeners;
-import nl.rug.oop.gui.util.Updater;
 
 import javax.swing.*;
 import java.awt.*;

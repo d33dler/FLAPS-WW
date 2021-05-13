@@ -20,7 +20,6 @@ public class SearchListener implements DocumentListener {
         Document search = event.getDocument();
         String query = search.getText(0, search.getLength());
         model.setSearchField(query);
-        System.out.println(query);
     }
 
     @SneakyThrows
