@@ -1,6 +1,7 @@
 package nl.rug.oop.gui.model;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import nl.rug.oop.gui.util.DataManager;
 import nl.rug.oop.gui.util.DetailsUpdater;
 import nl.rug.oop.gui.util.TableUpdater;
@@ -26,10 +27,12 @@ public class AppCore {
         this.gui = new MainFrame(this);
     }
 
+    @SneakyThrows
     public void setSearchField(String searchField) {
         this.searchField = ("%" + searchField + "%");
-        System.out.println("i update sF" + searchField);
+        System.out.println("Search field update: " + searchField);
         this.database = new Table(this);
+
         tableUpdater.fireUpdate(this);
     }
 

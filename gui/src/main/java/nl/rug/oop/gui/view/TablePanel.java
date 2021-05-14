@@ -1,5 +1,6 @@
 package nl.rug.oop.gui.view;
 
+import lombok.Getter;
 import lombok.SneakyThrows;
 import nl.rug.oop.gui.control.SearchListener;
 import nl.rug.oop.gui.model.AppCore;
@@ -10,6 +11,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
+@Getter
 public class TablePanel extends JPanel implements UpdateInterface {
     private AppCore model;
     private JTable table;
@@ -38,6 +40,7 @@ public class TablePanel extends JPanel implements UpdateInterface {
             }
         };
         table.setFillsViewportHeight(true);
+        table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         table.setPreferredScrollableViewportSize(new Dimension(470, 250));
         addTableSelectionListener();
         editTableView(table);
@@ -45,10 +48,11 @@ public class TablePanel extends JPanel implements UpdateInterface {
     }
 
     public void addTableSelectionListener() {
-        table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-            public void valueChanged(ListSelectionEvent event) {
+        table.getSelectionModel().addListSelectionListener(event -> {
+            if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
                 model.setRequestData();
             }
+
         });
     }
 
@@ -66,9 +70,9 @@ public class TablePanel extends JPanel implements UpdateInterface {
 
     @Override
     public void update(AppCore model) {
+        table.clearSelection();
         table.setModel(model.getDatabase().getTable());
-        model.getGui().setTable(table);
         editTableView(table);
+        revalidate();
     }
-
 }

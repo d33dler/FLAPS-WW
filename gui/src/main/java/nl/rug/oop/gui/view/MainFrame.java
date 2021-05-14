@@ -10,7 +10,10 @@ import java.awt.*;
 @Getter
 public class MainFrame extends JFrame {
     AppCore model;
-    JTable jTable;
+    TablePanel tablePanel;
+    DetailsPanel detailsPanel;
+    QueryPanel queryPanel;
+
     public MainFrame(AppCore model) {
         super("Fantasy Database");
         this.model = model;
@@ -19,19 +22,24 @@ public class MainFrame extends JFrame {
 
     @SneakyThrows
     public void init() {
-        setPreferredSize(new Dimension(500, 1000));
+        setFocusTraversalPolicy(null);
+        setPreferredSize(new Dimension(500, 800));
         setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         menuBar();
-        add(new TablePanel(model), BorderLayout.NORTH);
-        add(new DetailsPanel(model), BorderLayout.WEST);
-        add(new QueryPanel(model), BorderLayout.SOUTH);
+        tablePanel = new TablePanel(model);
+        add(this.tablePanel, BorderLayout.NORTH);
+        detailsPanel = new DetailsPanel(model);
+        add(this.detailsPanel, BorderLayout.WEST);
+        queryPanel = new QueryPanel(model);
+        add(this.queryPanel, BorderLayout.SOUTH);
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
     }
-    public void menuBar(){
+
+    public void menuBar() {
         JMenuBar bar = new JMenuBar();
         JMenu menu = new JMenu("File");
         JMenuItem export = new JMenuItem("Export");
@@ -40,7 +48,4 @@ public class MainFrame extends JFrame {
         setJMenuBar(bar);
     }
 
-    public void setTable(JTable jTable) {
-        this.jTable = jTable;
-    }
 }
