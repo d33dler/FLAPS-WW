@@ -44,7 +44,7 @@ public class QueryPanel extends JPanel implements UpdateInterface {
 
     public void addButton() {
         JButton submit = new JButton(new CustomQueryAction(model, "Submit", this.customQuery));
-        add(submit,BorderLayout.WEST);
+        add(submit,BorderLayout.EAST);
         submit.setSize(20,10);
     }
 
