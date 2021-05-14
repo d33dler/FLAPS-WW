@@ -102,88 +102,6 @@ public class DataManager implements AutoCloseable {
     }
 
     /**
-     * Fetches a single entity by their identifying attribute.
-     *
-     * @param entityClass The class of the entity to fetch.
-     * @param id          The id of the entity.
-     * @param sql         The SQL query. This <strong>must</strong> have exactly one
-     *                    placeholder parameter, which is used to identify a single
-     *                    entity by its primary key.
-     * @param <T>         The entity type.
-     * @return An optional container that will contain the found entity, or it
-     * will be empty if none was found.
-     */
-    public <T> Optional<T> findById(Class<T> entityClass, Object id, String sql) {
-        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
-            stmt.setObject(1, id);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                return Optional.of(FetchUtils.extractEntity(entityClass, rs));
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return Optional.empty();
-    }
-
-    /**
-     * Fetches a list of entities of the given class.
-     *
-     * @param entityClass The class of entities to fetch.
-     * @param sql         The SQL string to use as a query. This query should take no
-     *                    parameters, and should produce one row for each entity in the
-     *                    system, thus no duplicate rows for groupings.
-     * @param <T>         The type of entity that is fetched.
-     * @return A list of entities.
-     */
-    public <T> List<T> findAll(Class<T> entityClass, String sql) {
-        try (Statement stmt = this.connection.createStatement()) {
-            ResultSet rs = stmt.executeQuery(sql);
-            List<T> entities = new ArrayList<>();
-            while (rs.next()) {
-                entities.add(FetchUtils.extractEntity(entityClass, rs));
-            }
-            return entities;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
-    }
-
-    /**
-     * Fetches a list of entities of the given class, which match a given search
-     * query string. It is up to the SQL script to determine how to use the
-     * provided search query parameter.
-     *
-     * @param entityClass The class of entities to fetch.
-     * @param searchQuery A string to supply to the query for searching. Note
-     *                    that the string is supplied as-is to the query, so for
-     *                    things like wildcard support in a <code>LIKE</code>
-     *                    clause, please ensure that you add the necessary "%"
-     *                    before passing the string to this method.
-     * @param sql         The SQL string to use as a query. The query should take a
-     *                    single string parameter to use to filter results. It is up to
-     *                    the query to decide how to do filtering, but using a pattern
-     *                    such as <code>WHERE name LIKE ?;</code> works in most cases.
-     * @param <T>         The type of entity that is fetched.
-     * @return A list of entities.
-     */
-    public <T> List<T> searchAll(Class<T> entityClass, String searchQuery, String sql) {
-        try (PreparedStatement stmt = this.connection.prepareStatement(sql)) {
-            stmt.setString(1, searchQuery);
-            ResultSet rs = stmt.executeQuery();
-            List<T> entities = new ArrayList<>();
-            while (rs.next()) {
-                entities.add(FetchUtils.extractEntity(entityClass, rs));
-            }
-            return entities;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return List.of();
-        }
-    }
-
-    /**
      * Executes an update SQL script (INSERT, UPDATE, DELETE) on the database.
      *
      * @param sql The script to run.
@@ -194,7 +112,6 @@ public class DataManager implements AutoCloseable {
             Statement stmt = this.connection.createStatement();
             return stmt.executeUpdate(sql);
         } catch (SQLException e) {
-            e.printStackTrace();
             return 0;
         }
     }

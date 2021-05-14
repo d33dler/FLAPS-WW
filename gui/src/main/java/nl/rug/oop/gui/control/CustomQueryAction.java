@@ -17,8 +17,6 @@ public class CustomQueryAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        model.setSearchField("");
-        System.out.println("this is not cool: " + queryCommand.getText());
         model.setQueryCommand(queryCommand.getText());
         model.updateDatabase();
     }

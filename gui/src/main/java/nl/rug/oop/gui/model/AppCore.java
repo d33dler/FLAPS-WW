@@ -19,6 +19,7 @@ public class AppCore {
     private DetailsUpdater detailsUpdater = new DetailsUpdater();
     private TableUpdater tableUpdater = new TableUpdater();
     private final String DEFAULT = "%%";
+    private final String Q_ERROR = "Error executing the query";
 
     public AppCore() throws SQLException {
         this.dm = new DataManager();
@@ -29,9 +30,9 @@ public class AppCore {
     }
 
     @SneakyThrows
-    public void setSearchField(String searchField) {
+    public void executeSearchQuery(String searchField) {
         this.searchField = ("%" + searchField + "%");
-        // System.out.println("Search field update: " + searchField);
+        System.out.println("Search field update: " + searchField);
         this.database = new Table(this);
         tableUpdater.fireUpdate(this);
     }
@@ -41,13 +42,20 @@ public class AppCore {
     }
 
     public void updateDatabase() {
-        dm.executeUpdate(queryCommand);
+        int confirm = dm.executeUpdate(queryCommand);
+        confirmUpdate(confirm);
         setQueryCommand(DataManager.SEARCH_NPCS);
-        setSearchField(DEFAULT);
+        executeSearchQuery(DEFAULT);
     }
 
     public void setQueryCommand(String queryCommand) {
         this.queryCommand = queryCommand;
+    }
+
+    public void confirmUpdate(int confirm) {
+        if (confirm == 0) {
+            gui.getQueryPanel().getLog().append("\n" + Q_ERROR);
+        }
     }
 
     public void setGui(MainFrame gui) {

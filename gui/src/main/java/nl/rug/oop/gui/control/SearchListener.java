@@ -3,7 +3,6 @@ package nl.rug.oop.gui.control;
 import lombok.SneakyThrows;
 import nl.rug.oop.gui.model.AppCore;
 
-import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
@@ -19,7 +18,7 @@ public class SearchListener implements DocumentListener {
     private void execUpdate(DocumentEvent event) throws BadLocationException {
         Document search = event.getDocument();
         String query = search.getText(0, search.getLength());
-        model.setSearchField(query);
+        model.executeSearchQuery(query);
     }
 
     @SneakyThrows
