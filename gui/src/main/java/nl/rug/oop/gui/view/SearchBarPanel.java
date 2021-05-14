@@ -3,7 +3,6 @@ import nl.rug.oop.gui.model.AppCore;
 import javax.swing.*;
 import java.awt.*;
 
-
 public class SearchBarPanel extends JTextField {
 
     AppCore model;

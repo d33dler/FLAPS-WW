@@ -7,7 +7,7 @@ public class Table extends DefaultTableModel {
     DefaultTableModel table;
 
     public Table(AppCore model) {
-        this.rset = model.getDm().getResultSet(model, model.getSearchQuery());
+        this.rset = model.getDm().getResultSet(model, model.getQueryCommand());
         this.table = new TableBuilder().buildTable(rset, model);
     }
 

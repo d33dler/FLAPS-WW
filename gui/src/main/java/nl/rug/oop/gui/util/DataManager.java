@@ -255,7 +255,7 @@ public class DataManager implements AutoCloseable {
     @SneakyThrows
     public Vector<String> getColumns(ResultSetMetaData metaData) {
         Vector<String> columnIds = new Vector<>();
-        for (int i = 1; i < metaData.getColumnCount(); i++) {
+        for (int i = 1; i <= metaData.getColumnCount(); i++) {
             columnIds.add(metaData.getColumnName(i));
         }
         return columnIds;
@@ -265,7 +265,7 @@ public class DataManager implements AutoCloseable {
         Vector<Vector<Object>> data = new Vector<>();
         while (rSet.next()) {
             Vector<Object> objData = new Vector<>();
-            for (int i = 1; i < metaData.getColumnCount(); i++) {
+            for (int i = 1; i <= metaData.getColumnCount(); i++) {
                 objData.add(rSet.getObject(i));
             }
             data.add(objData);

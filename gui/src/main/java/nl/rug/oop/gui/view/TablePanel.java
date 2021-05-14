@@ -7,8 +7,6 @@ import nl.rug.oop.gui.model.AppCore;
 import nl.rug.oop.gui.util.UpdateInterface;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 
 @Getter
@@ -50,9 +48,8 @@ public class TablePanel extends JPanel implements UpdateInterface {
     public void addTableSelectionListener() {
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
-                model.setRequestData();
+                model.fetchEntityDetails();
             }
-
         });
     }
 
@@ -63,7 +60,7 @@ public class TablePanel extends JPanel implements UpdateInterface {
     }
 
     public void editTableView(JTable table) {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             table.removeColumn(table.getColumnModel().getColumn(3));
         }
     }

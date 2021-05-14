@@ -15,6 +15,7 @@ import javax.swing.border.Border;
 import javax.xml.crypto.Data;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.nio.file.Path;
 @Getter
 public class ImagePanel extends JPanel implements UpdateInterface {
@@ -44,10 +45,18 @@ public class ImagePanel extends JPanel implements UpdateInterface {
     @SneakyThrows
     @Override
     public void update(AppCore model) {
-        JTable table = model.getGui().getTablePanel().getTable();
-        BufferedImage newImage = ImageIO.read(Path.of("images", (model.getDatabase().getTable().getValueAt(table.getSelectedRow(), 3).toString())).toFile());
-        this.getImage().setIcon((new ImageIcon(newImage.getScaledInstance(200, 190, BufferedImage.SCALE_SMOOTH))));
-        revalidate();
+        BufferedImage newImage;
+        try{
+            JTable table = model.getGui().getTablePanel().getTable();
+            newImage = ImageIO.read(Path.of("images", (model.getDatabase().getTable().getValueAt(table.getSelectedRow(), 3).toString())).toFile());
+            this.getImage().setIcon((new ImageIcon(newImage.getScaledInstance(200, 190, BufferedImage.SCALE_SMOOTH))));
+            revalidate();
+        } catch (NullPointerException e) {
+            newImage = ImageIO.read(Path.of("images", ("notfound.gif")).toFile());
+            Icon notFound = new ImageIcon(newImage.getScaledInstance(200,190, BufferedImage.SCALE_SMOOTH));
+            this.getImage().setIcon(notFound);
+            System.out.println("No image found");
+        }
     }
 
     public void setImage(JLabel image) {
