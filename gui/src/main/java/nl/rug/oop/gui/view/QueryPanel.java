@@ -8,6 +8,8 @@ import nl.rug.oop.gui.util.UpdateInterface;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.time.format.DateTimeFormatter;
+
 @Getter
 public class QueryPanel extends JPanel implements UpdateInterface {
     AppCore model;
@@ -51,5 +53,13 @@ public class QueryPanel extends JPanel implements UpdateInterface {
     @Override
     public void update(AppCore model) {
        customQuery.setText("");
+    }
+    public void updateLog(AppCore model) {
+        String time = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss"));
+        if (model.getLogQuery() == 0) {
+            getLog().append("\n" + time +": " + model.getQ_ERROR());
+        } else {
+            getLog().append("\n" + time +": " + model.getQ_POS());
+        }
     }
 }

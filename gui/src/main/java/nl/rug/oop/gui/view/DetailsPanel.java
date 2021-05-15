@@ -1,7 +1,7 @@
 package nl.rug.oop.gui.view;
 
 import nl.rug.oop.gui.model.AppCore;
-import nl.rug.oop.gui.model.Table;
+import nl.rug.oop.gui.model.Database;
 import nl.rug.oop.gui.util.UpdateInterface;
 
 import javax.swing.*;
@@ -59,17 +59,17 @@ public class DetailsPanel extends JPanel implements UpdateInterface {
 
     @Override
     public void update(AppCore model) {
-        Table database = model.getDatabase();
+        Database database = model.getDatabase();
         JTable guiTable = model.getGui().getTablePanel().getTable();
         updateDetails(database, guiTable);
         updateDescription(database, guiTable);
         revalidate();
     }
 
-    public void updateDescription(Table database, JTable guiTable) {
+    public void updateDescription(Database database, JTable guiTable) {
         descText.setText("Description:\n " + database.getTable().getValueAt(guiTable.getSelectedRow(), 5).toString());
     }
-    public void updateDetails(Table database, JTable guiTable) {
+    public void updateDetails(Database database, JTable guiTable) {
         id.setText("Id: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 0).toString());
         created.setText("Created: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 1).toString());
         name.setText("Name: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 2).toString());

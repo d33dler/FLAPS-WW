@@ -181,11 +181,11 @@ public class DataManager implements AutoCloseable {
     public Vector<Vector<Object>> getData(ResultSet rSet, ResultSetMetaData metaData) {
         Vector<Vector<Object>> data = new Vector<>();
         while (rSet.next()) {
-            Vector<Object> objData = new Vector<>();
+            Vector<Object> entityObj = new Vector<>();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                objData.add(rSet.getObject(i));
+                entityObj.add(rSet.getObject(i));
             }
-            data.add(objData);
+            data.add(entityObj);
         }
         return data;
     }
