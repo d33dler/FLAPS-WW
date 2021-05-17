@@ -13,10 +13,10 @@ import java.time.format.DateTimeFormatter;
 @Getter
 public class QueryPanel extends JPanel implements UpdateInterface {
     AppCore model;
-
-
     JTextArea customQuery;
     JTextArea log;
+    private final String Q_ERROR = "Error executing the query";
+    private final String Q_POS = "Your query was executed successfully.";
 
     public QueryPanel(AppCore model) {
         this.model = model;
@@ -57,9 +57,9 @@ public class QueryPanel extends JPanel implements UpdateInterface {
     public void updateLog(AppCore model) {
         String time = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss"));
         if (model.getLogQuery() == 0) {
-            getLog().append("\n" + time +": " + model.getQ_ERROR());
+            getLog().append("\n" + time +": " + Q_ERROR);
         } else {
-            getLog().append("\n" + time +": " + model.getQ_POS());
+            getLog().append("\n" + time +": " + Q_POS);
         }
     }
 }

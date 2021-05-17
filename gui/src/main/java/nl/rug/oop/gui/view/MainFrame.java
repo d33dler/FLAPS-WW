@@ -2,6 +2,7 @@ package nl.rug.oop.gui.view;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import nl.rug.oop.gui.control.MenuAction;
 import nl.rug.oop.gui.model.AppCore;
 
 import javax.swing.*;
@@ -9,10 +10,12 @@ import java.awt.*;
 
 @Getter
 public class MainFrame extends JFrame {
-    AppCore model;
-    TablePanel tablePanel;
-    DetailsPanel detailsPanel;
-    QueryPanel queryPanel;
+    private AppCore model;
+    private TablePanel tablePanel;
+    private DetailsPanel detailsPanel;
+    private QueryPanel queryPanel;
+    private FileChooser fileChooser;
+
 
     public MainFrame(AppCore model) {
         super("Fantasy Database");
@@ -26,26 +29,35 @@ public class MainFrame extends JFrame {
         setPreferredSize(new Dimension(500, 920));
         setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        menuBar();
-        tablePanel = new TablePanel(model);
-        add(this.tablePanel, BorderLayout.NORTH);
-        detailsPanel = new DetailsPanel(model);
-        add(this.detailsPanel, BorderLayout.WEST);
-        queryPanel = new QueryPanel(model);
-        add(this.queryPanel, BorderLayout.SOUTH);
+        addFileChooser();
+        addMenuBar();
+        addMainPanels();
         pack();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
     }
 
-    public void menuBar() {
+    public void addMainPanels() {
+        tablePanel = new TablePanel(model);
+        add(this.tablePanel, BorderLayout.NORTH);
+        detailsPanel = new DetailsPanel(model);
+        add(this.detailsPanel, BorderLayout.WEST);
+        queryPanel = new QueryPanel(model);
+        add(this.queryPanel, BorderLayout.SOUTH);
+    }
+
+    public void addMenuBar() {
         JMenuBar bar = new JMenuBar();
         JMenu menu = new JMenu("File");
-        JMenuItem export = new JMenuItem("Export");
+        JMenuItem export = new JMenuItem(new MenuAction("Export", this));
         menu.add(export);
         bar.add(menu);
         setJMenuBar(bar);
+    }
+
+    public void addFileChooser() {
+        this.fileChooser = new FileChooser(model, this);
     }
 
 }

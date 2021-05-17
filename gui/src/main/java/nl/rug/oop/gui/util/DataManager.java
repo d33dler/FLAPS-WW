@@ -79,6 +79,7 @@ public class DataManager implements AutoCloseable {
     public static final String SELECT_NPCS = "src/main/resources/sql/select_npcs.sql";
     public static final String SELECT_NPC_TYPES = "src/main/resources/sql/select_npc_types.sql";
     public static final String SEARCH_NPCS = "src/main/resources/sql/search_npcs.sql";
+    public static final String SELECT_DISTINCT_ALL = "src/main/resources/sql/select_npcs_full.sql";
 
     private final Connection connection;
 
@@ -99,6 +100,30 @@ public class DataManager implements AutoCloseable {
      */
     public DataManager(String jdbcUrl) throws SQLException {
         this.connection = DriverManager.getConnection(jdbcUrl);
+    }
+
+    /**
+     * Fetches a list of entities of the given class.
+     *
+     * @param entityClass The class of entities to fetch.
+     * @param sql         The SQL string to use as a query. This query should take no
+     *                    parameters, and should produce one row for each entity in the
+     *                    system, thus no duplicate rows for groupings.
+     * @param <T>         The type of entity that is fetched.
+     * @return A list of entities.
+     */
+    public <T> List<T> findAll(Class<T> entityClass, String sql) {
+        try (Statement stmt = this.connection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            List<T> entities = new ArrayList<>();
+            while (rs.next()) {
+                entities.add(FetchUtils.extractEntity(entityClass, rs));
+            }
+            return entities;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return List.of();
+        }
     }
 
     /**
@@ -127,7 +152,7 @@ public class DataManager implements AutoCloseable {
     }
 
     @SneakyThrows
-    private String getQuery(String path) {
+    public String getQuery(String path) {
         try {
             InputStream iStream = new FileInputStream(path);
             ByteArrayOutputStream query = new ByteArrayOutputStream();
@@ -142,6 +167,7 @@ public class DataManager implements AutoCloseable {
         }
         return null;
     }
+
     private String getQueryPath(String sql) {
         File queryFile = new File(sql);
         File queryExtract = queryFile.getAbsoluteFile();
@@ -153,7 +179,7 @@ public class DataManager implements AutoCloseable {
         try {
             String query = getQuery(getQueryPath(sql));
             PreparedStatement stmt = this.connection.prepareStatement(query);
-            stmt = insertQuery(model,stmt);
+            stmt = insertQuery(model, stmt);
             return stmt.executeQuery();
         } catch (SQLException e) {
             System.out.println("Error executing the query.");
@@ -162,13 +188,14 @@ public class DataManager implements AutoCloseable {
     }
 
     @SneakyThrows
-    public PreparedStatement  insertQuery(AppCore model , PreparedStatement stmt){
+    public PreparedStatement insertQuery(AppCore model, PreparedStatement stmt) {
         String query = model.getSearchField();
-        if (query!=null){
-            stmt.setString(1,query);
+        if (query != null && !model.isExport()) {
+            stmt.setString(1, query);
         }
-       return stmt;
+        return stmt;
     }
+
     @SneakyThrows
     public Vector<String> getColumns(ResultSetMetaData metaData) {
         Vector<String> columnIds = new Vector<>();
@@ -177,6 +204,7 @@ public class DataManager implements AutoCloseable {
         }
         return columnIds;
     }
+
     @SneakyThrows
     public Vector<Vector<Object>> getData(ResultSet rSet, ResultSetMetaData metaData) {
         Vector<Vector<Object>> data = new Vector<>();

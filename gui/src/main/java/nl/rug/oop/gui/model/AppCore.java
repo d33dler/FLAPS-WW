@@ -2,9 +2,9 @@ package nl.rug.oop.gui.model;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import nl.rug.oop.gui.control.DatabaseExport;
 import nl.rug.oop.gui.util.DataManager;
 import nl.rug.oop.gui.util.DetailsUpdater;
-import nl.rug.oop.gui.util.LogUpdater;
 import nl.rug.oop.gui.util.TableUpdater;
 import nl.rug.oop.gui.view.MainFrame;
 
@@ -19,24 +19,26 @@ public class AppCore {
     private MainFrame gui;
     private final DetailsUpdater detailsUpdater = new DetailsUpdater();
     private final TableUpdater tableUpdater = new TableUpdater();
-    private final LogUpdater logUpdater = new LogUpdater();
     private int logQuery;
 
+
+    private boolean export;
     private final String DEFAULT = "%%";
-    private final String Q_ERROR = "Error executing the query";
-    private final String Q_POS = "Your query was executed successfully.";
+    private final DatabaseExport databaseExport;
+
     public AppCore() throws SQLException {
         this.dm = new DataManager();
-        this.searchField = "%%";
+        this.searchField = DEFAULT;
         this.queryCommand = DataManager.SEARCH_NPCS;
         this.database = new Database(this);
         this.gui = new MainFrame(this);
+        this.databaseExport = new DatabaseExport(this);
+        this.export = false;
     }
 
     @SneakyThrows
     public void executeSearchQuery(String searchField) {
         this.searchField = ("%" + searchField + "%");
-        System.out.println("Search field update: " + searchField);
         this.database = new Database(this);
         tableUpdater.fireUpdate(this);
     }
@@ -63,4 +65,9 @@ public class AppCore {
     public void setGui(MainFrame gui) {
         this.gui = gui;
     }
+
+    public void setExport(boolean export) {
+        this.export = export;
+    }
+
 }
