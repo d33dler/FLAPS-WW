@@ -1,10 +1,6 @@
 package nl.rug.oop.gui.util;
-
 import lombok.SneakyThrows;
-import nl.rug.oop.gui.model.AppCore;
-
 import java.lang.reflect.Field;
-import java.sql.ResultSet;
 import java.util.Arrays;
 import java.util.List;
 

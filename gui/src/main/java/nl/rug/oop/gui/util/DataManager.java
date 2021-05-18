@@ -11,7 +11,6 @@ import java.util.Vector;
 import lombok.SneakyThrows;
 import nl.rug.oop.gui.model.AppCore;
 
-import static java.nio.file.Files.lines;
 
 /**
  * This class is responsible for interacting with the database.
@@ -70,12 +69,9 @@ import static java.nio.file.Files.lines;
  * @author Andrew Lalis
  */
 public class DataManager implements AutoCloseable {
-    private static final String dbUrl = "jdbc:sqlite:npcs.sqlite";
 
-    // The following constants are defined for convenience.
-    public static final String SELECT_NPC = "src/main/resources/sql/select_npc.sql";
-    public static final String SELECT_NPCS = "src/main/resources/sql/select_npcs.sql";
-    public static final String SELECT_NPC_TYPES = "src/main/resources/sql/select_npc_types.sql";
+    private static final String dbUrl = "jdbc:sqlite:npcs.sqlite";
+    private AppCore model;
     public static final String SEARCH_NPCS = "src/main/resources/sql/search_npcs.sql";
     public static final String SELECT_DISTINCT_ALL = "src/main/resources/sql/select_npcs_full.sql";
 
@@ -86,8 +82,9 @@ public class DataManager implements AutoCloseable {
      *
      * @throws SQLException If the connection could not be initialized.
      */
-    public DataManager() throws SQLException {
+    public DataManager(AppCore model) throws SQLException {
         this(dbUrl);
+        this.model = model;
     }
 
     /**
@@ -115,7 +112,7 @@ public class DataManager implements AutoCloseable {
             ResultSet rs = stmt.executeQuery(sql);
             List<T> entities = new ArrayList<>();
             while (rs.next()) {
-                entities.add(FetchUtils.extractEntity(entityClass, rs));
+                entities.add(FetchUtils.extractEntity(entityClass, rs, model));
             }
             return entities;
         } catch (Exception e) {

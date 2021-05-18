@@ -14,7 +14,7 @@ import java.awt.event.ActionEvent;
 public class MenuAction extends AbstractAction {
 
     private final MainFrame mainFrame;
-    private FileChooser fileChooser;
+    private final FileChooser fileChooser;
 
     /**
      * Creates a new menu action
@@ -35,7 +35,7 @@ public class MenuAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        int export =  fileChooser.getFileExchange().showSaveDialog(mainFrame);;
+        int export =  fileChooser.getFileExchange().showSaveDialog(mainFrame);
         if (export == JFileChooser.APPROVE_OPTION) {
             DatabaseExport databaseExport = mainFrame.getModel().getDatabaseExport();
             databaseExport.exportFile(mainFrame.getModel(), fileChooser.getFileExchange());

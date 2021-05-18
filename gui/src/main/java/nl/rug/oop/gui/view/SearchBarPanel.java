@@ -4,17 +4,12 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SearchBarPanel extends JTextField {
-
     AppCore model;
     JTextField txtField = new JTextField("", 40);
+
     public SearchBarPanel(AppCore model) {
         this.model = model;
         setPreferredSize(new Dimension(300, 25));
-        addTextField(model);
-    }
-
-    private void addTextField(AppCore model) {
         add(txtField);
     }
-
 }

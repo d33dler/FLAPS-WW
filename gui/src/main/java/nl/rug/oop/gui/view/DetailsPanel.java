@@ -21,7 +21,7 @@ public class DetailsPanel extends JPanel implements UpdateInterface {
     public void init() {
 
         this.setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(500, 400));
+        setPreferredSize(new Dimension(495, 350));
         add(new ImagePanel(model), BorderLayout.WEST);
         setDetailsData();
         setDetailsDescription();
@@ -47,12 +47,13 @@ public class DetailsPanel extends JPanel implements UpdateInterface {
 
     public void setDetailsDescription() {
         JPanel descriptionData = new JPanel();
-        descriptionData.setPreferredSize(new Dimension(500, 150));
+        descriptionData.setPreferredSize(new Dimension(485, 100));
         descriptionData.setLayout(new BoxLayout(descriptionData, BoxLayout.PAGE_AXIS));
         this.descText = new JTextArea("Description:\n ", 1, 1);
         this.descText.setEditable(false);
         this.descText.setWrapStyleWord(true);
         this.descText.setLineWrap(true);
+        this.descText.setBorder(BorderFactory.createCompoundBorder());
         descriptionData.add(new JScrollPane(descText));
         add(descriptionData, BorderLayout.SOUTH);
     }

@@ -13,9 +13,4 @@ public class Database extends DefaultTableModel {
         this.rset = model.getDm().getResultSet(model, model.getQueryCommand());
         this.table = new TableBuilder().buildTable(rset, model);
     }
-
-    public void setRset(ResultSet rset) {
-        this.rset = rset;
-    }
-
 }

@@ -26,7 +26,7 @@ public class MainFrame extends JFrame {
     @SneakyThrows
     public void init() {
         setFocusTraversalPolicy(null);
-        setPreferredSize(new Dimension(500, 920));
+        setPreferredSize(new Dimension(500, 950));
         setLayout(new BorderLayout());
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         addFileChooser();

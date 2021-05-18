@@ -39,7 +39,7 @@ public class TablePanel extends JPanel implements UpdateInterface {
         };
         table.setFillsViewportHeight(true);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setPreferredScrollableViewportSize(new Dimension(470, 250));
+        table.setPreferredScrollableViewportSize(new Dimension(470, 240));
         addTableSelectionListener();
         editTableView(table);
         add(new JScrollPane(table), BorderLayout.CENTER);

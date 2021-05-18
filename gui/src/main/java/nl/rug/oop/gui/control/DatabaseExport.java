@@ -1,11 +1,8 @@
 package nl.rug.oop.gui.control;
-
 import nl.rug.oop.gui.model.AppCore;
 import nl.rug.oop.gui.model.NpcEntity;
 import nl.rug.oop.gui.util.DataManager;
 import nl.rug.oop.gui.util.JsonConverter;
-import nl.rug.oop.gui.view.FileChooser;
-
 import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -15,7 +12,7 @@ public class DatabaseExport {
     File exportDir;
     JsonConverter jsonConverter;
 
-    public DatabaseExport(AppCore model) {
+    public DatabaseExport() {
         this.exportDir = new File("export");
         this.exportDir.mkdirs();
     }

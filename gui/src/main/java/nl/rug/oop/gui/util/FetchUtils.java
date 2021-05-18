@@ -1,5 +1,6 @@
 package nl.rug.oop.gui.util;
 
+import nl.rug.oop.gui.model.AppCore;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.lang.reflect.Field;
@@ -25,7 +26,6 @@ public class FetchUtils {
      * the standard ISO8601 formatting rules.
      */
     public static final Map<Class<?>, Function<Object, Object>> customDeserializers = new HashMap<>();
-
     static {
         customDeserializers.put(LocalDateTime.class, o -> LocalDateTime.parse((String) o, DateTimeFormatter.ISO_LOCAL_DATE_TIME));
         customDeserializers.put(boolean.class, o -> ((int) o) == 1);
@@ -35,31 +35,33 @@ public class FetchUtils {
     /**
      * Extracts an entity from the given result set.
      *
+     * @param <T>         The entity's type.
      * @param entityClass The class of entity to extract.
      * @param rs          The SQL result set to extract from.
-     * @param <T>         The entity's type.
+     * @param model
      * @return The entity that was extracted, or <code>null</code> if the entity
      * could not be properly extracted.
      * @throws Exception If any sort of reflection or SQL error occurs.
      */
-    public static <T> T extractEntity(Class<T> entityClass, ResultSet rs) throws Exception {
-        return extractEntity(entityClass, rs, null);
+    public static <T> T extractEntity(Class<T> entityClass, ResultSet rs, AppCore model) throws Exception {
+        return extractEntity(entityClass, rs, null, model);
     }
 
     /**
-     * Recursive implementation of {@link FetchUtils#extractEntity(Class, ResultSet)}.
+     * Recursive implementation of {@link FetchUtils#extractEntity(Class, ResultSet, AppCore)}.
      * Uses a column prefix to fetch nested entity data.
      *
+     * @param <T>          The entity's type.
      * @param entityClass  The class of the entity to extract.
      * @param rs           The SQL result set to extract from.
      * @param columnPrefix The prefix to use for all column names when fetching
      *                     values for all of the entity's fields.
-     * @param <T>          The entity's type.
+     * @param model
      * @return The entity that was extracted, or <code>null</code> if the entity
      * could not be properly extracted.
      * @throws Exception If any sort of reflection or SQL error occurs.
      */
-    private static <T> T extractEntity(Class<T> entityClass, ResultSet rs, String columnPrefix) throws Exception {
+    private static <T> T extractEntity(Class<T> entityClass, ResultSet rs, String columnPrefix, AppCore model) throws Exception {
         T entity = entityClass.getConstructor().newInstance();
         boolean allFieldsFound = true;
         boolean allFieldsMissing = true;
@@ -70,7 +72,7 @@ public class FetchUtils {
                 if (columnPrefix != null && !columnPrefix.isBlank()) {
                     expectedColumnName = columnPrefix + "_" + expectedColumnName;
                 }
-                setFieldValue(field, expectedColumnName, rs, entity);
+                setFieldValue(field, expectedColumnName, rs, entity, model);
                 allFieldsMissing = false;
             } catch (MissingFieldValueException e) {
                 allFieldsFound = false;
@@ -80,7 +82,7 @@ public class FetchUtils {
             return null;
         }
         if (!allFieldsFound) {
-            System.err.println("Not all fields were found while extracting entity: " + entityClass.getName());
+            model.reportLogCustomError("Notice: Not all fields were found while extracting entity: " + entityClass.getSimpleName());
         }
         return entity;
     }
@@ -94,10 +96,11 @@ public class FetchUtils {
      *                           value.
      * @param rs                 The result set.
      * @param entity             The entity that the field's value should be set on.
+     * @param model
      * @throws MissingFieldValueException If value for the field could not be
      *                                    found.
      */
-    private static void setFieldValue(Field field, String expectedColumnName, ResultSet rs, Object entity) throws MissingFieldValueException {
+    private static void setFieldValue(Field field, String expectedColumnName, ResultSet rs, Object entity, AppCore model) throws MissingFieldValueException {
         try {
             if (isFieldPrimitiveDeserializable(field)) {
                 Object value = getPrimitiveFieldValue(field, expectedColumnName, rs);
@@ -106,7 +109,7 @@ public class FetchUtils {
                 }
                 field.set(entity, value);
             } else {
-                field.set(entity, extractEntity(field.getType(), rs, expectedColumnName));
+                field.set(entity, extractEntity(field.getType(), rs, expectedColumnName,model ));
             }
         } catch (Exception e) {
             throw new MissingFieldValueException(field);

@@ -26,12 +26,12 @@ public class AppCore {
     private final DatabaseExport databaseExport;
 
     public AppCore() throws SQLException {
-        this.dm = new DataManager();
+        this.dm = new DataManager(this);
         this.searchField = DEFAULT;
         this.queryCommand = DataManager.SEARCH_NPCS;
         this.database = new Database(this);
         this.gui = new MainFrame(this);
-        this.databaseExport = new DatabaseExport(this);
+        this.databaseExport = new DatabaseExport();
         this.exportQuery = false;
         this.confirmExport = false;
     }
@@ -73,5 +73,8 @@ public class AppCore {
     public void setConfirmExport(boolean confirmExport) {
         this.confirmExport = confirmExport;
         gui.getQueryPanel().exportUpdateLog(this);
+    }
+    public void reportLogCustomError(String error) {
+        gui.getQueryPanel().entityExtractionError(error);
     }
 }
