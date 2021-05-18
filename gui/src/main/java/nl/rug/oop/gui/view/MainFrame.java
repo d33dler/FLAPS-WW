@@ -50,8 +50,10 @@ public class MainFrame extends JFrame {
     public void addMenuBar() {
         JMenuBar bar = new JMenuBar();
         JMenu menu = new JMenu("File");
-        JMenuItem export = new JMenuItem(new MenuAction("Export", this));
-        menu.add(export);
+        JMenu fileFormat = new JMenu("Export to...");
+        JMenuItem json = new JMenuItem(new MenuAction("JSON", this));
+        fileFormat.add(json);
+        menu.add(fileFormat);
         bar.add(menu);
         setJMenuBar(bar);
     }
