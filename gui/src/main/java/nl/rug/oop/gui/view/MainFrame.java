@@ -57,7 +57,7 @@ public class MainFrame extends JFrame {
     }
 
     public void addFileChooser() {
-        this.fileChooser = new FileChooser(model, this);
+        this.fileChooser = new FileChooser();
     }
 
 }

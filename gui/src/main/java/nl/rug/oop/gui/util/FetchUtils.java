@@ -1,5 +1,7 @@
 package nl.rug.oop.gui.util;
+
 import org.apache.commons.lang3.ClassUtils;
+
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -57,38 +59,31 @@ public class FetchUtils {
      * could not be properly extracted.
      * @throws Exception If any sort of reflection or SQL error occurs.
      */
-    protected static <T> T extractEntity(Class<T> entityClass, ResultSet rs, String columnPrefix) throws Exception {
+    private static <T> T extractEntity(Class<T> entityClass, ResultSet rs, String columnPrefix) throws Exception {
         T entity = entityClass.getConstructor().newInstance();
+        boolean allFieldsFound = true;
         boolean allFieldsMissing = true;
         for (var field : getAllFields(entityClass)) {
-            boolean confirmField = extractRefactor(field, rs, entity, columnPrefix, 1);
-            if (confirmField) {
+            try {
+                field.setAccessible(true);
+                String expectedColumnName = toSnakeCase(field.getName());
+                if (columnPrefix != null && !columnPrefix.isBlank()) {
+                    expectedColumnName = columnPrefix + "_" + expectedColumnName;
+                }
+                setFieldValue(field, expectedColumnName, rs, entity);
                 allFieldsMissing = false;
+            } catch (MissingFieldValueException e) {
+                allFieldsFound = false;
             }
         }
         if (allFieldsMissing) {
             return null;
         }
+        if (!allFieldsFound) {
+            System.err.println("Not all fields were found while extracting entity: " + entityClass.getName());
+        }
         return entity;
     }
-
-    protected static boolean extractRefactor(Field field, ResultSet rs, Object entity, String columnPrefix, int option) {
-        try {
-            field.setAccessible(true);
-            String expectedColumnName = toSnakeCase(field.getName());
-            if (columnPrefix != null && !columnPrefix.isBlank()) {
-                expectedColumnName = columnPrefix + "_" + expectedColumnName;
-            }
-            if (option == 1) {
-                setFieldValue(field, expectedColumnName, rs, entity);
-            }
-            return true;
-        } catch (MissingFieldValueException e) {
-            System.err.println("A field was not extracted successfully for: " + entity.getClass().getName());
-            return false;
-        }
-    }
-
 
     /**
      * Sets a field's value for a particular entity, taking into consideration

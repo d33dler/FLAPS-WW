@@ -35,10 +35,10 @@ public class MenuAction extends AbstractAction {
      */
     @Override
     public void actionPerformed(ActionEvent e) {
-        int export = fileChooser.showSaveDialog(mainFrame);
+        int export =  fileChooser.getFileExchange().showSaveDialog(mainFrame);;
         if (export == JFileChooser.APPROVE_OPTION) {
             DatabaseExport databaseExport = mainFrame.getModel().getDatabaseExport();
-            databaseExport.exportFile(mainFrame.getModel(), fileChooser);
+            databaseExport.exportFile(mainFrame.getModel(), fileChooser.getFileExchange());
         }
     }
 }

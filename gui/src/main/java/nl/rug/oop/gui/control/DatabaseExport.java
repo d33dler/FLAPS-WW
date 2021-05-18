@@ -6,6 +6,7 @@ import nl.rug.oop.gui.util.DataManager;
 import nl.rug.oop.gui.util.JsonConverter;
 import nl.rug.oop.gui.view.FileChooser;
 
+import javax.swing.*;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -19,7 +20,7 @@ public class DatabaseExport {
         this.exportDir.mkdirs();
     }
 
-    public void exportFile(AppCore model, FileChooser fileChooser) {
+    public void exportFile(AppCore model, JFileChooser fileChooser) {
         String dataJson = initExport(model);
         String outputPath = fileChooser.getCurrentDirectory() + "/" + fileChooser.getSelectedFile().getName();
         try {
@@ -40,7 +41,7 @@ public class DatabaseExport {
 
     public String initExport(AppCore model) {
         model.setExportQuery(true);
-        this.jsonConverter = new JsonConverter(model);
+        this.jsonConverter = new JsonConverter();
         List<NpcEntity> entities = getExportData(model);
         return jsonConverter.convertSyntax(entities);
     }
