@@ -6,7 +6,6 @@ import nl.rug.oop.gui.model.AppCore;
 import nl.rug.oop.gui.util.UpdateInterface;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.time.format.DateTimeFormatter;
 
@@ -15,9 +14,10 @@ public class QueryPanel extends JPanel implements UpdateInterface {
     AppCore model;
     JTextArea customQuery;
     JTextArea log;
-    private final String Q_ERROR = "Error executing the query";
+    private final String Q_ERROR = "Encountered an error while executing the query. Aborting.";
     private final String Q_POS = "Your query was executed successfully.";
-
+    private final String EXPORT_ERROR = "Encountered an error while exporting database files. Aborting.";
+    private final String EXPORT_POS = "Database data was exported successfully";
     public QueryPanel(AppCore model) {
         this.model = model;
         model.getTableUpdater().addListener(this);
@@ -55,11 +55,22 @@ public class QueryPanel extends JPanel implements UpdateInterface {
        customQuery.setText("");
     }
     public void updateLog(AppCore model) {
-        String time = java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss"));
+        String time = getTimeNow();
         if (model.getLogQuery() == 0) {
             getLog().append("\n" + time +": " + Q_ERROR);
         } else {
             getLog().append("\n" + time +": " + Q_POS);
         }
+    }
+    public void exportUpdateLog(AppCore model) {
+        String time = getTimeNow();
+        if (!model.isConfirmExport()) {
+            getLog().append("\n" + time +": " + EXPORT_ERROR);
+        } else {
+            getLog().append("\n" + time +": " + EXPORT_POS);
+        }
+    }
+    public String getTimeNow() {
+        return java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss"));
     }
 }

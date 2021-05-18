@@ -5,10 +5,8 @@ import java.nio.charset.StandardCharsets;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import java.util.Vector;
-import java.util.stream.Collectors;
 
 import lombok.SneakyThrows;
 import nl.rug.oop.gui.model.AppCore;
@@ -190,7 +188,7 @@ public class DataManager implements AutoCloseable {
     @SneakyThrows
     public PreparedStatement insertQuery(AppCore model, PreparedStatement stmt) {
         String query = model.getSearchField();
-        if (query != null && !model.isExport()) {
+        if (query != null && !model.isExportQuery()) {
             stmt.setString(1, query);
         }
         return stmt;

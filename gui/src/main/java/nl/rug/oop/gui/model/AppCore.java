@@ -20,9 +20,8 @@ public class AppCore {
     private final DetailsUpdater detailsUpdater = new DetailsUpdater();
     private final TableUpdater tableUpdater = new TableUpdater();
     private int logQuery;
-
-
-    private boolean export;
+    private boolean exportQuery;
+    private boolean confirmExport;
     private final String DEFAULT = "%%";
     private final DatabaseExport databaseExport;
 
@@ -33,7 +32,8 @@ public class AppCore {
         this.database = new Database(this);
         this.gui = new MainFrame(this);
         this.databaseExport = new DatabaseExport(this);
-        this.export = false;
+        this.exportQuery = false;
+        this.confirmExport = false;
     }
 
     @SneakyThrows
@@ -66,8 +66,12 @@ public class AppCore {
         this.gui = gui;
     }
 
-    public void setExport(boolean export) {
-        this.export = export;
+    public void setExportQuery(boolean exportQuery) {
+        this.exportQuery = exportQuery;
     }
 
+    public void setConfirmExport(boolean confirmExport) {
+        this.confirmExport = confirmExport;
+        gui.getQueryPanel().exportUpdateLog(this);
+    }
 }

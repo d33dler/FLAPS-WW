@@ -20,32 +20,37 @@ public class DatabaseExport {
     }
 
     public void exportFile(AppCore model, FileChooser fileChooser) {
-        model.setExport(true);
+        String dataJson = initExport(model);
+        String outputPath = fileChooser.getCurrentDirectory() + "/" + fileChooser.getSelectedFile().getName();
+        try {
+            FileOutputStream fStream =
+                    new FileOutputStream(outputPath);
+            ByteArrayOutputStream data = new ByteArrayOutputStream();
+            byte[] byteData = dataJson.getBytes(StandardCharsets.UTF_8);
+            data.write(byteData);
+            data.writeTo(fStream);
+            data.flush();
+            data.close();
+            fStream.close();
+            model.setConfirmExport(true);
+        } catch (Exception e) {
+            model.setConfirmExport(false);
+        }
+    }
+
+    public String initExport(AppCore model) {
+        model.setExportQuery(true);
         this.jsonConverter = new JsonConverter(model);
         List<NpcEntity> entities = getExportData(model);
-        String dataJson = jsonConverter.convertSyntax(entities);
-        try {
-            FileOutputStream fstream = new FileOutputStream("export/" + fileChooser.getSelectedFile().getName());
-            ByteArrayOutputStream store = new ByteArrayOutputStream();
-            byte[] data = dataJson.getBytes(StandardCharsets.UTF_8);
-            store.write(data);
-            store.writeTo(fstream);
-            store.flush();
-            store.close();
-            fstream.close();
-            System.out.println("Data exported succesfully");
-        } catch (Exception e) {
-            System.out.println("Error exporting data");
-        }
+        return jsonConverter.convertSyntax(entities);
     }
 
     public List<NpcEntity> getExportData(AppCore model) {
         DataManager dataManager = model.getDm();
         String query = dataManager.getQuery(DataManager.SELECT_DISTINCT_ALL);
         List<NpcEntity> list = dataManager.findAll(NpcEntity.class, query);
-        model.setExport(false);
+        model.setExportQuery(false);
         return list;
     }
-
 
 }
