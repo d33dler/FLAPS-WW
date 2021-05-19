@@ -146,6 +146,14 @@ public class DataManager implements AutoCloseable {
         this.connection.close();
     }
 
+    /**
+     *
+     * @param path - of the SQL query file
+     * @return - query in String value type
+     * getQuery() : reads the file data and writes it to a byteArray buffer,
+     * afterwards, parsing it to String type with UTF_8 standard.
+     */
+
     @SneakyThrows
     public String getQuery(String path) {
         try {
@@ -163,12 +171,22 @@ public class DataManager implements AutoCloseable {
         return null;
     }
 
+    /**
+     *
+     * @param sql - simple path from source dir of the project
+     * @return absolute path of the sql file holding the query.
+     */
     private String getQueryPath(String sql) {
         File queryFile = new File(sql);
         File queryExtract = queryFile.getAbsoluteFile();
         return queryExtract.getAbsolutePath();
     }
 
+    /**
+     *
+     * @param sql - path to the SQL command query file
+     * @return resultSet created from the statement of the supplied SQL query file.
+     */
     @SneakyThrows
     public ResultSet getResultSet(AppCore model, String sql) {
         try {
@@ -182,6 +200,12 @@ public class DataManager implements AutoCloseable {
         }
     }
 
+    /**
+     *
+     * @param stmt - statement to be altered if the query is related to searching
+     *             based on string matching;
+     * @return - prepared statement -> modified/unaltered;
+     */
     @SneakyThrows
     public PreparedStatement insertQuery(AppCore model, PreparedStatement stmt) {
         String query = model.getSearchField();
@@ -191,6 +215,11 @@ public class DataManager implements AutoCloseable {
         return stmt;
     }
 
+    /**
+     *
+     * @param metaData - to obtain column count and column names for the DefaultTableModel
+     * @return columnIds Strings vector list
+     */
     @SneakyThrows
     public Vector<String> getColumns(ResultSetMetaData metaData) {
         Vector<String> columnIds = new Vector<>();
@@ -200,13 +229,16 @@ public class DataManager implements AutoCloseable {
         return columnIds;
     }
 
+    /**
+     * @return all fields data from all entities in the current resultSet.
+     */
     @SneakyThrows
-    public Vector<Vector<Object>> getData(ResultSet rSet, ResultSetMetaData metaData) {
+    public Vector<Vector<Object>> getData(ResultSet resultSet, ResultSetMetaData metaData) {
         Vector<Vector<Object>> data = new Vector<>();
-        while (rSet.next()) {
+        while (resultSet.next()) {
             Vector<Object> entityObj = new Vector<>();
             for (int i = 1; i <= metaData.getColumnCount(); i++) {
-                entityObj.add(rSet.getObject(i));
+                entityObj.add(resultSet.getObject(i));
             }
             data.add(entityObj);
         }

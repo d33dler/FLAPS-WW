@@ -5,6 +5,9 @@ import nl.rug.oop.gui.model.AppCore;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * Overrides the AbstractAction method
+ */
 public class CustomQueryAction extends AbstractAction {
     AppCore model;
     JTextArea queryCommand;
@@ -15,6 +18,12 @@ public class CustomQueryAction extends AbstractAction {
         this.queryCommand = queryCommand;
     }
 
+    /**
+     *
+     * @param actionEvent submitting a custom query
+     *                    actionPerformed() :
+     *                    calls the model to update the remote and local database;
+     */
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         model.setQueryCommand(queryCommand.getText());

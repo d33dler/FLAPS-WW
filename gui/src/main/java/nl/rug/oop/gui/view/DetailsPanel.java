@@ -7,77 +7,126 @@ import nl.rug.oop.gui.util.UpdateInterface;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * DetailsPanel holds two secondary components: Image, Details and Description panel;
+ */
 public class DetailsPanel extends JPanel implements UpdateInterface {
-    AppCore model;
-    JTextArea detailsText, descText;
-    JLabel id, created, name, type, health, attack, defense;
+    private AppCore model;
+    private JTextArea detailsText, descriptionText;
+    private JPanel detailsPanel, descriptionPanel;
 
+    private final static String DESC = " » Description:\n";
+    private final static String DETS = "» Details:\n";
+    private final static String N_A = "Not available!";
+
+    /**
+     * Adds the class to the listener list of the Details updater and inits
+     * the initialization, configuration and inclusion of secondary components;
+     */
     public DetailsPanel(AppCore model) {
         this.model = model;
         model.getDetailsUpdater().addListener(this);
         init();
     }
 
+    /**
+     * init() : sets the border type, adds a new instance of the image panel,
+     * calls methods to initiate secondary component panels;
+     */
     public void init() {
-
         this.setBorder(BorderFactory.createEtchedBorder());
-        setPreferredSize(new Dimension(495, 350));
+        setPreferredSize(new Dimension(515, 350));
         add(new ImagePanel(model), BorderLayout.WEST);
-        setDetailsData();
-        setDetailsDescription();
+        addDetailsPanel();
+        addDescriptionPanel();
         validate();
     }
 
-    public void setDetailsData() {
-        JPanel detailsData = new JPanel();
-        detailsData.setPreferredSize(new Dimension(250, 200));
-        detailsData.setLayout(new BoxLayout(detailsData, BoxLayout.PAGE_AXIS));
-        this.detailsText = new JTextArea("Details:", 1, 1);
-        this.detailsText.setEditable(false);
-        detailsData.add(detailsText);
-        detailsData.add(id = new JLabel());
-        detailsData.add(created = new JLabel());
-        detailsData.add(name = new JLabel());
-        detailsData.add(type = new JLabel());
-        detailsData.add(health = new JLabel());
-        detailsData.add(attack = new JLabel());
-        detailsData.add(defense = new JLabel());
-        add(detailsData, BorderLayout.CENTER);
+    /**
+     * Initiates a JPanel and a JTextArea, sets the layout and configures the
+     * details text area, adding it as a JScrollPane to the panel.
+     */
+    public void addDetailsPanel() {
+        this.detailsPanel = configurePanel(270, 200);
+        this.detailsText = new JTextArea(12, 27);
+        configTextArea(this.detailsText);
+        this.detailsPanel.add(new JScrollPane(detailsText));
+        add(detailsPanel, BorderLayout.EAST);
     }
 
-    public void setDetailsDescription() {
-        JPanel descriptionData = new JPanel();
-        descriptionData.setPreferredSize(new Dimension(485, 100));
-        descriptionData.setLayout(new BoxLayout(descriptionData, BoxLayout.PAGE_AXIS));
-        this.descText = new JTextArea("Description:\n ", 1, 1);
-        this.descText.setEditable(false);
-        this.descText.setWrapStyleWord(true);
-        this.descText.setLineWrap(true);
-        this.descText.setBorder(BorderFactory.createCompoundBorder());
-        descriptionData.add(new JScrollPane(descText));
-        add(descriptionData, BorderLayout.SOUTH);
+    /**
+     * Initiates a JPanel and a JTextArea, sets the layout and configures the
+     * description text area, adding it as a JScrollPane to the panel.
+     */
+    public void addDescriptionPanel() {
+        this.descriptionPanel = configurePanel(500,100);
+        this.descriptionText = new JTextArea(DESC, 1, 1);
+        configTextArea(this.descriptionText);
+        this.descriptionText.setBorder(BorderFactory.createCompoundBorder());
+        this.descriptionPanel.add(new JScrollPane(descriptionText));
+        add(descriptionPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     *
+     * @param area - to undergo configuration
+     */
+    public void configTextArea(JTextArea area) {
+        area.setEditable(false);
+        area.setEnabled(false);
+        area.setDisabledTextColor(Color.LIGHT_GRAY);
+        area.setWrapStyleWord(true);
+        area.setLineWrap(true);
+    }
+
+    /**
+     *
+     * @params width & height of panel
+     * @return initialised panel with BoxLayout
+     */
+    public JPanel configurePanel(int width, int height) {
+        JPanel panel = new JPanel();
+        panel.setPreferredSize(new Dimension(width, height));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.PAGE_AXIS));
+        return panel;
+    }
+
+    /**
+     *
+     * @param model - supplies the database model and JTable component,
+     *              both required to update details and description
+     *              based on the  user's current table selection;
+     */
     @Override
     public void update(AppCore model) {
         Database database = model.getDatabase();
         JTable guiTable = model.getGui().getTablePanel().getTable();
-        updateDetails(database, guiTable);
+        configureDetails(database, guiTable);
         updateDescription(database, guiTable);
         revalidate();
     }
 
     public void updateDescription(Database database, JTable guiTable) {
-        descText.setText("Description:\n " + database.getTable().getValueAt(guiTable.getSelectedRow(), 5).toString());
-    }
-    public void updateDetails(Database database, JTable guiTable) {
-        id.setText("Id: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 0).toString());
-        created.setText("Created: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 1).toString());
-        name.setText("Name: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 2).toString());
-        type.setText("Type: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 4).toString());
-        health.setText("Health: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 6).toString());
-        attack.setText("Attack: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 7).toString());
-        defense.setText("Defense: " +  database.getTable().getValueAt(guiTable.getSelectedRow(), 8).toString());
+        descriptionText.setText(DESC + database.getTable().getValueAt(guiTable.getSelectedRow(), 5).toString());
     }
 
+    /**
+     * Clear previous details and loop through the column data of the current selected entity
+     * append new column data to the text; if data == null -> append "Not available" (N_A)
+     */
+    public void configureDetails(Database database, JTable guiTable) {
+        String detailInfo;
+        this.detailsText.setText(DETS);
+        for (int i = 0; i < database.getTable().getColumnCount(); i++) {
+            if (i != 5) {
+                String columnId = database.getTable().getColumnName(i);
+                try {
+                    detailInfo = database.getTable().getValueAt(guiTable.getSelectedRow(), i).toString();
+                } catch (NullPointerException e) {
+                    detailInfo = N_A;
+                }
+                this.detailsText.append(columnId + " : " + detailInfo + "\n");
+            }
+        }
+    }
 }

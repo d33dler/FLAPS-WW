@@ -30,8 +30,6 @@ public class MenuAction extends AbstractAction {
 
     /**
      * The action that is performed when the user clicks on the item
-     *
-     * @param e
      */
     @Override
     public void actionPerformed(ActionEvent e) {

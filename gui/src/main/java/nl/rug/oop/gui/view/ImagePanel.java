@@ -12,16 +12,25 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.nio.file.Path;
 
+/**
+ * ImagePanel holds no secondary components; only a JLabel is used to represent a picture;
+ */
 @Getter
 public class ImagePanel extends JPanel implements UpdateInterface {
     BufferedImage img;
     JLabel image;
 
+    /**
+     * Constructor adds the class to the listener list for updates from DetailsUpdater
+     */
     public ImagePanel(AppCore model) {
         model.getDetailsUpdater().addListener(this);
         init();
     }
 
+    /**
+     * init() : configures the GridBag layout, default launch picture, preferred size, border;
+     */
     @SneakyThrows
     void init() {
         this.setLayout(new GridBagLayout());
@@ -38,21 +47,22 @@ public class ImagePanel extends JPanel implements UpdateInterface {
         validate();
     }
 
+    /**
+     * @param model - supplies the image location of the currently selected entity row;
+     *              the image is changed and revalidated.
+     */
     @SneakyThrows
     @Override
     public void update(AppCore model) {
         BufferedImage newImage;
+        JTable table = model.getGui().getTablePanel().getTable();
         try {
-            JTable table = model.getGui().getTablePanel().getTable();
             newImage = ImageIO.read(Path.of("images", (model.getDatabase().getTable().getValueAt(table.getSelectedRow(), 3).toString())).toFile());
-            this.getImage().setIcon((new ImageIcon(newImage.getScaledInstance(200, 190, BufferedImage.SCALE_SMOOTH))));
-            revalidate();
         } catch (NullPointerException e) {
             newImage = ImageIO.read(Path.of("images", ("notfound.gif")).toFile());
-            Icon notFound = new ImageIcon(newImage.getScaledInstance(200, 190, BufferedImage.SCALE_SMOOTH));
-            this.getImage().setIcon(notFound);
-            System.out.println("No image found");
         }
+        this.getImage().setIcon(new ImageIcon(newImage.getScaledInstance(200, 190, BufferedImage.SCALE_SMOOTH)));
+        revalidate();
     }
 
 }
