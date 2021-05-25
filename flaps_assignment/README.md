@@ -61,6 +61,8 @@ to get an idea of the units of the different fields.
 
 ## 1 Basic View
 
+Whenever you select an aircraft, there is a `Configure` button. This `Configure` button opens the frame of the aircraft editor. This is where all your work will be done.
+
 An aircraft consists of two important customizable components: fuel areas and cargo areas. Information on the location
 of these areas can be found in the `type` field of the aircraft. The components have an `x` and a `y` coordinate.
 The coordinate system starts at the top center, so `x = 0` indicates the middle of the plane, while `y = 0` indicates the
@@ -74,11 +76,13 @@ You are free to draw them at a fixed size.
 - Start by displaying the blueprint image of the aircraft on the screen.
 
 - Draw on top of the blueprint image an indicator (e.g. a red circle) for each fuel area. The coordinates of the fuel
-  areas are proportional to the aircraft length. This means that a `y` coordinate of `50` and an `x` coordinate of `0` 
+  areas are proportional to the aircraft length. This means that a `y` coordinate of `50` and an `x` coordinate of `0`
   on an aircraft with length `100` means that the point should be drawn in the middle of the image.
-  
-  > Hint: it might be useful to create methods that map from the aircraft coordinate space to the image coordinate space
-  > (and back)
+
+  > Hint: it might be useful to create methods that maps (not to be confused with the data structure `Map`) from the 
+  > aircraft coordinate space to the image coordinate space(and back). From the height of the image (in pixels) and the 
+  > length of the aircraft (in meters), you can get a scale factor of a certain number of pixels per meter. This can be 
+  > used in both the `x` and `y` direction to know where to draw the indicators.
 
 - Do the same for the cargo areas. Make sure this indicator is different from the one that is used for the fuel areas.
   That way the user can easily distinguish between cargo areas and fuel areas.
@@ -136,12 +140,13 @@ The user should also be able to load/unload cargo to/from the aircraft.
 - Allow the user to add this selected cargo type and the corresponding amount to the selected cargo area.
 
   > You could add a popup that allows the user to select a cargo type and amount of cargo in kilograms. When the user
-  > presses the `Confirm` button, the cargo is added to the cargo area.
-   
+  > presses the `Confirm` button, the cargo is added to the cargo area. You might need to add a setter for the `weight` 
+  > in the `CargoUnit` class. 
+
 - Allow the user to remove cargo from the cargo area.
 
   > This could, for example, be done via a popup that allows the user to select a cargo type. When the user presses the
-  > `Delete` button, the cargo type is removed from the cargo area. You could also choose to allow the user to remove a 
+  > `Delete` button, the cargo type is removed from the cargo area. You could also choose to allow the user to remove a
   > specific amount of cargo.
 
 - Each cargo area has a weight capacity. Make sure that the user cannot violate this weight constraint.
@@ -150,7 +155,7 @@ The user should also be able to load/unload cargo to/from the aircraft.
 
 Now that the user is able to fully configure an aircraft, it is time to show some additional information to the user.
 There are three important things that should be added here. These are discussed next. Make sure that this information
-is updated accordingly whenever there is a change to the aircraft that would affect the values. Where you show this 
+is updated accordingly whenever there is a change to the aircraft that would affect the values. Where you show this
 information to the user is up to you.
 
 ### 4.1 Range
@@ -161,7 +166,7 @@ Depending on the configuration, the range of the aircraft changes. The range for
 range = (total fuel / fuel consumption) * cruise speed
 ```
 
-> In the real world this calculation is much more complex, but this is not the real world :)
+> In the real world this calculation is much more complex, but this is not the real world.
 
 **Requirements**
 
@@ -169,18 +174,18 @@ range = (total fuel / fuel consumption) * cruise speed
 
 ### 4.2 Center of Gravity
 
-Similar to the range, depending on the contents of the fuel tanks and cargo areas, the center of gravity of the aircraft 
+Similar to the range, depending on the contents of the fuel tanks and cargo areas, the center of gravity of the aircraft
 can change. The `x` coordinate of this center of gravity can be calculated as follows (it's equivalent for `y`):
 
-The following Java-ish pseudocode indicates how you would compute a weighted sum of multiple components (where a component 
+The following Java-ish pseudocode indicates how you would compute a weighted sum of multiple components (where a component
 is anything that has weight and a position, such as cargo, fuel, or the aircraft itself).
 
 ```java
 var x = 0.0;
 var totalWeight = 0.0;
 for (var c : components) {
-	x += c.getWeight() * c.getXCoordinate();
-	totalWeight += c.getWeight();
+  x += c.getWeight() * c.getXCoordinate();
+  totalWeight += c.getWeight();
 }
 return x / totalWeight;
 ```
@@ -188,9 +193,8 @@ return x / totalWeight;
 For the aircraft, you will have to use the coordinates of the center of gravity. This is accessible for an `aircraft` via
 `aircraft.getType().getEmptyCgX()` (and similarly for the `y` coordinate).
 
-Here a component can be a fuel tank, a cargo area or the aircraft itself. Doing this for both `x` and `y` results in the 
-center of gravity of the entire aircraft. The aircraft itself also has a center of gravity. 
-For the aircraft itself, 
+Here a component can be a fuel tank, a cargo area or the aircraft itself. Doing this for both `x` and `y` results in the
+center of gravity of the entire aircraft. The aircraft itself also has a center of gravity.
 
 
 **Requirements**
@@ -198,7 +202,7 @@ For the aircraft itself,
 - Show the center of gravity of the empty aircraft.
 - Show the center of gravity of the aircraft with its current fuel and cargo loads accounted for.
 
-> Instead of printing the x and y coordinates of the center of gravity, you could also draw a unique indicator 
+> Instead of printing the x and y coordinates of the center of gravity, you could also draw a unique indicator
 > (e.g. a square) on the blueprint image instead.
 
 ### 4.3 Profit Estimation
@@ -219,7 +223,7 @@ profit of this journey.
   ```
 
   The total revenue is the sum of this calculation for all different cargo types.
-  
+
 - The estimated profit is the difference between the revenue and the cost:
 
   ```
@@ -260,7 +264,7 @@ By now, the user has enough information to know whether an aircraft can depart t
 
   - The center of gravity of the load of the aircraft is within the tolerance of the aircraft.
 
-  > Both the aircraft and its contents have a center of gravity. The difference between these as a percentage of the
+  > Both the aircraft and its contents have a center of gravity. The absolute difference between these as a percentage of the
   length of the aircraft cannot surpass the threshold as defined in `aircraft.getType().getCgTolerance()`
 
   - The total weight of the aircraft (including fuel and cargo) does not surpass the `maxTakeoffWeight`.
@@ -268,9 +272,9 @@ By now, the user has enough information to know whether an aircraft can depart t
 - Once the `Depart` button has been pressed, the aircraft will move to the new airport and an amount of fuel is removed.
 
   - The amount of fuel to be removed is calculated as follows: `( distance / cruise speed ) * fuel consumption`.
-  
+
 - All cargo should be removed once the aircraft arrives at its destination.
-  
+
 - A popup should appear that shows an informative message to the user that the aircraft departed.
 
 - Ideally, the frame should close once the aircraft has departed. Leave this for the end though (it is not extremely
@@ -301,7 +305,7 @@ To do this, follow these steps:
   `undo()`/`redo()` from the `UndoManager`. This will make sure that the appropriate action is being executed, and you
   do not have to keep track of all these operations yourself.
 
-- Before undoing/redoing, be sure to check whether it is actually possible to undo/redo using the `canUndo()`/`canRedo()` 
+- Before undoing/redoing, be sure to check whether it is actually possible to undo/redo using the `canUndo()`/`canRedo()`
   methods.
 
 - Make sure all the information that is displayed to the user such as range, estimated profit and the availability of

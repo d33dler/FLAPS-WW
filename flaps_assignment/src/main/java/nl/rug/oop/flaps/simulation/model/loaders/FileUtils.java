@@ -28,6 +28,8 @@ public class FileUtils {
 		var matcher = FileSystems.getDefault().getPathMatcher(pattern);
 		try (var paths = Files.walk(directory)) {
 			return paths.filter(matcher::matches).findAny();
+		} catch (NullPointerException e) {
+			return Optional.empty();
 		}
 	}
 

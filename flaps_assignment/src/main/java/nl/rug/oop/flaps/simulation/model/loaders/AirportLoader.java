@@ -21,7 +21,7 @@ import java.util.Set;
 public class AirportLoader {
 	private static final Path AIRPORTS_PATH = Path.of("data", "airports");
 	private static final String YAML_FILE_PATTERN = "glob:**airport.yaml";
-	private static final String BANNER_FILE_PATTERN = "glob:**banner.*";
+	public static final String BANNER_FILE_PATTERN = "glob:**banner.*";
 
 	private final ObjectMapper mapper;
 

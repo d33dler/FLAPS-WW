@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps;
 
+import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
 import com.formdev.flatlaf.FlatDarculaLaf;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.model.world.WorldInitializer;
@@ -22,11 +23,19 @@ public class Main {
         try {
             World world = new WorldInitializer().initializeWorld();
             SwingUtilities.invokeLater(() -> new FlapsFrame(world));
-        } catch (IOException e) {
+        } catch(UnrecognizedPropertyException e) {
+            String errorMessage = "FLAPS encountered an error parsing one of the yaml files.\nCould not recognize property: \"" + e.getPropertyName() + "\"";
             JOptionPane.showMessageDialog(null,
-                    "FLAPS encountered an unexpected error.",
+                    errorMessage,
                     "Program Crashed",
                     JOptionPane.ERROR_MESSAGE);
+
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null,
+                    "FLAPS encountered an unexpected error and could not start.",
+                    "Program Crashed",
+                    JOptionPane.ERROR_MESSAGE);
+            e.printStackTrace();
         }
     }
 }

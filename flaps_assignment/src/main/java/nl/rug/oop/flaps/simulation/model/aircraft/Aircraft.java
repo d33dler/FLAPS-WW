@@ -85,7 +85,7 @@ public class Aircraft implements Comparable<Aircraft> {
      * @return The total amount of fuel in the aircraft in kg
      */
     public double getTotalFuel() {
-        return fuelTankFillStatuses.keySet().stream().mapToDouble(fuelTankFillStatuses::get).sum() * type.getFuelType().getDensity();
+        return fuelTankFillStatuses.keySet().stream().mapToDouble(fuelTankFillStatuses::get).sum();
     }
 
     /**

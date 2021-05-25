@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.simulation.model.cargo;
 
 import lombok.Getter;
+import lombok.Setter;
 
 /**
  * Represents a unit of cargo
@@ -16,6 +17,7 @@ public class CargoUnit {
     /**
      * The weight in kg of this cargo unit
      */
+    @Setter
     private double weight;
 
     public CargoUnit(CargoType cargoType) {

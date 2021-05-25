@@ -3,12 +3,18 @@ package nl.rug.oop.flaps.simulation.model.airport;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelType;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+import nl.rug.oop.flaps.simulation.model.loaders.AirportLoader;
+import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
+import javax.imageio.ImageIO;
 import java.awt.*;
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -20,6 +26,7 @@ import java.util.Set;
  * @author T.O.W.E.R.
  */
 @Getter
+@Log
 public class Airport implements Comparable<Airport> {
     /**
      * The name of the airport
@@ -64,6 +71,13 @@ public class Airport implements Comparable<Airport> {
      */
     @Setter
     private Image bannerImage;
+
+    /**
+     * The path to this airport's configuration directory, containing its YAML
+     *  file and any images.
+     */
+    @Setter
+    private Path directoryPath;
 
     /**
      * Creates a new airport
@@ -145,5 +159,19 @@ public class Airport implements Comparable<Airport> {
     @Override
     public String toString() {
         return "Airport{name=\"" + name + "\"}";
+    }
+
+    public Image getBannerImage() {
+        if (bannerImage == null) {
+            try {
+                var optionalBannerFile = FileUtils.findMatch(this.directoryPath, AirportLoader.BANNER_FILE_PATTERN);
+                if (optionalBannerFile.isPresent()) {
+                    setBannerImage(ImageIO.read(optionalBannerFile.get().toFile()));
+                }
+            } catch (IOException e) {
+                log.warning("Could not load airport banner image.");
+            }
+        }
+        return bannerImage;
     }
 }

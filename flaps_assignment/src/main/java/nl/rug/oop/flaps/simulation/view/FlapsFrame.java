@@ -23,15 +23,17 @@ public class FlapsFrame extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        world.getDimensions().setMapHeight(HEIGHT/2);
+        world.getDimensions().setMapWidth(WIDTH/2);
         initPanels(world);
         pack();
-
 
         setLocationRelativeTo(null);
         setVisible(true);
     }
 
     private void initPanels(World world) {
+
         WorldPanel worldPanel = new WorldPanel(world);
         worldPanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
 

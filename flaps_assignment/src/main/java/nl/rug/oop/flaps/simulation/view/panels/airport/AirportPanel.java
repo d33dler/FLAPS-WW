@@ -51,10 +51,14 @@ public class AirportPanel extends JPanel implements WorldSelectionModelListener 
         gbc.gridy = 0;
         if(airport != null) {
             gbc.gridwidth = 2;
-            ImageIcon bannerImage = new ImageIcon(airport.getBannerImage().getScaledInstance(this.getWidth(), this.getWidth() / 3, Image.SCALE_SMOOTH));
-            add(new JLabel(bannerImage), gbc);
+
+            Image bannerImage = airport.getBannerImage();
+            if(bannerImage != null) {
+                add(new JLabel(new ImageIcon(bannerImage.getScaledInstance(this.getWidth(), this.getWidth() / 3, Image.SCALE_SMOOTH))), gbc);
+                gbc.gridy++;
+            }
+
             pad();
-            gbc.gridy++;
             JLabel nameLabel = new JLabel(airport.getName());
             nameLabel.setFont(new Font(Font.SANS_SERIF, Font.BOLD, 30));
             add(nameLabel, gbc);
