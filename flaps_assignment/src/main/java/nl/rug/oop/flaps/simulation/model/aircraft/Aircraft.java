@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -28,7 +29,8 @@ public class Aircraft implements Comparable<Aircraft> {
      * The world that this aircraft exists in.
      */
     private final World world;
-
+    @Setter
+    private boolean updatedUnitXY = false;
     /**
      * A map that contains information for each fuel tank of how much fuel is in there
      * The key is the name of the fuel tank and the Double is the amount of fuel in kg

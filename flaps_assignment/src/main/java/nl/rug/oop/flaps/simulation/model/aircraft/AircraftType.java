@@ -17,6 +17,7 @@ import java.util.Objects;
  * @author T.O.W.E.R.
  */
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AircraftType implements Comparable<AircraftType> {
     /**
@@ -92,6 +93,7 @@ public class AircraftType implements Comparable<AircraftType> {
     /**
      * The list of cargo areas in this type of aircraft.
      */
+
     private List<CargoArea> cargoAreas;
 
     /**

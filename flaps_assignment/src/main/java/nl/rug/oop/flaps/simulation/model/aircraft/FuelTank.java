@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.awt.geom.Point2D;
 import java.util.Objects;
@@ -14,36 +15,13 @@ import java.util.Objects;
  * @author T.O.W.E.R.
  */
 @Getter
+@Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FuelTank {
-    /**
-     * The name of this fuel tank.
-     */
-    private String name;
-
+public class FuelTank extends Areas {
     /**
      * The maximum amount of fuel this tank can contain in kg
      */
     private int capacity;
-
-    /**
-     * The x-coordinate of this fuel tank
-     */
-    private double x;
-
-    /**
-     * The y-coordinate of this fuel tank
-     */
-    private double y;
-
-    /**
-     * Retrieves the coordinates of this fuel tank
-     *
-     * @return The coordinates of this fuel tank
-     */
-    public Point2D getCoords() {
-        return new Point2D.Double(x, y);
-    }
 
     @Override
     public boolean equals(Object o) {

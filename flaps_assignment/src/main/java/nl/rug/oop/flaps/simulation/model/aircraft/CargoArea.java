@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.awt.geom.Point2D;
 import java.util.Objects;
@@ -14,13 +15,9 @@ import java.util.Objects;
  * @author T.O.W.E.R.
  */
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CargoArea {
-    /**
-     * The name of this cargo area
-     */
-    private String name;
 
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class CargoArea extends Areas {
     /**
      * The maximum dimension in meters that this cargo area can contain. You do not have to use this
      */
@@ -30,25 +27,6 @@ public class CargoArea {
      * The maximum weight in kg that the contents of this cargo may weigh
      */
     private double maxWeight;
-
-    /**
-     * The x-coordinate of this cargo area
-     */
-    private double x;
-
-    /**
-     * The y-coordinate of this cargo area
-     */
-    private double y;
-
-    /**
-     * Retrieves the coordinates of this cargo area
-     *
-     * @return The coordinates of this cargo area
-     */
-    public Point2D getCoords() {
-        return new Point2D.Double(x, y);
-    }
 
     @Override
     public boolean equals(Object o) {
