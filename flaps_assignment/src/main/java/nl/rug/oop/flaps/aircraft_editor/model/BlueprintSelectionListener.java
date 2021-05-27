@@ -6,5 +6,5 @@ import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 public interface BlueprintSelectionListener {
 
-    default void cargoAreaSelected(Compartment area) {}
+    default void compartmentSelected(Compartment area) {}
 }

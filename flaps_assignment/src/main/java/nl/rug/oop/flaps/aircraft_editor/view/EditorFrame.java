@@ -4,7 +4,6 @@ import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -30,8 +29,7 @@ public class EditorFrame extends JFrame {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraft = aircraft;
-        //setFocusTraversalPolicy(null);
-        this.model = new EditorCore(aircraft, selectionModel);
+        this.model = new EditorCore(aircraft, selectionModel, this);
         editorInit();
         pack();
         setLocationRelativeTo(null);

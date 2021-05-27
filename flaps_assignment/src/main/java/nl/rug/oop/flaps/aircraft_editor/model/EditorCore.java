@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 
@@ -13,15 +14,19 @@ import java.util.*;
 @Setter
 public class EditorCore {
     private final Aircraft aircraft;
-    private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
+
     private static double AIRCRAFT_LEN;
     private final BlueprintSelectionModel selectionModel;
     private static final double NEARBY_UNIT_RANGE = 250.0;
+    private EditorFrame editorFrame;
+    private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
+    protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
 
-    public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
+    public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel, EditorFrame editorFrame) {
         this.aircraft = aircraft;
+        this.editorFrame = editorFrame;
         this.selectionModel = selectionModel;
-        updateUnitCoords();
+        updateCompartmentCoords();
         listToCoordsMap(this.aircraft.getType().getCargoAreas());
         listToCoordsMap(this.aircraft.getType().getFuelTanks());
     }
@@ -47,29 +52,26 @@ public class EditorCore {
 
     private void listToCoordsMap(List<? extends Compartment> list) {
         list.forEach(area -> {
-            if (this.areasMap.containsKey(area.getX())) {
-                this.areasMap.get(area.getX()).put(area.getY(), area);
+            Point2D.Double pos = this.localCoords.get(area.hashCode());
+            if (this.areasMap.containsKey(pos.x)) {
+                this.areasMap.get(pos.x).put(pos.y, area);
             } else {
                 NavigableMap<Double, Compartment> mapY = new TreeMap<>();
-                mapY.put(area.getY(), area);
-                this.areasMap.put(area.getX(), mapY);
+                mapY.put(pos.y, area);
+                this.areasMap.put(pos.x, mapY);
             }
         });
     }
-    private void updateUnitCoords() {
-        if (!this.aircraft.isUpdatedUnitXY()) {
-            AIRCRAFT_LEN = this.aircraft.getType().getLength();
-            updateXY(this.aircraft.getType().getCargoAreas());
-            updateXY(this.aircraft.getType().getFuelTanks());
-            this.aircraft.setUpdatedUnitXY(true);
-        }
+    private void updateCompartmentCoords() {
+        AIRCRAFT_LEN = this.aircraft.getType().getLength();
+        updateXY(this.aircraft.getType().getCargoAreas());
+        updateXY(this.aircraft.getType().getFuelTanks());
     }
 
     private void updateXY(List<? extends Compartment> units) {
-        units.forEach(cargoArea -> {
-            var p = remap(cargoArea.getCoords());
-            cargoArea.setX(p.x);
-            cargoArea.setY(p.y);
+        units.forEach(area -> {
+            var p = remap(area.getCoords());
+            this.localCoords.put(area.hashCode(),p);
         });
     }
 

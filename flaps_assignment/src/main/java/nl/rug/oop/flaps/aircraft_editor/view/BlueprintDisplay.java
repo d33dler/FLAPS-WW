@@ -1,29 +1,35 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.SneakyThrows;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
-public class BlueprintDisplay extends JPanel {
+
+public class BlueprintDisplay extends JPanel implements BlueprintSelectionListener {
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
     public static final double MK_SIZE = 13;
     public static final int WIDTH = 500, HEIGHT = 500;
-
+    private BlueprintSelectionModel sm;
+    private BlueprintPanel bpPanel;
 
     @SneakyThrows
-    public BlueprintDisplay(Aircraft aircraft) {
+    public BlueprintDisplay(BlueprintSelectionModel editorCore, Aircraft aircraft, BlueprintPanel bpPanel) {
+        this.bpPanel = bpPanel;
+        this.sm = editorCore;
         this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.aircraft = aircraft;
-        this.blueprintImage =
-                aircraft.getType().getBlueprintImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+        this.blueprintImage = aircraft.getType().
+                getBlueprintImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+        sm.addListener(this);
     }
 
     @Override
@@ -37,25 +43,33 @@ public class BlueprintDisplay extends JPanel {
                     this.blueprintImage.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
         }
         g2d.drawImage(this.cachedBpImage, 0, 0, this);
-        this.aircraft.getType().getCargoAreas().forEach(cargoArea -> addCargoIndicators(g2d, cargoArea));
-        this.aircraft.getType().getFuelTanks().forEach(fuelArea -> addFuelTanksIndicators(g2d, fuelArea));
+        this.aircraft.getType().getCargoAreas().forEach(cargoArea -> addAreaIndicators(g2d, cargoArea, Color.blue));
+        this.aircraft.getType().getFuelTanks().forEach(fuelArea -> addAreaIndicators(g2d, fuelArea, Color.magenta));
     }
 
-    private void addCargoIndicators(Graphics2D g2d, CargoArea cargoArea) {
-        Color c = Color.blue;
+    private void addAreaIndicators(Graphics2D g2d, Compartment area, Color c) {
+        double mk = MK_SIZE;
+        boolean adjust = false;
+        if (sm.getCompartment() != null && sm.getCompartment().equals(area)) {
+            c = Color.GREEN;
+            mk *= 2;
+            adjust = true;
+        }
         g2d.setColor(c);
-        addIndicator(g2d, cargoArea);
+        addIndicator(g2d, area, mk, adjust);
     }
 
-    private void addFuelTanksIndicators(Graphics2D g2d, FuelTank fuelTank) {
-        Color c = Color.magenta;
-        g2d.setColor(c);
-        addIndicator(g2d, fuelTank);
+    private void addIndicator(Graphics2D g2d, Compartment area, double mk, boolean adjust) {
+        Point2D.Double pos = bpPanel.getModel().getLocalCoords().get(area.hashCode());
+        if (adjust) {
+            g2d.fill(new Ellipse2D.Double(pos.x - MK_SIZE / 2, pos.y - MK_SIZE / 2, mk, mk));
+        } else {
+            g2d.fill(new Rectangle2D.Double(pos.x, pos.y, mk, mk));
+        }
     }
 
-    private void addIndicator(Graphics2D g2d, Compartment area) {
-        Shape marker = new Rectangle2D.
-                Double(area.getCoords().x, area.getCoords().y, MK_SIZE, MK_SIZE);
-        g2d.fill(marker);
+    @Override
+    public void compartmentSelected(Compartment area) {
+        this.repaint();
     }
 }
