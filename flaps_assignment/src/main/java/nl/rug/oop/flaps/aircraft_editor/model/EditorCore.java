@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 
@@ -13,13 +14,14 @@ import java.util.*;
 public class EditorCore {
     private final Aircraft aircraft;
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
-
+    private static double AIRCRAFT_LEN;
     private final BlueprintSelectionModel selectionModel;
     private static final double NEARBY_UNIT_RANGE = 250.0;
 
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
         this.aircraft = aircraft;
         this.selectionModel = selectionModel;
+        updateUnitCoords();
         listToCoordsMap(this.aircraft.getType().getCargoAreas());
         listToCoordsMap(this.aircraft.getType().getFuelTanks());
     }
@@ -38,7 +40,7 @@ public class EditorCore {
                 return Optional.ofNullable(xAxis.lowerEntry(coords.y).getValue());
             }
         } catch (NullPointerException e) {
-            System.out.println("Your cursor is outside of blueprint coordinate area range.");
+            System.out.println("Your cursor is outside of the blueprint's coordinate area range.");
             return Optional.empty();
         }
     }
@@ -53,6 +55,30 @@ public class EditorCore {
                 this.areasMap.put(area.getX(), mapY);
             }
         });
+    }
+    private void updateUnitCoords() {
+        if (!this.aircraft.isUpdatedUnitXY()) {
+            AIRCRAFT_LEN = this.aircraft.getType().getLength();
+            updateXY(this.aircraft.getType().getCargoAreas());
+            updateXY(this.aircraft.getType().getFuelTanks());
+            this.aircraft.setUpdatedUnitXY(true);
+        }
+    }
+
+    private void updateXY(List<? extends Compartment> units) {
+        units.forEach(cargoArea -> {
+            var p = remap(cargoArea.getCoords());
+            cargoArea.setX(p.x);
+            cargoArea.setY(p.y);
+        });
+    }
+
+    protected Point2D.Double remap(Point2D.Double source) {
+        double bpSize = BlueprintDisplay.WIDTH;
+        double s = BlueprintDisplay.MK_SIZE;
+        double x = (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
+        double y = (source.y) * (bpSize / AIRCRAFT_LEN) - s / 2;
+        return new Point2D.Double(x, y);
     }
 }
 

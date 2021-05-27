@@ -14,8 +14,8 @@ public class BlueprintDisplay extends JPanel {
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
-    protected static final double MK_SIZE = 13;
-    protected static final int WIDTH = 500, HEIGHT = 500;
+    public static final double MK_SIZE = 13;
+    public static final int WIDTH = 500, HEIGHT = 500;
 
 
     @SneakyThrows
