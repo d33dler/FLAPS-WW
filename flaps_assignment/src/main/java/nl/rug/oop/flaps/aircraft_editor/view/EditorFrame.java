@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
@@ -19,17 +20,18 @@ public class EditorFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 700;
     private EditorCore model;
-    private WorldSelectionModel selectionModel;
+    private BlueprintSelectionModel selectionModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
     private SettingsPanel settingsPanel;
     private InfoPanel infoPanel;
 
-    public EditorFrame(Aircraft aircraft, WorldSelectionModel selectionModel) {
+    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraft = aircraft;
         //setFocusTraversalPolicy(null);
+        this.model = new EditorCore(aircraft, selectionModel);
         editorInit();
         pack();
         setLocationRelativeTo(null);

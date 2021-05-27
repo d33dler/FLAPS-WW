@@ -3,9 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.awt.geom.Point2D;
 import java.util.Objects;
 
 /**
@@ -17,7 +15,7 @@ import java.util.Objects;
 @Getter
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class CargoArea extends Areas {
+public class CargoArea extends Compartment {
     /**
      * The maximum dimension in meters that this cargo area can contain. You do not have to use this
      */

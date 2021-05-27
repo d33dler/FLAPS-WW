@@ -2,21 +2,20 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.Areas;
+import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 
 public class BlueprintDisplay extends JPanel {
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
-    public static final double INDICATOR_SIZE = 13;
-    private final int WIDTH = 500, HEIGHT = 500;
+    protected static final double MK_SIZE = 13;
+    protected static final int WIDTH = 500, HEIGHT = 500;
 
 
     @SneakyThrows
@@ -43,21 +42,20 @@ public class BlueprintDisplay extends JPanel {
     }
 
     private void addCargoIndicators(Graphics2D g2d, CargoArea cargoArea) {
-        double s = INDICATOR_SIZE;
         Color c = Color.blue;
         g2d.setColor(c);
-        Shape marker = new Rectangle2D.
-                Double(cargoArea.getCoords().x, cargoArea.getCoords().y, s, s);
-        g2d.fill(marker);
+        addIndicator(g2d, cargoArea);
     }
 
     private void addFuelTanksIndicators(Graphics2D g2d, FuelTank fuelTank) {
-        double s = INDICATOR_SIZE;
         Color c = Color.magenta;
         g2d.setColor(c);
-        Shape marker = new Rectangle2D.
-                Double(fuelTank.getCoords().x, fuelTank.getCoords().y, s, s);
-        g2d.fill(marker);
+        addIndicator(g2d, fuelTank);
     }
 
+    private void addIndicator(Graphics2D g2d, Compartment area) {
+        Shape marker = new Rectangle2D.
+                Double(area.getCoords().x, area.getCoords().y, MK_SIZE, MK_SIZE);
+        g2d.fill(marker);
+    }
 }

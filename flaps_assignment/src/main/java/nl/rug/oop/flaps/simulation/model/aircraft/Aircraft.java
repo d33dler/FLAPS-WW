@@ -29,8 +29,13 @@ public class Aircraft implements Comparable<Aircraft> {
      * The world that this aircraft exists in.
      */
     private final World world;
+
+    /**
+     * Boolean switch to verify if an update (upscale) of aircraft areas XY coords is required;
+     */
     @Setter
     private boolean updatedUnitXY = false;
+
     /**
      * A map that contains information for each fuel tank of how much fuel is in there
      * The key is the name of the fuel tank and the Double is the amount of fuel in kg

@@ -1,30 +1,35 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.SneakyThrows;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.AircraftUnitSelectionController;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
+import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
-
-import static nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay.INDICATOR_SIZE;
+import java.util.List;
 
 public class BlueprintPanel extends JPanel implements WorldSelectionModelListener {
-    EditorCore model;
 
+    private final EditorCore model;
     private BlueprintDisplay blueprintDisplay;
-    private WorldSelectionModel selectionModel;
+    private BlueprintSelectionModel selectionModel;
     private Aircraft aircraft;
     private static double AIRCRAFT_LEN;
-    public static final double INDICATOR_SIZE = 13;
-    private final int WIDTH = 650, HEIGHT = 650;
-    public BlueprintPanel(EditorCore model, WorldSelectionModel selectionModel, Aircraft aircraft) {
+    private static final int WIDTH = 650, HEIGHT = 650;
+
+    public BlueprintPanel(EditorCore model, BlueprintSelectionModel selectionModel, Aircraft aircraft) {
         this.model = model;
         this.selectionModel = selectionModel;
         this.aircraft = aircraft;
+        AircraftUnitSelectionController controller = new AircraftUnitSelectionController(model);
+        addMouseListener(controller);
         init();
     }
 
@@ -32,7 +37,7 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
     private void init() {
         updateUnitCoords();
         this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBorder(BorderFactory.createCompoundBorder());
         this.blueprintDisplay = new BlueprintDisplay(this.aircraft);
         add(blueprintDisplay, BorderLayout.CENTER);
@@ -41,36 +46,27 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
     private void updateUnitCoords() {
         if (!this.aircraft.isUpdatedUnitXY()) {
             AIRCRAFT_LEN = this.aircraft.getType().getLength();
-            this.aircraft.getType().getCargoAreas().forEach(cargoArea -> {
-                var p = remap(cargoArea.getCoords());
-                System.out.println(cargoArea.getCoords().x + "  " + cargoArea.getCoords().y + " <- before\n");
-                cargoArea.setX(p.x);
-                cargoArea.setY(p.y);
-                System.out.println(p.x + " <- setX\n");
-                System.out.println(p.y + " <- setY\n");
-            });
-            this.aircraft.getType().getFuelTanks().forEach(fuelTank -> {
-                var p = remap(fuelTank.getCoords());
-                fuelTank.setX(p.x);
-                fuelTank.setY(p.y);
-            });
+            updateXY(this.aircraft.getType().getCargoAreas());
+            updateXY(this.aircraft.getType().getFuelTanks());
             this.aircraft.setUpdatedUnitXY(true);
         }
     }
 
+    private void updateXY(List<? extends Compartment> units) {
+        units.forEach(cargoArea -> {
+            var p = remap(cargoArea.getCoords());
+            cargoArea.setX(p.x);
+            cargoArea.setY(p.y);
+        });
+    }
+
     protected Point2D.Double remap(Point2D.Double source) {
-        double s = INDICATOR_SIZE;
-        double x = ((double) 500 / 2) + (source.x * ((double) 500 / AIRCRAFT_LEN)) - s / 2;
-        double y = (source.y) * ((double) 500 / AIRCRAFT_LEN) - s / 2;
+        double bpSize = BlueprintDisplay.WIDTH;
+        double s = BlueprintDisplay.MK_SIZE;
+        double x = (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
+        double y = (source.y) * (bpSize / AIRCRAFT_LEN) - s / 2;
         return new Point2D.Double(x, y);
     }
 
-    private void drawCargoIndicators() {
-
-    }
-
-    private void drawFuelIndicators() {
-
-    }
 
 }

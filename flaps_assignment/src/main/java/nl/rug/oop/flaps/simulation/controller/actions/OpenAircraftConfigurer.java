@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.simulation.controller.actions;
 
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
@@ -16,9 +17,9 @@ import java.beans.PropertyChangeListener;
 public class OpenAircraftConfigurer extends AbstractAction implements PropertyChangeListener {
 
     private final Aircraft aircraft;
-    private final WorldSelectionModel selectionModel;
+    private final BlueprintSelectionModel selectionModel;
 
-    public OpenAircraftConfigurer(Aircraft aircraft, WorldSelectionModel selectionModel) {
+    public OpenAircraftConfigurer(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
         super("Configure");
         this.aircraft = aircraft;
         this.selectionModel = selectionModel;
