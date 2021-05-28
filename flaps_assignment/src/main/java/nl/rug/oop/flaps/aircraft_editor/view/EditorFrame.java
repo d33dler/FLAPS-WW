@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
@@ -17,12 +18,13 @@ import java.awt.*;
 @Getter
 public class EditorFrame extends JFrame {
     private static final int WIDTH = 1200;
-    private static final int HEIGHT = 700;
-    private EditorCore model;
+    private static final int HEIGHT = 900;
+    public EditorCore model;
     private BlueprintSelectionModel selectionModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
     private SettingsPanel settingsPanel;
+    private LogPanel logPanel;
     private InfoPanel infoPanel;
 
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
@@ -33,13 +35,11 @@ public class EditorFrame extends JFrame {
         editorInit();
         pack();
         setLocationRelativeTo(null);
-        setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
     }
 
     private void editorInit() {
-
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -48,12 +48,14 @@ public class EditorFrame extends JFrame {
     }
 
     private void addMainPanels() {
-        blueprintPanel = new BlueprintPanel(model,selectionModel, this.aircraft);
+        blueprintPanel = new BlueprintPanel(model, selectionModel, this.aircraft);
         settingsPanel = new SettingsPanel(model);
         infoPanel = new InfoPanel(model);
+        logPanel = new LogPanel(this);
         add(this.blueprintPanel, BorderLayout.WEST);
-        add(this.settingsPanel, BorderLayout.EAST);
-        add(this.infoPanel, BorderLayout.SOUTH);
+        add(this.settingsPanel, BorderLayout.NORTH);
+        add(this.infoPanel, BorderLayout.EAST);
+        add(this.logPanel, BorderLayout.SOUTH);
         validate();
     }
 

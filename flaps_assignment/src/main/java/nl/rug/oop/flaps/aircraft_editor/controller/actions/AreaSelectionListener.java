@@ -7,11 +7,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Point2D;
 
-public class AircraftUnitSelectionController extends MouseAdapter {
+public class AreaSelectionListener extends MouseAdapter {
 
     EditorCore editorCore;
 
-    public AircraftUnitSelectionController(EditorCore editorCore) {
+    public AreaSelectionListener(EditorCore editorCore) {
         this.editorCore = editorCore;
     }
 

@@ -28,7 +28,8 @@ public class World {
     private final Map<String, AircraftType> aircraftTypes;
     private final Map<String, FuelType> fuelTypes;
     private final Map<String, CargoType> cargoTypes;
-
+    @Getter
+    private final Set<CargoType> cargoSet;
     @Getter
     @Setter
     private WorldDimensions dimensions;
@@ -41,6 +42,7 @@ public class World {
         this.aircraftTypes = setToMap(aircraftTypes, AircraftType::getName);
         this.fuelTypes = setToMap(fuelTypes, FuelType::getName);
         this.cargoTypes = setToMap(cargoTypes, CargoType::getName);
+        this.cargoSet = cargoTypes;
         this.dimensions = dimensions;
         this.selectionModel = new WorldSelectionModel();
     }

@@ -3,9 +3,12 @@ package nl.rug.oop.flaps.simulation.model.loaders;
 import lombok.extern.java.Log;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -37,4 +40,14 @@ public class FileUtils {
 		return findMatch(directory, pattern)
 				.orElseThrow(() -> new IOException("No match found for pattern " + pattern + " in directory " + directory + "."));
 	}
+
+
+	public static List<Field> getAllFields(Class<?> type) {
+		List<Field> fields = new ArrayList<>();
+		for (Class<?> c = type; c != null; c = c.getSuperclass()) {
+			fields.addAll(Arrays.asList(c.getDeclaredFields()));
+		}
+		return fields;
+	}
+
 }

@@ -23,4 +23,5 @@ public class BlueprintSelectionModel {
             listener.compartmentSelected(area);
         });
     }
+
 }

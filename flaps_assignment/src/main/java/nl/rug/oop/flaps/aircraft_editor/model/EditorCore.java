@@ -5,27 +5,37 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
+import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.geom.Point2D;
+import java.sql.ResultSet;
 import java.util.*;
 
 @Getter
 @Setter
 public class EditorCore {
+    private final World world;
     private final Aircraft aircraft;
-
     private static double AIRCRAFT_LEN;
     private final BlueprintSelectionModel selectionModel;
-    private static final double NEARBY_UNIT_RANGE = 250.0;
     private EditorFrame editorFrame;
+    private Configurator configurator;
+    private CargoDatabase cargoDatabase;
+
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
     protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
 
+    private static final double NEARBY_UNIT_RANGE = 250.0;
+
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel, EditorFrame editorFrame) {
+        this.world = aircraft.getWorld();
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
         this.selectionModel = selectionModel;
+        this.configurator = new Configurator(this);
         updateCompartmentCoords();
         listToCoordsMap(this.aircraft.getType().getCargoAreas());
         listToCoordsMap(this.aircraft.getType().getFuelTanks());
@@ -75,12 +85,14 @@ public class EditorCore {
         });
     }
 
-    protected Point2D.Double remap(Point2D.Double source) {
+    private Point2D.Double remap(Point2D.Double source) {
         double bpSize = BlueprintDisplay.WIDTH;
         double s = BlueprintDisplay.MK_SIZE;
         double x = (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
         double y = (source.y) * (bpSize / AIRCRAFT_LEN) - s / 2;
         return new Point2D.Double(x, y);
     }
+
+
 }
 
