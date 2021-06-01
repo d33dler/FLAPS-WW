@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
+import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.util.*;
@@ -46,7 +46,7 @@ public class Aircraft implements Comparable<Aircraft> {
      * A map that contains information for each cargo area what the cargo contents are
      * The key is the name of the cargo area
      */
-    private final Map<CargoArea, Set<CargoUnit>> cargoAreaContents;
+    private final Map<CargoArea, Set<CargoFreight>> cargoAreaContents;
 
 
     public Aircraft(String identifier, AircraftType type, World world) {
@@ -102,7 +102,7 @@ public class Aircraft implements Comparable<Aircraft> {
      *
      * @return A list of cargo units representing the contents of the cargo area
      */
-    public Set<CargoUnit> getCargoAreaContents(CargoArea cargoArea) {
+    public Set<CargoFreight> getCargoAreaContents(CargoArea cargoArea) {
         return cargoAreaContents.getOrDefault(cargoArea, new HashSet<>());
     }
 

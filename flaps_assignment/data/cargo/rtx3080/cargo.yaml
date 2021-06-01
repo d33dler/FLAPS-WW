@@ -1,2 +1,3 @@
 name: NVIDIA GeForce RTX 3080 GPU
 basePricePerKg: 2100
+weightPerUnit: 3

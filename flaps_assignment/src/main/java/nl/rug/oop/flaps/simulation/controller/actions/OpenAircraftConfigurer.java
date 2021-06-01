@@ -1,9 +1,9 @@
 package nl.rug.oop.flaps.simulation.controller.actions;
 
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -18,17 +18,18 @@ public class OpenAircraftConfigurer extends AbstractAction implements PropertyCh
 
     private final Aircraft aircraft;
     private final BlueprintSelectionModel selectionModel;
+    private final CargoManipulationModel cargoManipulationModel;
 
-    public OpenAircraftConfigurer(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
+    public OpenAircraftConfigurer(Aircraft aircraft) {
         super("Configure");
         this.aircraft = aircraft;
-        this.selectionModel = selectionModel;
+        this.selectionModel = new BlueprintSelectionModel();
+        this.cargoManipulationModel = new CargoManipulationModel();
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
-        SwingUtilities.invokeLater(() -> new EditorFrame(aircraft, selectionModel));
+        SwingUtilities.invokeLater(() -> new EditorFrame(aircraft, selectionModel, cargoManipulationModel));
     }
 
     @Override

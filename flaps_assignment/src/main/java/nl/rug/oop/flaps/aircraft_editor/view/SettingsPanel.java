@@ -2,9 +2,8 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
-import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;

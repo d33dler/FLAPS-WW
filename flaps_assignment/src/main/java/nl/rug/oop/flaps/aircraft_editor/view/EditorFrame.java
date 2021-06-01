@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
-import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
+import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
@@ -21,15 +21,17 @@ public class EditorFrame extends JFrame {
     private static final int HEIGHT = 900;
     public EditorCore model;
     private BlueprintSelectionModel selectionModel;
+    private CargoManipulationModel cargoManipulationModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
     private SettingsPanel settingsPanel;
     private LogPanel logPanel;
     private InfoPanel infoPanel;
 
-    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel) {
+    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, CargoManipulationModel cargoModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
+        this.cargoManipulationModel = cargoModel;
         this.aircraft = aircraft;
         this.model = new EditorCore(aircraft, selectionModel, this);
         editorInit();

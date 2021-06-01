@@ -34,4 +34,5 @@ public class FuelTank extends Compartment {
     public int hashCode() {
         return Objects.hash(name);
     }
+
 }

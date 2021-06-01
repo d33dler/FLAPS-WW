@@ -1,19 +1,21 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
+import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-public class CargoTablesPanel extends JPanel {
+public class CargoTablesPanel extends JPanel implements CargoUnitsListener {
 
     private CargoArea cargoArea;
     private EditorCore editorCore;
@@ -23,25 +25,27 @@ public class CargoTablesPanel extends JPanel {
     private CargoType selected;
     private HashMap<String, CargoType> cargoHashMap = new HashMap<>();
     private SettingsPanel settingsPanel;
-    private Set<CargoUnit> aircraftCargoUnits;
+    private Set<CargoFreight> aircraftCargoUnits;
 
-    public CargoTablesPanel(EditorCore editorCore, Set<CargoType> cargoTypeSet) {
+    public CargoTablesPanel(EditorCore editorCore, Set<CargoType> cargoTypeSet, String command) {
         this.editorCore = editorCore;
         this.settingsPanel = editorCore.getEditorFrame().getSettingsPanel();
         this.cargoTypeSet = cargoTypeSet;
         this.cargoArea = (CargoArea) settingsPanel.getCompartmentArea();
         addUnitSet();
-        init();
+        init(command);
     }
 
-    private void init() {
+    private void init(String command) {
         setPreferredSize(new Dimension(600, 300));
         cargoTypeSet.forEach(cargoType -> cargoHashMap.put(cargoType.getName(), cargoType));
         allCargo = addTable("all");
         aircraftCargo = addTable("aircraft");
-        editTableView(allCargo);
-        add(new JScrollPane(allCargo), BorderLayout.WEST);
-        add(new JScrollPane(aircraftCargo), BorderLayout.EAST);
+        if(command.equals(CargoSettings.CARGO_ALL)) {
+            add(new JScrollPane(allCargo), BorderLayout.WEST);
+        } else {
+            add(new JScrollPane(aircraftCargo), BorderLayout.EAST);
+        }
     }
 
     private void addUnitSet() {
@@ -56,9 +60,9 @@ public class CargoTablesPanel extends JPanel {
     public JTable addTable(String command) {
         DefaultTableModel model;
         if (command.equals("all")) {
-            model = editorCore.getCargoDatabase().getDatabase(cargoTypeSet);
+            model = editorCore.getCargoDatabase().getDatabase(cargoTypeSet, CargoType.class);
         } else {
-            model = editorCore.getCargoDatabase().getAircraftHold(aircraftCargoUnits);
+            model = editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class);
         }
         JTable table = new JTable(model) {
             @Override
@@ -69,7 +73,7 @@ public class CargoTablesPanel extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         table.setFillsViewportHeight(true);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setPreferredScrollableViewportSize(new Dimension(250, 200));
+        table.setPreferredScrollableViewportSize(new Dimension(350, 200));
         addTableSelectionListener(table);
         return table;
     }
@@ -85,4 +89,9 @@ public class CargoTablesPanel extends JPanel {
             }
         });
     }
+    @Override
+    public void notifyChange(Aircraft aircraft) {
+        CargoUnitsListener.super.notifyChange(aircraft);
+    }
+
 }

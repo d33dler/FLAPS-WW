@@ -4,12 +4,11 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.view.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoUnit;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -19,22 +18,18 @@ public class CargoDatabase extends DefaultTableModel {
     private DefaultTableModel tableModel;
     private EditorCore editorCore;
     private CargoArea cargoArea;
-    
+    private static final String DATA_OBJ_Pkg = "nl.rug.oop.flaps.simulation.model.cargo";
     public CargoDatabase(EditorCore editorCore, SettingsPanel settingsPanel) {
         this.editorCore = editorCore;
         this.cargoArea = (CargoArea) settingsPanel.getCompartmentArea();
+    }
 
+    public DefaultTableModel getDatabase(Set<?> set, Class<?> clazz) {
+        return new DefaultTableModel(getDatabaseData(set, clazz), getColumns(FileUtils.getAllFields(clazz)));
     }
-    public DefaultTableModel getDatabase(Set<CargoType> set){
-        Class<CargoType> clazz = CargoType.class;
-        return new DefaultTableModel(getData(set,clazz),getColumns(FileUtils.getAllFields(clazz)));
-    }
-    public DefaultTableModel getAircraftHold(Set<CargoUnit> set){
-        Class<CargoUnit> clazz = CargoUnit.class;
-        return new DefaultTableModel(getData(set,clazz),getColumns(FileUtils.getAllFields(clazz)));
-    }
+
     /**
-     * @param  - to obtain column count and column names for the DefaultTableModel
+     * @param -      to obtain column count and column names for the DefaultTableModel
      * @param fields
      * @return columnIds Strings vector list
      */
@@ -42,32 +37,61 @@ public class CargoDatabase extends DefaultTableModel {
     public Vector<String> getColumns(List<Field> fields) {
         Vector<String> columnIds = new Vector<>();
         for (Field field : fields) {
-            columnIds.add(field.getName());
+            System.out.println(field.getName());
+            field.setAccessible(true);
+            if (FileUtils.isFieldPrimitiveDeserializable(field)) {
+                columnIds.add(FileUtils.toSnakeCase(field.getName()));
+            } else {
+                if (!field.getType().getPackage().getName().equals(DATA_OBJ_Pkg)) {
+                    continue;
+                }
+                List<Field> nwList = FileUtils.getAllFields(field.getType());
+                nwList.forEach(fld -> System.out.println(field.getName()));
+                Vector<String> nestedFields = getColumns(FileUtils.getAllFields(field.getType()));
+                nestedFields.forEach(System.out::println);
+                columnIds.addAll(nestedFields);
+            }
         }
         return columnIds;
     }
 
     /**
-     * @return all fields data from all entities in the current resultSet.
      * @param objectSet
+     * @return all fields data from all entities in the current resultSet.
      */
     @SneakyThrows
-    public Vector<Vector<Object>> getData(Set<?> objectSet, Class clazz) {
+    public Vector<Vector<Object>> getDatabaseData(Set<?> objectSet, Class<?> clazz) {
         Vector<Vector<Object>> data = new Vector<>();
-        List<Field> fields = FileUtils.getAllFields(clazz);
         objectSet.forEach(obj -> {
-            Vector<Object> entityObj = new Vector<>();
-            fields.forEach(field -> {
-                field.setAccessible(true);
-                try {
-                    entityObj.add(field.get(obj));
-                } catch (IllegalAccessException e) {
-                    System.out.println("Error returning all fields");
-                }
-            });
-            data.add(entityObj);
+            data.add(extractObjData(obj, clazz));
         });
-
         return data;
+    }
+
+    public Vector<Object> extractObjData(Object obj, Class<?> clazz) {
+        List<Field> fields = FileUtils.getAllFields(clazz);
+        Vector<Object> entityObj = new Vector<>();
+        for (Field field : fields) {
+            field.setAccessible(true);
+            try {
+                if (FileUtils.isFieldPrimitiveDeserializable(field)) {
+                    System.out.println(field.getName() + " <- primitive : Class:" + clazz.getSimpleName());
+                    entityObj.add(field.get(obj));
+                } else {
+                    System.out.println(field.getName() + " <- super : Class:" + clazz.getSimpleName());
+                    if (!field.getType().getPackage().getName().equals(DATA_OBJ_Pkg)) {
+                        continue;
+                    }
+                    Class<?> fieldClass = field.getType();
+                    Set<Field> set = new HashSet<>();
+                    set.add(field);
+                    Vector<Object> nestedData = extractObjData(set, fieldClass);
+                    entityObj.addAll(nestedData);
+                }
+            } catch (IllegalAccessException e) {
+                System.out.println("Error returning all fields");
+            }
+        }
+        return entityObj;
     }
 }

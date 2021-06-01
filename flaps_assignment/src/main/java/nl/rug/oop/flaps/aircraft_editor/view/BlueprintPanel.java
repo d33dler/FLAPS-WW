@@ -16,7 +16,7 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
     private BlueprintDisplay blueprintDisplay;
     private BlueprintSelectionModel selectionModel;
     private Aircraft aircraft;
-    private static final int WIDTH = 650, HEIGHT = 650;
+    //private static final int WIDTH = 500, HEIGHT = 650;
 
     public BlueprintPanel(EditorCore model, BlueprintSelectionModel selectionModel, Aircraft aircraft) {
         this.model = model;
@@ -30,11 +30,10 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
 
     @SneakyThrows
     private void init() {
-        this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setPreferredSize(new Dimension((int)EditorCore.BP_WIDTH, (int) EditorCore.BP_HEIGHT));
         this.setBorder(BorderFactory.createCompoundBorder());
         this.blueprintDisplay = new BlueprintDisplay(this.selectionModel, this.aircraft, this);
-        add(blueprintDisplay, BorderLayout.CENTER);
+        add(blueprintDisplay, BorderLayout.WEST);
     }
 
 

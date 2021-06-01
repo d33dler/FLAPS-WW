@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,5 +24,4 @@ public class BlueprintSelectionModel {
             listener.compartmentSelected(area);
         });
     }
-
 }

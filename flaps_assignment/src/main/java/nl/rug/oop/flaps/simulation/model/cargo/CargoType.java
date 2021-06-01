@@ -27,6 +27,8 @@ public class CargoType implements Comparable<CargoType> {
 	 */
 	private float basePricePerKg;
 
+	private float weightPerUnit;
+
 	/**
 	 * The sprite of this type
 	 */

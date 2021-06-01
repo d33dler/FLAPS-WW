@@ -13,7 +13,7 @@ public class LogPanel extends JPanel {
     EditorCore editorCore;
     EditorFrame editorFrame;
 
-    public static final String FUEL_CONFIRM = "Fuel amount loaded successfully!";
+    public static final String FUEL_CONFIRM = "Fuel amount loaded successfully! ";
     public static final String OTHER_CONFIRM = "others";
 
     public LogPanel(EditorFrame editorFrame) {

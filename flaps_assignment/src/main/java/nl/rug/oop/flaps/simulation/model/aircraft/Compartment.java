@@ -16,5 +16,7 @@ public abstract class Compartment {
     public Point2D.Double getCoords() {
         return new Point2D.Double(x, y);
     }
-
+    public int getCoordsHash() {
+        return Objects.hash(x,y);
+    }
 }

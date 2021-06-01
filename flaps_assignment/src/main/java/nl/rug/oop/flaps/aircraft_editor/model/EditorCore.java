@@ -2,17 +2,16 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.geom.Point2D;
-import java.sql.ResultSet;
 import java.util.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -21,21 +20,27 @@ public class EditorCore {
     private final Aircraft aircraft;
     private static double AIRCRAFT_LEN;
     private final BlueprintSelectionModel selectionModel;
+    private final CargoManipulationModel cargoManipulationModel;
     private EditorFrame editorFrame;
     private Configurator configurator;
     private CargoDatabase cargoDatabase;
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
     protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
-
     private static final double NEARBY_UNIT_RANGE = 250.0;
+
+    public static double BP_WIDTH, BP_HEIGHT, BP_RATIO, BP_MARGIN;
+    public static Point2D.Double BP_POS;
+
 
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel, EditorFrame editorFrame) {
         this.world = aircraft.getWorld();
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
         this.selectionModel = selectionModel;
+        this.cargoManipulationModel = editorFrame.getCargoManipulationModel();
         this.configurator = new Configurator(this);
+        configureBlueprintImg();
         updateCompartmentCoords();
         listToCoordsMap(this.aircraft.getType().getCargoAreas());
         listToCoordsMap(this.aircraft.getType().getFuelTanks());
@@ -60,6 +65,16 @@ public class EditorCore {
         }
     }
 
+    private void configureBlueprintImg() {
+        BP_MARGIN = 30;
+        BP_WIDTH = aircraft.getType().getBlueprintImage().getWidth(editorFrame);
+        BP_HEIGHT = aircraft.getType().getBlueprintImage().getHeight(editorFrame);
+        BP_RATIO = BP_HEIGHT / BP_WIDTH;
+        BP_HEIGHT = 500;
+        BP_WIDTH = 500 / BP_RATIO;
+        BP_POS = new Point2D.Double(0, 20);
+    }
+
     private void listToCoordsMap(List<? extends Compartment> list) {
         list.forEach(area -> {
             Point2D.Double pos = this.localCoords.get(area.hashCode());
@@ -72,6 +87,7 @@ public class EditorCore {
             }
         });
     }
+
     private void updateCompartmentCoords() {
         AIRCRAFT_LEN = this.aircraft.getType().getLength();
         updateXY(this.aircraft.getType().getCargoAreas());
@@ -81,18 +97,17 @@ public class EditorCore {
     private void updateXY(List<? extends Compartment> units) {
         units.forEach(area -> {
             var p = remap(area.getCoords());
-            this.localCoords.put(area.hashCode(),p);
+            this.localCoords.put(area.hashCode(), p);
         });
     }
 
     private Point2D.Double remap(Point2D.Double source) {
-        double bpSize = BlueprintDisplay.WIDTH;
+        double bpSize = BP_WIDTH;
         double s = BlueprintDisplay.MK_SIZE;
-        double x = (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
-        double y = (source.y) * (bpSize / AIRCRAFT_LEN) - s / 2;
+        double x = BP_POS.x + (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - (s / 2);
+        double y = BP_POS.y + (source.y * (bpSize / AIRCRAFT_LEN)) - (s / 2);
         return new Point2D.Double(x, y);
     }
-
 
 }
 

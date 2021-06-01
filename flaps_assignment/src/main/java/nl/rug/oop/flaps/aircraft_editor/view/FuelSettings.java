@@ -1,9 +1,12 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
+
 import lombok.Setter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -21,8 +24,19 @@ public class FuelSettings extends JPanel implements BlueprintSelectionListener, 
     private FuelTank area;
     private static final int LARGE_TANK = 50000;
 
+    @Override
+    public void compartmentSelected(Compartment area) {
+        BlueprintSelectionListener.super.compartmentSelected(area);
+        System.out.println("New area selected");
+        if (area instanceof FuelTank) {
+            this.area = (FuelTank) area;
+            System.out.println("New FUELTANK");
+        }
+    }
+
     public FuelSettings(EditorCore editorCore) {
         this.editorCore = editorCore;
+        editorCore.getSelectionModel().addListener(this);
         addFuelSlider();
     }
 
@@ -51,22 +65,21 @@ public class FuelSettings extends JPanel implements BlueprintSelectionListener, 
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
+                sliderSaves.put(area.getCoordsHash(), fuelSlider.getValue());
                 editorCore.getConfigurator().updateFuelStatus(area, fuelSlider.getValue());
-
             }
         });
         return confirm;
     }
 
     protected void displaySlider() {
-        int capacity = (area).getCapacity();
-        adjustSlider(capacity);
-        if (sliderSaves.containsKey(area.hashCode())
-                && sliderSaves.get(area.hashCode()) != null) {
-            fuelSlider.setValue(sliderSaves.get(area.hashCode()));
+        adjustSlider(area.getCapacity());
+        System.out.println(area.getName());
+        if (sliderSaves.containsKey(area.getCoordsHash())) {
+            fuelSlider.setValue(sliderSaves.get(area.getCoordsHash()));
         } else {
-            sliderSaves.put(this.area.hashCode(), 0);
-            fuelSlider.setValue(0);
+            sliderSaves.put(area.getCoordsHash(), 1);
+            fuelSlider.setValue(1);
         }
     }
 
@@ -79,8 +92,5 @@ public class FuelSettings extends JPanel implements BlueprintSelectionListener, 
     @Override
     public void stateChanged(ChangeEvent e) {
         fuelAmount.setText(String.valueOf(fuelSlider.getValue()));
-        if (!fuelSlider.getValueIsAdjusting()) {
-            this.sliderSaves.put(this.area.hashCode(), fuelSlider.getValue());
-        }
     }
 }

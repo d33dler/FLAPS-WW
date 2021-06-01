@@ -1,7 +1,6 @@
 package nl.rug.oop.flaps.simulation.view.panels.aircraft;
 
 import lombok.extern.java.Log;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.simulation.controller.actions.OpenAircraftConfigurer;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -39,7 +38,7 @@ public class AircraftPanel extends JPanel implements WorldSelectionModelListener
         ImageIcon blueprintIcon = new ImageIcon(aircraft.getType().getBannerImage().getScaledInstance(this.getWidth(), this.getWidth() / 3, Image.SCALE_SMOOTH));
         add(new JLabel(blueprintIcon), BorderLayout.CENTER);
         var sm = this.world.getSelectionModel();
-        add(new JButton(new OpenAircraftConfigurer(sm.getSelectedAircraft(), new BlueprintSelectionModel())), BorderLayout.SOUTH);
+        add(new JButton(new OpenAircraftConfigurer(sm.getSelectedAircraft())), BorderLayout.SOUTH);
         revalidate();
         repaint();
     }
