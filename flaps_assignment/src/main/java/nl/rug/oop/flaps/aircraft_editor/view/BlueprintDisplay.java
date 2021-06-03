@@ -6,6 +6,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -84,7 +85,7 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
     }
 
     @Override
-    public void compartmentSelected(Compartment area) {
+    public void compartmentSelected(FuelTank area) {
         this.repaint();
     }
 }

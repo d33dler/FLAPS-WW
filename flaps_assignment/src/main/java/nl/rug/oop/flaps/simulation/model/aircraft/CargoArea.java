@@ -38,4 +38,8 @@ public class CargoArea extends Compartment {
     public int hashCode() {
         return Objects.hash(name);
     }
+
+    public double requestCapacity() {
+        return maxWeight;
+    }
 }

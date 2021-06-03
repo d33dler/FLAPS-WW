@@ -27,7 +27,7 @@ public class CargoButtonPanel extends JPanel {
         add.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                settings.getCargoAmountPanel().setVisible(true);
+                settings.getCargoAmountPanel().enableFull();
                 settings.setCommandRequest(ADD_COM);
             }
         });
@@ -35,7 +35,7 @@ public class CargoButtonPanel extends JPanel {
         remove.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                settings.getCargoAmountPanel().setVisible(true);
+                settings.getCargoAmountPanel().enableFull();
                 settings.setCommandRequest(REM_COM);
             }
         });
@@ -43,8 +43,7 @@ public class CargoButtonPanel extends JPanel {
         removeAll.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                settings.getCargoAmountPanel().setVisible(true);
-                settings.getCargoAmountPanel().getAmountField().setVisible(false);
+                settings.getCargoAmountPanel().enablePartial();
                 settings.setCommandRequest(REMALL_COM);
             }
         });

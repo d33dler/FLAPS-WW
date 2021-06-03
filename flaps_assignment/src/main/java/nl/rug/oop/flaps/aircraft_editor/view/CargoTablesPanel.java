@@ -53,7 +53,6 @@ public class CargoTablesPanel extends JPanel {
     private void addUnitSet() {
         this.aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
         if (aircraftCargoUnits == null) {
-            System.out.println("He didn't init them");
             this.aircraftCargoUnits = new HashSet<>();
             editorCore.getAircraft().getCargoAreaContents().put(cargoArea, aircraftCargoUnits);
         }
@@ -76,7 +75,7 @@ public class CargoTablesPanel extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         table.setFillsViewportHeight(true);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setPreferredScrollableViewportSize(new Dimension(500, 200));
+        table.setPreferredScrollableViewportSize(new Dimension(500, 300));
         return table;
     }
 
@@ -85,9 +84,9 @@ public class CargoTablesPanel extends JPanel {
     }
     protected void update() {
         aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
-        aircraftCargoUnits.forEach(obj -> System.out.println(obj.getCargoType().getName()));
+        aircraftCargoUnits.forEach(obj -> System.out.println(obj.getCargoType().getName() + " : " + obj.getTotalWeight()));
         cargoTable.setModel(editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class));
-        editTableView(cargoTable, 1);
+        editTableView(cargoTable, 2);
         cargoTable.repaint();
     }
 }

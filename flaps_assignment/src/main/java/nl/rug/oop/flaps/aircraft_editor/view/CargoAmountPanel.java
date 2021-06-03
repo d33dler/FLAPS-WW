@@ -38,6 +38,7 @@ public class CargoAmountPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 cargoSettings.setQuantity(Integer.parseInt(amountField.getText()));
                 cargoSettings.delegateCommands(cargoSettings.getCommandRequest());
+                System.out.println(cargoSettings.getCommandRequest());
                 executeCommonUpdate();
             }
         });
@@ -46,6 +47,7 @@ public class CargoAmountPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 cargoSettings.getCargoWarehouse().getCargoTable().getSelectionModel().clearSelection();
+                cargoSettings.getCargoAircraft().getCargoTable().getSelectionModel().clearSelection();
                 executeCommonUpdate();
             }
         });
@@ -56,14 +58,14 @@ public class CargoAmountPanel extends JPanel {
 
     private void executeCommonUpdate() {
         cargoSettings.getCargoButtonPanel().disableButtons();
-        amountField.setText("");
+        amountField.setText("0");
         cargoSettings.setCommandRequest(null);
         setVisible(false);
     }
 
     private void addTextField() {
         this.amountField = new JTextField("unit amount", 5);
-        amountField.setCaretPosition(1);
+        amountField.setPreferredSize(new Dimension(50,15));
         addDocumentListener(amountField);
         add(amountField);
     }
@@ -96,5 +98,16 @@ public class CargoAmountPanel extends JPanel {
 
     private void tweakButton(String input) {
         confirmButton.setEnabled(input.matches("[0-9]+"));
+    }
+
+    protected void enablePartial() {
+        this.setVisible(true);
+        amountField.setVisible(false);
+        confirmButton.setEnabled(true);
+    }
+    protected void enableFull() {
+        this.setVisible(true);
+        amountField.setVisible(true);
+        confirmButton.setEnabled(true);
     }
 }

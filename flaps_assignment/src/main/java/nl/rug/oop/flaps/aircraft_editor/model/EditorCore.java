@@ -2,11 +2,14 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.MassTracker;
+import nl.rug.oop.flaps.aircraft_editor.controller.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.airport.Airport;
+import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.geom.Point2D;
@@ -24,6 +27,10 @@ public class EditorCore {
     private EditorFrame editorFrame;
     private Configurator configurator;
     private CargoDatabase cargoDatabase;
+    private MassTracker massTracker;
+    private GeographicCoordinates originCoordinates;
+    private Airport source;
+    private Airport destination;
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
     protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
@@ -35,10 +42,13 @@ public class EditorCore {
 
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel, EditorFrame editorFrame) {
         this.world = aircraft.getWorld();
+        this.destination = world.getSelectionModel().getSelectedAirport();
+        this.originCoordinates = world.getSelectionModel().getSelectedDestinationAirport().getGeographicCoordinates();
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
         this.selectionModel = selectionModel;
         this.cargoManipulationModel = editorFrame.getCargoManipulationModel();
+        this.massTracker = new MassTracker(this, aircraft);
         this.configurator = new Configurator(this);
         configureBlueprintImg();
         updateCompartmentCoords();

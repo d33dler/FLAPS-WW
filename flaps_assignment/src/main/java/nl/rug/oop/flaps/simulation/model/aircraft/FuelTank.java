@@ -35,4 +35,7 @@ public class FuelTank extends Compartment {
         return Objects.hash(name);
     }
 
+    public double requestCapacity() {
+        return capacity;
+    }
 }

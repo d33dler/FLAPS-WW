@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
@@ -28,11 +29,13 @@ public class EditorFrame extends JFrame {
     private LogPanel logPanel;
     private InfoPanel infoPanel;
 
+
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, CargoManipulationModel cargoModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.cargoManipulationModel = cargoModel;
         this.aircraft = aircraft;
+        addLog();
         this.model = new EditorCore(aircraft, selectionModel, this);
         editorInit();
         pack();
@@ -45,15 +48,18 @@ public class EditorFrame extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
         addMainPanels();
         addMenuBar();
+    }
+    private void addLog() {
+        logPanel = new LogPanel(this);
     }
 
     private void addMainPanels() {
         blueprintPanel = new BlueprintPanel(model, selectionModel, this.aircraft);
         settingsPanel = new SettingsPanel(model);
         infoPanel = new InfoPanel(model);
-        logPanel = new LogPanel(this);
         add(this.blueprintPanel, BorderLayout.WEST);
         add(this.settingsPanel, BorderLayout.NORTH);
         add(this.infoPanel, BorderLayout.EAST);
@@ -72,15 +78,3 @@ public class EditorFrame extends JFrame {
         setJMenuBar(bar);
     }
 }
-
-
-
-
-
-/*
- * To get the destination airport:
- * selectionModel.getSelectedDestinationAirport()
- * To get the origin airport:
- * selectionModel.getSelectedAirport()
- * Other than this, the only place where you you need to use the selectionModel is passing it to the DepartAction
- */

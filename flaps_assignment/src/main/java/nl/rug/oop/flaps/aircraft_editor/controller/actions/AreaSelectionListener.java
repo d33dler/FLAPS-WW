@@ -1,6 +1,8 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.actions;
 
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 import javax.swing.*;
 import java.awt.event.MouseAdapter;
@@ -21,7 +23,7 @@ public class AreaSelectionListener extends MouseAdapter {
             Point2D.Double ePos = new Point2D.Double(e.getPoint().x,e.getPoint().y);
             var area = this.editorCore.extractApproxArea(ePos);
             area.ifPresent(a -> {
-                this.editorCore.getSelectionModel().setSelectedCompartment(a);
+                this.editorCore.getSelectionModel().setSelectedCompartment(a, editorCore.getSelectionModel());
                 System.out.println(area.get().getName());
             });
         });

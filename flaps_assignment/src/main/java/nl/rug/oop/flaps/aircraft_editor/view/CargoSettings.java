@@ -25,13 +25,14 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     private CargoAmountPanel cargoAmountPanel;
     private HashMap<String, CargoType> cargoHashMap = new HashMap<>();
     private HashMap<String, CargoFreight> freightHashMap = new HashMap<>();
-    private static final int WIDTH = 1200, LENGTH = 600;
-    protected static final String CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo";
     private String commandRequest;
     private int quantity;
     private CargoButtonPanel cargoButtonPanel;
     private CargoType selectedType;
     private CargoFreight selectedFreight;
+    private float totalCargoAreaWgt;
+    protected static final String CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo";
+    private static final int WIDTH = 1200, LENGTH = 600;
 
     public CargoSettings(EditorCore editorCore, CargoArea cargoArea) {
         super("Cargo Areas Loader");
@@ -39,6 +40,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
         this.cargoArea = cargoArea;
         this.aircraft = editorCore.getAircraft();
         this.cargoTypeSet = editorCore.getWorld().getCargoSet();
+        this.totalCargoAreaWgt = 0;
         editorCore.getCargoManipulationModel().addListener(this);
         init();
     }
@@ -51,7 +53,11 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
             cargoHashMap.put(cargoType.getName(), cargoType);
         });
         aircraft.getCargoAreaContents(cargoArea).forEach(cargoFreight
-                -> freightHashMap.put(cargoFreight.getId(),cargoFreight));
+                -> {
+            totalCargoAreaWgt += cargoFreight.getTotalWeight();
+            freightHashMap.put(cargoFreight.getId(), cargoFreight);
+        });
+
         addAllPanels();
         setLocationRelativeTo(null);
         setResizable(false);
@@ -96,30 +102,39 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
                 cargoWarehouse.getCargoTable().getSelectionModel().clearSelection();
                 selectedFreight = freightHashMap.get(table.getValueAt(table.getSelectedRow(), 0).toString());
+                selectedType = cargoHashMap.get(table.getValueAt(table.getSelectedRow(), 1).toString());
                 cargoButtonPanel.switchTwo();
             }
         });
     }
+
     protected void delegateCommands(String command) {
         int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
         if (command != null) {
             switch (command) {
                 case CargoButtonPanel.ADD_COM: {
-                    editorCore.getConfigurator().unitAdded(editorCore.getAircraft(), selectedType, amount);
+                    float weight = amount * selectedType.getWeightPerUnit();
+                    if (editorCore.getMassTracker().performCheck(weight)) {
+                        editorCore.getConfigurator().unitAdded(aircraft, selectedType, amount);
+                    }
                     return;
                 }
                 case CargoButtonPanel.REM_COM: {
-                    editorCore.getConfigurator().unitRemoved(editorCore.getAircraft(), selectedType, amount);
+                    editorCore.getConfigurator().unitRemoved(aircraft, selectedFreight, amount);
                     return;
                 }
                 case CargoButtonPanel.REMALL_COM: {
+                    editorCore.getConfigurator().allCargoRemove(aircraft);
+                    return;
                 }
                 default:
             }
         } else {
-            System.out.println("No command selected");
+            System.out.println("There was an issue loading the cargo");
         }
     }
+
+
     @Override
     public void notifyChange(Aircraft aircraft) {
         CargoUnitsListener.super.notifyChange(aircraft);
