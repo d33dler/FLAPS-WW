@@ -22,6 +22,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private FuelSettings fuelSettings;
     private Compartment compartmentArea;
     private JButton exCargoLoader;
+    private CargoSettings cargoSettings;
 
     public SettingsPanel(EditorCore model) {
         this.model = model;
@@ -54,9 +55,8 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         exCargoLoader.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 SwingUtilities.invokeLater(() ->
-                        new CargoSettings(model,(CargoArea) compartmentArea,model.getWorld().getCargoSet()));
+                    cargoSettings = new CargoSettings(model,(CargoArea) compartmentArea));
             }
         });
         add(exCargoLoader);

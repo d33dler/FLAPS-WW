@@ -37,7 +37,6 @@ public class CargoDatabase extends DefaultTableModel {
     public Vector<String> getColumns(List<Field> fields) {
         Vector<String> columnIds = new Vector<>();
         for (Field field : fields) {
-            System.out.println(field.getName());
             field.setAccessible(true);
             if (FileUtils.isFieldPrimitiveDeserializable(field)) {
                 columnIds.add(FileUtils.toSnakeCase(field.getName()));
@@ -45,10 +44,7 @@ public class CargoDatabase extends DefaultTableModel {
                 if (!field.getType().getPackage().getName().equals(DATA_OBJ_Pkg)) {
                     continue;
                 }
-                List<Field> nwList = FileUtils.getAllFields(field.getType());
-                nwList.forEach(fld -> System.out.println(field.getName()));
                 Vector<String> nestedFields = getColumns(FileUtils.getAllFields(field.getType()));
-                nestedFields.forEach(System.out::println);
                 columnIds.addAll(nestedFields);
             }
         }
@@ -75,17 +71,13 @@ public class CargoDatabase extends DefaultTableModel {
             field.setAccessible(true);
             try {
                 if (FileUtils.isFieldPrimitiveDeserializable(field)) {
-                    System.out.println(field.getName() + " <- primitive : Class:" + clazz.getSimpleName());
                     entityObj.add(field.get(obj));
                 } else {
-                    System.out.println(field.getName() + " <- super : Class:" + clazz.getSimpleName());
                     if (!field.getType().getPackage().getName().equals(DATA_OBJ_Pkg)) {
                         continue;
                     }
                     Class<?> fieldClass = field.getType();
-                    Set<Field> set = new HashSet<>();
-                    set.add(field);
-                    Vector<Object> nestedData = extractObjData(set, fieldClass);
+                    Vector<Object> nestedData = extractObjData(field.get(obj), fieldClass);
                     entityObj.addAll(nestedData);
                 }
             } catch (IllegalAccessException e) {
