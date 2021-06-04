@@ -60,7 +60,7 @@ public class EditorFrame extends JFrame {
         infoPanel = new InfoPanel(model);
         add(this.blueprintPanel, BorderLayout.WEST);
         add(this.settingsPanel, BorderLayout.NORTH);
-        add(this.infoPanel, BorderLayout.EAST);
+        add(this.infoPanel, BorderLayout.CENTER);
         add(this.logPanel, BorderLayout.SOUTH);
         validate();
     }

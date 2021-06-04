@@ -134,10 +134,10 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
         }
     }
 
-
     @Override
     public void notifyChange(Aircraft aircraft) {
         CargoUnitsListener.super.notifyChange(aircraft);
+        System.out.println("repaintTable");
         cargoAircraft.update();
     }
 }

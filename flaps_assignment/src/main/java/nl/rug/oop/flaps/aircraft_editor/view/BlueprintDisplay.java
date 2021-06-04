@@ -21,20 +21,18 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
     private Image cachedBpImage;
     private Aircraft aircraft;
     public static final int MK_SIZE = 18;
-    public static String BP_TITLE;
     public static int WIDTH, HEIGHT;
     private BlueprintSelectionModel sm;
     private BlueprintPanel bpPanel;
-    private RoundPolygon ellMarker;
-    private RegularPolygon recMarker;
     private Graphics2D g2d;
     private final static String listener_Id = EditorCore.generalListenerID;
+
     /* Color Palette */
     private final static Color
             C_ROYBLUE = new Color(48, 87, 225, 218),
             C_HMAG = new Color(232, 55, 238, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
-            BP_BG = new Color(71, 77, 85, 42);
+            BP_BG = new Color(58, 66, 80, 171);
 
     /**
      * @param bpSmodel
@@ -46,9 +44,10 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
         this.bpPanel = bpPanel;
         this.sm = bpSmodel;
         this.aircraft = aircraft;
+        setBackground(BP_BG);
         getSizes();
-        BP_TITLE = this.aircraft.getType().getName() + " Blueprint";
         sm.addListener(listener_Id,this);
+
     }
 
     private void getSizes() {
@@ -75,9 +74,6 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
                 .forEach(cargoArea -> addAreaIndicators(cargoArea, C_ROYBLUE));
         this.aircraft.getType().getFuelTanks()
                 .forEach(fuelArea -> addAreaIndicators(fuelArea, C_HMAG));
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(1),
-                BP_TITLE, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-        setBackground(BP_BG);
     }
 
     private void addAreaIndicators(Compartment area, Color c) {
@@ -98,18 +94,14 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
         int coordX = (int) (pos.x + off);
         int coordY = (int) (pos.y + off);
         if (adjust) {
-
-            recMarker = new RegularPolygon(coordX, coordY, mk, 8, 0);
-            g2d.fill(recMarker);
+            g2d.fill(new RegularPolygon(coordX, coordY, mk, 8, 0));
         } else {
-            ellMarker = new RoundPolygon(new RegularPolygon(coordX, coordY, mk, 4, 0), 5);
-            g2d.fill(ellMarker);
+            g2d.fill(new RoundPolygon(new RegularPolygon(coordX, coordY, mk, 4, 0), 5));
         }
     }
 
     @Override
     public void compartmentSelected(Compartment area) {
-        g2d.dispose();
-        repaint();
+        this.repaint();
     }
 }

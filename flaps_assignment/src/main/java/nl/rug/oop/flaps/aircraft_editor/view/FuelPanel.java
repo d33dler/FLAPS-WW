@@ -92,7 +92,6 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     @Override
     public void compartmentSelected(Compartment area) {
         this.area = (FuelTank) area;
-        System.out.println("!New FUELTANK");
         displaySlider();
         editorCore.getConfigurator().setFuelTankLoad();
         settingsPanel.getCargoPanel().setVisible(false);

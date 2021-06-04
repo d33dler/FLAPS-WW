@@ -27,7 +27,7 @@ public class FlapsFrame extends JFrame {
         world.getDimensions().setMapWidth(WIDTH/2);
         initPanels(world);
         pack();
-
+        setResizable(false);
         setLocationRelativeTo(null);
         setVisible(true);
     }

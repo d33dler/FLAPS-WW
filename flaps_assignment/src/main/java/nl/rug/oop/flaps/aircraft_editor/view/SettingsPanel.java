@@ -34,7 +34,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private void init() {
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        setPreferredSize(new Dimension(500, 150));
+        setPreferredSize(new Dimension(500, 120));
         setBorder(BorderFactory.createEtchedBorder());
         this.areaData = new JTextArea("Selected compartment:\n\nN/A", 7, 17);
         areaData.setBorder(BorderFactory.createEtchedBorder());

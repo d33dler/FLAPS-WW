@@ -44,7 +44,6 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
 
     @Override
     public void compartmentSelected(Compartment area) {
-        System.out.println("!New CargoAREA");
         editorCore.getConfigurator().updateDatabaseTables(settingsPanel);
         editorCore.getConfigurator().setCargoAreaLoad();
         settingsPanel.getFuelPanel().setVisible(false);

@@ -11,7 +11,7 @@ import java.util.List;
 
 
 @Getter
-public class CargoManipulationModel implements CargoManipulationInterface{
+public class CargoManipulationModel implements CargoManipulationInterface {
     private CargoType cargoUnit = null;
     private CargoFreight cargoFreight = null;
     private int amount;

@@ -24,9 +24,9 @@ public class DataTracker implements BlueprintSelectionListener {
             nomCompartmentLoad = 0;
     private double defaultRange,
             emptyWeight,
-            maxTakeOffWgt,
-            maxLandingWgt,
-            areaCapacity = 0,
+            maxTakeOffWeight,
+            maxLandingWeight,
+            selectedAreaCapacity = 0,
             travelDistance,
             aircraftRange;
     private static final int M_KM = 1000;
@@ -34,7 +34,6 @@ public class DataTracker implements BlueprintSelectionListener {
     public DataTracker(EditorCore editorCore, Aircraft aircraft) {
         this.aircraft = aircraft;
         this.editorCore = editorCore;
-
         editorCore.getSelectionModel().addListener(listener_ID, this);
         init();
     }
@@ -44,8 +43,8 @@ public class DataTracker implements BlueprintSelectionListener {
                 .distanceTo(editorCore.getDestination().getGeographicCoordinates());
         this.defaultRange = aircraft.getType().getRange();
         this.emptyWeight = totalAircraftLoad = (float) aircraft.getType().getEmptyWeight();
-        this.maxTakeOffWgt = aircraft.getType().getMaxTakeoffWeight();
-        this.maxLandingWgt = aircraft.getType().getMaxLandingWeight();
+        this.maxTakeOffWeight = aircraft.getType().getMaxTakeoffWeight();
+        this.maxLandingWeight = aircraft.getType().getMaxLandingWeight();
         aircraft.getType().getCargoAreas()
                 .forEach(area -> aircraftCapacity += area.getMaxWeight());
         aircraft.getType().getFuelTanks()
@@ -57,9 +56,9 @@ public class DataTracker implements BlueprintSelectionListener {
         float allCargo = totalAircraftLoad + amount;
 
         if (amount > 0
-                && nomCompartmentLoad + amount <= areaCapacity
-                && allCargo <= maxTakeOffWgt
-                && allCargo <= maxLandingWgt) {
+                && nomCompartmentLoad + amount <= selectedAreaCapacity
+                && allCargo <= maxTakeOffWeight
+                && allCargo <= maxLandingWeight) {
             totalAircraftLoad = allCargo;
             nomCompartmentLoad += amount;
             System.out.println("NOICE: " + allCargo + "; nomLoad:" + nomCompartmentLoad + "; aircraftLoad: " + totalAircraftLoad
@@ -106,10 +105,10 @@ public class DataTracker implements BlueprintSelectionListener {
 
     @SneakyThrows
     private void updateCompartmentAttr() {
-        areaCapacity = (double) compartment.getClass()
+        selectedAreaCapacity = (double) compartment.getClass()
                 .getMethod("requestCapacity")
                 .invoke(compartment);
-        System.out.println("Received capacity: " + areaCapacity);
+        System.out.println("Received capacity: " + selectedAreaCapacity);
         updateTotalLoadMass();
     }
     private void updateTotalLoadMass() {
@@ -117,6 +116,7 @@ public class DataTracker implements BlueprintSelectionListener {
                 area.forEach(freight -> totalCargoLoadMass += freight.getTotalWeight()));
         aircraft.getFuelTankFillStatuses().values().forEach(tank ->
                 totalFuelLoadMass += tank);
+        //aircraft.getCargoAreaContents(compartment)
     }
 
     public float getAreaMass() {
