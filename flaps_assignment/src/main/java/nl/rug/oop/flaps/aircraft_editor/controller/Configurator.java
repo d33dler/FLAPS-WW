@@ -19,7 +19,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Configurator {
     private Aircraft aircraft;
     private EditorCore editorCore;
-    private MassTracker massTracker;
+    private DataTracker dataTracker;
     private BlueprintSelectionModel selectionModel;
     private CargoManipulationModel cargoManipulationModel;
     private LogPanel logPanel;
@@ -32,14 +32,14 @@ public class Configurator {
         this.editorCore = editorCore;
         this.aircraft = editorCore.getAircraft();
         this.selectionModel = editorCore.getSelectionModel();
-        this.massTracker = editorCore.getMassTracker();
+        this.dataTracker = editorCore.getDataTracker();
         this.cargoManipulationModel = editorCore.getCargoManipulationModel();
         this.logPanel = editorCore.getEditorFrame().getLogPanel();
     }
 
     public void updateFuelStatus(FuelTank fuelTank, double level) {
         String val = "Level: " + level + "; Fuel Tank: " + fuelTank.getName();
-        if (massTracker.performFuelCheck(aircraft.getFuelAmountForFuelTank(fuelTank),level )) {
+        if (dataTracker.performFuelCheck(aircraft.getFuelAmountForFuelTank(fuelTank),level )) {
             aircraft.setFuelAmountForFuelTank(fuelTank, level);
             logPanel.updateLog(LogMessagesStack.FUEL_CONFIRM + val);
         } else {
@@ -93,11 +93,11 @@ public class Configurator {
 
     public void setCargoAreaLoad() {
         aircraft.getCargoAreaContents((CargoArea) selectionModel.getCompartment()).forEach(cargoFreight ->
-                massTracker.setAreaMass((float) (massTracker.getAreaMass() + cargoFreight.getTotalWeight())));
+                dataTracker.setAreaMass((float) (dataTracker.getAreaMass() + cargoFreight.getTotalWeight())));
     }
 
     public void setFuelTankLoad() {
-        massTracker.setAreaMass
+        dataTracker.setAreaMass
                 (Float.parseFloat
                         (String.valueOf(aircraft.getFuelAmountForFuelTank((FuelTank) selectionModel.getCompartment()))));
     }

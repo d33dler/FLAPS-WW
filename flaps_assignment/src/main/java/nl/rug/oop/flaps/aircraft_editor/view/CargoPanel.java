@@ -6,6 +6,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class CargoPanel extends JPanel implements BlueprintSelectionListener {
@@ -13,21 +14,28 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     private SettingsPanel settingsPanel;
     private JButton exCargoLoader;
     private final static String listenerId = EditorCore.cargoListenerID;
+
     public CargoPanel(EditorCore editorCore, SettingsPanel settingsPanel) {
         this.editorCore = editorCore;
         this.settingsPanel = settingsPanel;
-        editorCore.getSelectionModel().addListener(listenerId,this);
+        init();
+    }
+
+    private void init() {
+        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
+        setPreferredSize(new Dimension(1000, 120));
+        editorCore.getSelectionModel().addListener(listenerId, this);
         addCargoLoaderButton();
     }
 
     private void addCargoLoaderButton() {
-        this.exCargoLoader = new JButton("Cargo Load");
+        this.exCargoLoader = new JButton("Load cargo");
         exCargoLoader.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() ->
                         settingsPanel.setCargoSettings(
-                                new CargoSettings(editorCore,(CargoArea) settingsPanel.getCompartmentArea())));
+                                new CargoSettings(editorCore, (CargoArea) settingsPanel.getCompartmentArea())));
             }
         });
         add(exCargoLoader);

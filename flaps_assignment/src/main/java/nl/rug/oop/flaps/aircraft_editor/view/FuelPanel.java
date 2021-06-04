@@ -30,6 +30,8 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
         this.editorCore = editorCore;
         this.settingsPanel = settingsPanel;
         editorCore.getSelectionModel().addListener(listenerId, this);
+        setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
+        setPreferredSize(new Dimension(1000,120));
         addFuelSlider();
     }
 
@@ -70,8 +72,6 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     public void stateChanged(ChangeEvent e) {
         fuelAmount.setText(String.valueOf(fuelSlider.getValue()));
     }
-
-
     private void displaySlider() {
         adjustSlider(area.getCapacity());
         System.out.println(area.getName());

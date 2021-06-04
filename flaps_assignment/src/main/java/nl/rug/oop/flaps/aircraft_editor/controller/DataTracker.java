@@ -10,7 +10,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 
 @Setter
 @Getter
-public class MassTracker implements BlueprintSelectionListener {
+public class DataTracker implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private Aircraft aircraft;
     private Compartment compartment = null;
@@ -31,7 +31,7 @@ public class MassTracker implements BlueprintSelectionListener {
             aircraftRange;
     private static final int M_KM = 1000;
 
-    public MassTracker(EditorCore editorCore, Aircraft aircraft) {
+    public DataTracker(EditorCore editorCore, Aircraft aircraft) {
         this.aircraft = aircraft;
         this.editorCore = editorCore;
 
@@ -50,10 +50,7 @@ public class MassTracker implements BlueprintSelectionListener {
                 .forEach(area -> aircraftCapacity += area.getMaxWeight());
         aircraft.getType().getFuelTanks()
                 .forEach(tank -> aircraftCapacity += tank.getCapacity());
-        aircraft.getCargoAreaContents().values().forEach(area ->
-                area.forEach(freight -> totalCargoLoadMass += freight.getTotalWeight()));
-        aircraft.getFuelTankFillStatuses().values().forEach(tank ->
-                totalFuelLoadMass += tank);
+
     }
 
     public boolean performCargoCheck(float amount) {
@@ -113,6 +110,13 @@ public class MassTracker implements BlueprintSelectionListener {
                 .getMethod("requestCapacity")
                 .invoke(compartment);
         System.out.println("Received capacity: " + areaCapacity);
+        updateTotalLoadMass();
+    }
+    private void updateTotalLoadMass() {
+        aircraft.getCargoAreaContents().values().forEach(area ->
+                area.forEach(freight -> totalCargoLoadMass += freight.getTotalWeight()));
+        aircraft.getFuelTankFillStatuses().values().forEach(tank ->
+                totalFuelLoadMass += tank);
     }
 
     public float getAreaMass() {

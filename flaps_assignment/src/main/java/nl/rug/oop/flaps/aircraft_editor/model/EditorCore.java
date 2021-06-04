@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.controller.MassTracker;
+import nl.rug.oop.flaps.aircraft_editor.controller.DataTracker;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -26,7 +26,7 @@ public class EditorCore {
     private EditorFrame editorFrame;
     private Configurator configurator;
     private CargoDatabase cargoDatabase;
-    private MassTracker massTracker;
+    private DataTracker dataTracker;
     private GeographicCoordinates originCoordinates;
     private Airport source;
     private Airport destination;
@@ -53,7 +53,7 @@ public class EditorCore {
     private void init() {
         getRoute();
         this.cargoManipulationModel = editorFrame.getCargoManipulationModel();
-        this.massTracker = new MassTracker(this, aircraft);
+        this.dataTracker = new DataTracker(this, aircraft);
         this.configurator = new Configurator(this);
         configureBlueprintImg();
         updateCompartmentCoords();

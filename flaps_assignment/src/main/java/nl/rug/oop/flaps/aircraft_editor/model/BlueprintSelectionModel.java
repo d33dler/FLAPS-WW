@@ -22,7 +22,6 @@ public class BlueprintSelectionModel {
         listenerMap = new HashMap<>();
     }
 
-
     public void addListener(String identity, BlueprintSelectionListener listener) {
         if(!listenerMap.containsKey(identity)) {
             Set<BlueprintSelectionListener> set = new HashSet<>();
@@ -31,7 +30,6 @@ public class BlueprintSelectionModel {
         } else {
             listenerMap.get(identity).add(listener);
         }
-        //this.listenerSet.add(listener);
     }
 
     @SneakyThrows

@@ -26,7 +26,6 @@ public class CargoArea extends Compartment {
      */
     private double maxWeight;
 
-    String caller_Id = EditorCore.cargoListenerID;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -32,7 +32,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     }
 
     private void init() {
-        setLayout(new FlowLayout());
+        setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(500, 150));
         setBorder(BorderFactory.createEtchedBorder());
@@ -44,6 +44,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         areaData.setEnabled(false);
         areaData.setDisabledTextColor(Color.white);
         areaData.setFont(Font.getFont(Font.MONOSPACED));
+        areaData.setPreferredSize(new Dimension(150,150));
         this.fuelPanel = new FuelPanel(editorCore, this);
         this.cargoPanel = new CargoPanel(editorCore, this);
         add(new JScrollPane(areaData));
@@ -64,7 +65,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         this.areaData.setText("Selected compartment:\n");
         for (var field : FileUtils.getAllFields(area.getClass())) {
             field.setAccessible(true);
-            this.areaData.append("\n" + field.getName().toUpperCase() + ": " + field.get(area).toString());
+            this.areaData.append(field.getName().toUpperCase() + ": " + field.get(area).toString() + "\n");
         }
     }
 }
