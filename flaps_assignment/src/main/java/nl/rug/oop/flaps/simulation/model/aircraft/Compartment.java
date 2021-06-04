@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import java.awt.geom.Point2D;
 import java.util.Objects;
@@ -10,6 +11,7 @@ import java.util.Objects;
 @Setter
 public abstract class Compartment {
     protected String name;
+    protected String compartmentId;
     protected double x;
     protected double y;
 

@@ -5,6 +5,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
 import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
 import nl.rug.oop.flaps.aircraft_editor.view.LogPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -38,13 +39,12 @@ public class Configurator {
 
     public void updateFuelStatus(FuelTank fuelTank, double level) {
         String val = "Level: " + level + "; Fuel Tank: " + fuelTank.getName();
-        if (massTracker.performCheck((float) (level * aircraft.getType().getFuelType().getDensity()))) {
+        if (massTracker.performFuelCheck(aircraft.getFuelAmountForFuelTank(fuelTank),level )) {
             aircraft.setFuelAmountForFuelTank(fuelTank, level);
-            logPanel.updateLog(LogPanel.FUEL_CONFIRM + val);
+            logPanel.updateLog(LogMessagesStack.FUEL_CONFIRM + val);
         } else {
-            logPanel.updateLog(LogPanel.FUEL_ERROR + val);
+            logPanel.updateLog(LogMessagesStack.FUEL_ERROR + val);
         }
-
     }
 
     public void updateDatabaseTables(SettingsPanel settingsPanel) {

@@ -2,12 +2,11 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
@@ -84,7 +83,6 @@ public class CargoTablesPanel extends JPanel {
     }
     protected void update() {
         aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
-        aircraftCargoUnits.forEach(obj -> System.out.println(obj.getCargoType().getName() + " : " + obj.getTotalWeight()));
         cargoTable.setModel(editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class));
         editTableView(cargoTable, 2);
         cargoTable.repaint();

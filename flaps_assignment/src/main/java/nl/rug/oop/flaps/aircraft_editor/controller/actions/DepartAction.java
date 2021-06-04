@@ -21,7 +21,7 @@ import java.awt.event.ActionEvent;
 @Log
 public class DepartAction extends AbstractAction {
     private final WorldSelectionModel selectionModel;
-
+    private double travelDistance;
     public DepartAction(WorldSelectionModel selectionModel) {
         super("Depart");
         this.selectionModel = selectionModel;
@@ -44,7 +44,7 @@ public class DepartAction extends AbstractAction {
             sm.setSelectedAirport(end);
             sm.setSelectedDestinationAirport(null);
             sm.setSelectedAircraft(aircraft);
-            aircraft.removeFuel(aircraft.getFuelConsumption(start, end));
+            aircraft.removeFuel(aircraft.getFuelConsumption(travelDistance));
         }
     }
 

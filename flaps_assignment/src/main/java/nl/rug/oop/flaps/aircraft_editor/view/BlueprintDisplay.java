@@ -7,25 +7,40 @@ import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.simulation.view.shapes.RegularPolygon;
+import nl.rug.oop.flaps.simulation.view.shapes.RoundPolygon;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import java.awt.*;
-import java.awt.geom.Ellipse2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
 
 
 public class BlueprintDisplay extends JPanel implements BlueprintSelectionListener {
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
-    public static final double MK_SIZE = 13;
+    public static final int MK_SIZE = 18;
     public static String BP_TITLE;
     public static int WIDTH, HEIGHT;
     private BlueprintSelectionModel sm;
     private BlueprintPanel bpPanel;
+    private RoundPolygon ellMarker;
+    private RegularPolygon recMarker;
+    private Graphics2D g2d;
+    private final static String listener_Id = EditorCore.generalListenerID;
+    /* Color Palette */
+    private final static Color
+            C_ROYBLUE = new Color(48, 87, 225, 218),
+            C_HMAG = new Color(232, 55, 238, 211),
+            C_HGREEN = new Color(8, 212, 14, 220),
+            BP_BG = new Color(71, 77, 85, 42);
 
+    /**
+     * @param bpSmodel
+     * @param aircraft
+     * @param bpPanel
+     */
     @SneakyThrows
     public BlueprintDisplay(BlueprintSelectionModel bpSmodel, Aircraft aircraft, BlueprintPanel bpPanel) {
         this.bpPanel = bpPanel;
@@ -33,14 +48,14 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
         this.aircraft = aircraft;
         getSizes();
         BP_TITLE = this.aircraft.getType().getName() + " Blueprint";
-        sm.addListener(this);
+        sm.addListener(listener_Id,this);
     }
 
     private void getSizes() {
         setLayout(new FlowLayout());
         WIDTH = (int) (EditorCore.BP_WIDTH);
         HEIGHT = (int) (EditorCore.BP_HEIGHT);
-        setPreferredSize(new Dimension((int) (WIDTH), (int) (HEIGHT + EditorCore.BP_MARGIN)));
+        setPreferredSize(new Dimension((WIDTH), (int) (HEIGHT + EditorCore.BP_MARGIN)));
         this.blueprintImage = aircraft.getType().
                 getBlueprintImage().getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
     }
@@ -48,7 +63,7 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
     @Override
     protected void paintComponent(Graphics schema) {
         super.paintComponent(schema);
-        Graphics2D g2d = (Graphics2D) schema;
+        g2d = (Graphics2D) schema;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(Color.WHITE);
         if (this.cachedBpImage == null) {
@@ -56,36 +71,45 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
                     this.blueprintImage.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
         }
         g2d.drawImage(this.cachedBpImage, (int) EditorCore.BP_POS.x, (int) EditorCore.BP_POS.y, this);
-        this.aircraft.getType().getCargoAreas().forEach(cargoArea -> addAreaIndicators(g2d, cargoArea, Color.blue));
-        this.aircraft.getType().getFuelTanks().forEach(fuelArea -> addAreaIndicators(g2d, fuelArea, Color.magenta));
-        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(1), BP_TITLE, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-        Color myWhite = new Color(64, 64, 64);
-        setBackground(myWhite);
+        this.aircraft.getType().getCargoAreas()
+                .forEach(cargoArea -> addAreaIndicators(cargoArea, C_ROYBLUE));
+        this.aircraft.getType().getFuelTanks()
+                .forEach(fuelArea -> addAreaIndicators(fuelArea, C_HMAG));
+        setBorder(BorderFactory.createTitledBorder(BorderFactory.createEtchedBorder(1),
+                BP_TITLE, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
+        setBackground(BP_BG);
     }
 
-    private void addAreaIndicators(Graphics2D g2d, Compartment area, Color c) {
-        double mk = MK_SIZE;
+    private void addAreaIndicators(Compartment area, Color c) {
+        int mk = MK_SIZE;
         boolean adjust = false;
         if (sm.getCompartment() != null && sm.getCompartment().equals(area)) {
-            c = Color.GREEN;
-            mk *= 2;
+            c = C_HGREEN;
+            mk *= 1.45;
             adjust = true;
         }
         g2d.setColor(c);
-        addIndicator(g2d, area, mk, adjust);
+        addIndicator(area, mk, adjust);
     }
 
-    private void addIndicator(Graphics2D g2d, Compartment area, double mk, boolean adjust) {
+    private void addIndicator(Compartment area, int mk, boolean adjust) {
         Point2D.Double pos = bpPanel.getModel().getLocalCoords().get(area.hashCode());
+        int off = MK_SIZE / 2;
+        int coordX = (int) (pos.x + off);
+        int coordY = (int) (pos.y + off);
         if (adjust) {
-            g2d.fill(new Ellipse2D.Double(pos.x - MK_SIZE / 2, pos.y - MK_SIZE / 2, mk, mk));
+
+            recMarker = new RegularPolygon(coordX, coordY, mk, 8, 0);
+            g2d.fill(recMarker);
         } else {
-            g2d.fill(new Rectangle2D.Double(pos.x, pos.y, mk, mk));
+            ellMarker = new RoundPolygon(new RegularPolygon(coordX, coordY, mk, 4, 0), 5);
+            g2d.fill(ellMarker);
         }
     }
 
     @Override
-    public void compartmentSelected(FuelTank area) {
-        this.repaint();
+    public void compartmentSelected(Compartment area) {
+        g2d.dispose();
+        repaint();
     }
 }

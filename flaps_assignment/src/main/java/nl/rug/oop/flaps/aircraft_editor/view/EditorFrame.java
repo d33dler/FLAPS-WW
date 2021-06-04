@@ -1,7 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
-import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
@@ -19,7 +18,7 @@ import java.awt.*;
 @Getter
 public class EditorFrame extends JFrame {
     private static final int WIDTH = 1200;
-    private static final int HEIGHT = 900;
+    private static final int HEIGHT = 920;
     public EditorCore model;
     private BlueprintSelectionModel selectionModel;
     private CargoManipulationModel cargoManipulationModel;
@@ -48,7 +47,6 @@ public class EditorFrame extends JFrame {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-
         addMainPanels();
         addMenuBar();
     }

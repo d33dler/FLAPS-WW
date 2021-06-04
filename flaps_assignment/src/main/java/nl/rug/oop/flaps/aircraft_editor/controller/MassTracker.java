@@ -7,8 +7,6 @@ import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionLis
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
-import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
 @Setter
 @Getter
@@ -16,6 +14,8 @@ public class MassTracker implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private Aircraft aircraft;
     private Compartment compartment = null;
+    private static final String listener_ID = EditorCore.generalListenerID;
+
     private float
             aircraftCapacity = 0,
             totalCargoLoadMass = 0,
@@ -29,11 +29,13 @@ public class MassTracker implements BlueprintSelectionListener {
             areaCapacity = 0,
             travelDistance,
             aircraftRange;
+    private static final int M_KM = 1000;
 
     public MassTracker(EditorCore editorCore, Aircraft aircraft) {
         this.aircraft = aircraft;
         this.editorCore = editorCore;
-        editorCore.getSelectionModel().addListener(this);
+
+        editorCore.getSelectionModel().addListener(listener_ID, this);
         init();
     }
 
@@ -54,27 +56,49 @@ public class MassTracker implements BlueprintSelectionListener {
                 totalFuelLoadMass += tank);
     }
 
-
-    public boolean performCheck(float amount) {
+    public boolean performCargoCheck(float amount) {
         float allCargo = totalAircraftLoad + amount;
-        aircraftRange =
-                (aircraft.getTotalFuel()
-                        / aircraft.getFuelConsumption(editorCore.getSource(), editorCore.getDestination()))
-                        * aircraft.getType().getCruiseSpeed();
+
         if (amount > 0
                 && nomCompartmentLoad + amount <= areaCapacity
                 && allCargo <= maxTakeOffWgt
-                && allCargo <= maxLandingWgt
-                && aircraftRange >= travelDistance) {
+                && allCargo <= maxLandingWgt) {
             totalAircraftLoad = allCargo;
             nomCompartmentLoad += amount;
-            System.out.println("NOICE: " + allCargo + "; nomLoad:" + nomCompartmentLoad + "; aircraftLoad: " + totalAircraftLoad);
+            System.out.println("NOICE: " + allCargo + "; nomLoad:" + nomCompartmentLoad + "; aircraftLoad: " + totalAircraftLoad
+                    + " range: " + aircraftRange + " ; travelDist: " + travelDistance);
             return true;
         }
-        System.out.println("FECK: " + allCargo + "; nomLoad:" + nomCompartmentLoad + "; aircraftLoad: " + totalAircraftLoad);
+        System.out.println("FECK: " + allCargo + "; nomLoad:" + nomCompartmentLoad + "; aircraftLoad: " + totalAircraftLoad
+                + " range: " + aircraftRange + " ; travelDist: " + travelDistance);
         return false;
     }
 
+    public boolean performFuelCheck(double oldLevel, double newLevel) {
+        float updatedLoad = (float) (totalAircraftLoad - oldLevel + newLevel);
+        double newTotalFuel = aircraft.getTotalFuel() - oldLevel + newLevel;
+        if (updatedLoad <= aircraftCapacity) {
+            totalAircraftLoad = updatedLoad;
+            aircraftRange = rangeCheck(newTotalFuel);
+            return true;
+        }
+        rangeCheck(newTotalFuel);
+        return false;
+    }
+
+    public double rangeCheck(double level) {
+        double range =
+                ((level / aircraft.getType().getFuelConsumption())
+                        * aircraft.getType().getCruiseSpeed()) * M_KM; //TODO check correctness
+        if (range >= travelDistance) {
+            System.out.println("Travel distance is within aircraft range; Fuel Consum: " + aircraft.getFuelConsumption(travelDistance / M_KM)
+                    + "; Totalfuel: " + level + "; Range: " + range);
+        } else
+            System.out.println("Travel distance is greater than aircraft range; FuelConsum: " + aircraft.getFuelConsumption(travelDistance / M_KM)
+                    + "; Totalfuel: " + level + "; Range: " + range);
+
+        return range;
+    }
 
     @Override
     public void compartmentSelected(Compartment area) {

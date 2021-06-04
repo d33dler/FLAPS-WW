@@ -18,14 +18,21 @@ public class AreaSelectionListener extends MouseAdapter {
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
+    public void mouseClicked(MouseEvent e) {
+
         SwingUtilities.invokeLater(() -> {
             Point2D.Double ePos = new Point2D.Double(e.getPoint().x,e.getPoint().y);
             var area = this.editorCore.extractApproxArea(ePos);
             area.ifPresent(a -> {
-                this.editorCore.getSelectionModel().setSelectedCompartment(a, editorCore.getSelectionModel());
+                this.editorCore.getSelectionModel().setSelectedCompartment(a.getCompartmentId(), a);
                 System.out.println(area.get().getName());
             });
         });
     }
+
+    @Override
+    public void mouseMoved(MouseEvent e) {
+        super.mouseMoved(e);
+    }
+
 }

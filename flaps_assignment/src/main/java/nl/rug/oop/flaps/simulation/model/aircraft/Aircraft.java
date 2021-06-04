@@ -61,12 +61,11 @@ public class Aircraft implements Comparable<Aircraft> {
     /**
      * Retrieves the amount of fuel that is consumed when flying between two airports in kg
      *
-     * @param origin The airport the aircraft departs from
-     * @param destination The airport the aircraft flies to
+     * @param travelDistance distance in km from origin to destination Airport
      * @return The amount of fuel in kg consumed in the journey
      */
-    public double getFuelConsumption(Airport origin, Airport destination) {
-        throw new UnsupportedOperationException("Getting the fuel consumption has not yet been implemented");
+    public double getFuelConsumption(double travelDistance) {
+        return (travelDistance/type.getCruiseSpeed()) * type.getFuelConsumption();
     }
 
     /**

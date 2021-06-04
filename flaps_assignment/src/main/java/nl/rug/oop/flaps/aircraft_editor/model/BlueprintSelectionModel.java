@@ -16,40 +16,32 @@ import java.util.Set;
 public class BlueprintSelectionModel {
     private Compartment compartment = null;
     private final Set<BlueprintSelectionListener> listenerSet;
-    private Map<Class<? extends Compartment>, Method > methodMap;
+    private HashMap<String, Set<BlueprintSelectionListener>> listenerMap;
     public BlueprintSelectionModel() {
         listenerSet = new HashSet<>();
-        methodMap = new HashMap<>();
-        init();
+        listenerMap = new HashMap<>();
+    }
+
+
+    public void addListener(String identity, BlueprintSelectionListener listener) {
+        if(!listenerMap.containsKey(identity)) {
+            Set<BlueprintSelectionListener> set = new HashSet<>();
+            set.add(listener);
+            listenerMap.put(identity,set);
+        } else {
+            listenerMap.get(identity).add(listener);
+        }
+        //this.listenerSet.add(listener);
     }
 
     @SneakyThrows
-    private void init() {
-        methodMap.put(CargoArea.class, this.getClass().getMethod("setSelectedCargoArea"));
-        methodMap.put(FuelTank.class, this.getClass().getMethod("setSelectedFuelTank"));
-    }
-
-    public void addListener(BlueprintSelectionListener listener) {
-        this.listenerSet.add(listener);
-    }
-
-    @SneakyThrows
-    public void setSelectedCompartment(Compartment area, BlueprintSelectionModel sm) {
+    public void setSelectedCompartment(String areaId, Compartment area) {
         this.compartment = area;
-        this.listenerSet.forEach(listener -> {
-            listener.compartmentSelected(compartment);
+        this.listenerMap.get(EditorCore.generalListenerID).forEach(listener -> {
+            listener.compartmentSelected(area);
         });
-        methodMap.get(area.getClass()).invoke(sm);
-    }
-
-    public void setSelectedCargoArea() {
-        this.listenerSet.forEach(listener -> {
-            listener.compartmentSelected((CargoArea) compartment); //check integrity all!
-        });
-    }
-    public void setSelectedFuelTank() {
-        this.listenerSet.forEach(listener -> {
-            listener.compartmentSelected((FuelTank) compartment);
+        this.listenerMap.get(areaId).forEach(listener -> {
+            listener.compartmentSelected(area);
         });
     }
 }

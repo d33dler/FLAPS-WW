@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import java.util.Objects;
 
@@ -13,7 +14,6 @@ import java.util.Objects;
  * @author T.O.W.E.R.
  */
 @Getter
-
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CargoArea extends Compartment {
     /**
@@ -26,6 +26,7 @@ public class CargoArea extends Compartment {
      */
     private double maxWeight;
 
+    String caller_Id = EditorCore.cargoListenerID;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

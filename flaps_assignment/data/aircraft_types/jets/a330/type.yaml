@@ -15,16 +15,19 @@ fuelTypeName: Jet A-1
 
 cargoAreas:
   - name: Front Lower-Deck Compartment
+    compartmentId: 100CARGO_ml
     maxSize: 12
     maxWeight: 40000
     x: 0
     y: 10
   - name: Aft Lower-Deck Compartment
+    compartmentId: 100CARGO_ml
     maxSize: 12
     maxWeight: 40000
     x: 0
     y: 35
   - name: Upper-Deck Main Compartment
+    compartmentId: 100CARGO_ml
     maxSize: 10
     maxWeight: 55000
     x: 0
@@ -32,14 +35,17 @@ cargoAreas:
 
 fuelTanks:
   - name: Left Wing Main Tank
+    compartmentId: 100FUEL_ml
     capacity: 39592
     x: -9
     y: 28
   - name: Right Wing Main Tank
+    compartmentId: 100FUEL_ml
     capacity: 39592
     x: 9
     y: 28
   - name: Central Tank
+    compartmentId: 100FUEL_ml
     capacity: 30000
     x: 0
     y: 23

@@ -7,7 +7,6 @@ import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionLis
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.*;
@@ -21,15 +20,14 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private FuelPanel fuelPanel;
     private CargoPanel cargoPanel;
     private Compartment compartmentArea;
-    private JButton exCargoLoader;
-
+    private static final String listener_Id = EditorCore.generalListenerID;
     @Setter
     private CargoSettings cargoSettings;
-    
+
     public SettingsPanel(EditorCore editorCore) {
         this.editorCore = editorCore;
         this.selectionModel = editorCore.getSelectionModel();
-        this.selectionModel.addListener(this);
+        this.selectionModel.addListener(listener_Id, this);
         init();
     }
 
@@ -38,7 +36,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(500, 150));
         setBorder(BorderFactory.createEtchedBorder());
-        this.areaData = new JTextArea("Selected compartment:\n\nN/A",7,17);
+        this.areaData = new JTextArea("Selected compartment:\n\nN/A", 7, 17);
         areaData.setBorder(BorderFactory.createEtchedBorder());
         areaData.setWrapStyleWord(true);
         areaData.setLineWrap(true);
@@ -46,8 +44,8 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         areaData.setEnabled(false);
         areaData.setDisabledTextColor(Color.white);
         areaData.setFont(Font.getFont(Font.MONOSPACED));
-        this.fuelPanel = new FuelPanel(editorCore, this );
-        this.cargoPanel = new CargoPanel(editorCore,this);
+        this.fuelPanel = new FuelPanel(editorCore, this);
+        this.cargoPanel = new CargoPanel(editorCore, this);
         add(new JScrollPane(areaData));
         add(fuelPanel);
         add(cargoPanel);

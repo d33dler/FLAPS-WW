@@ -13,9 +13,7 @@ public class LogPanel extends JPanel {
     EditorCore editorCore;
     EditorFrame editorFrame;
 
-    public static final String FUEL_CONFIRM = "Fuel amount loaded successfully! ";
-    public static final String FUEL_ERROR = "ERROR: Cannot loading fuel amount. Possible cause: total capacity was reached.";
-    public static final String OTHER_CONFIRM = "others";
+
 
     public LogPanel(EditorFrame editorFrame) {
         this.editorFrame = editorFrame;
@@ -24,7 +22,8 @@ public class LogPanel extends JPanel {
 
     private void init() {
         JPanel log = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("■ COMMAND LOG HISTORY ■");
+        JLabel title = new JLabel("■ COMMAND LOG HISTORY");
+        title.setFont(Font.getFont(String.valueOf(Font.BOLD)));
         logBook = new JTextArea(8, 50);
         logBook.setLineWrap(true);
         logBook.setEditable(false);

@@ -2,15 +2,12 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.CargoUnitsListener;
-import nl.rug.oop.flaps.aircraft_editor.view.CargoSettings;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @Getter

@@ -1,0 +1,2 @@
+FUEL_CONFIRM: Fuel amount loaded successfully!
+FUEL_ERROR: Warning! Cannot loading fuel amount. Possible cause - total capacity was reached.

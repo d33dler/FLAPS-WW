@@ -4,6 +4,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 import javax.swing.*;
@@ -23,11 +24,12 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     private FuelTank area;
     private SettingsPanel settingsPanel;
     private static final int LARGE_TANK = 50000;
+    private static final String listenerId = EditorCore.fuelListenerID;
 
     public FuelPanel(EditorCore editorCore, SettingsPanel settingsPanel) {
         this.editorCore = editorCore;
         this.settingsPanel = settingsPanel;
-        editorCore.getSelectionModel().addListener(this);
+        editorCore.getSelectionModel().addListener(listenerId, this);
         addFuelSlider();
     }
 
@@ -88,8 +90,8 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     }
 
     @Override
-    public void compartmentSelected(FuelTank area) {
-        this.area = area;
+    public void compartmentSelected(Compartment area) {
+        this.area = (FuelTank) area;
         System.out.println("!New FUELTANK");
         displaySlider();
         editorCore.getConfigurator().setFuelTankLoad();

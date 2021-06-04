@@ -8,7 +8,6 @@ import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;

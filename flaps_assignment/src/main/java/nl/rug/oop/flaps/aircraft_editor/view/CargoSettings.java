@@ -114,7 +114,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
             switch (command) {
                 case CargoButtonPanel.ADD_COM: {
                     float weight = amount * selectedType.getWeightPerUnit();
-                    if (editorCore.getMassTracker().performCheck(weight)) {
+                    if (editorCore.getMassTracker().performCargoCheck(weight)) {
                         editorCore.getConfigurator().unitAdded(aircraft, selectedType, amount);
                     }
                     return;
