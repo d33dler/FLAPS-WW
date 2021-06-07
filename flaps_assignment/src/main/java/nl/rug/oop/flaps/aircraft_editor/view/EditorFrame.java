@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
-import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
+import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
@@ -21,7 +21,7 @@ public class EditorFrame extends JFrame {
     private static final int HEIGHT = 920;
     public EditorCore model;
     private BlueprintSelectionModel selectionModel;
-    private CargoManipulationModel cargoManipulationModel;
+    private AircraftLoadingModel aircraftLoadingModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
     private SettingsPanel settingsPanel;
@@ -29,10 +29,10 @@ public class EditorFrame extends JFrame {
     private InfoPanel infoPanel;
 
 
-    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, CargoManipulationModel cargoModel) {
+    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
-        this.cargoManipulationModel = cargoModel;
+        this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
         addLog();
         this.model = new EditorCore(aircraft, selectionModel, this);
@@ -55,7 +55,8 @@ public class EditorFrame extends JFrame {
     }
 
     private void addMainPanels() {
-        blueprintPanel = new BlueprintPanel(model, selectionModel, this.aircraft);
+        blueprintPanel = new BlueprintPanel(model, selectionModel, aircraft);
+        model.getDataTracker().setDisplay(blueprintPanel.getBlueprintDisplay());
         settingsPanel = new SettingsPanel(model);
         infoPanel = new InfoPanel(model);
         add(this.blueprintPanel, BorderLayout.WEST);
@@ -64,6 +65,7 @@ public class EditorFrame extends JFrame {
         add(this.logPanel, BorderLayout.SOUTH);
         validate();
     }
+
 
     private void addMenuBar() {
         JMenuBar bar = new JMenuBar();

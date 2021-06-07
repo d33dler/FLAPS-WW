@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 
 import java.util.Objects;
 
@@ -35,7 +36,12 @@ public class FuelTank extends Compartment {
         return Objects.hash(name);
     }
 
-    public double requestCapacity() {
-        return capacity;
+    public float requestCapacity() {
+        return (float)capacity;
+    }
+
+    @Override
+    public void getAreaLoad(AircraftDataTracker dataTracker) {
+        dataTracker.updateFuelAreaMass();
     }
 }

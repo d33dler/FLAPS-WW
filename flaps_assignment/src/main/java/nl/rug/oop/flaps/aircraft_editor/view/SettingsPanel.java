@@ -3,7 +3,8 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
@@ -34,9 +35,9 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private void init() {
         setLayout(new BoxLayout(this,BoxLayout.LINE_AXIS));
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
-        setPreferredSize(new Dimension(500, 120));
+        setPreferredSize(new Dimension(500, 130));
         setBorder(BorderFactory.createEtchedBorder());
-        this.areaData = new JTextArea("Selected compartment:\n\nN/A", 7, 17);
+        this.areaData = new JTextArea("Selected compartment:\n\nN/A", 7, 20);
         areaData.setBorder(BorderFactory.createEtchedBorder());
         areaData.setWrapStyleWord(true);
         areaData.setLineWrap(true);
@@ -54,8 +55,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     }
 
     @Override
-    public void compartmentSelected(Compartment area) {
-        BlueprintSelectionListener.super.compartmentSelected(area);
+    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         this.compartmentArea = area;
         displayPrimaryData(area);
     }

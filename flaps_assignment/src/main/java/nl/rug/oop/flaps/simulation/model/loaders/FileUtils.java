@@ -70,5 +70,8 @@ public class FileUtils {
         }
         return fields;
     }
-
+    public  static String toNiceCase(String camelCase) {
+        Matcher m = Pattern.compile("(?<=[a-z])[A-Z]").matcher(camelCase);
+        return m.replaceAll(match -> " " + match.group().toLowerCase());
+    }
 }

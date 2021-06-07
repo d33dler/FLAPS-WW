@@ -1,37 +1,43 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 import nl.rug.oop.flaps.simulation.view.shapes.RegularPolygon;
 import nl.rug.oop.flaps.simulation.view.shapes.RoundPolygon;
 
 import javax.swing.*;
-import javax.swing.border.TitledBorder;
 import java.awt.*;
 import java.awt.geom.Point2D;
 
 
-public class BlueprintDisplay extends JPanel implements BlueprintSelectionListener {
+public class BlueprintDisplay extends JPanel {
+    private final static String listener_Id = EditorCore.generalListenerID;
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
-    public static final int MK_SIZE = 18;
     public static int WIDTH, HEIGHT;
-    private BlueprintSelectionModel sm;
-    private BlueprintPanel bpPanel;
+    private BlueprintSelectionModel selectionModel;
+    private AircraftLoadingModel cargoModel;
+    private BlueprintPanel blueprintPanel;
     private Graphics2D g2d;
-    private final static String listener_Id = EditorCore.generalListenerID;
+
+    public static final int MK_SIZE = 18;
+    private final static int OFFSET = MK_SIZE / 2;
 
     /* Color Palette */
     private final static Color
             C_ROYBLUE = new Color(48, 87, 225, 218),
             C_HMAG = new Color(232, 55, 238, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
+            C_CGMARK = new Color(248, 157, 4, 193),
             BP_BG = new Color(58, 66, 80, 171);
 
     /**
@@ -41,13 +47,12 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
      */
     @SneakyThrows
     public BlueprintDisplay(BlueprintSelectionModel bpSmodel, Aircraft aircraft, BlueprintPanel bpPanel) {
-        this.bpPanel = bpPanel;
-        this.sm = bpSmodel;
+        this.blueprintPanel = bpPanel;
+        this.selectionModel = bpSmodel;
         this.aircraft = aircraft;
+        this.cargoModel = blueprintPanel.getModel().getAircraftLoadingModel();
         setBackground(BP_BG);
         getSizes();
-        sm.addListener(listener_Id,this);
-
     }
 
     private void getSizes() {
@@ -74,12 +79,13 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
                 .forEach(cargoArea -> addAreaIndicators(cargoArea, C_ROYBLUE));
         this.aircraft.getType().getFuelTanks()
                 .forEach(fuelArea -> addAreaIndicators(fuelArea, C_HMAG));
+        addCgIndicator();
     }
 
     private void addAreaIndicators(Compartment area, Color c) {
         int mk = MK_SIZE;
         boolean adjust = false;
-        if (sm.getCompartment() != null && sm.getCompartment().equals(area)) {
+        if (selectionModel.getCompartment() != null && selectionModel.getCompartment().equals(area)) {
             c = C_HGREEN;
             mk *= 1.45;
             adjust = true;
@@ -89,10 +95,9 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
     }
 
     private void addIndicator(Compartment area, int mk, boolean adjust) {
-        Point2D.Double pos = bpPanel.getModel().getLocalCoords().get(area.hashCode());
-        int off = MK_SIZE / 2;
-        int coordX = (int) (pos.x + off);
-        int coordY = (int) (pos.y + off);
+        Point2D.Double pos = blueprintPanel.getModel().getLocalCoords().get(area.hashCode());
+        int coordX = (int) (pos.x + OFFSET);
+        int coordY = (int) (pos.y + OFFSET);
         if (adjust) {
             g2d.fill(new RegularPolygon(coordX, coordY, mk, 8, 0));
         } else {
@@ -100,8 +105,14 @@ public class BlueprintDisplay extends JPanel implements BlueprintSelectionListen
         }
     }
 
-    @Override
-    public void compartmentSelected(Compartment area) {
-        this.repaint();
+    private void addCgIndicator() {
+        Point2D.Double pos = aircraft.getCenterOfG();
+        System.out.println("Displaying the CG COORDS");
+        int coordX = (int) ((pos.x) + OFFSET);
+        int coordY = (int) ((pos.y) + OFFSET);
+        g2d.setColor(C_CGMARK);
+        g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE, 6, 0));
+        g2d.setColor(Color.BLACK);
+        g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE / 2, 10, 0));
     }
 }

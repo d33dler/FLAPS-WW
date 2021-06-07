@@ -7,6 +7,7 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
+import java.awt.geom.Point2D;
 import java.util.*;
 
 /**
@@ -49,6 +50,8 @@ public class Aircraft implements Comparable<Aircraft> {
      */
     private final Map<CargoArea, Set<CargoFreight>> cargoAreaContents;
 
+    @Setter
+    private Point2D.Double centerOfG;
 
     public Aircraft(String identifier, AircraftType type, World world) {
         this.identifier = identifier;

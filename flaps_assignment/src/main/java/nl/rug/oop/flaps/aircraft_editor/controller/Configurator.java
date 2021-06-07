@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
-import nl.rug.oop.flaps.aircraft_editor.model.CargoManipulationModel;
+import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
 import nl.rug.oop.flaps.aircraft_editor.view.LogPanel;
@@ -19,9 +19,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Configurator {
     private Aircraft aircraft;
     private EditorCore editorCore;
-    private DataTracker dataTracker;
+    private AircraftDataTracker dataTracker;
     private BlueprintSelectionModel selectionModel;
-    private CargoManipulationModel cargoManipulationModel;
+    private AircraftLoadingModel aircraftLoadingModel;
     private LogPanel logPanel;
     private transient static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());
 
@@ -33,7 +33,7 @@ public class Configurator {
         this.aircraft = editorCore.getAircraft();
         this.selectionModel = editorCore.getSelectionModel();
         this.dataTracker = editorCore.getDataTracker();
-        this.cargoManipulationModel = editorCore.getCargoManipulationModel();
+        this.aircraftLoadingModel = editorCore.getAircraftLoadingModel();
         this.logPanel = editorCore.getEditorFrame().getLogPanel();
     }
 
@@ -42,6 +42,7 @@ public class Configurator {
         if (dataTracker.performFuelCheck(aircraft.getFuelAmountForFuelTank(fuelTank),level )) {
             aircraft.setFuelAmountForFuelTank(fuelTank, level);
             logPanel.updateLog(LogMessagesStack.FUEL_CONFIRM + val);
+            aircraftLoadingModel.fireFuelUpdate(aircraft);
         } else {
             logPanel.updateLog(LogMessagesStack.FUEL_ERROR + val);
         }
@@ -57,7 +58,7 @@ public class Configurator {
         carriage.setId(freightIdGen.generateId());
         updateHashedFreight(carriage);
         aircraft.getCargoAreaContents().get((CargoArea) selectionModel.getCompartment()).add(carriage);
-        cargoManipulationModel.fireUpdate(aircraft, cargoType, amount);
+        aircraftLoadingModel.fireCargoUpdate(aircraft);
     }
 
     public void unitRemoved(Aircraft aircraft, CargoFreight cargoFreight, int amount) {
@@ -65,12 +66,12 @@ public class Configurator {
                 .get((CargoArea) selectionModel.getCompartment())
                 .remove(cargoFreight);
         updateAircraftCargo(aircraft, cargoFreight, amount);
-        cargoManipulationModel.fireUpdate(aircraft, cargoFreight, amount);
+        aircraftLoadingModel.fireCargoUpdate(aircraft);
     }
 
     public void allCargoRemove(Aircraft aircraft) {
         aircraft.getCargoAreaContents().get((CargoArea) selectionModel.getCompartment()).clear();
-        cargoManipulationModel.fireUpdate(aircraft, (CargoFreight) null, 0);
+        aircraftLoadingModel.fireCargoUpdate(aircraft);
     }
 
     public void updateAircraftCargo(Aircraft aircraft, CargoFreight cargoFreight, int amount) {
@@ -91,14 +92,6 @@ public class Configurator {
                 put(carriage.getId(), carriage);
     }
 
-    public void setCargoAreaLoad() {
-        aircraft.getCargoAreaContents((CargoArea) selectionModel.getCompartment()).forEach(cargoFreight ->
-                dataTracker.setAreaMass((float) (dataTracker.getAreaMass() + cargoFreight.getTotalWeight())));
-    }
 
-    public void setFuelTankLoad() {
-        dataTracker.setAreaMass
-                (Float.parseFloat
-                        (String.valueOf(aircraft.getFuelAmountForFuelTank((FuelTank) selectionModel.getCompartment()))));
-    }
+
 }

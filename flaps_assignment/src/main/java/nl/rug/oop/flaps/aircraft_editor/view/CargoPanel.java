@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
@@ -43,9 +44,8 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     }
 
     @Override
-    public void compartmentSelected(Compartment area) {
+    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         editorCore.getConfigurator().updateDatabaseTables(settingsPanel);
-        editorCore.getConfigurator().setCargoAreaLoad();
         settingsPanel.getFuelPanel().setVisible(false);
         setVisible(true);
     }

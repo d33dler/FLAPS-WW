@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 
 import java.util.Objects;
 
@@ -39,7 +39,12 @@ public class CargoArea extends Compartment {
         return Objects.hash(name);
     }
 
-    public double requestCapacity() {
-        return maxWeight;
+    public float requestCapacity() {
+        return (float) maxWeight;
+    }
+
+    @Override
+    public void getAreaLoad(AircraftDataTracker dataTracker) {
+            dataTracker.updateCargoAreaMass();
     }
 }

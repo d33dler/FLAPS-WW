@@ -2,7 +2,8 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.CargoUnitsListener;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
@@ -41,7 +42,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
         this.aircraft = editorCore.getAircraft();
         this.cargoTypeSet = editorCore.getWorld().getCargoSet();
         this.totalCargoAreaWgt = 0;
-        editorCore.getCargoManipulationModel().addListener(this);
+        editorCore.getAircraftLoadingModel().addListener(this);
         init();
     }
 
@@ -135,8 +136,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     }
 
     @Override
-    public void notifyChange(Aircraft aircraft) {
-        CargoUnitsListener.super.notifyChange(aircraft);
+    public void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
         System.out.println("repaintTable");
         cargoAircraft.update();
     }

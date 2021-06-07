@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.controller.actions.AreaSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.controller.actions.AreaSelectionAction;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -26,7 +26,7 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
         this.selectionModel = selectionModel;
         this.aircraft = aircraft;
         BP_TITLE = this.aircraft.getType().getName() + " Blueprint";
-        AreaSelectionModel controller = new AreaSelectionModel(model);
+        AreaSelectionAction controller = new AreaSelectionAction(model);
         addMouseListener(controller);
         init();
     }
@@ -37,6 +37,6 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
                 BP_TITLE, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
         this.setPreferredSize(new Dimension((int) EditorCore.BP_WIDTH, (int) (EditorCore.BP_HEIGHT)));
         this.blueprintDisplay = new BlueprintDisplay(this.selectionModel, this.aircraft, this);
-        add(blueprintDisplay, BorderLayout.WEST);
+        add(new SpecialComponent(blueprintDisplay), BorderLayout.WEST);
     }
 }
