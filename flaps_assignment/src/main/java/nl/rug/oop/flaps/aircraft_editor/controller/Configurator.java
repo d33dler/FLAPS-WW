@@ -22,6 +22,7 @@ public class Configurator {
     private AircraftDataTracker dataTracker;
     private BlueprintSelectionModel selectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
+    @Setter
     private LogPanel logPanel;
     private transient static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());
 
@@ -34,7 +35,6 @@ public class Configurator {
         this.selectionModel = editorCore.getSelectionModel();
         this.dataTracker = editorCore.getDataTracker();
         this.aircraftLoadingModel = editorCore.getAircraftLoadingModel();
-        this.logPanel = editorCore.getEditorFrame().getLogPanel();
     }
 
     public void updateFuelStatus(FuelTank fuelTank, double level) {

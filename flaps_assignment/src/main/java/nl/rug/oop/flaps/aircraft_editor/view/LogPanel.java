@@ -9,22 +9,24 @@ import java.time.format.DateTimeFormatter;
 
 @Getter
 public class LogPanel extends JPanel {
-    JTextArea logBook;
-    EditorCore editorCore;
-    EditorFrame editorFrame;
-
+    private JTextArea logBook;
+    private EditorCore editorCore;
+    private EditorFrame editorFrame;
+    private DepartPanel departPanel;
 
 
     public LogPanel(EditorFrame editorFrame) {
         this.editorFrame = editorFrame;
+        this.editorCore = editorFrame.getEditorCore();
         init();
     }
 
     private void init() {
+        this.editorCore.getConfigurator().setLogPanel(this);
         JPanel log = new JPanel(new BorderLayout());
         JLabel title = new JLabel("■ COMMAND LOG HISTORY");
         title.setFont(Font.getFont(String.valueOf(Font.BOLD)));
-        logBook = new JTextArea(8, 50);
+        this.logBook = new JTextArea(8, 50);
         logBook.setLineWrap(true);
         logBook.setEditable(false);
         logBook.setWrapStyleWord(true);
@@ -34,6 +36,8 @@ public class LogPanel extends JPanel {
         log.add(title, BorderLayout.NORTH);
         log.add(new JScrollPane(logBook), BorderLayout.CENTER);
         add(log, BorderLayout.NORTH);
+        this.departPanel = new DepartPanel(editorCore);
+        add(departPanel, BorderLayout.EAST);
     }
 
     public void updateLog(String logMsg) {

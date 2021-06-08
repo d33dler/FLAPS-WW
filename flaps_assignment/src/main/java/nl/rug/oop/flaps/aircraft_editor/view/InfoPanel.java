@@ -8,6 +8,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.CommercialDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
@@ -27,7 +28,7 @@ import static nl.rug.oop.flaps.simulation.model.loaders.FileUtils.toNiceCase;
 
 @Getter
 @Setter
-public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSelectionListener {
+public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSelectionListener, FuelSupplyListener {
     private EditorCore editorCore;
     private Aircraft aircraft;
     private AircraftDataTracker aircraftDataTracker;
@@ -53,7 +54,8 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
 
     @SneakyThrows
     private void init() {
-        editorCore.getAircraftLoadingModel().addListener(this);
+        editorCore.getAircraftLoadingModel().addListener((CargoUnitsListener) this);
+        editorCore.getAircraftLoadingModel().addListener((FuelSupplyListener) this);
         editorCore.getSelectionModel().addListener(EditorCore.generalListenerID, this);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setSize(new Dimension(WIDTH, HEIGHT));
@@ -133,6 +135,11 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         updateAllData();
     }
 
+    @Override
+    public void fireFuelSupplyUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
+        updateAllData();
+    }
+
     private void updateAllData() {
         updateFields(fieldListADT, dataSetADT, aircraftDataTracker);
         updateFields(fieldListCDT, dataSetCDT, commercialDataTracker);
@@ -145,7 +152,6 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         while (i < dataList.size() && fieldIterator.hasNext()) {
             JLabel label = dataList.get(i);
             Field field = fieldIterator.next();
-            System.out.println(field.getName() + ": " + field.get(object).toString() );
             label.setText(field.get(object).toString());
             i++;
         }

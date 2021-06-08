@@ -6,6 +6,8 @@ import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.DepartPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.LogPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
@@ -16,13 +18,14 @@ import java.awt.geom.Point2D;
 @Setter
 @Getter
 public class AircraftDataTracker {
+    private static final String listener_ID = EditorCore.generalListenerID;
     private EditorCore editorCore;
     private Aircraft aircraft;
     private Compartment compartment = null;
     private BlueprintSelectionModel selectionModel;
     private CommercialDataTracker commercialData;
-    private static final String listener_ID = EditorCore.generalListenerID;
     private BlueprintDisplay display;
+    private DepartPanel departPanel;
 
     private float
             aircraftCapacity = 0,
@@ -37,6 +40,8 @@ public class AircraftDataTracker {
             travelDistance,
             defaultRange,
             aircraftRange,
+            aircraftLength,
+            cgTolerance,
             defaultCenterOfGravity_X,
             defaultCenterOfGravity_Y,
             centerOfGravity_X = 0.0,
@@ -55,14 +60,29 @@ public class AircraftDataTracker {
         this.travelDistance = editorCore.getOriginCoordinates()
                 .distanceTo(editorCore.getDestination().getGeographicCoordinates());
         this.defaultRange = aircraft.getType().getRange();
-        this.emptyWeight = totalAircraftWeight = (float) aircraft.getType().getEmptyWeight();
+        this.aircraftRange = computeAircraftRange(totalFuelLoadMass);
+        this.emptyWeight = (float) aircraft.getType().getEmptyWeight();
         this.maxTakeOffWeight = aircraft.getType().getMaxTakeoffWeight();
         this.maxLandingWeight = aircraft.getType().getMaxLandingWeight();
+        this.cgTolerance = aircraft.getType().getCgTolerance();
+        this.aircraftLength = aircraft.getType().getLength();
         aircraft.getType().getCargoAreas()
                 .forEach(area -> aircraftCapacity += area.getMaxWeight());
         aircraft.getType().getFuelTanks()
                 .forEach(tank -> aircraftCapacity += tank.getCapacity());
+        commercialData.refreshData();
+        initCg();
+    }
+
+    private void initCg() {
         remapCg(new Point2D.Double(aircraft.getType().getEmptyCgX(), aircraft.getType().getEmptyCgY()));
+        updateTotalLoadMass();
+        if (aircraft.getCenterOfG() == null) {
+            updateCenterOfGravity();
+        } else {
+            centerOfGravity_X = aircraft.getCenterOfG().x;
+            centerOfGravity_Y = aircraft.getCenterOfG().y;
+        }
     }
 
 
@@ -84,24 +104,33 @@ public class AircraftDataTracker {
         double newTotalFuel = aircraft.getTotalFuel() - oldLevel + newLevel;
         if (updatedLoad <= aircraftCapacity) {
             totalAircraftWeight = updatedLoad;
-            aircraftRange = rangeCheck(newTotalFuel);
+            aircraftRange = computeAircraftRange(newTotalFuel);
             return true;
         }
-        rangeCheck(newTotalFuel);
         return false;
     }
 
-    public double rangeCheck(double level) {
-        double range =
-                ((level / aircraft.getType().getFuelConsumption())
-                        * aircraft.getType().getCruiseSpeed()) * M_KM; //TODO check correctness
-        if (range >= travelDistance) {
-            //TODO
-        }
-
-        return range;
+    public void performDepartureValidationCheck() {
+        departPanel.getDepartButton().setEnabled(aircraftRange >= travelDistance
+                && validateDecalage()
+                && commercialData.getDestination().canAcceptIncomingAircraft());
     }
 
+    private boolean validateDecalage() {
+        double ppm = EditorCore.Pixels_per_M;
+        double cgDistance = cgTolerance * aircraftLength;
+        double cathetus_1 = Math.abs(defaultCenterOfGravity_X - centerOfGravity_X) / ppm;
+        double cathetus_2 = Math.abs(defaultCenterOfGravity_Y - centerOfGravity_Y) / ppm;
+        double hypotenuse = Math.sqrt(Math.pow(cathetus_1, 2) + Math.pow(cathetus_2, 2));
+        System.out.println("ppm = " + ppm + "; cgDist: " + cgDistance + " ; cat1: " + cathetus_1 + "; cat2: " + cathetus_2
+                + "; hypo: " + hypotenuse);
+        return hypotenuse < cgDistance;
+    }
+
+    private double computeAircraftRange(double totalFuel) {
+        return ((totalFuel / aircraft.getType().getFuelConsumption())
+                * aircraft.getType().getCruiseSpeed()) * M_KM;
+    }
 
     public void refreshData(Compartment area) {
         this.compartment = area;
@@ -130,8 +159,7 @@ public class AircraftDataTracker {
     }
 
     private void updateTotalLoadMass() {
-        centerOfGravity_X = 0.0;
-        centerOfGravity_Y = 0.0;
+        centerOfGravity_X = centerOfGravity_Y = 0.0;
         totalCargoLoadMass = totalFuelLoadMass = 0;
         aircraft.getCargoAreaContents().forEach((area, freightSet) ->
                 freightSet.forEach(freight -> {
@@ -143,6 +171,7 @@ public class AircraftDataTracker {
             totalFuelLoadMass += amount;
             computeCenterOfGravity(tank, amount);
         });
+        this.totalAircraftWeight = (float) (emptyWeight + totalFuelLoadMass);
     }
 
     private void computeCenterOfGravity(Compartment area, double weight) {
@@ -160,9 +189,8 @@ public class AircraftDataTracker {
 
     private void remapCg(Point2D.Double cgPos) {
         Point2D.Double remappedCgPos = editorCore.remap(cgPos);
-        aircraft.setCenterOfG(remappedCgPos);
-        defaultCenterOfGravity_X = centerOfGravity_X = remappedCgPos.x;
-        defaultCenterOfGravity_Y = centerOfGravity_Y = remappedCgPos.y;
+        defaultCenterOfGravity_X = remappedCgPos.x;
+        defaultCenterOfGravity_Y = remappedCgPos.y;
     }
 
     public void updateFuelAreaMass() {

@@ -91,8 +91,8 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     }
 
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
-        this.fuelTank = (FuelTank) area;
+    public void compartmentSelected(Compartment fuelTank, AircraftDataTracker dataTracker) {
+        this.fuelTank = (FuelTank) fuelTank;
         displaySlider();
         settingsPanel.getCargoPanel().setVisible(false);
         setVisible(true);

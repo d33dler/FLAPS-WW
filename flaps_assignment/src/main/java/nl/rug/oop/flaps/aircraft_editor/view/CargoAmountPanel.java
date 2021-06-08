@@ -36,7 +36,6 @@ public class CargoAmountPanel extends JPanel {
         confirmButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargoSettings.setQuantity(Integer.parseInt(amountField.getText()));
                 cargoSettings.delegateCommands(cargoSettings.getCommandRequest());
                 System.out.println(cargoSettings.getCommandRequest());
                 executeCommonUpdate();
@@ -58,14 +57,15 @@ public class CargoAmountPanel extends JPanel {
 
     private void executeCommonUpdate() {
         cargoSettings.getCargoButtonPanel().disableButtons();
-        amountField.setText("0");
+        amountField.setText("");
         cargoSettings.setCommandRequest(null);
         setVisible(false);
     }
 
     private void addTextField() {
-        this.amountField = new JTextField("unit amount", 5);
+        this.amountField = new JTextField("", 5);
         amountField.setPreferredSize(new Dimension(50,15));
+        amountField.setToolTipText("Enter cargo unit amount...");
         addDocumentListener(amountField);
         add(amountField);
     }

@@ -19,7 +19,7 @@ import java.awt.*;
 public class EditorFrame extends JFrame {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 920;
-    public EditorCore model;
+    public EditorCore editorCore;
     private BlueprintSelectionModel selectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
     private Aircraft aircraft;
@@ -29,13 +29,14 @@ public class EditorFrame extends JFrame {
     private InfoPanel infoPanel;
 
 
+
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
+        this.editorCore = new EditorCore(aircraft, selectionModel, this);
         addLog();
-        this.model = new EditorCore(aircraft, selectionModel, this);
         editorInit();
         pack();
         setLocationRelativeTo(null);
@@ -55,10 +56,11 @@ public class EditorFrame extends JFrame {
     }
 
     private void addMainPanels() {
-        blueprintPanel = new BlueprintPanel(model, selectionModel, aircraft);
-        model.getDataTracker().setDisplay(blueprintPanel.getBlueprintDisplay());
-        settingsPanel = new SettingsPanel(model);
-        infoPanel = new InfoPanel(model);
+        blueprintPanel = new BlueprintPanel(editorCore, selectionModel, aircraft);
+        settingsPanel = new SettingsPanel(editorCore);
+        infoPanel = new InfoPanel(editorCore);
+        editorCore.getDataTracker().setDisplay(blueprintPanel.getBlueprintDisplay());
+        editorCore.getDataTracker().setDepartPanel(logPanel.getDepartPanel());
         add(this.blueprintPanel, BorderLayout.WEST);
         add(this.settingsPanel, BorderLayout.NORTH);
         add(this.infoPanel, BorderLayout.CENTER);

@@ -19,7 +19,6 @@ import java.awt.geom.Point2D;
 
 
 public class BlueprintDisplay extends JPanel {
-    private final static String listener_Id = EditorCore.generalListenerID;
     private Image blueprintImage;
     private Image cachedBpImage;
     private Aircraft aircraft;
@@ -35,9 +34,9 @@ public class BlueprintDisplay extends JPanel {
     /* Color Palette */
     private final static Color
             C_ROYBLUE = new Color(48, 87, 225, 218),
-            C_HMAG = new Color(232, 55, 238, 211),
+            C_HMAG = new Color(245, 60, 4, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
-            C_CGMARK = new Color(248, 157, 4, 193),
+            C_CGMARK = new Color(200, 0, 255, 205),
             BP_BG = new Color(58, 66, 80, 171);
 
     /**

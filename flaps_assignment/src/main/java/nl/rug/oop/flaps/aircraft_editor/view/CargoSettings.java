@@ -3,8 +3,8 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
@@ -32,8 +32,10 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     private CargoType selectedType;
     private CargoFreight selectedFreight;
     private float totalCargoAreaWgt;
-    protected static final String CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo";
-    private static final int WIDTH = 1200, LENGTH = 600;
+    protected static final String
+            CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo",
+            TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo";
+    private static final int WIDTH = 1200, LENGTH = 500;
 
     public CargoSettings(EditorCore editorCore, CargoArea cargoArea) {
         super("Cargo Areas Loader");
@@ -67,8 +69,10 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     }
 
     private void addAllPanels() {
-        this.cargoWarehouse = new CargoTablesPanel(editorCore, cargoTypeSet, this, CARGO_ALL);
-        this.cargoAircraft = new CargoTablesPanel(editorCore, cargoTypeSet, this, CARGO_PLANE);
+        this.cargoWarehouse = new CargoTablesPanel(editorCore, cargoTypeSet,
+                this, CARGO_ALL, TITLE_L + editorCore.getSource().getName());
+
+        this.cargoAircraft = new CargoTablesPanel(editorCore, cargoTypeSet, this, CARGO_PLANE, TITLE_R);
         this.cargoAmountPanel = new CargoAmountPanel(this);
         this.cargoButtonPanel = new CargoButtonPanel(editorCore, this);
         cargoWarehouse.setPreferredSize(new Dimension(520, 300));
@@ -110,10 +114,10 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     }
 
     protected void delegateCommands(String command) {
-        int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
         if (command != null) {
             switch (command) {
                 case CargoButtonPanel.ADD_COM: {
+                    int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
                     float weight = amount * selectedType.getWeightPerUnit();
                     if (editorCore.getDataTracker().performCargoCheck(weight)) {
                         editorCore.getConfigurator().unitAdded(aircraft, selectedType, amount);
@@ -121,6 +125,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
                     return;
                 }
                 case CargoButtonPanel.REM_COM: {
+                    int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
                     editorCore.getConfigurator().unitRemoved(aircraft, selectedFreight, amount);
                     return;
                 }
@@ -137,7 +142,6 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
 
     @Override
     public void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
-        System.out.println("repaintTable");
         cargoAircraft.update();
     }
 }

@@ -8,7 +8,9 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
 import javax.swing.*;
+import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,11 +25,12 @@ public class CargoTablesPanel extends JPanel {
     private CargoSettings cargoSettings;
     private Set<CargoType> cargoTypeSet;
     private Set<CargoFreight> aircraftCargoUnits;
-    private String command;
+    private String command, tableName;
 
     public CargoTablesPanel(EditorCore editorCore, Set<CargoType> cargoTypeSet,
-                            CargoSettings cargoSettings, String command) {
+                            CargoSettings cargoSettings, String command, String title) {
         this.command = command;
+        this.tableName = title;
         this.editorCore = editorCore;
         this.cargoSettings = cargoSettings;
         this.cargoTypeSet = cargoTypeSet;
@@ -37,6 +40,9 @@ public class CargoTablesPanel extends JPanel {
     }
 
     private void init(String command) {
+        setBorder(BorderFactory.createTitledBorder
+                (BorderFactory.createEtchedBorder(1),
+                        tableName, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
         setPreferredSize(new Dimension(500, 300));
         if (command.equals(CargoSettings.CARGO_ALL)) {
             cargoTable = addTable(CargoSettings.CARGO_ALL);
@@ -44,7 +50,6 @@ public class CargoTablesPanel extends JPanel {
         } else {
             cargoTable = addTable(CargoSettings.CARGO_PLANE);
             add(new JScrollPane(cargoTable), BorderLayout.EAST);
-
             editTableView(cargoTable, 1);
         }
     }
@@ -58,7 +63,7 @@ public class CargoTablesPanel extends JPanel {
     }
 
     private JTable addTable(String command) {
-        JTable table = new JTable(){
+        JTable table = new JTable() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -81,6 +86,7 @@ public class CargoTablesPanel extends JPanel {
     protected void editTableView(JTable table, int index) {
         table.removeColumn(table.getColumnModel().getColumn(index));
     }
+
     protected void update() {
         aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
         cargoTable.setModel(editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class));

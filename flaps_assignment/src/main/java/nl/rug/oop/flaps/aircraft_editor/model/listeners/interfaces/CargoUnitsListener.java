@@ -5,6 +5,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
 public interface CargoUnitsListener {
     default void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
+        dataTracker.performDepartureValidationCheck();
         dataTracker.getDisplay().repaint();
         dataTracker.refreshData();
     }

@@ -33,8 +33,11 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     private GeographicCoordinates originCoordinates;
     private Airport source;
     private Airport destination;
-    public final static Point2D.Double BP_POS = new Point2D.Double(0, 20);;
-    public static double BP_WIDTH, BP_HEIGHT, BP_RATIO, BP_MARGIN;
+    public final static Point2D.Double BP_POS = new Point2D.Double(0, 20);
+    public static double BP_WIDTH, BP_HEIGHT, BP_RATIO, Pixels_per_M;
+    public static final double BP_MARGIN = 30;
+    private static final double BP_DEF_H = 500;
+    private static final double BP_DEF_W = 500;
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
     protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
@@ -50,7 +53,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
         this.selectionModel = selectionModel;
-        this.selectionModel.addListener(generalListenerID,this);
+        this.selectionModel.addListener(generalListenerID, this);
         this.selectionModel.setEditorCore(this);
         init();
     }
@@ -58,6 +61,9 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     private void init() {
         getRoute();
         configureBlueprintImg();
+        updateCompartmentCoords();
+        listToCoordsMap(this.aircraft.getType().getCargoAreas());
+        listToCoordsMap(this.aircraft.getType().getFuelTanks());
         this.aircraftLoadingModel = editorFrame.getAircraftLoadingModel();
         aircraftLoadingModel.addListener((CargoUnitsListener) this);
         aircraftLoadingModel.addListener((FuelSupplyListener) this);
@@ -65,19 +71,18 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         this.selectionModel.setDataTracker(dataTracker);
         this.aircraftLoadingModel.setDataTracker(dataTracker);
         this.configurator = new Configurator(this);
-        updateCompartmentCoords();
-        listToCoordsMap(this.aircraft.getType().getCargoAreas());
-        listToCoordsMap(this.aircraft.getType().getFuelTanks());
     }
 
     private void getRoute() {
         this.source = world.getSelectionModel().getSelectedAirport();
         this.destination = world.getSelectionModel().getSelectedDestinationAirport();
-        //  if ((destination != null) && destination.canAcceptIncomingAircraft()) {
-        this.originCoordinates = world.getSelectionModel().getSelectedAirport().getGeographicCoordinates();
-        //      } else {
-//TODO
-        //     }
+        if ((destination != null) && destination.canAcceptIncomingAircraft()) {
+            this.originCoordinates = world.getSelectionModel().getSelectedAirport().getGeographicCoordinates();
+        } else {
+            editorFrame.dispose();
+            System.out.println("Select a destination airport before proceeding with Aircraft configuration"); //TODO relay to Log
+            Thread.currentThread().stop();
+        }
     }
 
     public Optional<Compartment> extractApproxArea(Point2D.Double coords) {
@@ -94,19 +99,19 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
                 return Optional.ofNullable(xAxis.lowerEntry(coords.y).getValue());
             }
         } catch (NullPointerException e) {
-            System.out.println("Your cursor is outside of the blueprint's coordinate area range.");
+            System.out.println("Your cursor is outside of the blueprint's coordinate area range."); //TODO relay to Log
             return Optional.empty();
         }
     }
 
     private void configureBlueprintImg() {
         AIRCRAFT_LEN = aircraft.getType().getLength();
-        BP_MARGIN = 30;
+        Pixels_per_M = BP_DEF_H / AIRCRAFT_LEN;
         BP_WIDTH = aircraft.getType().getBlueprintImage().getWidth(editorFrame);
         BP_HEIGHT = aircraft.getType().getBlueprintImage().getHeight(editorFrame);
         BP_RATIO = BP_HEIGHT / BP_WIDTH;
-        BP_HEIGHT = 500;
-        BP_WIDTH = 500 / BP_RATIO;
+        BP_HEIGHT = BP_DEF_H;
+        BP_WIDTH = BP_DEF_W / BP_RATIO;
     }
 
     private void listToCoordsMap(List<? extends Compartment> list) {
@@ -139,7 +144,6 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         double s = BlueprintDisplay.MK_SIZE;
         double x = BP_POS.x + (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
         double y = BP_POS.y + (source.y * (bpSize / AIRCRAFT_LEN)) - s / 2;
-        System.out.println("Res: "+ x + "  :  " + y);
         return new Point2D.Double(x, y);
     }
 
