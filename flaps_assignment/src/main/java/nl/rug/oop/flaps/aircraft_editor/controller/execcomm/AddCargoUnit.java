@@ -8,15 +8,14 @@ import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
-import java.util.HashMap;
-
 
 public class AddCargoUnit extends Command {
     private final Configurator configurator;
     private CargoArea cargoArea;
     private final CargoType cargoType;
     private final int amount;
-    private HashMap<String, CargoFreight> freightSet = new HashMap<>();
+    private CargoFreight cargoFreight;
+    //private HashMap<String, CargoFreight> freightSet = new HashMap<>();
 
     public AddCargoUnit(Configurator configurator, CargoArea cargoArea, CargoType cargoType, int amount) {
         this.cargoArea = cargoArea;
@@ -27,7 +26,7 @@ public class AddCargoUnit extends Command {
     }
 
     private void getData() {
-        configurator.cloneSet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
+        //configurator.cloneSet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
     }
 
     @Override
@@ -46,11 +45,11 @@ public class AddCargoUnit extends Command {
     }
 
     private void generateAddCarriage(Aircraft aircraft) {
-        CargoFreight carriage = new CargoFreight(cargoType, amount,
+        this.cargoFreight = new CargoFreight(cargoType, amount,
                 amount * cargoType.getWeightPerUnit(),
                 Configurator.freightIdGen.generateId());
-        configurator.updateHashedFreight(carriage);
-        aircraft.getCargoAreaContents().get(cargoArea).add(carriage);
+        configurator.updateHashedFreight(cargoFreight);
+        aircraft.getCargoAreaContents().get(cargoArea).add(cargoFreight);
     }
 
     public void fetchLogData(boolean state) {
@@ -64,15 +63,17 @@ public class AddCargoUnit extends Command {
     public void undo() {
         configurator.getAircraft()
                 .getCargoAreaContents(cargoArea)
-                .removeIf(cargoFreight ->
-                        !freightSet.containsKey(cargoFreight.getId()));
+                .remove(cargoFreight);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(LogMessagesStack.UNDO_ADD_C);
     }
 
     @Override
     public void redo() {
-        execute();
+        configurator.getAircraft()
+                .getCargoAreaContents(cargoArea)
+                .add(cargoFreight);
+        configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(LogMessagesStack.REDO_ADD_C);
     }
 }
