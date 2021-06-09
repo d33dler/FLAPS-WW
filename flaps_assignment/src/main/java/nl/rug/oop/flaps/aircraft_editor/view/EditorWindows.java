@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
-public class CargoSettingsWindow extends JFrame implements WindowListener {
+public class EditorWindows extends JFrame implements WindowListener {
 
     @Override
     public void windowOpened(WindowEvent e) {

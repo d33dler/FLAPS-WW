@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.undo.UndoManager;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 /**
  * The main frame in which the editor should be displayed.
@@ -18,7 +20,7 @@ import java.awt.event.ActionEvent;
  */
 
 @Getter
-public class EditorFrame extends JFrame {
+public class EditorFrame extends EditorWindows implements WindowListener {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 920;
     public EditorCore editorCore;
@@ -32,11 +34,12 @@ public class EditorFrame extends JFrame {
     private UndoManager undoManager;
 
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
-        super("Aircraft Editor");
+        setTitle("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
         this.editorCore = new EditorCore(aircraft, selectionModel, this); //TODO code style M before V
+        addWindowListener(this);
         this.undoManager = editorCore.getUndoRedoManager().getUndoManager();
         addLog();
         editorInit();
@@ -52,6 +55,17 @@ public class EditorFrame extends JFrame {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         addMainPanels();
         addMenuBar();
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        if (settingsPanel.getCargoSettings() != null)
+            settingsPanel.getCargoSettings().dispose();
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+
     }
 
     private void addLog() {

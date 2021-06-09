@@ -19,7 +19,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class CargoSettings extends CargoSettingsWindow implements CargoUnitsListener, WindowListener {
+public class CargoSettings extends EditorWindows implements CargoUnitsListener, WindowListener {
     private EditorCore editorCore;
     private CargoArea cargoArea;
     private Aircraft aircraft;
@@ -150,13 +150,12 @@ public class CargoSettings extends CargoSettingsWindow implements CargoUnitsList
 
     @Override
     public void windowOpened(WindowEvent e) {
-        super.windowOpened(e);
         cargoPanel.getExCargoLoader().setEnabled(false);
     }
 
     @Override
     public void windowClosed(WindowEvent e) {
-        super.windowClosed(e);
+        editorCore.getEditorFrame().getSettingsPanel().setCargoSettings(null);
         cargoPanel.getExCargoLoader().setEnabled(true);
     }
 }

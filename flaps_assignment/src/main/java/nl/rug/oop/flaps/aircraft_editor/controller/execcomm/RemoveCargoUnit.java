@@ -8,17 +8,18 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import java.util.HashMap;
 
 public class RemoveCargoUnit extends Command {
-    private Configurator configurator;
-    private CargoArea cargoArea;
+    private  Configurator configurator;
+    private  CargoArea cargoArea;
     private CargoFreight cargoFreight;
-    private HashMap<String, CargoFreight> freightSet = new HashMap<>();
-    private int amount;
+    private  HashMap<String, CargoFreight> freightSet = new HashMap<>();
+    private  int amount, oldCount;
 
     public RemoveCargoUnit(Configurator configurator, CargoArea cargoArea, CargoFreight cargoFreight, int amount) {
         this.configurator = configurator;
         this.cargoArea = cargoArea;
         this.cargoFreight = cargoFreight;
         this.amount = amount;
+        this.oldCount = cargoFreight.getUnitCount();
         getData();
     }
 
@@ -29,23 +30,20 @@ public class RemoveCargoUnit extends Command {
     @Override
     public void execute() {
         Aircraft aircraft = configurator.getAircraft();
-        aircraft.getCargoAreaContents()
-                .get(cargoArea)
-                .remove(cargoFreight);
-        updateAircraftCargo(aircraft, cargoFreight, amount);
+        updateAircraftCargo(aircraft, amount);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         fetchLogData(true);
     }
 
-    public void updateAircraftCargo(Aircraft aircraft, CargoFreight cargoFreight, int amount) {
-        if (cargoFreight.getUnitCount() - amount > 0) {
-            cargoFreight.setUnitCount(cargoFreight.getUnitCount() - amount);
-            float weightPerUnit = cargoFreight.getCargoType().getWeightPerUnit();
-            cargoFreight.setTotalWeight(cargoFreight.getUnitCount() * weightPerUnit);
+    public void updateAircraftCargo(Aircraft aircraft, int amount) {
+        double newAmount = cargoFreight.getUnitCount() - amount;
+        if (newAmount > 0) {
+            cargoFreight.setUnitCount((int) newAmount);
+            configurator.updateHashedFreight(cargoFreight);
+        } else {
             aircraft.getCargoAreaContents()
                     .get(cargoArea)
-                    .add(cargoFreight);
-            configurator.updateHashedFreight(cargoFreight);
+                    .remove(cargoFreight);
         }
     }
 
@@ -55,13 +53,20 @@ public class RemoveCargoUnit extends Command {
     }
 
     @Override
-    public void undo() {
-        configurator.getAircraft().getCargoAreaContents(cargoArea).clear();
-        freightSet.values().forEach(clonedFreight ->  {
+    public void undo() { //TODO terrible performance (because of Set<Cargofreight> needs improvement
+        if (configurator.getAircraft().getCargoAreaContents(cargoArea).contains(cargoFreight)) {
+            for (CargoFreight freight : configurator.getAircraft().getCargoAreaContents(cargoArea)) {
+                if (freight.getId().equals(cargoFreight.getId())) {
+                    freight.setUnitCount(oldCount);
+                    break;
+                }
+            }
+        } else {
             CargoFreight newOriginal = new CargoFreight();
-            configurator.cloneAttributes(clonedFreight,newOriginal);
+            configurator.cloneAttributes(cargoFreight, newOriginal);
+            cargoFreight = newOriginal;
             configurator.getAircraft().getCargoAreaContents(cargoArea).add(newOriginal);
-        });
+        }
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(LogMessagesStack.UNDO_REM_C);
     }

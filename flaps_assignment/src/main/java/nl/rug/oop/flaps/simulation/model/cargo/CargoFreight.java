@@ -7,6 +7,8 @@ import lombok.Setter;
 public class CargoFreight {
     private String id;
     private CargoType cargoType;
+
+
     private int unitCount;
     private double totalWeight;
 
@@ -18,5 +20,10 @@ public class CargoFreight {
     }
 
     public CargoFreight() {
+    }
+
+    public void setUnitCount(int unitCount) {
+        this.unitCount = unitCount;
+        this.totalWeight = unitCount * cargoType.getWeightPerUnit();
     }
 }
