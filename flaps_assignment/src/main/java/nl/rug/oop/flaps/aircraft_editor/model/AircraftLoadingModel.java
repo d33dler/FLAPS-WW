@@ -5,7 +5,6 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
-import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +29,14 @@ public class AircraftLoadingModel {
         this.fuelListenerList.add(listener);
     }
 
-    public void fireCargoUpdate(Aircraft aircraft) {
+    public void fireCargoUpdate() {
         this.cargoListenerList.forEach(listener -> {
-            listener.fireCargoTradeUpdate(aircraft, dataTracker);
+            listener.fireCargoTradeUpdate(dataTracker);
         });
     }
-    public void fireFuelUpdate(Aircraft aircraft) {
+    public void fireFuelUpdate() {
         this.fuelListenerList.forEach(listener -> {
-            listener.fireFuelSupplyUpdate(aircraft, dataTracker);
+            listener.fireFuelSupplyUpdate(dataTracker);
         });
     }
 }

@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
@@ -26,6 +26,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     private static double AIRCRAFT_LEN;
     private final BlueprintSelectionModel selectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
+    private UndoRedoManager undoRedoManager;
     private EditorFrame editorFrame;
     private Configurator configurator;
     private CargoDatabase cargoDatabase;
@@ -70,7 +71,9 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         this.dataTracker = new AircraftDataTracker(this, aircraft);
         this.selectionModel.setDataTracker(dataTracker);
         this.aircraftLoadingModel.setDataTracker(dataTracker);
+        this.undoRedoManager = new UndoRedoManager(this);
         this.configurator = new Configurator(this);
+        undoRedoManager.setConfigurator(configurator);
     }
 
     private void getRoute() {
@@ -80,7 +83,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
             this.originCoordinates = world.getSelectionModel().getSelectedAirport().getGeographicCoordinates();
         } else {
             editorFrame.dispose();
-            System.out.println("Select a destination airport before proceeding with Aircraft configuration"); //TODO relay to Log
+            System.out.println("The selected airport is not accepting aircraft or is missing !");
             Thread.currentThread().stop();
         }
     }
@@ -153,13 +156,14 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     }
 
     @Override
-    public void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
-        CargoUnitsListener.super.fireCargoTradeUpdate(aircraft, dataTracker);
+    public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
+        CargoUnitsListener.super.fireCargoTradeUpdate(dataTracker);
     }
 
     @Override
-    public void fireFuelSupplyUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
-        FuelSupplyListener.super.fireFuelSupplyUpdate(aircraft, dataTracker);
+    public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
+        FuelSupplyListener.super.fireFuelSupplyUpdate(dataTracker);
     }
+
 }
 

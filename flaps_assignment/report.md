@@ -1,8 +1,8 @@
 # FLAPS Report
 
-**First author**: John Doe (s1234567)
+**First author**:  Radu Rebeja (s4051297)
 
-**Second author**: Foo Bar (s2345678)
+**Second author**: Eugen Falca (s)
 
 ## Introduction
 

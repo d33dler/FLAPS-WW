@@ -1,13 +1,15 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
 import lombok.Getter;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
 import javax.swing.*;
+import javax.swing.undo.UndoManager;
 import java.awt.*;
+import java.awt.event.ActionEvent;
 
 /**
  * The main frame in which the editor should be displayed.
@@ -27,15 +29,15 @@ public class EditorFrame extends JFrame {
     private SettingsPanel settingsPanel;
     private LogPanel logPanel;
     private InfoPanel infoPanel;
-
-
+    private UndoManager undoManager;
 
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
         super("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
-        this.editorCore = new EditorCore(aircraft, selectionModel, this);
+        this.editorCore = new EditorCore(aircraft, selectionModel, this); //TODO code style M before V
+        this.undoManager = editorCore.getUndoRedoManager().getUndoManager();
         addLog();
         editorInit();
         pack();
@@ -51,6 +53,7 @@ public class EditorFrame extends JFrame {
         addMainPanels();
         addMenuBar();
     }
+
     private void addLog() {
         logPanel = new LogPanel(this);
     }
@@ -71,11 +74,23 @@ public class EditorFrame extends JFrame {
 
     private void addMenuBar() {
         JMenuBar bar = new JMenuBar();
-        JMenu menu = new JMenu("File");
-        //  JMenu fileFormat = new JMenu("Export to...");
-        // JMenuItem json = new JMenuItem(new MenuAction("JSON", this));
-        //  fileFormat.add(json);
-        //  menu.add(fileFormat);
+        JMenu menu = new JMenu("Options");
+        menu.add(new JMenuItem(new AbstractAction("Undo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (EditorFrame.this.undoManager.canUndo()) {
+                    EditorFrame.this.undoManager.undo();
+                }
+            }
+        }));
+        menu.add(new JMenuItem(new AbstractAction("Redo") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (EditorFrame.this.undoManager.canRedo()) {
+                    EditorFrame.this.undoManager.redo();
+                }
+            }
+        }));
         bar.add(menu);
         setJMenuBar(bar);
     }

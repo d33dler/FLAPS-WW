@@ -131,12 +131,12 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     }
 
     @Override
-    public void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
+    public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
         updateAllData();
     }
 
     @Override
-    public void fireFuelSupplyUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
+    public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
         updateAllData();
     }
 

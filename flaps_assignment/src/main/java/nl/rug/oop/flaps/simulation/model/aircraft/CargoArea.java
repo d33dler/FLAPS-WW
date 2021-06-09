@@ -4,6 +4,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.UndoRedoManager;
+import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
 import java.util.Objects;
 
@@ -46,5 +48,10 @@ public class CargoArea extends Compartment {
     @Override
     public void getAreaLoad(AircraftDataTracker dataTracker) {
             dataTracker.updateCargoAreaMass();
+    }
+
+    @Override
+    public void saveConfigData(UndoRedoManager undoRedoManager, DataHolder holder) {
+        //((CargoArea) area)
     }
 }

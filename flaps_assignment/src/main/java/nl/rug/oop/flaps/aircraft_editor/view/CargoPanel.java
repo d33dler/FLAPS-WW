@@ -1,5 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.view;
 
+import lombok.Getter;
+import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
@@ -13,6 +15,8 @@ import java.awt.event.ActionEvent;
 public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private SettingsPanel settingsPanel;
+    @Getter
+    @Setter
     private JButton exCargoLoader;
     private final static String listenerId = EditorCore.cargoListenerID;
 
@@ -36,7 +40,7 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() ->
                         settingsPanel.setCargoSettings(
-                                new CargoSettings(editorCore, (CargoArea) settingsPanel.getCompartmentArea())));
+                                new CargoSettings(editorCore, (CargoArea) settingsPanel.getCompartmentArea(),CargoPanel.this)));
             }
         });
         add(exCargoLoader);

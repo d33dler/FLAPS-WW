@@ -10,7 +10,6 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.JTableHeader;
 import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,7 +49,7 @@ public class CargoTablesPanel extends JPanel {
         } else {
             cargoTable = addTable(CargoSettings.CARGO_PLANE);
             add(new JScrollPane(cargoTable), BorderLayout.EAST);
-            editTableView(cargoTable, 1);
+            editTableView(cargoTable, 2,2);
         }
     }
 
@@ -83,14 +82,16 @@ public class CargoTablesPanel extends JPanel {
         return table;
     }
 
-    protected void editTableView(JTable table, int index) {
-        table.removeColumn(table.getColumnModel().getColumn(index));
+    protected void editTableView(JTable table, int start, int interval) {
+        for(int i = 0; i < interval; i++) {
+            table.removeColumn(table.getColumnModel().getColumn(start));
+        }
     }
 
     protected void update() {
         aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
         cargoTable.setModel(editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class));
-        editTableView(cargoTable, 2);
+        editTableView(cargoTable, 2,2);
         cargoTable.repaint();
     }
 }

@@ -336,7 +336,7 @@ Your program should be able to:
 
 - Add/remove cargo to/from cargo areas
 
-- Show the following information:
+- Sho**w the following information:
 
   - Range
 

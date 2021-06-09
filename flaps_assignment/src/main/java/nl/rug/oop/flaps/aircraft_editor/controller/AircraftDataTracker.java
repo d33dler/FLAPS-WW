@@ -31,6 +31,7 @@ public class AircraftDataTracker {
             aircraftCapacity = 0,
             totalCargoLoadMass = 0,
             totalFuelLoadMass = 0,
+            totalAircraftLoadWeight = 0,
             totalAircraftWeight = 0,
             selectedAreaLoad = 0,
             selectedAreaCapacity = 0;
@@ -87,12 +88,13 @@ public class AircraftDataTracker {
 
 
     public boolean performCargoCheck(float amount) {
-        float allCargo = totalAircraftWeight + amount;
+        float allCargo = totalAircraftLoadWeight + amount;
         if (amount > 0
                 && selectedAreaLoad + amount <= selectedAreaCapacity
                 && allCargo <= maxTakeOffWeight
                 && allCargo <= maxLandingWeight) {
-            totalAircraftWeight = allCargo;
+            totalAircraftLoadWeight = allCargo;
+            totalAircraftWeight += amount;
             selectedAreaLoad += amount;
             return true;
         }
@@ -100,10 +102,10 @@ public class AircraftDataTracker {
     }
 
     public boolean performFuelCheck(double oldLevel, double newLevel) {
-        float updatedLoad = (float) (totalAircraftWeight - oldLevel + newLevel);
+        float updatedLoad = (float) (totalAircraftLoadWeight - oldLevel + newLevel);
         double newTotalFuel = aircraft.getTotalFuel() - oldLevel + newLevel;
         if (updatedLoad <= aircraftCapacity) {
-            totalAircraftWeight = updatedLoad;
+            totalAircraftLoadWeight = updatedLoad;
             aircraftRange = computeAircraftRange(newTotalFuel);
             return true;
         }
@@ -122,9 +124,7 @@ public class AircraftDataTracker {
         double cathetus_1 = Math.abs(defaultCenterOfGravity_X - centerOfGravity_X) / ppm;
         double cathetus_2 = Math.abs(defaultCenterOfGravity_Y - centerOfGravity_Y) / ppm;
         double hypotenuse = Math.sqrt(Math.pow(cathetus_1, 2) + Math.pow(cathetus_2, 2));
-        System.out.println("ppm = " + ppm + "; cgDist: " + cgDistance + " ; cat1: " + cathetus_1 + "; cat2: " + cathetus_2
-                + "; hypo: " + hypotenuse);
-        return hypotenuse < cgDistance;
+        return hypotenuse <= cgDistance;
     }
 
     private double computeAircraftRange(double totalFuel) {
@@ -171,7 +171,8 @@ public class AircraftDataTracker {
             totalFuelLoadMass += amount;
             computeCenterOfGravity(tank, amount);
         });
-        this.totalAircraftWeight = (float) (emptyWeight + totalFuelLoadMass);
+        this.totalAircraftLoadWeight = totalFuelLoadMass + totalCargoLoadMass;
+        this.totalAircraftWeight = (float) (emptyWeight + totalFuelLoadMass + totalCargoLoadMass);
     }
 
     private void computeCenterOfGravity(Compartment area, double weight) {

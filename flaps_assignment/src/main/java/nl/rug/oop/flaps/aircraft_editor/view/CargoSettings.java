@@ -12,12 +12,14 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Set;
 
 @Getter
 @Setter
-public class CargoSettings extends JFrame implements CargoUnitsListener {
+public class CargoSettings extends CargoSettingsWindow implements CargoUnitsListener, WindowListener {
     private EditorCore editorCore;
     private CargoArea cargoArea;
     private Aircraft aircraft;
@@ -31,20 +33,23 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     private CargoButtonPanel cargoButtonPanel;
     private CargoType selectedType;
     private CargoFreight selectedFreight;
+    private CargoPanel cargoPanel;
     private float totalCargoAreaWgt;
     protected static final String
             CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo",
             TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo";
     private static final int WIDTH = 1200, LENGTH = 500;
 
-    public CargoSettings(EditorCore editorCore, CargoArea cargoArea) {
-        super("Cargo Areas Loader");
+    public CargoSettings(EditorCore editorCore, CargoArea cargoArea,CargoPanel cargoPanel) {
+        setTitle("Cargo Areas Loader");
         this.editorCore = editorCore;
         this.cargoArea = cargoArea;
         this.aircraft = editorCore.getAircraft();
         this.cargoTypeSet = editorCore.getWorld().getCargoSet();
         this.totalCargoAreaWgt = 0;
+        this.cargoPanel = cargoPanel;
         editorCore.getAircraftLoadingModel().addListener(this);
+        addWindowListener(this);
         init();
     }
 
@@ -52,6 +57,7 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(WIDTH, LENGTH));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         cargoTypeSet.forEach(cargoType -> {
             cargoHashMap.put(cargoType.getName(), cargoType);
         });
@@ -118,19 +124,16 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
             switch (command) {
                 case CargoButtonPanel.ADD_COM: {
                     int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
-                    float weight = amount * selectedType.getWeightPerUnit();
-                    if (editorCore.getDataTracker().performCargoCheck(weight)) {
-                        editorCore.getConfigurator().unitAdded(aircraft, selectedType, amount);
-                    }
+                    editorCore.getConfigurator().unitAdded(selectedType, amount);
                     return;
                 }
                 case CargoButtonPanel.REM_COM: {
                     int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
-                    editorCore.getConfigurator().unitRemoved(aircraft, selectedFreight, amount);
+                    editorCore.getConfigurator().unitRemoved(selectedFreight, amount);
                     return;
                 }
                 case CargoButtonPanel.REMALL_COM: {
-                    editorCore.getConfigurator().allCargoRemove(aircraft);
+                    editorCore.getConfigurator().allCargoRemove();
                     return;
                 }
                 default:
@@ -141,7 +144,19 @@ public class CargoSettings extends JFrame implements CargoUnitsListener {
     }
 
     @Override
-    public void fireCargoTradeUpdate(Aircraft aircraft, AircraftDataTracker dataTracker) {
+    public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
         cargoAircraft.update();
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        super.windowOpened(e);
+        cargoPanel.getExCargoLoader().setEnabled(false);
+    }
+
+    @Override
+    public void windowClosed(WindowEvent e) {
+        super.windowClosed(e);
+        cargoPanel.getExCargoLoader().setEnabled(true);
     }
 }
