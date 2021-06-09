@@ -15,18 +15,12 @@ public class AddCargoUnit extends Command {
     private final CargoType cargoType;
     private final int amount;
     private CargoFreight cargoFreight;
-    //private HashMap<String, CargoFreight> freightSet = new HashMap<>();
 
     public AddCargoUnit(Configurator configurator, CargoArea cargoArea, CargoType cargoType, int amount) {
         this.cargoArea = cargoArea;
         this.cargoType = cargoType;
         this.amount = amount;
         this.configurator = configurator;
-        getData();
-    }
-
-    private void getData() {
-        //configurator.cloneSet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
     }
 
     @Override

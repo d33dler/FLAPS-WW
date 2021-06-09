@@ -5,14 +5,11 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 
-import java.util.HashMap;
-
 public class RemoveCargoUnit extends Command {
-    private  Configurator configurator;
-    private  CargoArea cargoArea;
+    private Configurator configurator;
+    private CargoArea cargoArea;
     private CargoFreight cargoFreight;
-    private  HashMap<String, CargoFreight> freightSet = new HashMap<>();
-    private  int amount, oldCount;
+    private int amount, oldCount;
 
     public RemoveCargoUnit(Configurator configurator, CargoArea cargoArea, CargoFreight cargoFreight, int amount) {
         this.configurator = configurator;
@@ -20,12 +17,8 @@ public class RemoveCargoUnit extends Command {
         this.cargoFreight = cargoFreight;
         this.amount = amount;
         this.oldCount = cargoFreight.getUnitCount();
-        getData();
     }
 
-    private void getData() {
-        configurator.cloneSet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
-    }
 
     @Override
     public void execute() {
