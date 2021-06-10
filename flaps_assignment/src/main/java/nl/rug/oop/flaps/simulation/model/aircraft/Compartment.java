@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.model.UndoRedoManager;
+import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
 import java.awt.geom.Point2D;

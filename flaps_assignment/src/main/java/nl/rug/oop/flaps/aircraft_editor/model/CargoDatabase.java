@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.view.SettingsPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 

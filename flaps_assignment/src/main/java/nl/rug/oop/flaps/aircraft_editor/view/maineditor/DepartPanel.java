@@ -1,11 +1,10 @@
-package nl.rug.oop.flaps.aircraft_editor.view;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
 
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.DepartAction;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
-import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModelListener;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,7 +25,7 @@ public class DepartPanel extends JPanel {
 
     private void init() {
         setLayout(new FlowLayout());
-        this.departButton = new JButton(new DepartAction(selectionModel));
+        this.departButton = new JButton(new DepartAction(selectionModel,editorCore.getDataTracker()));
         add(departButton);
     }
 }

@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;

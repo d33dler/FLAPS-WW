@@ -1,5 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.actions;
+
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
+
 import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
@@ -23,6 +25,7 @@ public class ConfiguratorAction extends AbstractUndoableEdit {
     public void undo() throws CannotUndoException {
         super.undo();
         command.undo();
+
     }
 
     @Override

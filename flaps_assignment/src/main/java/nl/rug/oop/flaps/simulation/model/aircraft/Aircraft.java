@@ -2,9 +2,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.geom.Point2D;
@@ -89,6 +87,9 @@ public class Aircraft implements Comparable<Aircraft> {
         }
     }
 
+    public void removeAllCargo() {
+        this.cargoAreaContents.values().forEach(Set::clear);
+    }
     /**
      * Retrieves the total amount of fuel (from all fuel tanks) in the aircraft in kg
      *

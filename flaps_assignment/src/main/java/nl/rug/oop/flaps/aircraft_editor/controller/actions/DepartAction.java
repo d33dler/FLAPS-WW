@@ -1,7 +1,11 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.actions;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
+import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.sound.sampled.AudioInputStream;
@@ -13,7 +17,7 @@ import java.awt.event.ActionEvent;
 /**
  * This action is invoked to perform the actual departure of an aircraft from an
  * airport.
- *
+ * <p>
  * Use the setEnabled() method to enable/disable the corresponding button
  *
  * @author T.O.W.E.R.
@@ -21,31 +25,52 @@ import java.awt.event.ActionEvent;
 @Log
 public class DepartAction extends AbstractAction {
     private final WorldSelectionModel selectionModel;
-    private double travelDistance;
-    public DepartAction(WorldSelectionModel selectionModel) {
+    private AircraftDataTracker dataTracker;
+    private EditorFrame editorFrame;
+
+    public DepartAction(WorldSelectionModel selectionModel, AircraftDataTracker dataTracker) {
         super("Depart");
         this.selectionModel = selectionModel;
-        // TODO: make sure the button gets enabled when the aircraft can depart
+        this.dataTracker = dataTracker;
+        this.editorFrame = dataTracker.getEditorCore().getEditorFrame();
         setEnabled(false);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        var sm = this.selectionModel; // Just to keep things succinct.
+        var sm = this.selectionModel;
         if (sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null && sm.getSelectedDestinationAirport() != null) {
             var aircraft = sm.getSelectedAircraft();
+            var start = sm.getSelectedAirport();
+            var end = sm.getSelectedDestinationAirport();
+            notifyDepart(start);
             if (aircraft.getType().getTakeoffClipPath() != null) {
                 this.playTakeoffClip(aircraft.getType());
             }
-            var start = sm.getSelectedAirport();
-            var end = sm.getSelectedDestinationAirport();
             start.removeAircraft(aircraft);
             end.addAircraft(aircraft);
             sm.setSelectedAirport(end);
             sm.setSelectedDestinationAirport(null);
             sm.setSelectedAircraft(aircraft);
-            aircraft.removeFuel(aircraft.getFuelConsumption(travelDistance));
+            aircraft.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
+            aircraft.removeAllCargo();
+            notificationPopUp();
+            dataTracker.getEditorCore().getAircraftLoadingModel().fireFuelUpdate();
+            dataTracker.getEditorCore().getAircraftLoadingModel().fireCargoUpdate();
         }
+    }
+
+
+    private void notifyDepart(Airport airport) {
+        JOptionPane.showMessageDialog(editorFrame, "Your plane is preparing for departure from  " +
+               airport.getName());
+    }
+
+    @SneakyThrows
+    private void notificationPopUp() {
+        Thread.sleep(4000);
+        JOptionPane.showMessageDialog(editorFrame, "Your plane has arrived at " +
+                this.selectionModel.getSelectedAirport().getName() );
     }
 
     private void playTakeoffClip(AircraftType type) {

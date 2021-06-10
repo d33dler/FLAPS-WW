@@ -2,13 +2,14 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
-import nl.rug.oop.flaps.aircraft_editor.view.BlueprintDisplay;
-import nl.rug.oop.flaps.aircraft_editor.view.EditorFrame;
+import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;

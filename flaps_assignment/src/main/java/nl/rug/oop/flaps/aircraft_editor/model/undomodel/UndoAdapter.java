@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.model;
+package nl.rug.oop.flaps.aircraft_editor.model.undomodel;
 
 import javax.swing.event.UndoableEditEvent;
 import javax.swing.event.UndoableEditListener;

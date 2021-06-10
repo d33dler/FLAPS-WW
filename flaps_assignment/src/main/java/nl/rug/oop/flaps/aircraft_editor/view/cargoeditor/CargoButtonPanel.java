@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view;
+package nl.rug.oop.flaps.aircraft_editor.view.cargoeditor;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;

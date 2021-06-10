@@ -1,13 +1,15 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
+package nl.rug.oop.flaps.aircraft_editor.controller.configcore;
 
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.Randomizers;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.ConfiguratorAction;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.*;
 import nl.rug.oop.flaps.aircraft_editor.model.*;
-import nl.rug.oop.flaps.aircraft_editor.view.LogPanel;
-import nl.rug.oop.flaps.aircraft_editor.view.SettingsPanel;
+import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
