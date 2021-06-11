@@ -8,6 +8,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.actions.ConfiguratorAction;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.*;
 import nl.rug.oop.flaps.aircraft_editor.model.*;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
+import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -35,6 +36,8 @@ public class Configurator {
     @Setter
     private LogPanel logPanel;
     private DataHolder holder = new DataHolder();
+    @Setter
+    private CargoTradeFrame cargoTradeFrame;
     public static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());
     private List<Command> commandList;
 
@@ -76,7 +79,7 @@ public class Configurator {
 
     public void updateHashedFreight(CargoFreight carriage) {
         editorCore.getEditorFrame().getSettingsPanel().
-                getCargoSettings().getFreightHashMap().
+                getCargoTradeFrame().getFreightHashMap().
                 put(carriage.getId(), carriage);
     }
 

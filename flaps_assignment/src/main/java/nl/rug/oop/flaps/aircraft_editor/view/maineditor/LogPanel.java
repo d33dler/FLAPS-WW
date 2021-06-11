@@ -1,7 +1,10 @@
 package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
 
 import lombok.Getter;
+import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
+import nl.rug.oop.flaps.simulation.model.airport.Airport;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,7 +27,7 @@ public class LogPanel extends JPanel {
     private void init() {
         this.editorCore.getConfigurator().setLogPanel(this);
         JPanel log = new JPanel(new BorderLayout());
-        JLabel title = new JLabel("■ COMMAND LOG HISTORY");
+        JLabel title = new JLabel(LogMessagesDb.LOG_TITLE);
         title.setFont(Font.getFont(String.valueOf(Font.BOLD)));
         this.logBook = new JTextArea(8, 50);
         logBook.setLineWrap(true);
@@ -43,6 +46,19 @@ public class LogPanel extends JPanel {
     public void updateLog(String logMsg) {
         logBook.append(getTimeNow() + logMsg + "\n");
     }
+
+    public void notifyDepart(Airport airport) {
+        JOptionPane.showMessageDialog(editorFrame, LogMessagesDb.DEPART_1 +
+                airport.getName());
+    }
+
+    @SneakyThrows
+    public void notifyArrive(Airport airport) {
+        Thread.sleep(12000);
+        JOptionPane.showMessageDialog(editorFrame, LogMessagesDb.ARRIVE_1 +
+               airport.getName());
+    }
+
 
     private String getTimeNow() {
         return (java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss")) + " ");

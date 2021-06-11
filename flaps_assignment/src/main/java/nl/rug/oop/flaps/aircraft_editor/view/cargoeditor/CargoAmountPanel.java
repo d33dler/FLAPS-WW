@@ -15,12 +15,12 @@ import java.awt.event.ActionEvent;
 @Setter
 public class CargoAmountPanel extends JPanel {
 
-    private CargoSettings cargoSettings;
+    private CargoTradeFrame cargoTradeFrame;
     private JTextField amountField;
     private JButton confirmButton, cancelButton;
 
-    public CargoAmountPanel(CargoSettings cargoSettings) {
-        this.cargoSettings = cargoSettings;
+    public CargoAmountPanel(CargoTradeFrame cargoTradeFrame) {
+        this.cargoTradeFrame = cargoTradeFrame;
         init();
     }
 
@@ -36,8 +36,7 @@ public class CargoAmountPanel extends JPanel {
         confirmButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargoSettings.delegateCommands(cargoSettings.getCommandRequest());
-                System.out.println(cargoSettings.getCommandRequest());
+                cargoTradeFrame.delegateCommand();
                 executeCommonUpdate();
             }
         });
@@ -45,8 +44,8 @@ public class CargoAmountPanel extends JPanel {
         cancelButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                cargoSettings.getCargoWarehouse().getCargoTable().getSelectionModel().clearSelection();
-                cargoSettings.getCargoAircraft().getCargoTable().getSelectionModel().clearSelection();
+                cargoTradeFrame.getCargoWarehouse().getCargoTable().getSelectionModel().clearSelection();
+                cargoTradeFrame.getCargoAircraft().getCargoTable().getSelectionModel().clearSelection();
                 executeCommonUpdate();
             }
         });
@@ -56,9 +55,9 @@ public class CargoAmountPanel extends JPanel {
     }
 
     private void executeCommonUpdate() {
-        cargoSettings.getCargoButtonPanel().disableButtons();
+        cargoTradeFrame.getCargoButtonPanel().disableButtons();
         amountField.setText("");
-        cargoSettings.setCommandRequest(null);
+        cargoTradeFrame.setCommandRequest(null);
         setVisible(false);
     }
 

@@ -39,4 +39,8 @@ public class AircraftLoadingModel {
             listener.fireFuelSupplyUpdate(dataTracker);
         });
     }
+    public void fireAllUpdates() {
+        fireFuelUpdate();
+        fireCargoUpdate();
+    }
 }

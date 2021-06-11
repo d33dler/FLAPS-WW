@@ -32,13 +32,14 @@ public class EditorFrame extends EditorWindows implements WindowListener {
     private LogPanel logPanel;
     private InfoPanel infoPanel;
     private UndoManager undoManager;
-
+    private JButton configInitButton;
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
         setTitle("Aircraft Editor");
         this.selectionModel = selectionModel;
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
         this.editorCore = new EditorCore(aircraft, selectionModel, this); //TODO code style M before V
+        this.configInitButton =  editorCore.getWorld().getFlapsFrame().getAircraftPanel().getOpenConfigurer();
         addWindowListener(this);
         this.undoManager = editorCore.getUndoRedoManager().getUndoManager();
         addLog();
@@ -59,13 +60,28 @@ public class EditorFrame extends EditorWindows implements WindowListener {
 
     @Override
     public void windowClosed(WindowEvent e) {
-        if (settingsPanel.getCargoSettings() != null)
-            settingsPanel.getCargoSettings().dispose();
+        if (settingsPanel.getCargoTradeFrame() != null)
+            settingsPanel.getCargoTradeFrame().dispose();
+        editorCore.getWorld().getEditorTrack().remove(aircraft);
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        boolean check = editorCore.getWorld().getSelectionModel().getSelectedAircraft().
+                getIdentifier().equals(aircraft.getIdentifier());
+        if (check) {
+            configInitButton.setEnabled(true);
+        }
     }
 
     @Override
     public void windowOpened(WindowEvent e) {
+        configInitButton.setEnabled(false);
+    }
 
+    @Override
+    public void setVisible(boolean b) {
+        super.setVisible(b);
     }
 
     private void addLog() {

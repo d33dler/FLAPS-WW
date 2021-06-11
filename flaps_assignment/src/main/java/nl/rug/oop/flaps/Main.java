@@ -22,7 +22,8 @@ public class Main {
         System.setProperty("sun.java2d.opengl", "true");
         try {
             World world = new WorldInitializer().initializeWorld();
-            SwingUtilities.invokeLater(() -> new FlapsFrame(world));
+            SwingUtilities.invokeLater(() -> world.setFlapsFrame(new FlapsFrame(world)));
+
         } catch(UnrecognizedPropertyException e) {
             String errorMessage = "FLAPS encountered an error parsing one of the yaml files.\nCould not recognize property: \"" + e.getPropertyName() + "\"";
             JOptionPane.showMessageDialog(null,

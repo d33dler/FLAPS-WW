@@ -10,6 +10,7 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.loaders.AirportLoader;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
+import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -149,6 +150,16 @@ public class Airport implements Comparable<Airport> {
         if (!(o instanceof Airport)) return false;
         Airport a = (Airport) o;
         return this.getName().equals(a.getName());
+    }
+    public static Airport changeLocation(WorldSelectionModel sm, Aircraft aircraft) {
+        var start = sm.getSelectedAirport();
+        var end = sm.getSelectedDestinationAirport();
+        start.removeAircraft(aircraft);
+        end.addAircraft(aircraft);
+        sm.setSelectedAirport(end);
+        sm.setSelectedDestinationAirport(null);
+        sm.setSelectedAircraft(aircraft);
+        return start;
     }
 
     @Override

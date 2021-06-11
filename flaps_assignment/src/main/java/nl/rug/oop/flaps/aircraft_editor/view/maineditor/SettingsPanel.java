@@ -7,7 +7,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoSettings;
+import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
@@ -24,7 +24,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private Compartment compartmentArea;
     private static final String listener_Id = EditorCore.generalListenerID;
     @Setter
-    private CargoSettings cargoSettings;
+    private CargoTradeFrame cargoTradeFrame;
 
     public SettingsPanel(EditorCore editorCore) {
         this.editorCore = editorCore;

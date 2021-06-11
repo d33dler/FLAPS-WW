@@ -1,7 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
+import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
@@ -43,7 +43,7 @@ public class RemoveCargoUnit extends Command {
 
     @Override
     public void fetchLogData(boolean state) {
-        configurator.relayConfiguratorMsg(LogMessagesStack.R_CARGO_POS);
+        configurator.relayConfiguratorMsg(LogMessagesDb.R_CARGO_POS);
     }
 
     @Override
@@ -62,12 +62,12 @@ public class RemoveCargoUnit extends Command {
             configurator.getAircraft().getCargoAreaContents(cargoArea).add(newOriginal);
         }
         configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesStack.UNDO_REM_C);
+        configurator.relayConfiguratorMsg(LogMessagesDb.UNDO_REM_C);
     }
 
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(LogMessagesStack.REDO_REM_C);
+        configurator.relayConfiguratorMsg(LogMessagesDb.REDO_REM_C);
     }
 }

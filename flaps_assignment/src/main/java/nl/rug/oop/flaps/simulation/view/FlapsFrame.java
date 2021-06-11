@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.simulation.view;
 
+import lombok.Getter;
 import nl.rug.oop.flaps.simulation.model.world.World;
 import nl.rug.oop.flaps.simulation.view.panels.WorldPanel;
 import nl.rug.oop.flaps.simulation.view.panels.aircraft.AircraftPanel;
@@ -17,7 +18,11 @@ public class FlapsFrame extends JFrame {
 
     private static final int WIDTH = 1620;
     private static final int HEIGHT = 920;
-
+    @Getter
+    private WorldPanel worldPanel;
+    @Getter
+    private AircraftPanel aircraftPanel;
+    private AirportPanel airportPanel;
     public FlapsFrame(World world) {
         super("Flight Logistics Aviation Planning Simulation");
         setLayout(new BorderLayout());
@@ -34,11 +39,11 @@ public class FlapsFrame extends JFrame {
 
     private void initPanels(World world) {
 
-        WorldPanel worldPanel = new WorldPanel(world);
+        this.worldPanel = new WorldPanel(world);
         worldPanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
 
-        AircraftPanel aircraftPanel = new AircraftPanel(world);
-        AirportPanel airportPanel = new AirportPanel(world);
+        this.aircraftPanel = new AircraftPanel(world);
+        this.airportPanel = new AirportPanel(world);
         airportPanel.setPreferredSize(new Dimension(WIDTH/2, HEIGHT/2));
 
         JSplitPane worldPlaneSplit = new JSplitPane(JSplitPane.VERTICAL_SPLIT, worldPanel, aircraftPanel);

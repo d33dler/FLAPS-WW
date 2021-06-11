@@ -21,17 +21,17 @@ public class CargoTablesPanel extends JPanel {
     private EditorCore editorCore;
     private JTable cargoTable;
     private JTextField searchDb, searchAircraft;
-    private CargoSettings cargoSettings;
+    private CargoTradeFrame cargoTradeFrame;
     private Set<CargoType> cargoTypeSet;
     private Set<CargoFreight> aircraftCargoUnits;
     private String command, tableName;
 
     public CargoTablesPanel(EditorCore editorCore, Set<CargoType> cargoTypeSet,
-                            CargoSettings cargoSettings, String command, String title) {
+                            CargoTradeFrame cargoTradeFrame, String command, String title) {
         this.command = command;
         this.tableName = title;
         this.editorCore = editorCore;
-        this.cargoSettings = cargoSettings;
+        this.cargoTradeFrame = cargoTradeFrame;
         this.cargoTypeSet = cargoTypeSet;
         this.cargoArea = (CargoArea) editorCore.getEditorFrame().getSettingsPanel().getCompartmentArea();
         addUnitSet();
@@ -43,11 +43,11 @@ public class CargoTablesPanel extends JPanel {
                 (BorderFactory.createEtchedBorder(1),
                         tableName, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
         setPreferredSize(new Dimension(500, 300));
-        if (command.equals(CargoSettings.CARGO_ALL)) {
-            cargoTable = addTable(CargoSettings.CARGO_ALL);
+        if (command.equals(CargoTradeFrame.CARGO_ALL)) {
+            cargoTable = addTable(CargoTradeFrame.CARGO_ALL);
             add(new JScrollPane(cargoTable), BorderLayout.WEST);
         } else {
-            cargoTable = addTable(CargoSettings.CARGO_PLANE);
+            cargoTable = addTable(CargoTradeFrame.CARGO_PLANE);
             add(new JScrollPane(cargoTable), BorderLayout.EAST);
             editTableView(cargoTable, 2,2);
         }
@@ -69,7 +69,7 @@ public class CargoTablesPanel extends JPanel {
             }
         };
         DefaultTableModel model;
-        if (command.equals(CargoSettings.CARGO_ALL)) {
+        if (command.equals(CargoTradeFrame.CARGO_ALL)) {
             model = editorCore.getCargoDatabase().getDatabase(cargoTypeSet, CargoType.class);
         } else {
             model = editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class);

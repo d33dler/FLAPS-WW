@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
+import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
@@ -36,9 +36,9 @@ public class Refuel extends Command {
     public void fetchLogData(boolean state) {
         String val = "Level: " + level + "; Fuel Tank: " + fuelTank.getName();
         if (state)
-            configurator.relayConfiguratorMsg(LogMessagesStack.FUEL_CONFIRM + val);
+            configurator.relayConfiguratorMsg(LogMessagesDb.FUEL_CONFIRM + val);
         else
-            configurator.relayConfiguratorMsg(LogMessagesStack.FUEL_ERROR + val);
+            configurator.relayConfiguratorMsg(LogMessagesDb.FUEL_ERROR + val);
     }
 
     @Override
@@ -46,12 +46,12 @@ public class Refuel extends Command {
         Aircraft aircraft = configurator.getAircraft();
         aircraft.setFuelAmountForFuelTank(fuelTank, oldLevel);
         configurator.getAircraftLoadingModel().fireFuelUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesStack.UNDO_FUEL + " : " + level);
+        configurator.relayConfiguratorMsg(LogMessagesDb.UNDO_FUEL + " : " + level);
     }
 
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(LogMessagesStack.REDO_FUEL + " : " + level);
+        configurator.relayConfiguratorMsg(LogMessagesDb.REDO_FUEL + " : " + level);
     }
 }

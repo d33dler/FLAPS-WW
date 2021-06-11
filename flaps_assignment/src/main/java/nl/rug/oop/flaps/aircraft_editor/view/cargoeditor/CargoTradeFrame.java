@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargoeditor;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.CargoPanel;
@@ -21,7 +22,7 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class CargoSettings extends EditorWindows implements CargoUnitsListener, WindowListener {
+public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener, WindowListener {
     private EditorCore editorCore;
     private CargoArea cargoArea;
     private Aircraft aircraft;
@@ -36,13 +37,15 @@ public class CargoSettings extends EditorWindows implements CargoUnitsListener, 
     private CargoType selectedType;
     private CargoFreight selectedFreight;
     private CargoPanel cargoPanel;
+    private SelectionCommand selectionCommand;
     private float totalCargoAreaWgt;
     protected static final String
             CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo",
             TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo";
     private static final int WIDTH = 1200, LENGTH = 500;
+    private int amount;
 
-    public CargoSettings(EditorCore editorCore, CargoArea cargoArea,CargoPanel cargoPanel) {
+    public CargoTradeFrame(EditorCore editorCore, CargoArea cargoArea, CargoPanel cargoPanel) {
         setTitle("Cargo Areas Loader");
         this.editorCore = editorCore;
         this.cargoArea = cargoArea;
@@ -121,28 +124,15 @@ public class CargoSettings extends EditorWindows implements CargoUnitsListener, 
         });
     }
 
-    protected void delegateCommands(String command) {
-        if (command != null) {
-            switch (command) {
-                case CargoButtonPanel.ADD_COM: {
-                    int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
-                    editorCore.getConfigurator().unitAdded(selectedType, amount);
-                    return;
-                }
-                case CargoButtonPanel.REM_COM: {
-                    int amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
-                    editorCore.getConfigurator().unitRemoved(selectedFreight, amount);
-                    return;
-                }
-                case CargoButtonPanel.REMALL_COM: {
-                    editorCore.getConfigurator().allCargoRemove();
-                    return;
-                }
-                default:
-            }
-        } else {
-            System.out.println("There was an issue loading the cargo");
+    protected void delegateCommand() {
+        performPriorUpdates();
+        if (selectionCommand != null) {
+            selectionCommand.confirmExec();
         }
+    }
+
+    protected void performPriorUpdates() {
+        this.amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
     }
 
     @Override
@@ -157,7 +147,7 @@ public class CargoSettings extends EditorWindows implements CargoUnitsListener, 
 
     @Override
     public void windowClosed(WindowEvent e) {
-        editorCore.getEditorFrame().getSettingsPanel().setCargoSettings(null);
+        editorCore.getEditorFrame().getSettingsPanel().setCargoTradeFrame(null);
         cargoPanel.getExCargoLoader().setEnabled(true);
     }
 }

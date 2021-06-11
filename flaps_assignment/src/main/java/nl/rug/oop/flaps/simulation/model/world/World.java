@@ -3,12 +3,14 @@ package nl.rug.oop.flaps.simulation.model.world;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.java.Log;
+import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelType;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.map.WorldDimensions;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
+import nl.rug.oop.flaps.simulation.view.FlapsFrame;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,7 +37,15 @@ public class World {
     private WorldDimensions dimensions;
 
     @Getter
+    @Setter
+    private HashSet<Aircraft> editorTrack = new HashSet<>();
+
+    @Getter
     private final WorldSelectionModel selectionModel;
+
+    @Setter
+    @Getter
+    private FlapsFrame flapsFrame;
 
     public World(Set<Airport> airports, Set<AircraftType> aircraftTypes, Set<FuelType> fuelTypes, Set<CargoType> cargoTypes, WorldDimensions dimensions) {
         this.airports = setToMap(airports, Airport::getName);
@@ -69,7 +79,6 @@ public class World {
      *
      * @param geoPosition The geographic coordinates around which to search.
      * @param tolerance   The range to look for an airport, in kilometers.
-     *
      * @return The airport that was found, or none if none could be found.
      */
     public Optional<Airport> getNearestAirport(GeographicCoordinates geoPosition, double tolerance) {
@@ -86,7 +95,6 @@ public class World {
      * @param uniqueProperty A getter method for a unique key value.
      * @param <P>            The type of the key.
      * @param <O>            The type of the object.
-     *
      * @return A map of objects, mapped by their unique property.
      */
     private static <P, O> Map<P, O> setToMap(Set<O> set, Function<O, P> uniqueProperty) {

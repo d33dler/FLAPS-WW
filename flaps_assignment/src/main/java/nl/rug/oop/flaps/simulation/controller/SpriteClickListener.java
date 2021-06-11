@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.simulation.controller;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
+import javax.swing.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -26,11 +27,12 @@ public class SpriteClickListener extends MouseAdapter {
      * Creates a new listener
      *
      * @param aircraft The aircraft that is belongs to this sprite
-     * @param world The world context
+     * @param world    The world context
      */
     public SpriteClickListener(Aircraft aircraft, World world) {
         this.aircraft = aircraft;
         this.world = world;
+
     }
 
     /**
@@ -42,5 +44,11 @@ public class SpriteClickListener extends MouseAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         world.getSelectionModel().setSelectedAircraft(aircraft);
+        performCheck();
+    }
+
+    public void performCheck() {
+        JButton openConfig = world.getFlapsFrame().getAircraftPanel().getOpenConfigurer();
+        openConfig.setEnabled(!world.getEditorTrack().contains(aircraft));
     }
 }

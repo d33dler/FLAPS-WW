@@ -3,7 +3,8 @@ package nl.rug.oop.flaps.aircraft_editor.view;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class LogMessagesStack {
+public class LogMessagesDb {//TODO transfer to yaml
+    public static final String LOG_TITLE = "■ COMMAND LOG HISTORY";
     public static final String FUEL_CONFIRM = "Fuel amount loaded successfully! ";
     public static final String FUEL_ERROR = "ERROR: Cannot loading fuel amount. Possible cause: total capacity was reached.";
     public static final String ADD_CARGO_POS = "Successfully added cargo.";
@@ -24,5 +25,10 @@ public class LogMessagesStack {
     public static final String UNDO_REMALL_C = UNDO + ALLR_REV;
     public static final String UNDO_FUEL = UNDO + REF_REV;
     public static final String REDO_FUEL = REDO + REF_REV;
+    public static final String DEPART_1 = "Your plane is preparing for departure from ";
+    public static final String ARRIVE_1 = "Your plane has arrived at ";
+    public static final String DEPART_TIP_0 = "The destination airport location is missing";
+    public static final String DEPART_TIP_1 = "Click to depart from the current airport";
+
     public static final String OTHER_CONFIRM = "others";
 }

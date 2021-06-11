@@ -1,6 +1,10 @@
 package nl.rug.oop.flaps.aircraft_editor.view.cargoeditor;
 
 import lombok.Getter;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.AddCargoRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.RemoveAllRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.RemoveCargoRelay;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import javax.swing.*;
@@ -10,13 +14,15 @@ import java.awt.event.ActionEvent;
 @Getter
 public class CargoButtonPanel extends JPanel {
     private EditorCore editorCore;
-    private CargoSettings settings;
+    private CargoTradeFrame settings;
+    private Configurator configurator;
     private JButton add, remove, removeAll;
     protected static final String ADD_COM = "addcom", REM_COM = "remove", REMALL_COM = "remall";
 
-    public CargoButtonPanel(EditorCore editorCore, CargoSettings settings) {
+    public CargoButtonPanel(EditorCore editorCore, CargoTradeFrame settings) {
         this.editorCore = editorCore;
         this.settings = settings;
+        this.configurator = editorCore.getConfigurator();
         setPreferredSize(new Dimension(20, 200));
         setLayout(new FlowLayout());
         addAllButtons();
@@ -28,7 +34,7 @@ public class CargoButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 settings.getCargoAmountPanel().enableFull();
-                settings.setCommandRequest(ADD_COM);
+                settings.setSelectionCommand(new AddCargoRelay(configurator));
             }
         });
         this.remove = new JButton("Remove");
@@ -36,7 +42,7 @@ public class CargoButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 settings.getCargoAmountPanel().enableFull();
-                settings.setCommandRequest(REM_COM);
+                settings.setSelectionCommand(new RemoveCargoRelay(configurator));
             }
         });
         this.removeAll = new JButton("Return All");
@@ -44,7 +50,7 @@ public class CargoButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 settings.getCargoAmountPanel().enablePartial();
-                settings.setCommandRequest(REMALL_COM);
+                settings.setSelectionCommand(new RemoveAllRelay(configurator));
             }
         });
         add(add);

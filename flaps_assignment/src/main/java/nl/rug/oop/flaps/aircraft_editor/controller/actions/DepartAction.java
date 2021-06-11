@@ -4,6 +4,7 @@ import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
@@ -36,41 +37,25 @@ public class DepartAction extends AbstractAction {
         setEnabled(false);
     }
 
+    @SneakyThrows
     @Override
     public void actionPerformed(ActionEvent event) {
         var sm = this.selectionModel;
-        if (sm.getSelectedAirport() != null && sm.getSelectedAircraft() != null && sm.getSelectedDestinationAirport() != null) {
-            var aircraft = sm.getSelectedAircraft();
-            var start = sm.getSelectedAirport();
-            var end = sm.getSelectedDestinationAirport();
-            notifyDepart(start);
+        var aircraft = sm.getSelectedAircraft();
+        LogPanel logPanel = editorFrame.getLogPanel();
+        if (sm.getSelectedAirport() != null
+                && sm.getSelectedDestinationAirport() != null) {
+            editorFrame.setVisible(false);
+            logPanel.notifyDepart(Airport.changeLocation(sm, aircraft));
             if (aircraft.getType().getTakeoffClipPath() != null) {
                 this.playTakeoffClip(aircraft.getType());
             }
-            start.removeAircraft(aircraft);
-            end.addAircraft(aircraft);
-            sm.setSelectedAirport(end);
-            sm.setSelectedDestinationAirport(null);
-            sm.setSelectedAircraft(aircraft);
-            aircraft.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
-            aircraft.removeAllCargo();
-            notificationPopUp();
-            dataTracker.getEditorCore().getAircraftLoadingModel().fireFuelUpdate();
-            dataTracker.getEditorCore().getAircraftLoadingModel().fireCargoUpdate();
+            aircraft.unLoadAircraft(aircraft,dataTracker);
+            logPanel.notifyArrive(sm.getSelectedAirport());
+            dataTracker.getEditorCore().getAircraftLoadingModel().fireAllUpdates();
+            Thread.sleep(2000);
+            editorFrame.setVisible(true);
         }
-    }
-
-
-    private void notifyDepart(Airport airport) {
-        JOptionPane.showMessageDialog(editorFrame, "Your plane is preparing for departure from  " +
-               airport.getName());
-    }
-
-    @SneakyThrows
-    private void notificationPopUp() {
-        Thread.sleep(4000);
-        JOptionPane.showMessageDialog(editorFrame, "Your plane has arrived at " +
-                this.selectionModel.getSelectedAirport().getName() );
     }
 
     private void playTakeoffClip(AircraftType type) {

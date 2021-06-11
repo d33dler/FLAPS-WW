@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
-import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesStack;
+import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
@@ -49,9 +49,9 @@ public class AddCargoUnit extends Command {
 
     public void fetchLogData(boolean state) {
         if (state)
-            configurator.relayConfiguratorMsg(LogMessagesStack.ADD_CARGO_POS);
+            configurator.relayConfiguratorMsg(LogMessagesDb.ADD_CARGO_POS);
         else
-            configurator.relayConfiguratorMsg(LogMessagesStack.ADD_CARGO_NEG);
+            configurator.relayConfiguratorMsg(LogMessagesDb.ADD_CARGO_NEG);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class AddCargoUnit extends Command {
                 .getCargoAreaContents(cargoArea)
                 .remove(cargoFreight);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesStack.UNDO_ADD_C);
+        configurator.relayConfiguratorMsg(LogMessagesDb.UNDO_ADD_C);
     }
 
     @Override
@@ -69,6 +69,6 @@ public class AddCargoUnit extends Command {
                 .getCargoAreaContents(cargoArea)
                 .add(cargoFreight);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesStack.REDO_ADD_C);
+        configurator.relayConfiguratorMsg(LogMessagesDb.REDO_ADD_C);
     }
 }
