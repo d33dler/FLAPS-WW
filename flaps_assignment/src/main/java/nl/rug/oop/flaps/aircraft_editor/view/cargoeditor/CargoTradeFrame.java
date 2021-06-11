@@ -132,7 +132,9 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     }
 
     protected void performPriorUpdates() {
-        this.amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
+        if(!cargoAmountPanel.getAmountField().getText().isBlank()){
+            this.amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
+        }
     }
 
     @Override

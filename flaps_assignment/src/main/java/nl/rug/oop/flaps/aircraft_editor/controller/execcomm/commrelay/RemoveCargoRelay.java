@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 
 public class RemoveCargoRelay extends SelectionCommand {
 
@@ -10,6 +11,8 @@ public class RemoveCargoRelay extends SelectionCommand {
 
     @Override
     public void confirmExec() {
-        configurator.allCargoRemove();
+        CargoFreight selectedFreight = configurator.getCargoTradeFrame().getSelectedFreight();
+        int amount =  configurator.getCargoTradeFrame().getAmount();
+        configurator.unitRemoved(selectedFreight, amount);
     }
 }
