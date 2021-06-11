@@ -26,13 +26,20 @@ public class AreaSelectionAction extends MouseAdapter {
             var area = this.editorCore.getBpSelectionModel().extractApproxArea(ePos);
             area.ifPresent(a -> {
                 this.editorCore.getBpSelectionModel().fireSelectedAreaUpdate(a.getCompartmentId(), a);
-                System.out.println(area.get().getName());
             });
         });
     }
 
     @Override
     public void mouseMoved(MouseEvent e) {
+        SwingUtilities.invokeLater(() -> {
+            Point2D.Double ePos = new Point2D.Double(e.getPoint().x, e.getPoint().y);
+            var area = this.editorCore.getBpSelectionModel().extractApproxArea(ePos);
+            area.ifPresent(a -> {
+                this.editorCore.getDataTracker().getDisplay().setCursorHover(a);
+                this.editorCore.getDataTracker().getDisplay().repaint();
+            });
+        });
     }
 
 }

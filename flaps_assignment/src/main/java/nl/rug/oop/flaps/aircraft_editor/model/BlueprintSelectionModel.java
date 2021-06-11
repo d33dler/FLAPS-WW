@@ -34,7 +34,7 @@ public class BlueprintSelectionModel {
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap;
     private LogPanel logPanel;
-    private static final double CURSOR_TOLERANCE = BlueprintDisplay.MK_SIZE * 4;
+    private static final double CURSOR_TOLERANCE = BlueprintDisplay.MK_SIZE * 3;
 
     public BlueprintSelectionModel() {
         this.listenerMap = new HashMap<>();
@@ -72,22 +72,26 @@ public class BlueprintSelectionModel {
             } else {
                 xAxis = areasMap.lowerEntry(coords.x).getValue();
             }
-            if (xAxis.lowerEntry(coords.y) == null) {
-                return identifyArea(coords,
-                        (xAxis.higherEntry(coords.y).getValue()));
+            if (xAxis != null) {
+                if (xAxis.lowerEntry(coords.y) == null) {
+                    return identifyArea(coords,
+                            (xAxis.higherEntry(coords.y).getValue()));
+                } else {
+                    return identifyArea(coords,
+                            (xAxis.lowerEntry(coords.y).getValue()));
+                }
             } else {
-                return identifyArea(coords,
-                        (xAxis.lowerEntry(coords.y).getValue()));
+                return Optional.empty();
             }
         } catch (NullPointerException e) {
             logPanel.updateLog(MessagesDb.BP_CURSOR_OUT);
+            e.printStackTrace();
             return Optional.empty();
         }
     }
 
     /**
-     *
-     * @param coords Cursor click coordinates;
+     * @param coords      Cursor click coordinates;
      * @param compartment Identified compartment closest to the cursor's click coordinates;
      * @return area - if decalage is within tolerance limit, otherwise Optional.empty;
      */
@@ -107,12 +111,11 @@ public class BlueprintSelectionModel {
     }
 
     /**
-     *
      * @param areaId id of the compartment area type
-     * @param area area subjected to changes
-     *             Fires updates with priority for generalListeners;
-     *             and fires separate updates for listeners concerned with
-     *             the particular area; (offers scalability opportunities)
+     * @param area   area subjected to changes
+     *               Fires updates with priority for generalListeners;
+     *               and fires separate updates for listeners concerned with
+     *               the particular area; (offers scalability opportunities)
      */
     @SneakyThrows
     public void fireSelectedAreaUpdate(String areaId, Compartment area) {

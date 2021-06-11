@@ -56,7 +56,7 @@ Contains the undo adapter coordinated edit storing.
 
 MainPackage - .controller \
 (Class) AircraftDataTracker & CommercialDataTracker - we chose to implement classes that gather all relevant aircraft data which is then
-supplied to the InfoPanel. Therefore, we can increment the data complexity by connecting new classes to this main class.
+supplied to the InfoPanel. Therefore, I can increment the data complexity by connecting new classes to this main class.
 
 Package .execcomm :\
 Contains all the objects extending from the abstract class Command, it features all available user configuration settings.

@@ -33,6 +33,7 @@ public class BlueprintPanel extends JPanel implements WorldSelectionModelListene
         BP_TITLE = this.aircraft.getType().getName() + " Blueprint";
         AreaSelectionAction controller = new AreaSelectionAction(model);
         addMouseListener(controller);
+        addMouseMotionListener(controller);
         init();
     }
 

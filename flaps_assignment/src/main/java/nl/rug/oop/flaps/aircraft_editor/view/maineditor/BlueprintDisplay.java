@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
 
+import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
@@ -29,6 +30,8 @@ public class BlueprintDisplay extends JPanel {
     public static final int MK_SIZE = 18;
     private final static int OFFSET = MK_SIZE / 2;
 
+    @Setter
+    private Compartment cursorHover;
     /**
      * Color Palette
      */
@@ -37,7 +40,8 @@ public class BlueprintDisplay extends JPanel {
             C_HMAG = new Color(245, 60, 4, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
             C_CGMARK = new Color(200, 0, 255, 205),
-            BP_BG = new Color(58, 66, 80, 171);
+            BP_BG = new Color(58, 66, 80, 171),
+            C_HOVER = new Color(255, 235, 147,213);
 
     /**
      * @param bpModel  selection model for blueprint indicator areas;
@@ -103,6 +107,10 @@ public class BlueprintDisplay extends JPanel {
             mk *= 1.45;
             adjust = true;
         }
+        if (cursorHover != null && cursorHover.equals(area)) {
+            c = C_HOVER;
+            mk *= 1.25;
+        }
         g2d.setColor(c);
         addIndicator(area, mk, adjust);
     }
@@ -132,7 +140,6 @@ public class BlueprintDisplay extends JPanel {
      */
     private void addCoGindicator() {
         Point2D.Double pos = aircraft.getCenterOfG();
-        System.out.println("Displaying the CG COORDS");
         int coordX = (int) ((pos.x) + OFFSET);
         int coordY = (int) ((pos.y) + OFFSET);
         g2d.setColor(C_CGMARK);
