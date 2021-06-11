@@ -4,8 +4,10 @@ import java.security.SecureRandom;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Randomizers class - used to generate random cargo freight ID keys;
+ */
 public class Randomizers {
     /**
      * Generate a random alphanumeric id for the room. Used for both
@@ -16,7 +18,7 @@ public class Randomizers {
     private final char[] strand;
     private final Random random;
     private final char[] chars;
-    public static final String upcase = "ABGWXYZ";
+    public static final String upcase = "ABCDGWXYZ";
     public static final String lowcase = upcase.toLowerCase(Locale.ROOT);
     public static final String digits = "1234567890";
     public static final String allchar = upcase + lowcase + digits;
@@ -41,18 +43,6 @@ public class Randomizers {
     }
     public Randomizers(int length, Random random) {
         this(length, random, allchar);
-    }
-
-    /**
-     *
-     * @param in roomId string influences the Item type which is created in the room.
-     * @return true/false depending on the roomId pattern matching of the regEx pattern.
-     */
-    public boolean itemInsert(String in) {
-        return in.matches("^[0-9|a-z].*$");
-    }
-    public static int getRandom(int min, int max) {
-        return ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 }
 

@@ -11,6 +11,9 @@ import javax.swing.text.BadLocationException;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * CargoAmountPanel - minimalistic panel containing the confirm button and textfield for user input of cargo amounts;
+ */
 @Getter
 @Setter
 public class CargoAmountPanel extends JPanel {
@@ -31,6 +34,9 @@ public class CargoAmountPanel extends JPanel {
         addTextField();
     }
 
+    /**
+     * Setup JButtons;
+     */
     private void setButtons() {
         this.confirmButton = new JButton("Confirm");
         confirmButton.addActionListener(new AbstractAction() {
@@ -54,6 +60,9 @@ public class CargoAmountPanel extends JPanel {
         confirmButton.setEnabled(false);
     }
 
+    /**
+     * Executes common updates upon button click
+     */
     private void executeCommonUpdate() {
         cargoTradeFrame.getCargoButtonPanel().disableButtons();
         amountField.setText("");
@@ -61,14 +70,22 @@ public class CargoAmountPanel extends JPanel {
         setVisible(false);
     }
 
+    /**
+     * Init and configure the cargo amount text field
+     */
     private void addTextField() {
         this.amountField = new JTextField("", 5);
-        amountField.setPreferredSize(new Dimension(50,15));
+        amountField.setPreferredSize(new Dimension(50, 15));
         amountField.setToolTipText("Enter cargo unit amount...");
         addDocumentListener(amountField);
         add(amountField);
     }
 
+    /**
+     *
+     * @param field - field to get a DocumentListener;
+     *              verifies user input to disable the confirm button if the input is invalid;
+     */
     private void addDocumentListener(JTextField field) {
         field.getDocument().addDocumentListener(new DocumentListener() {
             public void update(DocumentEvent e) throws BadLocationException {
@@ -95,6 +112,11 @@ public class CargoAmountPanel extends JPanel {
         });
     }
 
+    /**
+     *
+     * @param input - user input in the amount text field
+     *              verifies if the input matches the pattern consisting of digits only;
+     */
     private void tweakButton(String input) {
         confirmButton.setEnabled(input.matches("[0-9]+"));
     }
@@ -104,6 +126,7 @@ public class CargoAmountPanel extends JPanel {
         amountField.setVisible(false);
         confirmButton.setEnabled(true);
     }
+
     protected void enableFull() {
         this.setVisible(true);
         amountField.setVisible(true);

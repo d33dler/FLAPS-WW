@@ -1,11 +1,15 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
+import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 
+/**
+ * RemoveCargoUnit class - represent a command object (extending from abstract class Command) and implementing
+ * all its abstract methods.
+ */
 public class RemoveCargoUnit extends Command {
     private Configurator configurator;
     private CargoArea cargoArea;
@@ -20,7 +24,9 @@ public class RemoveCargoUnit extends Command {
         this.oldCount = cargoFreight.getUnitCount();
     }
 
-
+    /**
+     * Executes the removal of a certain amount of units of a cargo type from a cargo freight;
+     */
     @Override
     public void execute() {
         Aircraft aircraft = configurator.getAircraft();
@@ -28,7 +34,9 @@ public class RemoveCargoUnit extends Command {
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         fetchLogData(true);
     }
-
+    /**
+     * Sets the new unit count if the new amount is > 0 , else the cargo is removed ;
+     */
     public void updateAircraftCargo(Aircraft aircraft, int amount) {
         double newAmount = cargoFreight.getUnitCount() - amount;
         if (newAmount > 0) {
@@ -43,9 +51,12 @@ public class RemoveCargoUnit extends Command {
 
     @Override
     public void fetchLogData(boolean state) {
-        configurator.relayConfiguratorMsg(LogMessagesDb.R_CARGO_POS);
+        configurator.relayConfiguratorMsg(MessagesDb.R_CARGO_POS);
     }
 
+    /**
+     * undo has to either reset the unit count or insert the removed cargo freight;
+     */
     @Override
     public void undo() { //TODO terrible performance (because of Set<Cargofreight> needs improvement
         if (configurator.getAircraft().getCargoAreaContents(cargoArea).contains(cargoFreight)) {
@@ -56,18 +67,19 @@ public class RemoveCargoUnit extends Command {
                 }
             }
         } else {
-            CargoFreight newOriginal = new CargoFreight();
-            configurator.cloneAttributes(cargoFreight, newOriginal);
-            cargoFreight = newOriginal;
-            configurator.getAircraft().getCargoAreaContents(cargoArea).add(newOriginal);
+            cargoFreight.setUnitCount(oldCount);
+            configurator.getAircraft().getCargoAreaContents(cargoArea).add(cargoFreight);
         }
         configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesDb.UNDO_REM_C);
+        configurator.relayConfiguratorMsg(MessagesDb.UNDO_REM_C);
     }
 
+    /**
+     * redo re-executes the default execute() operation method
+     */
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(LogMessagesDb.REDO_REM_C);
+        configurator.relayConfiguratorMsg(MessagesDb.REDO_REM_C);
     }
 }

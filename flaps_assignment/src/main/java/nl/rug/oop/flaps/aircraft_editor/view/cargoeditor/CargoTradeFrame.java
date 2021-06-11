@@ -20,6 +20,11 @@ import java.awt.event.WindowListener;
 import java.util.HashMap;
 import java.util.Set;
 
+/**
+ * CargoTradeFrame class - frame displaying the cargo exchange environment between the user's aircraft cargo area
+ * and the airports warehouse;
+ */
+
 @Getter
 @Setter
 public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener, WindowListener {
@@ -40,10 +45,11 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     private SelectionCommand selectionCommand;
     private float totalCargoAreaWgt;
     protected static final String
-            CARGO_ALL = "allcargo", CARGO_PLANE = "aircargo",
+            WAREHOUSE_DB = "allcargo", CARGO_PLANE = "aircargo",
             TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo";
     private static final int WIDTH = 1200, LENGTH = 500;
     private int amount;
+
 
     public CargoTradeFrame(EditorCore editorCore, CargoArea cargoArea, CargoPanel cargoPanel) {
         setTitle("Cargo Areas Loader");
@@ -58,11 +64,26 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         init();
     }
 
+    /**
+     * Sets common settings
+     */
     private void init() {
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(WIDTH, LENGTH));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        populateDatabaseHashmaps();
+        addAllPanels();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setVisible(true);
+        pack();
+    }
 
+    /**
+     * Store cargo type names and cargo freight IDs for fast retrieval during selections;
+     * Storing is dynamical - based on current warehouse types and cargo area's freights;
+     */
+    private void populateDatabaseHashmaps(){
         cargoTypeSet.forEach(cargoType -> {
             cargoHashMap.put(cargoType.getName(), cargoType);
         });
@@ -71,18 +92,14 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
             totalCargoAreaWgt += cargoFreight.getTotalWeight();
             freightHashMap.put(cargoFreight.getId(), cargoFreight);
         });
-
-        addAllPanels();
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
-        pack();
     }
 
+    /**
+     * Initializes and adds all JTables and internal JComponents for the frame;
+     */
     private void addAllPanels() {
         this.cargoWarehouse = new CargoTablesPanel(editorCore, cargoTypeSet,
-                this, CARGO_ALL, TITLE_L + editorCore.getSource().getName());
-
+                this, WAREHOUSE_DB, TITLE_L + editorCore.getSource().getName());
         this.cargoAircraft = new CargoTablesPanel(editorCore, cargoTypeSet, this, CARGO_PLANE, TITLE_R);
         this.cargoAmountPanel = new CargoAmountPanel(this);
         this.cargoButtonPanel = new CargoButtonPanel(editorCore, this);
@@ -97,11 +114,18 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         cargoAmountPanel.setVisible(false);
     }
 
+    /**
+     * Adds the table listeners
+     */
     private void addTableListeners() {
         addDatabaseSelectionListener(cargoWarehouse.getCargoTable());
         addAircraftCargoSelectionListener(cargoAircraft.getCargoTable());
     }
 
+    /**
+     *
+     * A separate listener for the warehouse cargo set database
+     */
     public void addDatabaseSelectionListener(JTable table) {
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
@@ -113,6 +137,10 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         });
     }
 
+    /**
+     * A separate listener for the aircraft cargo area freight set database. Necessary, since a cargo area may have
+     * different cargo freight units with the same cargoType.
+     */
     public void addAircraftCargoSelectionListener(JTable table) {
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
@@ -124,6 +152,9 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         });
     }
 
+    /**
+     * Delegate specific cargo exchange command
+     */
     protected void delegateCommand() {
         performPriorUpdates();
         if (selectionCommand != null) {
@@ -131,17 +162,28 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         }
     }
 
+    /**
+     * Collect setting data and update values before delegating the execution of the selected command;
+     */
     protected void performPriorUpdates() {
-        if(!cargoAmountPanel.getAmountField().getText().isBlank()){
+        if (!cargoAmountPanel.getAmountField().getText().isBlank()) {
             this.amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
         }
     }
 
+    /**
+     *
+     * Updates the JTable view
+     */
     @Override
     public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
         cargoAircraft.update();
     }
 
+    /**
+     *
+     * WindowListener methods overridden to limit the user to one opened cargo trade frame at a time;
+     */
     @Override
     public void windowOpened(WindowEvent e) {
         cargoPanel.getExCargoLoader().setEnabled(false);

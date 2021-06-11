@@ -3,6 +3,16 @@ package nl.rug.oop.flaps.simulation.view.shapes;
 import java.awt.*;
 import java.awt.geom.*;
 
+/**
+ * RoundPolygon class - creates custom polygon shapes based on input parameters;
+ * This class was sourced from  http://java-sl.com/shapes.html .
+ * @Author Stanislav Lapitsky
+ */
+
+/**
+ * We took the artistic freedom of sharing his shape creation classes,
+ * since it was not part of the FLAPS requirements and does not involve functionality features.
+ */
 public class RoundPolygon implements Shape {
     GeneralPath path;
 

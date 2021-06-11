@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.DepartPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -14,6 +15,10 @@ import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
 
 import java.awt.geom.Point2D;
 
+/**
+ * AircraftDataTracker class - stores and updates all data related to the aircraft's real-time state.
+ * All the data is displayed in the InfoPanel (sub component titled - AIRCRAFT DATA);
+ */
 @Setter
 @Getter
 public class AircraftDataTracker {
@@ -25,7 +30,7 @@ public class AircraftDataTracker {
     private CommercialDataTracker commercialData;
     private BlueprintDisplay display;
     private DepartPanel departPanel;
-
+    private Remapper remapper;
     private float
             aircraftCapacity = 0,
             totalCargoLoadMass = 0,
@@ -51,11 +56,15 @@ public class AircraftDataTracker {
     public AircraftDataTracker(EditorCore editorCore, Aircraft aircraft) {
         this.aircraft = aircraft;
         this.editorCore = editorCore;
-        this.selectionModel = editorCore.getSelectionModel();
+        this.selectionModel = editorCore.getBpSelectionModel();
         this.commercialData = new CommercialDataTracker(editorCore, this);
+        this.remapper = editorCore.getRemapper();
         init();
     }
 
+    /**
+     * Set initial values according to the aircraft type parameters;
+     */
     private void init() {
         this.travelDistance = editorCore.getOriginCoordinates()
                 .distanceTo(editorCore.getDestination().getGeographicCoordinates());
@@ -74,6 +83,9 @@ public class AircraftDataTracker {
         initCg();
     }
 
+    /**
+     * compute default center of gravity
+     */
     private void initCg() {
         remapCg(new Point2D.Double(aircraft.getType().getEmptyCgX(), aircraft.getType().getEmptyCgY()));
         updateTotalLoadMass();
@@ -85,7 +97,12 @@ public class AircraftDataTracker {
         }
     }
 
-
+    /**
+     *
+     * @param amount weight of the cargo added to the cargo area by the user
+     * @return true if the weight does not surpass any of the limiting parameters
+     * (takeOff,Landing weight limits, area capacity..)
+     */
     public boolean performCargoCheck(float amount) {
         float allCargo = totalAircraftLoadWeight + amount;
         if (amount > 0
@@ -100,6 +117,13 @@ public class AircraftDataTracker {
         return false;
     }
 
+    /**
+     *
+     * @param oldLevel - fuel in kg in the tank area
+     * @param newLevel - fuel in kg in the tank area
+     * @return true if the new level does not surpass any of the limiting parameters
+     * (aircraft total capacity)
+     */
     public boolean performFuelCheck(double oldLevel, double newLevel) {
         float updatedLoad = (float) (totalAircraftLoadWeight - oldLevel + newLevel);
         double newTotalFuel = aircraft.getTotalFuel() - oldLevel + newLevel;
@@ -111,14 +135,24 @@ public class AircraftDataTracker {
         return false;
     }
 
+    /**
+     * Sets the depart button enabled/disabled state depending on the fulfilled requirements
+     */
     public void performDepartureValidationCheck() {
         departPanel.getDepartButton().setEnabled(aircraftRange >= travelDistance
                 && validateDecalage()
                 && commercialData.getDestination().canAcceptIncomingAircraft());
     }
 
+    /**
+     *
+     * @return true if the computed decalage does not surpass the threshold tolerance of aircraft type;
+     * We use the Pythagoras's theorem to compute the hypotenuse based on cathetuses(sides) obtained by calculating
+     * the absolute value from subtraction from the default XY coordinate values of current Cg XY values and divide the results
+     * to the custom pixels per meter (specific to the planes size).
+     */
     private boolean validateDecalage() {
-        double ppm = EditorCore.Pixels_per_M;
+        double ppm = Remapper.Pixels_per_M;
         double cgDistance = cgTolerance * aircraftLength;
         double cathetus_1 = Math.abs(defaultCenterOfGravity_X - centerOfGravity_X) / ppm;
         double cathetus_2 = Math.abs(defaultCenterOfGravity_Y - centerOfGravity_Y) / ppm;
@@ -126,16 +160,28 @@ public class AircraftDataTracker {
         return hypotenuse <= cgDistance;
     }
 
+    /**
+     *
+     * @param totalFuel in all the aircraft's tanks
+     * @return range based on the formula of fuel consumption and cruise speed
+     */
     private double computeAircraftRange(double totalFuel) {
         return ((totalFuel / aircraft.getType().getFuelConsumption())
                 * aircraft.getType().getCruiseSpeed()) * M_KM;
     }
 
+    /**
+     *
+     * @param area selected area Updates all native data plus the selected area specific data;
+     */
     public void refreshData(Compartment area) {
         this.compartment = area;
         updateAllInfo();
     }
 
+    /**
+     * Method overloading
+     */
     public void refreshData() {
         updateAllInfo();
     }
@@ -153,10 +199,19 @@ public class AircraftDataTracker {
         compartment.getAreaLoad(this);
     }
 
+    /**
+     * Get custom capacity. Abstract Compartment class allows for easier data extraction by abstraction;
+     */
     private void updateAreaCapacity() {
         this.selectedAreaCapacity = compartment.requestCapacity();
     }
 
+    /**
+     * Updates the total load mass of the aircraft
+     * & separate loading material types total mass (cargo + fuel, cargo, fuel)
+     * & w/ or without emptyWeight included;
+     * In parallel, calculates the center of gravity;
+     */
     private void updateTotalLoadMass() {
         centerOfGravity_X = centerOfGravity_Y = 0.0;
         totalCargoLoadMass = totalFuelLoadMass = 0;
@@ -174,11 +229,19 @@ public class AircraftDataTracker {
         this.totalAircraftWeight = (float) (emptyWeight + totalFuelLoadMass + totalCargoLoadMass);
     }
 
+    /**
+     *
+     * @param area - currently examined area
+     * @param weight - total weight of this particular area
+     */
     private void computeCenterOfGravity(Compartment area, double weight) {
-        centerOfGravity_X += weight * editorCore.getLocalCoords().get(area.hashCode()).x;
-        centerOfGravity_Y += weight * editorCore.getLocalCoords().get(area.hashCode()).y;
+        centerOfGravity_X += weight * remapper.getLocalCoords().get(area.hashCode()).x;
+        centerOfGravity_Y += weight * remapper.getLocalCoords().get(area.hashCode()).y;
     }
 
+    /**
+     * Last step in the computation of cG, addition of the empty weight contribution to the cG ;
+     */
     private void updateCenterOfGravity() {
         centerOfGravity_X += emptyWeight * defaultCenterOfGravity_X;
         centerOfGravity_Y += emptyWeight * defaultCenterOfGravity_Y;
@@ -187,12 +250,22 @@ public class AircraftDataTracker {
         aircraft.setCenterOfG(new Point2D.Double(centerOfGravity_X, centerOfGravity_Y));
     }
 
+    /**
+     *
+     * @param cgPos default position of the center of gravity according to the airplane type data;
+     *              Methods remapCg, remaps it similarly to the way indicators are remapped;
+     *              (only necessary for the initial (default) cG)
+     */
     private void remapCg(Point2D.Double cgPos) {
-        Point2D.Double remappedCgPos = editorCore.remap(cgPos);
+        Remapper remapper = editorCore.getRemapper();
+        Point2D.Double remappedCgPos = remapper.remap(cgPos);
         defaultCenterOfGravity_X = remappedCgPos.x;
         defaultCenterOfGravity_Y = remappedCgPos.y;
     }
 
+    /**
+     * Methods below update the area load for the selected fuel tank or cargo area;
+     */
     public void updateFuelAreaMass() {
         this.selectedAreaLoad = Float.parseFloat
                 (String.valueOf(aircraft.getFuelAmountForFuelTank((FuelTank) compartment)));

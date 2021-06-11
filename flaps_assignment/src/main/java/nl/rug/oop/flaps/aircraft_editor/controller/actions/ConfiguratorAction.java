@@ -6,6 +6,10 @@ import javax.swing.undo.AbstractUndoableEdit;
 import javax.swing.undo.CannotRedoException;
 import javax.swing.undo.CannotUndoException;
 
+/**
+ * ConfiguratorAction class - represent an undoable edit object holding the specific command;
+ * In order to redo/undo the command, we execute the command's proprietary method;
+ */
 public class ConfiguratorAction extends AbstractUndoableEdit {
 
     private Command command;

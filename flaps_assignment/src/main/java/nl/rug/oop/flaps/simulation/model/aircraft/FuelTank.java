@@ -5,8 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
-import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
 import java.util.Objects;
 
@@ -47,8 +45,4 @@ public class FuelTank extends Compartment {
         dataTracker.updateFuelAreaMass();
     }
 
-    @Override
-    public void saveConfigData(UndoRedoManager undoRedoManager, DataHolder holder) {
-        //undoRedoManager.mementoFuel();
-    }
 }

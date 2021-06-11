@@ -4,6 +4,9 @@ import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
+/**
+ * AddCargoRelay - relays the AddCargoUnit command
+ */
 public class AddCargoRelay extends SelectionCommand {
 
     public AddCargoRelay(Configurator configurator) {

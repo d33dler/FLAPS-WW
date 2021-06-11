@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.controller.actions;
 
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -44,11 +45,11 @@ public class OpenAircraftConfigurer extends AbstractAction implements PropertyCh
                 super.setEnabled(false);
             } else {
                 JOptionPane.showMessageDialog(world.getFlapsFrame(),
-                        "The selected airport does not accept incoming aircraft!");
+                        MessagesDb.AIRPORT_CLOSED);
             }
         } else {
             JOptionPane.showMessageDialog(world.getFlapsFrame(),
-                    "Please select a destination airport before initializing the Aircraft Editor© !");
+                    MessagesDb.AIRPORT_NIL);
         }
     }
 

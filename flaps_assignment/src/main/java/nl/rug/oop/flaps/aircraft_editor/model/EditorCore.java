@@ -2,13 +2,12 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
@@ -16,17 +15,18 @@ import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
-import java.awt.geom.Point2D;
-import java.util.*;
-
+/**
+ * EditorCore class -  the core of the simulator; Stores the listenerIds,
+ * initializes the configurator, aircraftDataTracker and other important model object classes;
+ */
 @Getter
 @Setter
 public class EditorCore implements CargoUnitsListener, BlueprintSelectionListener, FuelSupplyListener {
     private World world;
     private Aircraft aircraft;
-    private static double AIRCRAFT_LEN;
-    private final BlueprintSelectionModel selectionModel;
+    private final BlueprintSelectionModel bpSelectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
+    private Remapper remapper;
     private UndoRedoManager undoRedoManager;
     private EditorFrame editorFrame;
     private Configurator configurator;
@@ -35,14 +35,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     private GeographicCoordinates originCoordinates;
     private Airport source;
     private Airport destination;
-    public final static Point2D.Double BP_POS = new Point2D.Double(0, 20);
-    public static double BP_WIDTH, BP_HEIGHT, BP_RATIO, Pixels_per_M;
-    public static final double BP_MARGIN = 30;
-    private static final double BP_DEF_H = 500;
-    private static final double BP_DEF_W = 500;
 
-    private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
-    protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
 
     private static final double NEARBY_UNIT_RANGE = 250.0;
     public static final String generalListenerID = "000AREA_abs";
@@ -50,109 +43,70 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     public static final String fuelListenerID = "100FUEL_ml";
 
 
-    public EditorCore(Aircraft aircraft, BlueprintSelectionModel selectionModel, EditorFrame editorFrame) {
+    public EditorCore(Aircraft aircraft, BlueprintSelectionModel bpSelectionModel, EditorFrame editorFrame) {
         this.world = aircraft.getWorld();
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
-        this.selectionModel = selectionModel;
-        this.selectionModel.addListener(generalListenerID, this);
-        this.selectionModel.setEditorCore(this);
+        this.bpSelectionModel = bpSelectionModel;
+        this.bpSelectionModel.addListener(generalListenerID, this);
+        this.bpSelectionModel.setEditorCore(this);
         init();
     }
 
+    /**
+     * Initialize Configurator,UndoRedoManager,AircraftDataTracker;
+     * add editorCore as listener to the AircraftLoadingModel class object;
+     */
     private void init() {
+        setupRemapper();
         getRoute();
-        configureBlueprintImg();
-        updateCompartmentCoords();
-        listToCoordsMap(this.aircraft.getType().getCargoAreas());
-        listToCoordsMap(this.aircraft.getType().getFuelTanks());
+        initRemap();
         this.aircraftLoadingModel = editorFrame.getAircraftLoadingModel();
         aircraftLoadingModel.addListener((CargoUnitsListener) this);
         aircraftLoadingModel.addListener((FuelSupplyListener) this);
         this.dataTracker = new AircraftDataTracker(this, aircraft);
-        this.selectionModel.setDataTracker(dataTracker);
+        this.bpSelectionModel.setDataTracker(dataTracker);
         this.aircraftLoadingModel.setDataTracker(dataTracker);
         this.undoRedoManager = new UndoRedoManager(this);
         this.configurator = new Configurator(this);
         undoRedoManager.setConfigurator(configurator);
     }
 
+    /**
+     * Setup the remapper and add it to the blueprintSelectionModel
+     */
+    private void setupRemapper() {
+        this.remapper = new Remapper(this,bpSelectionModel);
+        bpSelectionModel.setRemapper(remapper);
+        bpSelectionModel.setAreasMap(remapper.getAreasMap());
+    }
+
+    /**
+     * Collect the travel route details for the aircraft;
+     */
     private void getRoute() {
         this.source = world.getSelectionModel().getSelectedAirport();
         this.destination = world.getSelectionModel().getSelectedDestinationAirport();
         if ((destination != null) && destination.canAcceptIncomingAircraft()) {
             this.originCoordinates = world.getSelectionModel().getSelectedAirport().getGeographicCoordinates();
-        } else {
-            editorFrame.dispose();
-            System.out.println("The selected airport is not accepting aircraft or is missing !");
-            Thread.currentThread().stop();
         }
     }
 
-    public Optional<Compartment> extractApproxArea(Point2D.Double coords) {
-        NavigableMap<Double, Compartment> xAxis;
-        try {
-            if (this.areasMap.lowerEntry(coords.x).getValue() == null) {
-                xAxis = this.areasMap.higherEntry(coords.x).getValue();
-            } else {
-                xAxis = this.areasMap.lowerEntry(coords.x).getValue();
-            }
-            if (xAxis.lowerEntry(coords.y).getValue() == null) {
-                return Optional.ofNullable(xAxis.higherEntry(coords.y).getValue());
-            } else {
-                return Optional.ofNullable(xAxis.lowerEntry(coords.y).getValue());
-            }
-        } catch (NullPointerException e) {
-            System.out.println("Your cursor is outside of the blueprint's coordinate area range."); //TODO relay to Log
-            return Optional.empty();
-        }
+    /**
+     * init remapping methods for all compartment coordinates
+     */
+    private void initRemap() {
+        remapper.updateCompartmentCoords();
+        remapper.listToCoordsMap(this.aircraft.getType().getCargoAreas());
+        remapper.listToCoordsMap(this.aircraft.getType().getFuelTanks());
+        remapper.setMapBoundaries();
     }
 
-    private void configureBlueprintImg() {
-        AIRCRAFT_LEN = aircraft.getType().getLength();
-        Pixels_per_M = BP_DEF_H / AIRCRAFT_LEN;
-        BP_WIDTH = aircraft.getType().getBlueprintImage().getWidth(editorFrame);
-        BP_HEIGHT = aircraft.getType().getBlueprintImage().getHeight(editorFrame);
-        BP_RATIO = BP_HEIGHT / BP_WIDTH;
-        BP_HEIGHT = BP_DEF_H;
-        BP_WIDTH = BP_DEF_W / BP_RATIO;
-    }
-
-    private void listToCoordsMap(List<? extends Compartment> list) {
-        list.forEach(area -> {
-            Point2D.Double pos = this.localCoords.get(area.hashCode());
-            if (this.areasMap.containsKey(pos.x)) {
-                this.areasMap.get(pos.x).put(pos.y, area);
-            } else {
-                NavigableMap<Double, Compartment> mapY = new TreeMap<>();
-                mapY.put(pos.y, area);
-                this.areasMap.put(pos.x, mapY);
-            }
-        });
-    }
-
-    private void updateCompartmentCoords() {
-        updateXY(this.aircraft.getType().getCargoAreas());
-        updateXY(this.aircraft.getType().getFuelTanks());
-    }
-
-    private void updateXY(List<? extends Compartment> units) {
-        units.forEach(area -> {
-            var p = remap(area.getCoords());
-            this.localCoords.put(area.hashCode(), p);
-        });
-    }
-
-    public Point2D.Double remap(Point2D.Double source) {
-        double bpSize = BP_WIDTH;
-        double s = BlueprintDisplay.MK_SIZE;
-        double x = BP_POS.x + (bpSize / 2) + (source.x * (bpSize / AIRCRAFT_LEN)) - s / 2;
-        double y = BP_POS.y + (source.y * (bpSize / AIRCRAFT_LEN)) - s / 2;
-        return new Point2D.Double(x, y);
-    }
-
+    /**
+     * All the methods below are required to execute the default updates;
+     */
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) { //TODO priority for EditorCore
+    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         BlueprintSelectionListener.super.compartmentSelected(area, dataTracker);
     }
 
@@ -165,6 +119,5 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
         FuelSupplyListener.super.fireFuelSupplyUpdate(dataTracker);
     }
-
 }
 

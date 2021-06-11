@@ -6,7 +6,10 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.Randomizers;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.ConfiguratorAction;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.*;
-import nl.rug.oop.flaps.aircraft_editor.model.*;
+import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
+import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
@@ -19,12 +22,15 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Configurator class - creates the command objects and executes their methods,
+ * also stores the commands in the UndoManagers edit archive.
+ */
 @Getter
 public class Configurator {
     private Aircraft aircraft;
@@ -45,7 +51,7 @@ public class Configurator {
     public Configurator(EditorCore editorCore) {
         this.editorCore = editorCore;
         this.aircraft = editorCore.getAircraft();
-        this.selectionModel = editorCore.getSelectionModel();
+        this.selectionModel = editorCore.getBpSelectionModel();
         this.dataTracker = editorCore.getDataTracker();
         this.aircraftLoadingModel = editorCore.getAircraftLoadingModel();
         this.undoRedoManager = editorCore.getUndoRedoManager();
@@ -97,28 +103,12 @@ public class Configurator {
         return commandList.get((commandList.size() - 1));
     }
 
-    public void pasteCargoFreight(Set<CargoFreight> dynamicSet, HashMap<String, CargoFreight> cloneSet){
-
-    }
-
-    public void cloneSet(Set<CargoFreight> dynamicSet, HashMap<String, CargoFreight> cloneSet) {
+    public void copySet(Set<CargoFreight> dynamicSet, HashMap<String, CargoFreight> cloneSet) {
         dynamicSet.forEach(originalFreight -> {
-            CargoFreight clone = new CargoFreight();
-            cloneAttributes(originalFreight, clone);
-            cloneSet.put(clone.getId(), clone);
+            cloneSet.put(originalFreight.getId(), originalFreight);
         });
     }
 
-    public void cloneAttributes(CargoFreight original, CargoFreight clone) {
-        for (Field field : original.getClass().getDeclaredFields()) {
-            field.setAccessible(true);
-            try {
-                field.set(clone, field.get(original));
-            } catch (IllegalAccessException e) {
-                System.out.println("Could not retrieve one of the freight obj fields.");
-            }
-        }
-    }
     public void relayConfiguratorMsg(String MSG) {
         logPanel.updateLog(MSG);
     }

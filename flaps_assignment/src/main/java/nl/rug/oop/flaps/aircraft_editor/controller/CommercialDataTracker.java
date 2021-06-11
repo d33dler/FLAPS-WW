@@ -7,6 +7,9 @@ import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
+/**
+ * CommercialDataTracker class - contains and updates all the data concerned with business aspects of the simulator;
+ */
 @Getter
 @Setter
 public class CommercialDataTracker {
@@ -34,12 +37,18 @@ public class CommercialDataTracker {
         this.airportFuelPrice = origin.getFuelPriceByType(aircraft.getType().getFuelType());
     }
 
+    /**
+     * Update all data commercial data;
+     */
     protected void refreshData() {
         computeFuelCosts();
         computeCargoRevenue();
         computeTotalProfit();
     }
 
+    /**
+     * All methods below compute the mentioned values according to the formulas stipulated in the reader;
+     */
     private void computeFuelCosts() {
         estimatedFuelCosts = airportFuelPrice * dataTracker.getTotalFuelLoadMass();
     }

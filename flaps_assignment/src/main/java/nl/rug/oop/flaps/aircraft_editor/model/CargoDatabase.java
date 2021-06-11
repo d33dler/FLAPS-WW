@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
@@ -12,12 +13,17 @@ import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
+/**
+ * CargoDatabase class - used to create the JTable models for the CargoTablesPanel
+ */
+@Log
 @Getter
 public class CargoDatabase extends DefaultTableModel {
     private DefaultTableModel tableModel;
     private EditorCore editorCore;
     private CargoArea cargoArea;
     private static final String DATA_OBJ_Pkg = "nl.rug.oop.flaps.simulation.model.cargo";
+
     public CargoDatabase(EditorCore editorCore, SettingsPanel settingsPanel) {
         this.editorCore = editorCore;
         this.cargoArea = (CargoArea) settingsPanel.getCompartmentArea();
@@ -28,9 +34,23 @@ public class CargoDatabase extends DefaultTableModel {
     }
 
     /**
-     * @param -      to obtain column count and column names for the DefaultTableModel
-     * @param fields
+     * @param objectSet all objects in the set that will be transmuted
+     *                  to a TableModel and the data represented in a JTable
+     * @return all fields data from all entities in the current resultSet.
+     */
+    @SneakyThrows
+    public Vector<Vector<Object>> getDatabaseData(Set<?> objectSet, Class<?> clazz) {
+        Vector<Vector<Object>> data = new Vector<>();
+        objectSet.forEach(obj -> {
+            data.add(extractObjData(obj, clazz));
+        });
+        return data;
+    }
+
+    /**
+     * @param fields to obtain column count and column names for the DefaultTableModel
      * @return columnIds Strings vector list
+     * Collects all columns, including nested fields(columns) in compound types;
      */
     @SneakyThrows
     public Vector<String> getColumns(List<Field> fields) {
@@ -51,18 +71,10 @@ public class CargoDatabase extends DefaultTableModel {
     }
 
     /**
-     * @param objectSet
-     * @return all fields data from all entities in the current resultSet.
+     * @param obj   compound object that requires recursive data extraction;
+     * @param clazz object's class
+     * @return vector of all the objects data (including nested fields data);
      */
-    @SneakyThrows
-    public Vector<Vector<Object>> getDatabaseData(Set<?> objectSet, Class<?> clazz) {
-        Vector<Vector<Object>> data = new Vector<>();
-        objectSet.forEach(obj -> {
-            data.add(extractObjData(obj, clazz));
-        });
-        return data;
-    }
-
     public Vector<Object> extractObjData(Object obj, Class<?> clazz) {
         List<Field> fields = FileUtils.getAllFields(clazz);
         Vector<Object> entityObj = new Vector<>();
@@ -80,7 +92,7 @@ public class CargoDatabase extends DefaultTableModel {
                     entityObj.addAll(nestedData);
                 }
             } catch (IllegalAccessException e) {
-                System.out.println("Error returning all fields");
+                log.warning("Error returning all fields");
             }
         }
         return entityObj;

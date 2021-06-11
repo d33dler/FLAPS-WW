@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
@@ -67,7 +68,7 @@ public class Aircraft implements Comparable<Aircraft> {
      * @return The amount of fuel in kg consumed in the journey
      */
     public double getFuelConsumption(double travelDistance) {
-        return (travelDistance/type.getCruiseSpeed()) * type.getFuelConsumption();
+        return (travelDistance / type.getCruiseSpeed()) * type.getFuelConsumption();
     }
 
     /**
@@ -88,9 +89,13 @@ public class Aircraft implements Comparable<Aircraft> {
         }
     }
 
-    public void removeAllCargo() {
-        this.cargoAreaContents.values().forEach(Set::clear);
+    public void removeAllCargo(LogPanel logPanel) {
+        this.cargoAreaContents.values().forEach(freightSet -> {
+                freightSet.forEach(logPanel::logFreightUnload);
+                freightSet.clear();
+        });
     }
+
     /**
      * Retrieves the total amount of fuel (from all fuel tanks) in the aircraft in kg
      *
@@ -104,7 +109,6 @@ public class Aircraft implements Comparable<Aircraft> {
      * Retrieves the contents of a cargo area
      *
      * @param cargoArea The cargo area the contents should be retrieved from
-     *
      * @return A list of cargo units representing the contents of the cargo area
      */
     public Set<CargoFreight> getCargoAreaContents(CargoArea cargoArea) {
@@ -114,8 +118,8 @@ public class Aircraft implements Comparable<Aircraft> {
     /**
      * Sets the amount of fuel in kg for a specific fuel tank
      *
-     * @param fuelTank The fuel tank
-     * @param fuelAmount   The amount of fuel in kg this aircraft
+     * @param fuelTank   The fuel tank
+     * @param fuelAmount The amount of fuel in kg this aircraft
      */
     public void setFuelAmountForFuelTank(FuelTank fuelTank, double fuelAmount) {
         fuelTankFillStatuses.put(fuelTank, fuelAmount);
@@ -125,7 +129,6 @@ public class Aircraft implements Comparable<Aircraft> {
      * Retrieves the amount of fuel in kg for a specific fuel tank
      *
      * @param fuelTank The fuel tank you want the contents of
-     *
      * @return The amount of fuel in kg in the fuel tank with the provided name
      */
     public double getFuelAmountForFuelTank(FuelTank fuelTank) {
@@ -145,10 +148,11 @@ public class Aircraft implements Comparable<Aircraft> {
         return Objects.hash(getIdentifier(), getType());
     }
 
-    public void  unLoadAircraft(Aircraft aircraft, AircraftDataTracker dataTracker) {
+    public void unLoadAircraft(Aircraft aircraft, AircraftDataTracker dataTracker, LogPanel logPanel) {
         this.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
-        this.removeAllCargo();
+        this.removeAllCargo(logPanel);
     }
+
     @Override
     public int compareTo(Aircraft o) {
         int typeComparison = this.getType().compareTo(o.getType());

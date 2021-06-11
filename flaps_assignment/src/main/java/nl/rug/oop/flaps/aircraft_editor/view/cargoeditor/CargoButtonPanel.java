@@ -11,13 +11,15 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * CargoButtonPanel - minimalistic panel containing the buttons for all cargo trading operations;
+ */
 @Getter
 public class CargoButtonPanel extends JPanel {
     private EditorCore editorCore;
     private CargoTradeFrame settings;
     private Configurator configurator;
     private JButton add, remove, removeAll;
-    protected static final String ADD_COM = "addcom", REM_COM = "remove", REMALL_COM = "remall";
 
     public CargoButtonPanel(EditorCore editorCore, CargoTradeFrame settings) {
         this.editorCore = editorCore;
@@ -28,6 +30,9 @@ public class CargoButtonPanel extends JPanel {
         addAllButtons();
     }
 
+    /**
+     * Initializes,adds an action listener and sets the appropriate abstract action for each button;
+     */
     private void addAllButtons() {
         this.add = new JButton("Add");
         add.addActionListener(new AbstractAction() {
@@ -60,6 +65,11 @@ public class CargoButtonPanel extends JPanel {
         remove.setEnabled(false);
         validate();
     }
+
+    /**
+     * All methods below are switches to limit users ability to one type of operation depending on the
+     * selected cargoType/Freight and command;
+     */
     protected void switchOne() {
         add.setEnabled(true);
         remove.setEnabled(false);

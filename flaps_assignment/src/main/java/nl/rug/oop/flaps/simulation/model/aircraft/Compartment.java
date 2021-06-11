@@ -3,12 +3,13 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
-import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
 import java.awt.geom.Point2D;
 import java.util.Objects;
 
+/**
+ * Compartment abstract class is used to force method implementation upon aircraft area types classes;
+ */
 @Getter
 @Setter
 public abstract class Compartment {
@@ -20,8 +21,6 @@ public abstract class Compartment {
     public abstract float requestCapacity();
 
     public abstract void getAreaLoad(AircraftDataTracker dataTracker);
-
-    public abstract void saveConfigData(UndoRedoManager undoRedoManager, DataHolder holder);
 
     public Point2D.Double getCoords() {
         return new Point2D.Double(x, y);

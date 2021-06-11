@@ -2,13 +2,15 @@ package nl.rug.oop.flaps.simulation.model.cargo;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * CargoFreight class - replaces the CargoUnit class created in the base version of FLAPS;
+ * It simply holds more data;
+ */
 @Getter
 @Setter
 public class CargoFreight {
     private String id;
     private CargoType cargoType;
-
-
     private int unitCount;
     private double totalWeight;
 

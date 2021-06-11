@@ -1,12 +1,16 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.view.LogMessagesDb;
+import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 
 import java.util.HashMap;
 
+/**
+ * RemoveAllCargo class -  represent a command object (extending from abstract class Command) and implementing
+ * all its abstract methods.
+ */
 public class RemoveAllCargo extends Command {
 
     private CargoArea cargoArea;
@@ -19,10 +23,17 @@ public class RemoveAllCargo extends Command {
         getData();
     }
 
+    /**
+     * Copy the entire cargo set for the undo process;
+     */
     private void getData() {
-        configurator.cloneSet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
+        configurator.copySet(configurator.getAircraft().getCargoAreaContents(cargoArea), this.freightSet);
     }
 
+    /**
+     * Clears all members of the cargoFreight set in the designated cargo area;
+     *
+     */
     @Override
     public void execute() {
         configurator.getAircraft().getCargoAreaContents().get(cargoArea).clear();
@@ -32,23 +43,27 @@ public class RemoveAllCargo extends Command {
 
     @Override
     public void fetchLogData(boolean state) {
-        configurator.relayConfiguratorMsg(LogMessagesDb.R_ALL_CARGO_POS);
+        configurator.relayConfiguratorMsg(MessagesDb.R_ALL_CARGO_POS);
     }
 
+    /**
+     * Restores the set by re-adding all removed members of the cargoFreight set;
+     */
     @Override
     public void undo() {
         freightSet.values().forEach(clonedFreight ->  {
-            CargoFreight newOriginal = new CargoFreight();
-            configurator.cloneAttributes(clonedFreight,newOriginal);
-            configurator.getAircraft().getCargoAreaContents(cargoArea).add(newOriginal);
+            configurator.getAircraft().getCargoAreaContents(cargoArea).add(clonedFreight);
         });
         configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(LogMessagesDb.UNDO_REMALL_C);
+        configurator.relayConfiguratorMsg(MessagesDb.UNDO_REMALL_C);
     }
 
+    /**
+     * redo re-executes the default execute() operation method
+     */
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(LogMessagesDb.REDO_REMALL_C);
+        configurator.relayConfiguratorMsg(MessagesDb.REDO_REMALL_C);
     }
 }

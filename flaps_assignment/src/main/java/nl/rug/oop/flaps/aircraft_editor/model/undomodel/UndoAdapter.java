@@ -5,6 +5,9 @@ import javax.swing.event.UndoableEditListener;
 import javax.swing.undo.UndoManager;
 import javax.swing.undo.UndoableEdit;
 
+/**
+ * UndoAdapter class - stores edits to the undoManager;
+ */
 public class UndoAdapter implements UndoableEditListener {
     private UndoManager undoManager;
 

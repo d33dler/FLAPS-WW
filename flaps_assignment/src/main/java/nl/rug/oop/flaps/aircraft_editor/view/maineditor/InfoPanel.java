@@ -26,6 +26,12 @@ import java.util.List;
 
 import static nl.rug.oop.flaps.simulation.model.loaders.FileUtils.toNiceCase;
 
+/**
+ * InfoPanel class - panel on the western part of the Configurer frame. It displays all data concerning the aircrafts
+ * real-time state , travel details, commercial data;
+ * All the data is obtained from the AircraftDataTracker and CommercialDataTracker;
+ */
+
 @Getter
 @Setter
 public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSelectionListener, FuelSupplyListener {
@@ -44,6 +50,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     private final static int F_WIDTH = 80, F_HEIGHT = 20, WIDTH = 300, HEIGHT = 550;
     private static final Color PANEL_BG = new Color(78, 86, 108, 67);
 
+
     public InfoPanel(EditorCore editorCore) {
         this.editorCore = editorCore;
         this.aircraft = editorCore.getAircraft();
@@ -56,7 +63,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     private void init() {
         editorCore.getAircraftLoadingModel().addListener((CargoUnitsListener) this);
         editorCore.getAircraftLoadingModel().addListener((FuelSupplyListener) this);
-        editorCore.getSelectionModel().addListener(EditorCore.generalListenerID, this);
+        editorCore.getBpSelectionModel().addListener(EditorCore.generalListenerID, this);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setSize(new Dimension(WIDTH, HEIGHT));
         this.fieldListADT = extractFields(aircraftDataTracker.getClass());
@@ -67,7 +74,9 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         addCommercialDataPanel();
     }
 
-
+    /**
+     * Init and configure the aircraft data panel;
+     */
     private void addAircraftDataPanel() {
         this.aircraftDataReg = new JPanel();
         configureRegisterPanel(aircraftDataReg, PANEL1_TITLE, fieldListADT,
@@ -75,12 +84,24 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         add(aircraftDataReg);
     }
 
+    /**
+     * Init and configure the commercial data panel;
+     */
     private void addCommercialDataPanel() {
         this.commercialDataReg = new JPanel();
         configureRegisterPanel(commercialDataReg, PANEL2_TITLE, fieldListCDT,
                 dataSetCDT, commercialDataTracker);
         add(commercialDataReg);
     }
+
+    /**
+     * @param panel   panel to be configured;
+     * @param title   title of the panel that is configured;
+     * @param list    list of fields the values of which is displayed in the panel (if not null);
+     * @param dataSet set of JLabels which contain the changing field variables;
+     * @param object  object supplying the data variables according to the list (of fields)
+     *                Extracts all data from the object and creates a panel;
+     */
 
     private void configureRegisterPanel(JPanel panel, String title, List<Field> list,
                                         List<JLabel> dataSet, Object object) {
@@ -99,6 +120,12 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         }
     }
 
+    /**
+     * @param field   - member of the new JPanel;
+     * @param dataSet - set of JLabels which contain the changing field variables of an object;
+     * @param object  - the specific object supplying the data;
+     * @return panel containing the labels with strings : *Field name* :  *variable*
+     */
     private JPanel setupFieldPanel(Field field, List<JLabel> dataSet, Object object) {
         JLabel fieldName = getFieldName(field);
         JLabel data = getFieldData(field, object);
@@ -110,6 +137,10 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         return fieldPanel;
     }
 
+    /**
+     * @param field field used to collect the name
+     * @return formatted field name
+     */
     private JLabel getFieldName(Field field) {
         JLabel fieldName = new JLabel();
         String format = StringUtils.capitalize(toNiceCase(field.getName())) + PAD;
@@ -118,11 +149,57 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         return fieldName;
     }
 
+    /**
+     * @param field  field used to collect variable value
+     * @param object object supplying the variable value
+     * @return formatted string label;
+     */
     @SneakyThrows
     private JLabel getFieldData(Field field, Object object) {
         JLabel dataField = new JLabel(field.get(object).toString());
         dataField.setBorder(BorderFactory.createEtchedBorder());
         return dataField;
+    }
+
+    /**
+     * Updates the data in all internal Data panels
+     */
+    private void updateAllData() {
+        updateFields(fieldListADT, dataSetADT, aircraftDataTracker);
+        updateFields(fieldListCDT, dataSetCDT, commercialDataTracker);
+    }
+
+    /**
+     * @param fieldList list of fields used to extract new data;
+     * @param dataList  list of JLabels to be updated with the new data;
+     * @param object    supplies the updated data;
+     */
+    @SneakyThrows
+    private void updateFields(List<Field> fieldList, List<JLabel> dataList, Object object) {
+        Iterator<Field> fieldIterator = fieldList.iterator();
+        int i = 0;
+        while (i < dataList.size() && fieldIterator.hasNext()) {
+            JLabel label = dataList.get(i);
+            Field field = fieldIterator.next();
+            label.setText(field.get(object).toString());
+            i++;
+        }
+    }
+
+    /**
+     * @param clazz some class
+     * @return all declared fields (except static and non-primitive fields);
+     */
+    private List<Field> extractFields(Class<?> clazz) {
+        List<Field> newFieldList = new ArrayList<>();
+        List<Field> list = Arrays.asList(clazz.getDeclaredFields());
+        list.forEach(field -> {
+            if (FileUtils.isFieldPrimitiveDeserializable(field)
+                    && !Modifier.isStatic(field.getModifiers())) {
+                newFieldList.add(field);
+            }
+        });
+        return newFieldList;
     }
 
     @Override
@@ -138,35 +215,5 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     @Override
     public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
         updateAllData();
-    }
-
-    private void updateAllData() {
-        updateFields(fieldListADT, dataSetADT, aircraftDataTracker);
-        updateFields(fieldListCDT, dataSetCDT, commercialDataTracker);
-    }
-
-    @SneakyThrows
-    private void updateFields(List<Field> fieldList, List<JLabel> dataList, Object object) {
-        Iterator<Field> fieldIterator = fieldList.iterator();
-        int i = 0;
-        while (i < dataList.size() && fieldIterator.hasNext()) {
-            JLabel label = dataList.get(i);
-            Field field = fieldIterator.next();
-            label.setText(field.get(object).toString());
-            i++;
-        }
-    }
-
-
-    private List<Field> extractFields(Class<?> clazz) {
-        List<Field> newFieldList = new ArrayList<>();
-        List<Field> list = Arrays.asList(clazz.getDeclaredFields());
-        list.forEach(field -> {
-            if (FileUtils.isFieldPrimitiveDeserializable(field)
-                    && !Modifier.isStatic(field.getModifiers())) {
-                newFieldList.add(field);
-            }
-        });
-        return newFieldList;
     }
 }

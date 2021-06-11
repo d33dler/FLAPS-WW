@@ -14,6 +14,9 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * CargoTablesPanel class - contains the JTable itself to separate additional functions implementations;
+ */
 @Getter
 @Setter
 public class CargoTablesPanel extends JPanel {
@@ -38,21 +41,30 @@ public class CargoTablesPanel extends JPanel {
         init(command);
     }
 
+    /**
+     *
+     * Set common settings and construct
+     * the appropriate JTable and its Table model according to the command;
+     */
     private void init(String command) {
         setBorder(BorderFactory.createTitledBorder
                 (BorderFactory.createEtchedBorder(1),
                         tableName, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
         setPreferredSize(new Dimension(500, 300));
-        if (command.equals(CargoTradeFrame.CARGO_ALL)) {
-            cargoTable = addTable(CargoTradeFrame.CARGO_ALL);
+        if (command.equals(CargoTradeFrame.WAREHOUSE_DB)) {
+            cargoTable = addTable(CargoTradeFrame.WAREHOUSE_DB);
             add(new JScrollPane(cargoTable), BorderLayout.WEST);
         } else {
             cargoTable = addTable(CargoTradeFrame.CARGO_PLANE);
             add(new JScrollPane(cargoTable), BorderLayout.EAST);
-            editTableView(cargoTable, 2,2);
+            editTableView(cargoTable, 2, 2);
         }
     }
 
+    /**
+     * Collects the set of cargo freights for the selected cargoArea;
+     * If it is null -> initialize new hashset;
+     */
     private void addUnitSet() {
         this.aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
         if (aircraftCargoUnits == null) {
@@ -61,6 +73,11 @@ public class CargoTablesPanel extends JPanel {
         }
     }
 
+    /**
+     *
+     * @param command command to request specific Jtable model ;
+     * @return configured JTable with the required JTable model;
+     */
     private JTable addTable(String command) {
         JTable table = new JTable() {
             @Override
@@ -69,7 +86,7 @@ public class CargoTablesPanel extends JPanel {
             }
         };
         DefaultTableModel model;
-        if (command.equals(CargoTradeFrame.CARGO_ALL)) {
+        if (command.equals(CargoTradeFrame.WAREHOUSE_DB)) {
             model = editorCore.getCargoDatabase().getDatabase(cargoTypeSet, CargoType.class);
         } else {
             model = editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class);
@@ -82,16 +99,26 @@ public class CargoTablesPanel extends JPanel {
         return table;
     }
 
+    /**
+     *
+     * @param table table to edit
+     * @param start beginning column to eliminate
+     * @param interval nr of eliminations
+                Trims the number of columns for the specific table;
+     */
     protected void editTableView(JTable table, int start, int interval) {
-        for(int i = 0; i < interval; i++) {
+        for (int i = 0; i < interval; i++) {
             table.removeColumn(table.getColumnModel().getColumn(start));
         }
     }
 
+    /**
+     * repaints the view of the JTable
+     */
     protected void update() {
         aircraftCargoUnits = editorCore.getAircraft().getCargoAreaContents().get(cargoArea);
         cargoTable.setModel(editorCore.getCargoDatabase().getDatabase(aircraftCargoUnits, CargoFreight.class));
-        editTableView(cargoTable, 2,2);
+        editTableView(cargoTable, 2, 2);
         cargoTable.repaint();
     }
 }

@@ -13,6 +13,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 
+/**
+ * CargoPanel class - minimalistic panel containing the button to launch the cargo trade frame between the user's
+ * aircraft and the warehouse;
+ */
 public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private SettingsPanel settingsPanel;
@@ -30,10 +34,14 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     private void init() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
         setPreferredSize(new Dimension(1000, 120));
-        editorCore.getSelectionModel().addListener(listenerId, this);
+        editorCore.getBpSelectionModel().addListener(listenerId, this);
         addCargoLoaderButton();
     }
 
+    /**
+     * Initializes the 'load cargo' button, adds and action listener and sets the action to be the launch
+     * of the cargo trade JFrame;
+     */
     private void addCargoLoaderButton() {
         this.exCargoLoader = new JButton("Load cargo");
         exCargoLoader.addActionListener(new AbstractAction() {
@@ -51,6 +59,12 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
         setVisible(false);
     }
 
+    /**
+     *
+     * @param area selected cargo area;
+     * @param dataTracker
+     *      sets this panel as visible and hides the concurrent fuel panel ;
+     */
     @Override
     public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         editorCore.getConfigurator().updateDatabaseTables(settingsPanel);

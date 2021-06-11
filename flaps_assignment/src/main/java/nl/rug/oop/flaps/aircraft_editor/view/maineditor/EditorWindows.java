@@ -4,6 +4,11 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+/**
+ * Class EditorWindows - all frames in the aircraft_editor extend from this class
+ * to avoid implementation of all WindowListener methods and override only the necessary ones;
+ */
+
 public class EditorWindows extends JFrame implements WindowListener {
 
     @Override

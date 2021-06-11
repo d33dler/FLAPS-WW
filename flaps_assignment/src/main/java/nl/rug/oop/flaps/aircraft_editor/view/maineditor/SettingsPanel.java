@@ -14,6 +14,11 @@ import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Class SettingsPanel - adaptive JPanel that offers data about the selected compartment and specific settings
+ * options based on the selected compartment's type;
+ */
+
 @Getter
 public class SettingsPanel extends JPanel implements BlueprintSelectionListener {
     private EditorCore editorCore;
@@ -28,7 +33,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
 
     public SettingsPanel(EditorCore editorCore) {
         this.editorCore = editorCore;
-        this.selectionModel = editorCore.getSelectionModel();
+        this.selectionModel = editorCore.getBpSelectionModel();
         this.selectionModel.addListener(listener_Id, this);
         init();
     }
@@ -38,6 +43,15 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         setPreferredSize(new Dimension(500, 130));
         setBorder(BorderFactory.createEtchedBorder());
+        createAreaDataComponent();
+        createInternalComponents();
+    }
+
+    /**
+     * Inits, configures and adds the component located in left-upper corner of the frame;
+     * The areaData component displays the selected area's data;
+     */
+    private void createAreaDataComponent(){
         this.areaData = new JTextArea("Selected compartment:\n\nN/A", 7, 20);
         areaData.setBorder(BorderFactory.createEtchedBorder());
         areaData.setWrapStyleWord(true);
@@ -47,20 +61,37 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         areaData.setDisabledTextColor(Color.white);
         areaData.setFont(Font.getFont(Font.MONOSPACED));
         areaData.setPreferredSize(new Dimension(150,150));
+        add(new JScrollPane(areaData));
+    }
+
+    /**
+     * Initializes and adds both internal setting panels.
+     */
+    private void createInternalComponents() {
         this.fuelPanel = new FuelPanel(editorCore, this);
         this.cargoPanel = new CargoPanel(editorCore, this);
-        add(new JScrollPane(areaData));
         add(fuelPanel);
         add(cargoPanel);
         fuelPanel.setVisible(false);
     }
+
+    /**
+     *
+     * @param area selected compartment area;
+     * @param dataTracker class that tracks aircraft data;
+     *                    launches area data collection and display
+     */
 
     @Override
     public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         this.compartmentArea = area;
         displayPrimaryData(area);
     }
-
+    /**
+     *
+     * @param area selected compartment - used to supply the data displayed in the areaData
+     *             component. Changes are made in real time upon selection real-time;
+     */
     @SneakyThrows
     private void displayPrimaryData(Compartment area) {
         this.areaData.setText("Selected compartment:\n");

@@ -14,9 +14,8 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 /**
- * The main frame in which the editor should be displayed.
+ * EditorFrame class - the main frame of the aircraft editor.
  *
- * @author T.O.W.E.R.
  */
 
 @Getter
@@ -24,7 +23,7 @@ public class EditorFrame extends EditorWindows implements WindowListener {
     private static final int WIDTH = 1200;
     private static final int HEIGHT = 920;
     public EditorCore editorCore;
-    private BlueprintSelectionModel selectionModel;
+    private BlueprintSelectionModel blueprintSelectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
@@ -33,63 +32,45 @@ public class EditorFrame extends EditorWindows implements WindowListener {
     private InfoPanel infoPanel;
     private UndoManager undoManager;
     private JButton configInitButton;
-    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel selectionModel, AircraftLoadingModel cargoModel) {
+
+    public EditorFrame(Aircraft aircraft, BlueprintSelectionModel blueprintSelectionModel, AircraftLoadingModel cargoModel) {
         setTitle("Aircraft Editor");
-        this.selectionModel = selectionModel;
+        addWindowListener(this);
+        this.blueprintSelectionModel = blueprintSelectionModel;
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
-        this.editorCore = new EditorCore(aircraft, selectionModel, this); //TODO code style M before V
-        this.configInitButton =  editorCore.getWorld().getFlapsFrame().getAircraftPanel().getOpenConfigurer();
-        addWindowListener(this);
+        this.editorCore = new EditorCore(aircraft, blueprintSelectionModel, this); //TODO code style M before V
+        this.configInitButton = editorCore.getWorld().getFlapsFrame().getAircraftPanel().getOpenConfigurer();
         this.undoManager = editorCore.getUndoRedoManager().getUndoManager();
-        addLog();
         editorInit();
-        pack();
-        setLocationRelativeTo(null);
-        setResizable(false);
-        setVisible(true);
     }
 
     private void editorInit() {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        addLog();
         addMainPanels();
         addMenuBar();
+        pack();
+        setLocationRelativeTo(null);
+        setResizable(false);
+        setVisible(true);
     }
 
-    @Override
-    public void windowClosed(WindowEvent e) {
-        if (settingsPanel.getCargoTradeFrame() != null)
-            settingsPanel.getCargoTradeFrame().dispose();
-        editorCore.getWorld().getEditorTrack().remove(aircraft);
-    }
-
-    @Override
-    public void windowClosing(WindowEvent e) {
-        boolean check = editorCore.getWorld().getSelectionModel().getSelectedAircraft().
-                getIdentifier().equals(aircraft.getIdentifier());
-        if (check) {
-            configInitButton.setEnabled(true);
-        }
-    }
-
-    @Override
-    public void windowOpened(WindowEvent e) {
-        configInitButton.setEnabled(false);
-    }
-
-    @Override
-    public void setVisible(boolean b) {
-        super.setVisible(b);
-    }
-
+    /**
+     * Initialize the logPanel and set the field value for the blueprintSelectionModel
+     */
     private void addLog() {
         logPanel = new LogPanel(this);
+        blueprintSelectionModel.setLogPanel(logPanel);
     }
 
+    /**
+     * Initializes and adds all main panels to the frame
+     */
     private void addMainPanels() {
-        blueprintPanel = new BlueprintPanel(editorCore, selectionModel, aircraft);
+        blueprintPanel = new BlueprintPanel(editorCore, blueprintSelectionModel, aircraft);
         settingsPanel = new SettingsPanel(editorCore);
         infoPanel = new InfoPanel(editorCore);
         editorCore.getDataTracker().setDisplay(blueprintPanel.getBlueprintDisplay());
@@ -101,7 +82,9 @@ public class EditorFrame extends EditorWindows implements WindowListener {
         validate();
     }
 
-
+    /**
+     * Initializes and adds the menu bar
+     */
     private void addMenuBar() {
         JMenuBar bar = new JMenuBar();
         JMenu menu = new JMenu("Options");
@@ -123,5 +106,34 @@ public class EditorFrame extends EditorWindows implements WindowListener {
         }));
         bar.add(menu);
         setJMenuBar(bar);
+    }
+
+    /**
+     *
+     * All the methods below are overridden in order to limit the user ability to launch
+     * only only a single editor per aircraft, but preserve the ability to open multiple editors
+     * at once for different aircraft;
+     */
+    @Override
+    public void windowClosed(WindowEvent e) {
+        if (settingsPanel.getCargoTradeFrame() != null) {
+            settingsPanel.getCargoTradeFrame().dispose();
+        }
+        editorCore.getWorld().getEditorTrack().remove(aircraft);
+        this.windowClosing(e);
+    }
+
+    @Override
+    public void windowClosing(WindowEvent e) {
+        boolean check = editorCore.getWorld().getSelectionModel().getSelectedAircraft().
+                getIdentifier().equals(aircraft.getIdentifier());
+        if (check) {
+            configInitButton.setEnabled(true);
+        }
+    }
+
+    @Override
+    public void windowOpened(WindowEvent e) {
+        configInitButton.setEnabled(false);
     }
 }

@@ -12,6 +12,9 @@ import javax.swing.undo.UndoableEditSupport;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * UndoRedoManager class - contains all the objects concerned with the undo/redo feature;
+ */
 @Getter
 @Setter
 public class UndoRedoManager {
@@ -34,6 +37,10 @@ public class UndoRedoManager {
         this.undoSupport.addUndoableEditListener(undoAdapter);
     }
 
+    /**
+     *
+     * @param edit to be added to the UndoableEditSupport class object
+     */
     public void mementoConfig(UndoableEdit edit) {
         this.undoSupport.postEdit(edit);
     }
