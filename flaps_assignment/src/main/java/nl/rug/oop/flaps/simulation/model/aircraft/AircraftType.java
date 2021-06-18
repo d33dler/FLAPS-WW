@@ -4,6 +4,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Engine;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.*;
@@ -90,6 +93,11 @@ public class AircraftType implements Comparable<AircraftType> {
      */
     private double fuelConsumption;
 
+    /**
+     * The list of engines
+     */
+
+    private List<Engine> engines;
     /**
      * The list of cargo areas in this type of aircraft.
      */

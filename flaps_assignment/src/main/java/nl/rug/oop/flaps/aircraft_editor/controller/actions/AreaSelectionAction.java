@@ -37,6 +37,7 @@ public class AreaSelectionAction extends MouseAdapter {
             var area = this.editorCore.getBpSelectionModel().extractApproxArea(ePos);
             area.ifPresent(a -> {
                 this.editorCore.getDataTracker().getDisplay().setCursorHover(a);
+                this.editorCore.getDataTracker().getDisplay().setCursorHoverXY(ePos);
                 this.editorCore.getDataTracker().getDisplay().repaint();
             });
         });

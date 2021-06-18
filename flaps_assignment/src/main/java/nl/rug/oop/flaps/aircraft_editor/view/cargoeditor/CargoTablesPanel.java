@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargoeditor;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 

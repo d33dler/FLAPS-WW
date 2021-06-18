@@ -4,7 +4,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 /**
  * Refuel class - represent a command object (extending from abstract class Command) and implementing
  * all its abstract methods.

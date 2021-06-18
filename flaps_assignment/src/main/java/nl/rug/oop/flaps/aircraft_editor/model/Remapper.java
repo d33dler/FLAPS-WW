@@ -2,10 +2,10 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 
 import java.awt.geom.Point2D;
 import java.util.HashMap;
@@ -61,6 +61,7 @@ public class Remapper {
     public void updateCompartmentCoords() {
         updateXY(this.aircraft.getType().getCargoAreas());
         updateXY(this.aircraft.getType().getFuelTanks());
+        updateXY(this.aircraft.getType().getEngines());
     }
 
 

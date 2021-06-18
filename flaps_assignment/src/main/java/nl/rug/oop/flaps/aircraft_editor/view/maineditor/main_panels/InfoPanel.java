@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +10,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsLis
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 

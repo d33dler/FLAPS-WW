@@ -1,7 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
 
 import lombok.Getter;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
 
 /**
  * Command abstract class - all command class objects extend from this class.

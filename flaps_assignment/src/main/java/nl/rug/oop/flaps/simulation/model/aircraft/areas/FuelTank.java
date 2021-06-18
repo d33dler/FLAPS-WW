@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.simulation.model.aircraft;
+package nl.rug.oop.flaps.simulation.model.aircraft.areas;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -17,7 +17,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class FuelTank extends Compartment {
+public class FuelTank extends Components {
     /**
      * The maximum amount of fuel this tank can contain in kg
      */
@@ -45,4 +45,8 @@ public class FuelTank extends Compartment {
         dataTracker.updateFuelAreaMass();
     }
 
+    @Override
+    public float getTotalHealth() {
+        return 0;
+    }
 }

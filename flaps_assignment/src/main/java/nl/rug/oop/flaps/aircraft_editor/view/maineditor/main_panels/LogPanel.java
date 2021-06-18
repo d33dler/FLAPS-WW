@@ -1,10 +1,11 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels;
 
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 

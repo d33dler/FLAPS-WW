@@ -1,6 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 
 /**
  * Interface with default method and its implementation;

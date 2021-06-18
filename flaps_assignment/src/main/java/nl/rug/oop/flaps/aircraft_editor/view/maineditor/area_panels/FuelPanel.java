@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels;
 
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -6,8 +6,9 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -33,10 +34,14 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     public FuelPanel(EditorCore editorCore, SettingsPanel settingsPanel) {
         this.editorCore = editorCore;
         this.settingsPanel = settingsPanel;
+        init();
+    }
+
+    private void init() {
         editorCore.getBpSelectionModel().addListener(listenerId, this);
         editorCore.getAircraftLoadingModel().addListener(this);
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setPreferredSize(new Dimension(1000, 120));
+        setPreferredSize(new Dimension(800, 120));
         addFuelSlider();
     }
 
@@ -46,7 +51,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     private void addFuelSlider() {
         this.sliderPanel = new JPanel();
         sliderPanel.setLayout(new FlowLayout());
-        sliderPanel.setPreferredSize(new Dimension(900, 120));
+        sliderPanel.setPreferredSize(new Dimension(800, 120));
         this.fuelSlider = new JSlider(SwingConstants.HORIZONTAL, 0, 0, 0);
         fuelSlider.setPaintTicks(true);
         fuelSlider.setPaintLabels(true);
@@ -59,6 +64,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
         sliderPanel.add(confirmButton());
         sliderPanel.add(fuelAmount);
         add(sliderPanel);
+        setVisible(false);
     }
 
     /**
@@ -107,9 +113,8 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
     @Override
     public void compartmentSelected(Compartment fuelTank, AircraftDataTracker dataTracker) {
         this.fuelTank = (FuelTank) fuelTank;
+        settingsPanel.setActivePanel(this);
         displaySlider();
-        settingsPanel.getCargoPanel().setVisible(false);
-        setVisible(true);
     }
 
 

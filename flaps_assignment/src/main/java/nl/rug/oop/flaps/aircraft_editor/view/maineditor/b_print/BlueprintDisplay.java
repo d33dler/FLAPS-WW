@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print;
 
 import lombok.Setter;
 import lombok.SneakyThrows;
@@ -6,7 +6,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.view.shapes.RegularPolygon;
 import nl.rug.oop.flaps.simulation.view.shapes.RoundPolygon;
 
@@ -29,9 +29,12 @@ public class BlueprintDisplay extends JPanel {
     private Remapper remapper;
     public static final int MK_SIZE = 18;
     private final static int OFFSET = MK_SIZE / 2;
-
+    private final BlueprintIcons bpIcons;
+    private boolean hover;
     @Setter
     private Compartment cursorHover;
+    @Setter
+    private Point2D.Double cursorHoverXY; //for tooltips
     /**
      * Color Palette
      */
@@ -39,9 +42,15 @@ public class BlueprintDisplay extends JPanel {
             C_ROYBLUE = new Color(48, 87, 225, 218),
             C_HMAG = new Color(245, 60, 4, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
-            C_CGMARK = new Color(200, 0, 255, 205),
+            C_CGMARK = new Color(200, 0, 255, 203),
+            ENGINE_TEMP = new Color(255, 0, 0, 205),
             BP_BG = new Color(58, 66, 80, 171),
-            C_HOVER = new Color(255, 235, 147,213);
+            C_HOVER = new Color(255, 235, 147, 213);
+
+    /**
+     * Icons //TODO migrate separate class
+     */
+    private Image engineIcon, fuelIcon, cargoIcon;
 
     /**
      * @param bpModel  selection model for blueprint indicator areas;
@@ -55,6 +64,7 @@ public class BlueprintDisplay extends JPanel {
         this.aircraft = aircraft;
         this.cargoModel = blueprintPanel.getModel().getAircraftLoadingModel();
         this.remapper = bpModel.getRemapper();
+        this.bpIcons = new BlueprintIcons();
         setBackground(BP_BG);
         getSizes();
     }
@@ -78,6 +88,7 @@ public class BlueprintDisplay extends JPanel {
     @Override
     protected void paintComponent(Graphics schema) {
         super.paintComponent(schema);
+        hover = false;
         g2d = (Graphics2D) schema;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         g2d.setColor(Color.WHITE);
@@ -86,11 +97,12 @@ public class BlueprintDisplay extends JPanel {
                     this.blueprintImage.getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
         }
         g2d.drawImage(this.cachedBpImage, (int) Remapper.BP_POS.x, (int) Remapper.BP_POS.y, this);
-        this.aircraft.getType().getCargoAreas()
-                .forEach(cargoArea -> addAreaIndicators(cargoArea, C_ROYBLUE));
-        this.aircraft.getType().getFuelTanks()
-                .forEach(fuelArea -> addAreaIndicators(fuelArea, C_HMAG));
         addCoGindicator();
+        this.aircraft.getType().getCargoAreas()
+                .forEach(cargoArea -> addAreaIndicators(cargoArea, bpIcons.getCargoIcon(), C_ROYBLUE));
+        this.aircraft.getType().getFuelTanks()
+                .forEach(fuelArea -> addAreaIndicators(fuelArea, bpIcons.getFuelIcon(), C_HMAG));
+        this.aircraft.getType().getEngines().forEach(engine -> addAreaIndicators(engine, bpIcons.getEngineIcon(), ENGINE_TEMP));
     }
 
     /**
@@ -99,7 +111,7 @@ public class BlueprintDisplay extends JPanel {
      *             Configures the indicator according to the parameters
      *             and checks if the compartment is selected (if true - adjust indicator)
      */
-    private void addAreaIndicators(Compartment area, Color c) {
+    private void addAreaIndicators(Compartment area, Image icon, Color c) {
         int mk = MK_SIZE;
         boolean adjust = false;
         if (bpSelectionModel.getCompartment() != null && bpSelectionModel.getCompartment().equals(area)) {
@@ -110,30 +122,32 @@ public class BlueprintDisplay extends JPanel {
         if (cursorHover != null && cursorHover.equals(area)) {
             c = C_HOVER;
             mk *= 1.25;
+            hover = true;
         }
         g2d.setColor(c);
-        addIndicator(area, mk, adjust);
+        addIndicator(area, mk, adjust, icon);
     }
 
     /**
-     *
-     * @param area compartment of focus
-     * @param mk indicator size
+     * @param area   compartment of focus
+     * @param mk     indicator size
      * @param adjust true if the indicator's shape must be adjusted
      *               configures the shape of the indicators &
-     *               adds the indicators to the correct XY coords positions
-     *
+     * @param icon
      */
-    private void addIndicator(Compartment area, int mk, boolean adjust) {
+    private void addIndicator(Compartment area, int mk, boolean adjust, Image icon) {
         Point2D.Double pos = remapper.getLocalCoords().get(area.hashCode());
         int coordX = (int) (pos.x + OFFSET);
         int coordY = (int) (pos.y + OFFSET);
         if (adjust) {
-            g2d.fill(new RegularPolygon(coordX, coordY, mk, 8, 0));
+            RegularPolygon regPoly = new RegularPolygon(coordX, coordY, mk, 8, 0);
+            g2d.fill(regPoly);
         } else {
             g2d.fill(new RoundPolygon(new RegularPolygon(coordX, coordY, mk, 4, 0), 5));
         }
+        g2d.drawImage(icon, coordX - BlueprintIcons.WIDTH / 2, coordY - BlueprintIcons.HEIGHT / 2, this);
     }
+
 
     /**
      * Customize and add the Center of gravity indicator ;
@@ -146,5 +160,10 @@ public class BlueprintDisplay extends JPanel {
         g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE, 6, 0));
         g2d.setColor(Color.BLACK);
         g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE / 2, 10, 0));
+    }
+
+    @Override
+    public String getToolTipText() {
+        return super.getToolTipText();
     }
 }

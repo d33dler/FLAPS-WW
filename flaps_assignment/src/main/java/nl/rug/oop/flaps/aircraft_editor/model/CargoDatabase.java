@@ -3,8 +3,8 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.table.DefaultTableModel;

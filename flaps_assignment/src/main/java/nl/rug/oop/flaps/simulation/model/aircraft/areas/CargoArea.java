@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.simulation.model.aircraft;
+package nl.rug.oop.flaps.simulation.model.aircraft.areas;
 
 import lombok.AccessLevel;
 import lombok.Getter;

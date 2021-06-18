@@ -13,6 +13,33 @@ cgTolerance: 0.33
 fuelConsumption: 10743
 fuelTypeName: Jet A-1
 
+
+engines:
+  - name: Left-Wing West Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: -19
+    y: 29
+  - name: Right-Wing West Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: 12
+    y: 26
+  - name: Left-Wing East Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: -12
+    y: 26
+  - name: Right-Wing East Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: 19
+    y: 29
+
 cargoAreas:
   - name: Front Cargo Area
     compartmentId: 100CARGO_ml

@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels;
 
 import javax.swing.*;
 import java.awt.*;

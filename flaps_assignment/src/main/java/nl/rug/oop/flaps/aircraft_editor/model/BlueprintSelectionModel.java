@@ -7,9 +7,9 @@ import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 
 import java.awt.geom.Point2D;
 import java.util.*;
@@ -85,7 +85,6 @@ public class BlueprintSelectionModel {
             }
         } catch (NullPointerException e) {
             logPanel.updateLog(MessagesDb.BP_CURSOR_OUT);
-            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -123,9 +122,10 @@ public class BlueprintSelectionModel {
         this.listenerMap.get(EditorCore.generalListenerID).forEach(listener -> {
             listener.compartmentSelected(area, dataTracker);
         });
-        this.listenerMap.get(areaId).forEach(listener -> {
-            listener.compartmentSelected(area, dataTracker);
-        });
+        if (listenerMap.containsKey(areaId)) {
+            listenerMap.get(areaId).forEach(listener -> {
+                listener.compartmentSelected(area, dataTracker);
+            });
+        }
     }
-
 }

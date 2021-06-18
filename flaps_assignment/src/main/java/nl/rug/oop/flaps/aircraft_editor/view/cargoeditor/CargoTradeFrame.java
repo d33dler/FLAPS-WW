@@ -6,10 +6,10 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.CargoPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorWindows;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
@@ -178,15 +178,6 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     @Override
     public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
         cargoAircraft.update();
-    }
-
-    /**
-     *
-     * WindowListener methods overridden to limit the user to one opened cargo trade frame at a time;
-     */
-    @Override
-    public void windowOpened(WindowEvent e) {
-        cargoPanel.getExCargoLoader().setEnabled(false);
     }
 
     @Override

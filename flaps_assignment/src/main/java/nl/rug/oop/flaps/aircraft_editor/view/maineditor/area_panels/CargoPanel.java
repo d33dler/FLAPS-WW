@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
+package nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,8 +6,9 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 
 import javax.swing.*;
 import java.awt.*;
@@ -33,7 +34,7 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
 
     private void init() {
         setLayout(new BoxLayout(this, BoxLayout.LINE_AXIS));
-        setPreferredSize(new Dimension(1000, 120));
+        setPreferredSize(new Dimension(800, 120));
         editorCore.getBpSelectionModel().addListener(listenerId, this);
         addCargoLoaderButton();
     }
@@ -51,8 +52,8 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
                     settingsPanel.setCargoTradeFrame(
                             new CargoTradeFrame(editorCore, (CargoArea) settingsPanel.getCompartmentArea(), CargoPanel.this));
                     editorCore.getConfigurator().setCargoTradeFrame(settingsPanel.getCargoTradeFrame());
+                    exCargoLoader.setEnabled(false);
                 });
-
             }
         });
         add(exCargoLoader);
@@ -68,7 +69,6 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
     @Override
     public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
         editorCore.getConfigurator().updateDatabaseTables(settingsPanel);
-        settingsPanel.getFuelPanel().setVisible(false);
-        setVisible(true);
+        settingsPanel.setActivePanel(this);
     }
 }

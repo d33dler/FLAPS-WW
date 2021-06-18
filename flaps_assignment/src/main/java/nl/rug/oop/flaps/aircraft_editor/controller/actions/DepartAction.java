@@ -5,7 +5,7 @@ import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;

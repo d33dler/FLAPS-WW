@@ -12,15 +12,14 @@ import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.SettingsPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
-import nl.rug.oop.flaps.simulation.model.loaders.DataHolder;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +40,6 @@ public class Configurator {
     private UndoRedoManager undoRedoManager;
     @Setter
     private LogPanel logPanel;
-    private DataHolder holder = new DataHolder();
     @Setter
     private CargoTradeFrame cargoTradeFrame;
     public static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());

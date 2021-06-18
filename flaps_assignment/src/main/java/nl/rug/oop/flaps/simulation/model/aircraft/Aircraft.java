@@ -3,7 +3,9 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.world.World;
 

@@ -6,12 +6,12 @@ import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.BlueprintDisplay;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.DepartPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.DepartPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.CargoArea;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
-import nl.rug.oop.flaps.simulation.model.aircraft.FuelTank;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 
 import java.awt.geom.Point2D;
 

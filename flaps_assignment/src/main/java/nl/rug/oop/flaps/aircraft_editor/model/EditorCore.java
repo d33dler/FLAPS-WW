@@ -10,7 +10,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyLis
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.Compartment;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -41,7 +41,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     public static final String generalListenerID = "000AREA_abs";
     public static final String cargoListenerID = "100CARGO_ml";
     public static final String fuelListenerID = "100FUEL_ml";
-
+    public static final String engineListenerID = "200ENGINE_ml";
 
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel bpSelectionModel, EditorFrame editorFrame) {
         this.world = aircraft.getWorld();
@@ -99,6 +99,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         remapper.updateCompartmentCoords();
         remapper.listToCoordsMap(this.aircraft.getType().getCargoAreas());
         remapper.listToCoordsMap(this.aircraft.getType().getFuelTanks());
+        remapper.listToCoordsMap(this.aircraft.getType().getEngines());
         remapper.setMapBoundaries();
     }
 

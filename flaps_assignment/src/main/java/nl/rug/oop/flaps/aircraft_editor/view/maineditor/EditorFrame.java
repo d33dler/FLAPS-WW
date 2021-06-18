@@ -4,6 +4,10 @@ import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.InfoPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
 import javax.swing.*;
