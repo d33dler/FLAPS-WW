@@ -17,13 +17,13 @@ engines:
     compartmentId: 200ENGINE_ml
     type: Turbofan
     engineModel: PW4062A
-    x: -9
+    x: -8
     y: 21
   - name: Right-Wing Turbofan Engine
     compartmentId: 200ENGINE_ml
     type: Turbofan
     engineModel: PW4062A
-    x: 9
+    x: 8
     y: 21
 
 cargoAreas:
@@ -51,14 +51,14 @@ fuelTanks:
     compartmentId: 100FUEL_ml
     capacity: 26514
     x: -9
-    y: 25
+    y: 27
   - name: Right Wing Main Tank
     compartmentId: 100FUEL_ml
     capacity: 26514
     x: 9
-    y: 25
+    y: 27
   - name: Central Tank
     compartmentId: 100FUEL_ml
     capacity: 20000
     x: 0
-    y: 25
+    y: 27
