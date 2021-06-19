@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/2021_Team_060.iml" filepath="$PROJECT_DIR$/.idea/2021_Team_060.iml" />
+      <module fileurl="file://$PROJECT_DIR$/flaps_assignment/flaps.iml" filepath="$PROJECT_DIR$/flaps_assignment/flaps.iml" />
+    </modules>
+  </component>
+</project>

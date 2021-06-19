@@ -19,13 +19,13 @@ engines:
     type: Turbofan
     engineModel: Trent 772C-60
     x: -9
-    y: 21
+    y: 22
   - name: Right-Wing Turbofan Engine
     compartmentId: 200ENGINE_ml
     type: Turbofan
     engineModel: Trent 772C-60
     x: 9
-    y: 21
+    y: 22
 
 cargoAreas:
   - name: Front Lower-Deck Compartment
@@ -52,12 +52,12 @@ fuelTanks:
     compartmentId: 100FUEL_ml
     capacity: 39592
     x: -9
-    y: 28
+    y: 30
   - name: Right Wing Main Tank
     compartmentId: 100FUEL_ml
     capacity: 39592
     x: 9
-    y: 28
+    y: 30
   - name: Central Tank
     compartmentId: 100FUEL_ml
     capacity: 30000
