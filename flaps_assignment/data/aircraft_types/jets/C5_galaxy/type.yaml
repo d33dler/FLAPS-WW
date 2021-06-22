@@ -1,0 +1,82 @@
+name: Lockheed C-5 Galaxy
+description: The largest military aircraft in the world was developed and produced by Lockheed starting in 1968, and has since flown missions for the United States Air Force in Vietnam, Iraq, Yugoslavia, Afghanistan, and Kuwait. It was also proposed to carry the Space Shuttle, but NASA opted for a 747 instead.
+
+emptyWeight: 172365
+maxTakeoffWeight: 417305
+maxLandingWeight: 405891
+cruiseSpeed: 830
+range: 8000
+length: 75.31
+emptyCgX: 0
+emptyCgY: 31
+cgTolerance: 0.33
+fuelConsumption: 10743
+fuelTypeName: Jet A-1
+
+
+engines:
+  - name: Left-Wing West Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: -19
+    y: 29
+  - name: Right-Wing West Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: 12
+    y: 26
+  - name: Left-Wing East Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: -12
+    y: 26
+  - name: Right-Wing East Turbofan Engine
+    compartmentId: 200ENGINE_ml
+    type: Turbofan
+    engineModel: CF6-80C2
+    x: 19
+    y: 29
+
+cargoAreas:
+  - name: Front Cargo Area
+    compartmentId: 100CARGO_ml
+    maxSize: 20
+    maxWeight: 150000
+    x: 0
+    y: 15
+  - name: Rear Cargo Area
+    compartmentId: 100CARGO_ml
+    maxSize: 20
+    maxWeight: 150000
+    x: 0
+    y: 50
+
+fuelTanks:
+  - name: Left Wing Main Tank
+    compartmentId: 100FUEL_ml
+    capacity: 44000
+    x: -9
+    y: 30
+  - name: Left Wing Trim Tank
+    compartmentId: 100FUEL_ml
+    capacity: 18827
+    x: -30
+    y: 37
+  - name: Right Wing Main Tank
+    compartmentId: 100FUEL_ml
+    capacity: 44000
+    x: 9
+    y: 30
+  - name: Right Wing Trim Tank
+    compartmentId: 100FUEL_ml
+    capacity: 18827
+    x: 30
+    y: 37
+  - name: Central Tank
+    compartmentId: 100FUEL_ml
+    capacity: 30000
+    x: 0
+    y: 30
