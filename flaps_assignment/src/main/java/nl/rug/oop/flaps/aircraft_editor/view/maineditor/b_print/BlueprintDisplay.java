@@ -40,17 +40,13 @@ public class BlueprintDisplay extends JPanel {
      */
     private final static Color
             C_ROYBLUE = new Color(48, 87, 225, 218),
-            C_HMAG = new Color(245, 60, 4, 211),
+            C_HMAG = new Color(255, 101, 21, 211),
             C_HGREEN = new Color(8, 212, 14, 220),
             C_CGMARK = new Color(200, 0, 255, 203),
             ENGINE_TEMP = new Color(255, 0, 0, 205),
             BP_BG = new Color(58, 66, 80, 171),
             C_HOVER = new Color(255, 235, 147, 213);
 
-    /**
-     * Icons //TODO migrate separate class
-     */
-    private Image engineIcon, fuelIcon, cargoIcon;
 
     /**
      * @param bpModel  selection model for blueprint indicator areas;

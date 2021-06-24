@@ -81,7 +81,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         this.aircraftDataReg = new JPanel();
         configureRegisterPanel(aircraftDataReg, PANEL1_TITLE, fieldListADT,
                 dataSetADT, aircraftDataTracker);
-        add(aircraftDataReg);
+        add(new JScrollPane(aircraftDataReg));
     }
 
     /**
@@ -91,7 +91,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         this.commercialDataReg = new JPanel();
         configureRegisterPanel(commercialDataReg, PANEL2_TITLE, fieldListCDT,
                 dataSetCDT, commercialDataTracker);
-        add(commercialDataReg);
+        add(new JScrollPane(commercialDataReg));
     }
 
     /**
