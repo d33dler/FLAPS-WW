@@ -5,7 +5,7 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
@@ -67,8 +67,7 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
      *      sets this panel as visible and hides the concurrent fuel panel ;
      */
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
-        editorCore.getConfigurator().updateDatabaseTables(settingsPanel);
+    public void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
         settingsPanel.setActivePanel(this);
     }
 }

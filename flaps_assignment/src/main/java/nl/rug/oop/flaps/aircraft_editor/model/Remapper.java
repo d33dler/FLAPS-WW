@@ -26,7 +26,7 @@ public class Remapper {
     private BlueprintSelectionModel bpSelectionModel;
     public static double AIRCRAFT_LEN, BP_WIDTH, BP_HEIGHT, BP_RATIO, Pixels_per_M;
     public final static Point2D.Double BP_POS = new Point2D.Double(0, 20);
-    public static final double BP_MARGIN = 30;
+    public static final double BP_MARGIN = 30, BP_OFF = 50;
     private static final double BP_DEF_H = 500;
     private static final double BP_DEF_W = 500;
 
@@ -62,6 +62,7 @@ public class Remapper {
         updateXY(this.aircraft.getType().getCargoAreas());
         updateXY(this.aircraft.getType().getFuelTanks());
         updateXY(this.aircraft.getType().getEngines());
+        setCabinXY(this.aircraft.getType().getCabin());
     }
 
 
@@ -118,7 +119,12 @@ public class Remapper {
             checkPutBound(navMap, BP_HEIGHT + margin);
         });
     }
-
+private void setCabinXY(List<? extends Compartment> units) {
+    units.forEach(area -> {
+        var p = new Point2D.Double(BP_WIDTH - BP_OFF,BP_HEIGHT - BP_OFF);
+        this.localCoords.put(area.hashCode(), p);
+    });
+}
     private void checkPutBound(NavigableMap<Double, ?> navMap, double bound) {
         if (!navMap.containsKey(0.0)) {
             navMap.put(0.0, null);

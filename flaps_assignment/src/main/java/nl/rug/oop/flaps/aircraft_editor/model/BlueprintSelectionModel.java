@@ -22,15 +22,18 @@ import java.util.*;
 @Log
 @Getter
 @Setter
-public class BlueprintSelectionModel {
+public class BlueprintSelectionModel implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private AircraftDataTracker dataTracker;
     private Compartment compartment = null;
     private Remapper remapper;
+
+
     /**
      * We use a hashmap for listener lists to separate listeners based on their roles & priority;
      */
-    private HashMap<String, List<BlueprintSelectionListener>> listenerMap;
+
+    protected HashMap<String, List<BlueprintSelectionListener>> listenerMap;
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap;
     private LogPanel logPanel;
@@ -42,17 +45,18 @@ public class BlueprintSelectionModel {
 
     /**
      * @param identity listenersId, to separate listeners when firing updates
-     * @param listener listener to be added to the hashmap's list
      */
-    public void addListener(String identity, BlueprintSelectionListener listener) {
+
+    public void addListener(String identity, BlueprintSelectionListener bpListener) {
         if (!listenerMap.containsKey(identity)) {
             List<BlueprintSelectionListener> list = new ArrayList<>();
-            list.add(listener);
+            list.add(bpListener);
             listenerMap.put(identity, list);
         } else {
-            listenerMap.get(identity).add(listener);
-        }
+            listenerMap.get(identity).add(bpListener);
+        };
     }
+
 
     /**
      * @param coords Cursor click coordinates on the JFrame
@@ -119,13 +123,19 @@ public class BlueprintSelectionModel {
     @SneakyThrows
     public void fireSelectedAreaUpdate(String areaId, Compartment area) {
         this.compartment = area;
+        fireBpUpdate(area, dataTracker);
         this.listenerMap.get(EditorCore.generalListenerID).forEach(listener -> {
-            listener.compartmentSelected(area, dataTracker);
+            listener.fireBpUpdate(area, dataTracker);
         });
         if (listenerMap.containsKey(areaId)) {
             listenerMap.get(areaId).forEach(listener -> {
-                listener.compartmentSelected(area, dataTracker);
+                listener.fireBpUpdate(area, dataTracker);
             });
         }
+    }
+
+    @Override
+    public void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
+        BlueprintSelectionListener.super.fireBpUpdate(area, dataTracker);
     }
 }

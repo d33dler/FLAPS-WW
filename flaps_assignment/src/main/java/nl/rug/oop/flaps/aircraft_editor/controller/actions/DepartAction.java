@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller.actions;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;

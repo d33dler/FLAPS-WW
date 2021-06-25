@@ -4,13 +4,9 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
-import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
-import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -21,7 +17,7 @@ import nl.rug.oop.flaps.simulation.model.world.World;
  */
 @Getter
 @Setter
-public class EditorCore implements CargoUnitsListener, BlueprintSelectionListener, FuelSupplyListener {
+public class EditorCore {
     private World world;
     private Aircraft aircraft;
     private final BlueprintSelectionModel bpSelectionModel;
@@ -30,7 +26,7 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     private UndoRedoManager undoRedoManager;
     private EditorFrame editorFrame;
     private Configurator configurator;
-    private CargoDatabase cargoDatabase;
+    private DatabaseBuilder databaseBuilder;
     private AircraftDataTracker dataTracker;
     private GeographicCoordinates originCoordinates;
     private Airport source;
@@ -42,14 +38,16 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
     public static final String cargoListenerID = "100CARGO_ml";
     public static final String fuelListenerID = "100FUEL_ml";
     public static final String engineListenerID = "200ENGINE_ml";
+    public static final String passengerListenerID = "300PASS_ml";
+    public static final String povListenerID = "000POV_mv";
 
     public EditorCore(Aircraft aircraft, BlueprintSelectionModel bpSelectionModel, EditorFrame editorFrame) {
         this.world = aircraft.getWorld();
         this.aircraft = aircraft;
         this.editorFrame = editorFrame;
         this.bpSelectionModel = bpSelectionModel;
-        this.bpSelectionModel.addListener(generalListenerID, this);
         this.bpSelectionModel.setEditorCore(this);
+        this.databaseBuilder = new DatabaseBuilder();
         init();
     }
 
@@ -62,11 +60,10 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         getRoute();
         initRemap();
         this.aircraftLoadingModel = editorFrame.getAircraftLoadingModel();
-        aircraftLoadingModel.addListener((CargoUnitsListener) this);
-        aircraftLoadingModel.addListener((FuelSupplyListener) this);
         this.dataTracker = new AircraftDataTracker(this, aircraft);
         this.bpSelectionModel.setDataTracker(dataTracker);
         this.aircraftLoadingModel.setDataTracker(dataTracker);
+        this.aircraftLoadingModel.setEditorCore(this);
         this.undoRedoManager = new UndoRedoManager(this);
         this.configurator = new Configurator(this);
         undoRedoManager.setConfigurator(configurator);
@@ -100,25 +97,9 @@ public class EditorCore implements CargoUnitsListener, BlueprintSelectionListene
         remapper.listToCoordsMap(this.aircraft.getType().getCargoAreas());
         remapper.listToCoordsMap(this.aircraft.getType().getFuelTanks());
         remapper.listToCoordsMap(this.aircraft.getType().getEngines());
+        remapper.listToCoordsMap(this.aircraft.getType().getCabin());
         remapper.setMapBoundaries();
     }
 
-    /**
-     * All the methods below are required to execute the default updates;
-     */
-    @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
-        BlueprintSelectionListener.super.compartmentSelected(area, dataTracker);
-    }
-
-    @Override
-    public void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
-        CargoUnitsListener.super.fireCargoTradeUpdate(dataTracker);
-    }
-
-    @Override
-    public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
-        FuelSupplyListener.super.fireFuelSupplyUpdate(dataTracker);
-    }
 }
 

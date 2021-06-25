@@ -13,6 +13,7 @@ import nl.rug.oop.flaps.simulation.view.shapes.RoundPolygon;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.Point2D;
+import java.util.List;
 
 /**
  * BlueprintDisplay class - used to display the blueprint graphical component including all the indicators;
@@ -45,7 +46,8 @@ public class BlueprintDisplay extends JPanel {
             C_CGMARK = new Color(200, 0, 255, 203),
             ENGINE_TEMP = new Color(255, 0, 0, 205),
             BP_BG = new Color(58, 66, 80, 171),
-            C_HOVER = new Color(255, 235, 147, 213);
+            C_HOVER = new Color(255, 235, 147, 213),
+            C_CABIN = new Color(237, 246, 9, 213);
 
 
     /**
@@ -94,11 +96,14 @@ public class BlueprintDisplay extends JPanel {
         }
         g2d.drawImage(this.cachedBpImage, (int) Remapper.BP_POS.x, (int) Remapper.BP_POS.y, this);
         addCoGindicator();
-        this.aircraft.getType().getCargoAreas()
-                .forEach(cargoArea -> addAreaIndicators(cargoArea, bpIcons.getCargoIcon(), C_ROYBLUE));
-        this.aircraft.getType().getFuelTanks()
-                .forEach(fuelArea -> addAreaIndicators(fuelArea, bpIcons.getFuelIcon(), C_HMAG));
-        this.aircraft.getType().getEngines().forEach(engine -> addAreaIndicators(engine, bpIcons.getEngineIcon(), ENGINE_TEMP));
+        addSpecificIndicators(aircraft.getType().getCargoAreas(), bpIcons.getCargoIcon(), C_ROYBLUE);
+        addSpecificIndicators(aircraft.getType().getFuelTanks(), bpIcons.getFuelIcon(), C_HMAG);
+        addSpecificIndicators(aircraft.getType().getEngines(), bpIcons.getEngineIcon(), ENGINE_TEMP);
+        addSpecificIndicators(aircraft.getType().getCabin(), bpIcons.getPassengerIcon(), C_CABIN);
+    }
+
+    private void addSpecificIndicators(List<?> list, Image icon, Color color) {
+        list.forEach(area -> addAreaIndicators((Compartment) area, icon, color));
     }
 
     /**
@@ -157,6 +162,7 @@ public class BlueprintDisplay extends JPanel {
         g2d.setColor(Color.BLACK);
         g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE / 2, 10, 0));
     }
+
 
     @Override
     public String getToolTipText() {

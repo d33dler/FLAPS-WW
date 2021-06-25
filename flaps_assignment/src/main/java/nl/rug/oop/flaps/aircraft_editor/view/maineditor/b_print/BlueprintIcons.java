@@ -9,7 +9,7 @@ import java.nio.file.Path;
 
 @Getter
 public class BlueprintIcons {
-    private Image engineIcon, fuelIcon, cargoIcon;
+    private Image engineIcon, fuelIcon, cargoIcon, passengerIcon;
     public static final int WIDTH = 25, HEIGHT = 25;
 
     public BlueprintIcons() {
@@ -23,6 +23,8 @@ public class BlueprintIcons {
         this.fuelIcon = ImageIO.read(Path.of("icons", ("fuel_tank_icon.png")).toFile()).
                 getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
         this.cargoIcon = ImageIO.read(Path.of("icons", ("cargo_icon.png")).toFile()).
+                getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
+        this.passengerIcon = ImageIO.read(Path.of("icons", ("passenger_icon.png")).toFile()).
                 getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
     }
 }

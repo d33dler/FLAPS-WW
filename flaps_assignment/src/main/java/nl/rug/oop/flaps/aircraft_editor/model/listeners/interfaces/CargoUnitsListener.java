@@ -6,9 +6,8 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
  * Used to avoid code duplication and store default update method routine in a single location;
  */
 
-public interface CargoUnitsListener {
-
-    default void fireCargoTradeUpdate(AircraftDataTracker dataTracker) {
+public interface CargoUnitsListener extends ChangeListener {
+    default void fireCargoUpdate(AircraftDataTracker dataTracker) {
         dataTracker.performDepartureValidationCheck();
         dataTracker.getDisplay().repaint();
         dataTracker.refreshData();

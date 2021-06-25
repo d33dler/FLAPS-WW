@@ -34,6 +34,13 @@ cargoAreas:
 fuelConsumption: 132.18
 fuelTypeName: AvGas
 
+cabin:
+  - name: Aircraft Cabin
+    compartmentId: 300PASS_ml
+    seats: 13
+    x: 0
+    y: 0
+
 engines:
   - name: Single Propeller Turbopop Engine
     compartmentId: 200ENGINE_ml

@@ -8,12 +8,10 @@ import nl.rug.oop.flaps.aircraft_editor.controller.actions.ConfiguratorAction;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.*;
 import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
-import nl.rug.oop.flaps.aircraft_editor.model.CargoDatabase;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
@@ -60,11 +58,6 @@ public class Configurator {
         commandList.add(new Refuel(this, fuelTank, level));
         addExecuteLastCommand();
     }
-
-    public void updateDatabaseTables(SettingsPanel settingsPanel) {
-        editorCore.setCargoDatabase(new CargoDatabase(editorCore, settingsPanel));
-    }
-
 
     public void unitAdded(CargoType cargoType, int amount) {
         commandList.add(new AddCargoUnit(this, (CargoArea) fetchArea(), cargoType, amount));

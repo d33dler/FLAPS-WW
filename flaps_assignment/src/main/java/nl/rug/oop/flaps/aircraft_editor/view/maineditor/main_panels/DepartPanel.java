@@ -5,7 +5,7 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.DepartAction;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
-import nl.rug.oop.flaps.aircraft_editor.view.flightsim.FlightSimulator;
+import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view.FlightSimFrame;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.swing.*;
@@ -52,7 +52,7 @@ public class DepartPanel extends JPanel {
         flyButton.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                SwingUtilities.invokeLater(() -> new FlightSimulator(editorCore));
+                SwingUtilities.invokeLater(() -> new FlightSimFrame(editorCore));
             }
         });
         add(flyButton);

@@ -1,7 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 
 /**

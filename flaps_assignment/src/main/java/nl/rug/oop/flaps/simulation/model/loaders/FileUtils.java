@@ -1,15 +1,21 @@
 package nl.rug.oop.flaps.simulation.model.loaders;
 
+import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.ClassUtils;
+import org.apache.commons.lang3.StringUtils;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.*;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -71,8 +77,72 @@ public class FileUtils {
         return fields;
     }
 
-    public  static String toNiceCase(String camelCase) {
+    public static String toNiceCase(String camelCase) {
         Matcher m = Pattern.compile("(?<=[a-z])[A-Z]").matcher(camelCase);
         return m.replaceAll(match -> " " + match.group().toLowerCase());
     }
+
+    public static List<Field> extractAllFieldsFiltered(Class<?> type) {
+        List<Field> list = new ArrayList<>();
+        List<Field> fieldsUnfiltered = getAllFields(type);
+        fieldsUnfiltered.forEach(field -> {
+            if (FileUtils.isFieldPrimitiveDeserializable(field)
+                    && !Modifier.isStatic(field.getModifiers())) {
+                list.add(field);
+            }
+        });
+        return list;
+    }
+
+    /**
+     * @param clazz some class
+     * @return all declared fields (except static and non-primitive fields);
+     */
+    public static List<Field> extractLocalFields(Class<?> clazz) {
+        List<Field> newFieldList = new ArrayList<>();
+        List<Field> list = Arrays.asList(clazz.getDeclaredFields());
+        list.forEach(field -> {
+            if (FileUtils.isFieldPrimitiveDeserializable(field)
+                    && !Modifier.isStatic(field.getModifiers())) {
+                newFieldList.add(field);
+            }
+        });
+        return newFieldList;
+    }
+
+    public static List<Field> getFields(Class<?> clazz) {
+        return Arrays.asList(clazz.getDeclaredFields());
+    }
+
+    /**
+     * @param field field used to collect the name
+     * @return formatted field name
+     */
+    public static JLabel getFormattedName(Field field) {
+        JLabel fieldName = new JLabel();
+        String format = StringUtils.capitalize(toNiceCase(field.getName())) + " : ";
+        fieldName.setText(format);
+        fieldName.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
+        return fieldName;
+    }
+
+    public static <K, V> Set<K> addUnitSet(V area, Map<V, Set<K>> setMap) {
+        return setMap.computeIfAbsent(area, k -> new HashSet<>());
+    }
+
+    @SneakyThrows
+    public static void cloneFields(Object obj_1, Object obj_2, List<Field> obj_1_fields) {
+        obj_1_fields.forEach(field -> System.out.println(field.getName()));
+        obj_1_fields.forEach(field -> {
+            field.setAccessible(true);
+            try {
+                field.set(obj_1, field.get(obj_2));
+            } catch (IllegalAccessException ignored) {
+            }
+
+        });
+
+    }
+
+
 }

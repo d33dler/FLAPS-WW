@@ -88,10 +88,6 @@ public class ApplicationTemplate {
             this.highlightController = new HighlightController(this.getWwd(), SelectEvent.ROLLOVER);
         }
 
-        public AppPanel(Dimension canvasSize, boolean includeStatusBar, Image aircraft) {
-            this(canvasSize, includeStatusBar);
-            this.aircraft = aircraft;
-        }
 
 
         protected WorldWindow createWorldWindow() {

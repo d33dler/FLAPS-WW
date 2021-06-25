@@ -4,9 +4,11 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
+import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.world.World;
 
 import java.awt.geom.Point2D;
@@ -44,13 +46,16 @@ public class Aircraft implements Comparable<Aircraft> {
      * A map that contains information for each fuel tank of how much fuel is in there
      * The key is the name of the fuel tank and the Double is the amount of fuel in kg
      */
-    private final Map<FuelTank, Double> fuelTankFillStatuses;
+    private Map<FuelTank, Double> fuelTankFillStatuses = new HashMap<>();
 
     /**
      * A map that contains information for each cargo area what the cargo contents are
      * The key is the name of the cargo area
      */
-    private final Map<CargoArea, Set<CargoFreight>> cargoAreaContents;
+    private Map<CargoArea, Set<CargoFreight>> cargoAreaContents = new HashMap<>();;
+
+
+    private Map<Cabin, Set<Passenger>> cabinPassengers = new HashMap<>();
 
     @Setter
     private Point2D.Double centerOfG;
@@ -59,8 +64,6 @@ public class Aircraft implements Comparable<Aircraft> {
         this.identifier = identifier;
         this.type = type;
         this.world = world;
-        fuelTankFillStatuses = new HashMap<>();
-        cargoAreaContents = new HashMap<>();
     }
 
     /**
@@ -116,6 +119,7 @@ public class Aircraft implements Comparable<Aircraft> {
     public Set<CargoFreight> getCargoAreaContents(CargoArea cargoArea) {
         return cargoAreaContents.getOrDefault(cargoArea, new HashSet<>());
     }
+
 
     /**
      * Sets the amount of fuel in kg for a specific fuel tank

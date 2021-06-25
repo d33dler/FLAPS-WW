@@ -678,7 +678,8 @@ public class BasicOrbitView extends BasicView implements OrbitView
         // Compute the current clip plane distances. The near distance depends on the far distance, so we must compute
         // the far distance first.
         this.farClipDistance = computeFarClipDistance();
-        this.nearClipDistance = computeNearClipDistance();
+       // this.nearClipDistance = computeNearClipDistance(); //TODO CHANGED CLIPPING
+        this.nearClipDistance = 3;
         // Compute the current viewport dimensions.
         double viewportWidth = this.viewport.getWidth() <= 0.0 ? 1.0 : this.viewport.getWidth();
         double viewportHeight = this.viewport.getHeight() <= 0.0 ? 1.0 : this.viewport.getHeight();

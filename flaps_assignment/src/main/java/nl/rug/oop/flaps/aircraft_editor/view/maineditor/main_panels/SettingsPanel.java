@@ -7,10 +7,11 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.EnginePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.FuelPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.PassengerPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
@@ -72,7 +73,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         add(new FuelPanel(editorCore, this));
         add(new CargoPanel(editorCore, this));
         add(new EnginePanel(editorCore, this));
-        //activePanel = (JPanel) this.getComponent(4);
+        add(new PassengerPanel(editorCore,this));
     }
 
     /**
@@ -82,7 +83,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
      */
 
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
+    public void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
         this.compartmentArea = area;
         displayPrimaryData(area);
     }
