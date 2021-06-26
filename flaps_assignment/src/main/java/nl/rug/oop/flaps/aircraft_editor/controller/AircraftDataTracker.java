@@ -3,12 +3,14 @@ package nl.rug.oop.flaps.aircraft_editor.controller;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.DepartPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.InfoPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
@@ -31,15 +33,17 @@ public class AircraftDataTracker {
     private BlueprintDisplay display;
     private DepartPanel departPanel;
     private Remapper remapper;
-    private float
+    private InfoPanel infoPanel;
+
+    private double
             aircraftCapacity = 0,
             totalCargoLoadMass = 0,
             totalFuelLoadMass = 0,
             totalAircraftLoadWeight = 0,
             totalAircraftWeight = 0,
             selectedAreaLoad = 0,
-            selectedAreaCapacity = 0;
-    private double emptyWeight,
+            selectedAreaCapacity = 0,
+            emptyWeight,
             maxTakeOffWeight,
             maxLandingWeight,
             travelDistance,
@@ -70,7 +74,7 @@ public class AircraftDataTracker {
                 .distanceTo(editorCore.getDestination().getGeographicCoordinates());
         this.defaultRange = aircraft.getType().getRange();
         this.aircraftRange = computeAircraftRange(totalFuelLoadMass);
-        this.emptyWeight = (float) aircraft.getType().getEmptyWeight();
+        this.emptyWeight =  aircraft.getType().getEmptyWeight();
         this.maxTakeOffWeight = aircraft.getType().getMaxTakeoffWeight();
         this.maxLandingWeight = aircraft.getType().getMaxLandingWeight();
         this.cgTolerance = aircraft.getType().getCgTolerance();
@@ -103,18 +107,24 @@ public class AircraftDataTracker {
      * @return true if the weight does not surpass any of the limiting parameters
      * (takeOff,Landing weight limits, area capacity..)
      */
-    public boolean performCargoCheck(float amount) {
-        float allCargo = totalAircraftLoadWeight + amount;
+    public boolean performWeightCheck(Compartment area, double amount) {
+        double allCargo = totalAircraftLoadWeight + amount;
+        double load = area.getLoadWeight();
+        double capacity = area.requestCapacity();
         if (amount > 0
-                && selectedAreaLoad + amount <= selectedAreaCapacity
+                && load + amount <= capacity
                 && allCargo <= maxTakeOffWeight
                 && allCargo <= maxLandingWeight) {
             totalAircraftLoadWeight = allCargo;
             totalAircraftWeight += amount;
-            selectedAreaLoad += amount;
+            area.setLoadWeight(area.getLoadWeight()+amount);
             return true;
         }
         return false;
+    }
+    public boolean performPassengerCheck(Cabin area, double weight) {
+        double count = commercialData.getPassengerCount();
+        return count < area.getSeats() && performWeightCheck(area, weight);
     }
 
     /**
@@ -125,7 +135,7 @@ public class AircraftDataTracker {
      * (aircraft total capacity)
      */
     public boolean performFuelCheck(double oldLevel, double newLevel) {
-        float updatedLoad = (float) (totalAircraftLoadWeight - oldLevel + newLevel);
+        double updatedLoad = totalAircraftLoadWeight - oldLevel + newLevel;
         double newTotalFuel = aircraft.getTotalFuel() - oldLevel + newLevel;
         if (updatedLoad <= aircraftCapacity) {
             totalAircraftLoadWeight = updatedLoad;
@@ -193,10 +203,11 @@ public class AircraftDataTracker {
         updateTotalLoadMass();
         updateCenterOfGravity();
         commercialData.refreshData();
+        infoPanel.updateAllData();
     }
 
     private void updateAreaLoad() {
-        compartment.getAreaLoad(this);
+        compartment.getUpdateAreaLoad(this);
     }
 
     /**
@@ -226,7 +237,7 @@ public class AircraftDataTracker {
             computeCenterOfGravity(tank, amount);
         });
         this.totalAircraftLoadWeight = totalFuelLoadMass + totalCargoLoadMass;
-        this.totalAircraftWeight = (float) (emptyWeight + totalFuelLoadMass + totalCargoLoadMass);
+        this.totalAircraftWeight =  emptyWeight + totalFuelLoadMass + totalCargoLoadMass;
     }
 
     /**
@@ -267,8 +278,7 @@ public class AircraftDataTracker {
      * Methods below update the area load for the selected fuel tank or cargo area;
      */
     public void updateFuelAreaMass() {
-        this.selectedAreaLoad = Float.parseFloat
-                (String.valueOf(aircraft.getFuelAmountForFuelTank((FuelTank) compartment)));
+        this.selectedAreaLoad = aircraft.getFuelAmountForFuelTank((FuelTank) compartment);
     }
 
     public void updateCargoAreaMass() {

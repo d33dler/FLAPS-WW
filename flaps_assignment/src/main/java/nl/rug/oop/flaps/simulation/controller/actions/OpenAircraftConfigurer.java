@@ -1,7 +1,7 @@
 package nl.rug.oop.flaps.simulation.controller.actions;
 
-import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;

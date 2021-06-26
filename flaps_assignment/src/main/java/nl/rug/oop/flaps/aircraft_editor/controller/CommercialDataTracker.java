@@ -19,6 +19,7 @@ public class CommercialDataTracker {
     private Airport origin, destination;
 
     private double
+            passengerCount = 0,
             estimatedFuelCosts = 0,
             cargoRevenue = 0,
             totalEstimatedProfit = 0,

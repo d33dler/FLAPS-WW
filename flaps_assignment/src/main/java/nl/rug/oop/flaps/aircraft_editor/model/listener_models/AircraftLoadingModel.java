@@ -1,8 +1,9 @@
-package nl.rug.oop.flaps.aircraft_editor.model;
+package nl.rug.oop.flaps.aircraft_editor.model.listener_models;
 
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 
@@ -45,7 +46,7 @@ public class AircraftLoadingModel extends ChangeListenerModel implements
      */
     public void fireCargoUpdate() {
         this.fireCargoUpdate(dataTracker);
-        this.cargoListenerList.forEach(listener -> {
+        cargoListenerList.forEach(listener -> {
             listener.fireCargoUpdate(dataTracker);
         });
     }
@@ -55,7 +56,7 @@ public class AircraftLoadingModel extends ChangeListenerModel implements
      */
     public void fireFuelUpdate() {
         this.fireFuelUpdate(dataTracker);
-        this.fuelListenerList.forEach(listener -> {
+        fuelListenerList.forEach(listener -> {
             listener.fireFuelUpdate(dataTracker);
         });
     }

@@ -1,7 +1,8 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
+package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.fuel_comm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
@@ -10,13 +11,11 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
  * all its abstract methods.
  */
 public class Refuel extends Command {
+    private final double level;
+    private double oldLevel;
 
-    private FuelTank fuelTank;
-    private double level, oldLevel;
-    private Configurator configurator;
-
-    public Refuel(Configurator configurator, FuelTank fuelTank, double level) {
-        this.fuelTank = fuelTank;
+    public Refuel(Configurator configurator, FuelTank area, double level) {
+        this.area = area;
         this.level = level;
         this.configurator = configurator;
     }
@@ -27,11 +26,12 @@ public class Refuel extends Command {
      */
     @Override
     public void execute() {
+        FuelTank area = (FuelTank) this.area;
         Aircraft aircraft = configurator.getAircraft();
         AircraftDataTracker dataTracker = configurator.getDataTracker();
-        this.oldLevel = aircraft.getFuelAmountForFuelTank(fuelTank);
+        this.oldLevel = aircraft.getFuelAmountForFuelTank(area);
         if (dataTracker.performFuelCheck(oldLevel, level)) {
-            aircraft.setFuelAmountForFuelTank(fuelTank, level);
+            aircraft.setFuelAmountForFuelTank(area, level);
             configurator.getAircraftLoadingModel().fireFuelUpdate();
             fetchLogData(true);
         } else {
@@ -41,7 +41,7 @@ public class Refuel extends Command {
 
     @Override
     public void fetchLogData(boolean state) {
-        String val = "Level: " + level + "; Fuel Tank: " + fuelTank.getName();
+        String val = "Level: " + level + "; Fuel Tank: " + area.getName();
         if (state)
             configurator.relayConfiguratorMsg(MessagesDb.FUEL_CONFIRM + val);
         else
@@ -54,7 +54,7 @@ public class Refuel extends Command {
     @Override
     public void undo() {
         Aircraft aircraft = configurator.getAircraft();
-        aircraft.setFuelAmountForFuelTank(fuelTank, oldLevel);
+        aircraft.setFuelAmountForFuelTank((FuelTank) area, oldLevel);
         configurator.getAircraftLoadingModel().fireFuelUpdate();
         configurator.relayConfiguratorMsg(MessagesDb.UNDO_FUEL + " : " + level);
     }

@@ -9,7 +9,7 @@ public abstract class TravelMember {
     public String name,
             surname,
             nationality,
-            passportId;
+            passportId, travellerId;
     public int age;
 
 }

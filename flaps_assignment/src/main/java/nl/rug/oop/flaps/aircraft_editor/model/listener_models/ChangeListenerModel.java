@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.model;
+package nl.rug.oop.flaps.aircraft_editor.model.listener_models;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.ChangeListener;

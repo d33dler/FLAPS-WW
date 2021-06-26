@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargo_editor;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.SelectionCommand;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorWindows;
@@ -48,8 +48,7 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     private SelectionCommand selectionCommand;
     private float totalCargoAreaWgt;
     protected static final String
-            WAREHOUSE_DB = "allcargo", CARGO_PLANE = "aircargo",
-            TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo";
+            TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo: ";
     private static final int WIDTH = 1200, LENGTH = 500;
     private int amount;
 
@@ -114,7 +113,7 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
                 .core(editorCore)
                 .frame(this)
                 .db(cargoUnitSet)
-                .title(TITLE_R)
+                .title(TITLE_R + aircraft.getType().getName())
                 .model(editorCore.getDatabaseBuilder().getDatabase(cargoUnitSet, CargoFreight.class))
                 .pos(BorderLayout.EAST)
                 .editView(2, 2)

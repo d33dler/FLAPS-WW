@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay;
+package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 
@@ -6,8 +6,6 @@ import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
  * RemoveAllRelay - relays the RemoveAllCargo command
  */
 public class RemoveAllRelay extends SelectionCommand {
-    Configurator configurator;
-
     public RemoveAllRelay(Configurator configurator) {
       this.configurator = configurator;
     }

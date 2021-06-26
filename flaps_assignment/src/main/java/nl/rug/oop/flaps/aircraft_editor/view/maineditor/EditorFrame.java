@@ -1,8 +1,9 @@
 package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
 
 import lombok.Getter;
-import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.InfoPanel;
@@ -36,7 +37,7 @@ public class EditorFrame extends EditorWindows implements WindowListener {
     private InfoPanel infoPanel;
     private UndoManager undoManager;
     private JButton configInitButton;
-
+    private AircraftDataTracker dataTracker;
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel blueprintSelectionModel, AircraftLoadingModel cargoModel) {
         setTitle("Aircraft Editor");
         addWindowListener(this);
@@ -77,15 +78,19 @@ public class EditorFrame extends EditorWindows implements WindowListener {
         blueprintPanel = new BlueprintPanel(editorCore, blueprintSelectionModel, aircraft);
         settingsPanel = new SettingsPanel(editorCore);
         infoPanel = new InfoPanel(editorCore);
-        editorCore.getDataTracker().setDisplay(blueprintPanel.getBlueprintDisplay());
-        editorCore.getDataTracker().setDepartPanel(logPanel.getDepartPanel());
+        setTrackerPanels();
         add(this.blueprintPanel, BorderLayout.WEST);
         add(this.settingsPanel, BorderLayout.NORTH);
         add(this.infoPanel, BorderLayout.CENTER);
         add(this.logPanel, BorderLayout.SOUTH);
         validate();
     }
-
+    private void setTrackerPanels() {
+        this.dataTracker = editorCore.getDataTracker();
+        dataTracker.setDisplay(blueprintPanel.getBlueprintDisplay());
+        dataTracker.setDepartPanel(logPanel.getDepartPanel());
+        dataTracker.setInfoPanel(infoPanel);
+    }
     /**
      * Initializes and adds the menu bar
      */

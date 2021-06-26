@@ -1,8 +1,9 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
+package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
@@ -14,14 +15,12 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
  * all its abstract methods.
  */
 public class AddCargoUnit extends Command {
-    private final Configurator configurator;
-    private CargoArea cargoArea;
     private final CargoType cargoType;
     private final int amount;
     private CargoFreight cargoFreight;
 
-    public AddCargoUnit(Configurator configurator, CargoArea cargoArea, CargoType cargoType, int amount) {
-        this.cargoArea = cargoArea;
+    public AddCargoUnit(Configurator configurator, CargoArea area, CargoType cargoType, int amount) {
+        this.area = area;
         this.cargoType = cargoType;
         this.amount = amount;
         this.configurator = configurator;
@@ -37,7 +36,7 @@ public class AddCargoUnit extends Command {
         AircraftDataTracker dataTracker = configurator.getDataTracker();
         AircraftLoadingModel aircraftLoadingModel = configurator.getAircraftLoadingModel();
         float weight = amount * cargoType.getWeightPerUnit();
-        if (dataTracker.performCargoCheck(weight)) {
+        if (dataTracker.performWeightCheck(area, weight)) {
             generateAddCarriage(aircraft);
             aircraftLoadingModel.fireCargoUpdate();
             fetchLogData(true);
@@ -55,7 +54,7 @@ public class AddCargoUnit extends Command {
                 amount * cargoType.getWeightPerUnit(),
                 Configurator.freightIdGen.generateId());
         configurator.updateHashedFreight(cargoFreight);
-        aircraft.getCargoAreaContents().get(cargoArea).add(cargoFreight);
+        aircraft.getCargoAreaContents().get((CargoArea) area).add(cargoFreight);
     }
 
     public void fetchLogData(boolean state) {
@@ -71,7 +70,7 @@ public class AddCargoUnit extends Command {
     @Override
     public void undo() {
         configurator.getAircraft()
-                .getCargoAreaContents(cargoArea)
+                .getCargoAreaContents((CargoArea) area)
                 .remove(cargoFreight);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(MessagesDb.UNDO_ADD_C);
@@ -83,7 +82,7 @@ public class AddCargoUnit extends Command {
     @Override
     public void redo() {
         configurator.getAircraft()
-                .getCargoAreaContents(cargoArea)
+                .getCargoAreaContents((CargoArea) area)
                 .add(cargoFreight);
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(MessagesDb.REDO_ADD_C);

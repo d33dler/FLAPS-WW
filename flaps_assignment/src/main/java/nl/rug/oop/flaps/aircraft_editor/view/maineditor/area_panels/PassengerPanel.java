@@ -1,5 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels;
 
+import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
@@ -16,6 +17,7 @@ public class PassengerPanel extends JPanel implements BlueprintSelectionListener
     private EditorCore editorCore;
     private SettingsPanel settingsPanel;
     private final static String listenerId = EditorCore.passengerListenerID;
+    @Getter
     private JButton embarque;
     private PassengerBoardFrame boardFrame;
     private Cabin cabin;
@@ -37,7 +39,9 @@ public class PassengerPanel extends JPanel implements BlueprintSelectionListener
         embarque.addActionListener(new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                embarque.setEnabled(false);
                 boardFrame = new PassengerBoardFrame(editorCore, cabin,PassengerPanel.this);
+                settingsPanel.setPassengerBoardFrame(boardFrame);
             }
         });
         add(embarque);

@@ -149,7 +149,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     /**
      * Updates the data in all internal Data panels
      */
-    private void updateAllData() {
+    public void updateAllData() {
         updateFields(fieldListADT, dataSetADT, aircraftDataTracker);
         updateFields(fieldListCDT, dataSetCDT, commercialDataTracker);
     }
@@ -180,5 +180,6 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
     public void fireFuelUpdate(AircraftDataTracker dataTracker) {
         updateAllData();
     }
+
 
 }

@@ -5,13 +5,14 @@ import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.EnginePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.FuelPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.PassengerPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.PassengerBoardFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
@@ -32,7 +33,8 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     private static final String listener_Id = EditorCore.generalListenerID;
     @Setter
     private CargoTradeFrame cargoTradeFrame;
-    @Getter
+    @Setter
+    private PassengerBoardFrame passengerBoardFrame;
     private JPanel activePanel;
 
     public SettingsPanel(EditorCore editorCore) {

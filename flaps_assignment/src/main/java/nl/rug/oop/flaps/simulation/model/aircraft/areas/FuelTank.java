@@ -41,7 +41,7 @@ public class FuelTank extends Components {
     }
 
     @Override
-    public void getAreaLoad(AircraftDataTracker dataTracker) {
+    public void getUpdateAreaLoad(AircraftDataTracker dataTracker) {
         dataTracker.updateFuelAreaMass();
     }
 

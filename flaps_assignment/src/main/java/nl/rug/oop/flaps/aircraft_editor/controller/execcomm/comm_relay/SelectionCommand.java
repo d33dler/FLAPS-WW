@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay;
+package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay;
 
 import lombok.Getter;
 import lombok.Setter;

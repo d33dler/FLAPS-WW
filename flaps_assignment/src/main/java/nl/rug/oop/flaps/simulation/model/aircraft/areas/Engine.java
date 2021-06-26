@@ -26,7 +26,7 @@ public class Engine extends Components {
     }
 
     @Override
-    public void getAreaLoad(AircraftDataTracker dataTracker) {
+    public void getUpdateAreaLoad(AircraftDataTracker dataTracker) {
         this.requestCapacity();
     }
 

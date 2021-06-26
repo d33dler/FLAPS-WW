@@ -1,6 +1,7 @@
-package nl.rug.oop.flaps.aircraft_editor.controller.execcomm;
+package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
@@ -11,14 +12,12 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
  * all its abstract methods.
  */
 public class RemoveCargoUnit extends Command {
-    private Configurator configurator;
-    private CargoArea cargoArea;
     private CargoFreight cargoFreight;
-    private int amount, oldCount;
+    private final int amount, oldCount;
 
-    public RemoveCargoUnit(Configurator configurator, CargoArea cargoArea, CargoFreight cargoFreight, int amount) {
+    public RemoveCargoUnit(Configurator configurator, CargoArea area, CargoFreight cargoFreight, int amount) {
         this.configurator = configurator;
-        this.cargoArea = cargoArea;
+        this.area = area;
         this.cargoFreight = cargoFreight;
         this.amount = amount;
         this.oldCount = cargoFreight.getUnitCount();
@@ -44,7 +43,7 @@ public class RemoveCargoUnit extends Command {
             configurator.updateHashedFreight(cargoFreight);
         } else {
             aircraft.getCargoAreaContents()
-                    .get(cargoArea)
+                    .get(((CargoArea) area))
                     .remove(cargoFreight);
         }
     }
@@ -58,9 +57,10 @@ public class RemoveCargoUnit extends Command {
      * undo has to either reset the unit count or insert the removed cargo freight;
      */
     @Override
-    public void undo() { //TODO terrible performance (because of Set<Cargofreight> needs improvement
-        if (configurator.getAircraft().getCargoAreaContents(cargoArea).contains(cargoFreight)) {
-            for (CargoFreight freight : configurator.getAircraft().getCargoAreaContents(cargoArea)) {
+    public void undo() {
+        CargoArea area = (CargoArea) this.area;
+        if (configurator.getAircraft().getCargoAreaContents(area).contains(cargoFreight)) {
+            for (CargoFreight freight : configurator.getAircraft().getCargoAreaContents(area)) {
                 if (freight.getId().equals(cargoFreight.getId())) {
                     freight.setUnitCount(oldCount);
                     break;
@@ -68,7 +68,7 @@ public class RemoveCargoUnit extends Command {
             }
         } else {
             cargoFreight.setUnitCount(oldCount);
-            configurator.getAircraft().getCargoAreaContents(cargoArea).add(cargoFreight);
+            configurator.getAircraft().getCargoAreaContents(area).add(cargoFreight);
         }
         configurator.getAircraftLoadingModel().fireCargoUpdate();
         configurator.relayConfiguratorMsg(MessagesDb.UNDO_REM_C);

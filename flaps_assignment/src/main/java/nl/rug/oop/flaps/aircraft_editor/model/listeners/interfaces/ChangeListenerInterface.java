@@ -1,12 +1,12 @@
 package nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces;
 
-import nl.rug.oop.flaps.aircraft_editor.model.ChangeListenerModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.ChangeListenerModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public interface ChangeListenerInterface {
-    default void addListener(String identity, ChangeListener changeListener) {}
+    void addListener(String identity, ChangeListener changeListener);
     default void addNewListener(ChangeListenerModel model,
                                 String identity,
                                 ChangeListener changeListener) {

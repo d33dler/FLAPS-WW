@@ -2,9 +2,9 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargo_editor;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.AddCargoRelay;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.RemoveAllRelay;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.commrelay.RemoveCargoRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.AddCargoRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.RemoveAllRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.RemoveCargoRelay;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import javax.swing.*;

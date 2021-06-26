@@ -5,10 +5,14 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.Randomizers;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.ConfiguratorAction;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.*;
-import nl.rug.oop.flaps.aircraft_editor.model.AircraftLoadingModel;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.AddCargoUnit;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.RemoveAllCargo;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.RemoveCargoUnit;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.fuel_comm.Refuel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
@@ -18,6 +22,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import java.util.HashMap;
 import java.util.List;
@@ -79,7 +84,11 @@ public class Configurator {
                 getCargoTradeFrame().getFreightHashMap().
                 put(carriage.getId(), carriage);
     }
-
+    public void updateHashedPassenger(Passenger p) {
+        editorCore.getEditorFrame().getSettingsPanel().
+                getPassengerBoardFrame().getPassengerHashMap().
+                put(p.getTravellerId(), p);
+    }
     public Compartment fetchArea() {
         return selectionModel.getCompartment();
     }

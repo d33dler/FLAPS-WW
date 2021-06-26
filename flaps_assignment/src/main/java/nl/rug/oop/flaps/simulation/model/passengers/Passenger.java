@@ -11,12 +11,17 @@ import java.awt.*;
 public class Passenger extends TravelMember {
     protected Image passportPhoto;
     protected double weight;
-    public final static int MAX_WEIGHT = 200;
+    public final static int MIN_WEIGHT = 1, MAX_WEIGHT = 200;
+    public final static int MIN_AGE = 10, MAX_AGE = 100;
 
     public static class Builder extends Passenger {
 
         public Passenger passId(String id) {
             this.passportId = id;
+            return this;
+        }
+        public Passenger id(String id) {
+            this.travellerId = id;
             return this;
         }
         public Passenger name(String sur, String name){
@@ -45,10 +50,30 @@ public class Passenger extends TravelMember {
             FileUtils.cloneFields(passenger, this, FileUtils.getAllFields(Passenger.class));
             return this;
         }
+        public Passenger buildThief(){
+            Passenger passenger = new Passenger(){
+                @Override
+                protected void signatureAction() {
+                    super.signatureAction();
+                }
+            };
+            FileUtils.cloneFields(passenger, this, FileUtils.getAllFields(Passenger.class));
+            return this;
+        }
+        public Passenger buildKaren(){
+            Passenger passenger = new Passenger() {
+                @Override
+                protected void signatureAction() {
+                    super.signatureAction();
+                }
+            };
+            FileUtils.cloneFields(passenger, this, FileUtils.getAllFields(Passenger.class));
+            return this;
+        }
     }
-
 
     public Passenger() {
     }
 
+    protected void signatureAction(){};
 }
