@@ -10,6 +10,7 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.loaders.AirportLoader;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
+import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;
 
 import javax.imageio.ImageIO;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -80,6 +82,8 @@ public class Airport implements Comparable<Airport> {
     @Setter
     private Path directoryPath;
 
+
+    private List<PassengerType> passengerTypes;
     /**
      * Creates a new airport
      */

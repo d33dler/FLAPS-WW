@@ -22,17 +22,17 @@ import java.util.ArrayList;
 
 @Log
 @Getter
-public class LogPanel extends JPanel {
+public class Logger extends JPanel {
     private JTextArea logBook;
     private final EditorCore editorCore;
     private final EditorFrame editorFrame;
     private DepartPanel departPanel;
     private final ArrayList<String> unloadList = new ArrayList<>();
 
-    public LogPanel(EditorFrame editorFrame) {
+    public Logger(EditorFrame editorFrame) {
         this.editorFrame = editorFrame;
         this.editorCore = editorFrame.getEditorCore();
-        this.editorCore.getConfigurator().setLogPanel(this);
+        this.editorCore.getController().setLogger(this);
         init();
     }
 
@@ -145,4 +145,8 @@ public class LogPanel extends JPanel {
     private String getTimeNow() {
         return (java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss")) + ": ");
     }
+    public void notifyErrMsg(String string) {
+        JOptionPane.showMessageDialog(editorFrame.getSettingsPanel().getCargoFrame(),string,"!",JOptionPane.ERROR_MESSAGE);
+    }
+
 }

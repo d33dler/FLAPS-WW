@@ -5,7 +5,7 @@ import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
@@ -49,10 +49,11 @@ public class CargoPanel extends JPanel implements BlueprintSelectionListener {
             @Override
             public void actionPerformed(ActionEvent e) {
                 SwingUtilities.invokeLater(() -> {
-                    settingsPanel.setCargoTradeFrame(
-                            new CargoTradeFrame(editorCore, (CargoArea) settingsPanel.getCompartmentArea(), CargoPanel.this));
-                    editorCore.getConfigurator().setCargoTradeFrame(settingsPanel.getCargoTradeFrame());
+                    settingsPanel.setCargoFrame(
+                            new CargoFrame(editorCore, (CargoArea) settingsPanel.getCompartmentArea(), CargoPanel.this));
                     exCargoLoader.setEnabled(false);
+                    settingsPanel.getController().setCargoMediator(settingsPanel.getCargoFrame().getMediator());
+                    settingsPanel.getSelectionModel().setFocusCompartment(settingsPanel.getCompartmentArea());
                 });
             }
         });

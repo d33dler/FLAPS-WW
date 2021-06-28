@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.simulation.model.aircraft;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
@@ -94,9 +94,9 @@ public class Aircraft implements Comparable<Aircraft> {
         }
     }
 
-    public void removeAllCargo(LogPanel logPanel) {
+    public void removeAllCargo(Logger logger) {
         this.cargoAreaContents.values().forEach(freightSet -> {
-                freightSet.forEach(logPanel::logFreightUnload);
+                freightSet.forEach(logger::logFreightUnload);
                 freightSet.clear();
         });
     }
@@ -154,9 +154,9 @@ public class Aircraft implements Comparable<Aircraft> {
         return Objects.hash(getIdentifier(), getType());
     }
 
-    public void unLoadAircraft(Aircraft aircraft, AircraftDataTracker dataTracker, LogPanel logPanel) {
+    public void unLoadAircraft(Aircraft aircraft, AircraftDataTracker dataTracker, Logger logger) {
         this.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
-        this.removeAllCargo(logPanel);
+        this.removeAllCargo(logger);
     }
 
     @Override

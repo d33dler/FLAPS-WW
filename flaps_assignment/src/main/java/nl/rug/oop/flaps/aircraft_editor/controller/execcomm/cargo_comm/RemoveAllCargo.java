@@ -1,6 +1,6 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm;
 
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
@@ -15,9 +15,9 @@ import java.util.HashMap;
 public class RemoveAllCargo extends Command {
     private HashMap<String, CargoFreight> freightSet = new HashMap<>();
 
-    public RemoveAllCargo(Configurator configurator, CargoArea area) {
+    public RemoveAllCargo(Controller controller, CargoArea area) {
         this.area = area;
-        this.configurator = configurator;
+        this.controller = controller;
         getData();
     }
 
@@ -25,7 +25,7 @@ public class RemoveAllCargo extends Command {
      * Copy the entire cargo set for the undo process;
      */
     private void getData() {
-        configurator.copySet(configurator.getAircraft().getCargoAreaContents((CargoArea) area), this.freightSet);
+        controller.copySet(controller.getAircraft().getCargoAreaContents((CargoArea) area), this.freightSet);
     }
 
     /**
@@ -34,14 +34,14 @@ public class RemoveAllCargo extends Command {
      */
     @Override
     public void execute() {
-        configurator.getAircraft().getCargoAreaContents().get(((CargoArea) area)).clear();
-        configurator.getAircraftLoadingModel().fireCargoUpdate();
+        controller.getAircraft().getCargoAreaContents().get(((CargoArea) area)).clear();
+        controller.getAircraftLoadingModel().fireCargoUpdate();
         fetchLogData(true);
     }
 
     @Override
     public void fetchLogData(boolean state) {
-        configurator.relayConfiguratorMsg(MessagesDb.R_ALL_CARGO_POS);
+        controller.relayConfiguratorMsg(MessagesDb.R_ALL_CARGO_POS);
     }
 
     /**
@@ -50,10 +50,10 @@ public class RemoveAllCargo extends Command {
     @Override
     public void undo() {
         freightSet.values().forEach(clonedFreight ->  {
-            configurator.getAircraft().getCargoAreaContents(((CargoArea) area)).add(clonedFreight);
+            controller.getAircraft().getCargoAreaContents(((CargoArea) area)).add(clonedFreight);
         });
-        configurator.getAircraftLoadingModel().fireCargoUpdate();
-        configurator.relayConfiguratorMsg(MessagesDb.UNDO_REMALL_C);
+        controller.getAircraftLoadingModel().fireCargoUpdate();
+        controller.relayConfiguratorMsg(MessagesDb.UNDO_REMALL_C);
     }
 
     /**
@@ -62,6 +62,6 @@ public class RemoveAllCargo extends Command {
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(MessagesDb.REDO_REMALL_C);
+        controller.relayConfiguratorMsg(MessagesDb.REDO_REMALL_C);
     }
 }

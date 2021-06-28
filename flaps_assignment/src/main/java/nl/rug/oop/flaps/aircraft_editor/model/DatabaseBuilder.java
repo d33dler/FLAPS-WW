@@ -3,11 +3,14 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
+import nl.rug.oop.flaps.FlapsDatabases;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import org.reflections.Reflections;
 
 import javax.swing.table.DefaultTableModel;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Vector;
@@ -19,8 +22,13 @@ import java.util.Vector;
 @Getter
 public class DatabaseBuilder extends DefaultTableModel {
     private static final String DATA_OBJ_Pkg = "nl.rug.oop.flaps.simulation.model.cargo";
+    private final Set<Class<?>> flapsDbClasses; //flaps database related classes
+    private final HashMap<Class<?>, Package> packageHashMap = new HashMap<>();
+    private final Reflections reflections = new Reflections("nl.rug.oop.flaps");
 
     public DatabaseBuilder() {
+        flapsDbClasses = reflections.getTypesAnnotatedWith(FlapsDatabases.class);
+        flapsDbClasses.forEach(aClass -> packageHashMap.put(aClass, aClass.getPackage()));
     }
 
     public DefaultTableModel getDatabase(Set<?> set, Class<?> clazz) {
@@ -54,8 +62,8 @@ public class DatabaseBuilder extends DefaultTableModel {
             if (FileUtils.isFieldPrimitiveDeserializable(field) && !Modifier.isStatic(field.getModifiers())) {
                 columnIds.add(FileUtils.toSnakeCase(field.getName()));
             } else {
-                var p = field.getType().getPackage();
-                if (p == null || !p.getName().equals(DATA_OBJ_Pkg)) continue;
+                var p = field.getType();
+                if (packageHashMap.get(p) == null) continue;
                 Vector<String> nestedFields = getColumns(FileUtils.getAllFields(field.getType()));
                 columnIds.addAll(nestedFields);
             }
@@ -77,7 +85,8 @@ public class DatabaseBuilder extends DefaultTableModel {
                 if (FileUtils.isFieldPrimitiveDeserializable(field) && !Modifier.isStatic(field.getModifiers())) {
                     entityObj.add(field.get(obj));
                 } else {
-                    if (!field.getType().getPackage().getName().equals(DATA_OBJ_Pkg)) {
+                    var p = field.getType();
+                    if (packageHashMap.get(p) == null) {
                         continue;
                     }
                     Class<?> fieldClass = field.getType();

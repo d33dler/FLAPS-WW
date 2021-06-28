@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 
 /**
  * SelectionCommand abstract class - all command relay objects extend from this class and override the confirmExec()
@@ -14,6 +14,6 @@ import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
 public abstract class SelectionCommand {
     @Getter
     @Setter
-    protected Configurator configurator;
+    protected Controller controller;
     public abstract void confirmExec();
 }

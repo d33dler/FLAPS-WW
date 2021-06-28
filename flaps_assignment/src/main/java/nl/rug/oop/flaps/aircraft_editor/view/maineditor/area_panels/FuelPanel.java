@@ -76,7 +76,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
-                editorCore.getConfigurator().updateFuelStatus(fuelTank, fuelSlider.getValue());
+                editorCore.getController().updateFuelStatus(fuelTank, fuelSlider.getValue());
             }
         });
         return confirm;

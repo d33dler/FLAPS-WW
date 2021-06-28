@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
@@ -27,7 +27,7 @@ public class EditorCore {
     private Remapper remapper;
     private UndoRedoManager undoRedoManager;
     private EditorFrame editorFrame;
-    private Configurator configurator;
+    private Controller controller;
     private DatabaseBuilder databaseBuilder;
     private AircraftDataTracker dataTracker;
     private GeographicCoordinates originCoordinates;
@@ -67,8 +67,9 @@ public class EditorCore {
         this.aircraftLoadingModel.setDataTracker(dataTracker);
         this.aircraftLoadingModel.setEditorCore(this);
         this.undoRedoManager = new UndoRedoManager(this);
-        this.configurator = new Configurator(this);
-        undoRedoManager.setConfigurator(configurator);
+        this.controller = new Controller(this);
+        undoRedoManager.setController(controller);
+        dataTracker.setController(controller);
     }
 
     /**

@@ -9,8 +9,6 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 public interface FuelSupplyListener extends ChangeListener {
 
     default void fireFuelUpdate(AircraftDataTracker dataTracker) {
-        dataTracker.performDepartureValidationCheck();
-        dataTracker.getDisplay().repaint();
-        dataTracker.refreshData();
+        ChangeListener.super.defaultUpdate(dataTracker);
     }
 }

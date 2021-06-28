@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rug.oop.flaps.FlapsDatabases;
 
 import java.awt.*;
 import java.util.Objects;
@@ -15,6 +16,7 @@ import java.util.Objects;
  * @author T.O.W.E.R.
  */
 @Getter
+@FlapsDatabases
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class CargoType implements Comparable<CargoType> {
 	/**

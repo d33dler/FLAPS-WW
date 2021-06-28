@@ -6,6 +6,8 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
+import nl.rug.oop.flaps.aircraft_editor.model.mediators.CargoMediator;
+import nl.rug.oop.flaps.aircraft_editor.view.generic_panels.TableSelectionListeners;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorWindows;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -17,8 +19,6 @@ import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -28,8 +28,10 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener, WindowListener {
+public class CargoFrame extends EditorWindows implements CargoUnitsListener {
+
     private EditorCore editorCore;
+    private CargoMediator mediator = new CargoMediator();
     private CargoArea cargoArea;
     private Aircraft aircraft;
     private Set<CargoType> cargoTypeSet;
@@ -37,29 +39,21 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     private DatabaseTablePanel<CargoType> cargoWarehouse;
     private DatabaseTablePanel<CargoFreight> cargoAircraft;
     private CargoAmountPanel cargoAmountPanel;
-    private HashMap<String, CargoType> cargoHashMap = new HashMap<>();
-    private HashMap<String, CargoFreight> freightHashMap = new HashMap<>();
-    private String commandRequest;
-    private int quantity;
-    private CargoButtonPanel cargoButtonPanel;
-    private CargoType selectedType;
-    private CargoFreight selectedFreight;
+    private CargoControlPanel cargoControlPanel;
     private CargoPanel cargoPanel;
     private SelectionCommand selectionCommand;
-    private float totalCargoAreaWgt;
+    private Set<TableSelectionListeners> buttonSet;
     protected static final String
             TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo: ";
     private static final int WIDTH = 1200, LENGTH = 500;
-    private int amount;
 
 
-    public CargoTradeFrame(EditorCore editorCore, CargoArea cargoArea, CargoPanel cargoPanel) {
+    public CargoFrame(EditorCore editorCore, CargoArea cargoArea, CargoPanel cargoPanel) {
         setTitle("Cargo Areas Loader");
         this.editorCore = editorCore;
         this.cargoArea = cargoArea;
         this.aircraft = editorCore.getAircraft();
         this.cargoTypeSet = editorCore.getWorld().getCargoSet();
-        this.totalCargoAreaWgt = 0;
         this.cargoPanel = cargoPanel;
         editorCore.getAircraftLoadingModel().addListener(this);
         addWindowListener(this);
@@ -73,33 +67,15 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         setLayout(new BorderLayout());
         setPreferredSize(new Dimension(WIDTH, LENGTH));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        populateDatabaseHashmaps();
+        mediator.populateDatabaseHashmaps(aircraft, cargoTypeSet, cargoArea);
+        buildDbTables();
         addAllPanels();
         setLocationRelativeTo(null);
         setResizable(false);
         setVisible(true);
         pack();
     }
-
-    /**
-     * Store cargo type names and cargo freight IDs for fast retrieval during selections;
-     * Storing is dynamical - based on current warehouse types and cargo area's freights;
-     */
-    private void populateDatabaseHashmaps() {
-        cargoTypeSet.forEach(cargoType -> {
-            cargoHashMap.put(cargoType.getName(), cargoType);
-        });
-        aircraft.getCargoAreaContents(cargoArea).forEach(cargoFreight
-                -> {
-            totalCargoAreaWgt += cargoFreight.getTotalWeight();
-            freightHashMap.put(cargoFreight.getId(), cargoFreight);
-        });
-    }
-
-    /**
-     * Initializes and adds all JTables and internal JComponents for the frame;
-     */
-    private void addAllPanels() {
+    private void buildDbTables(){
         this.cargoUnitSet = FileUtils.addUnitSet(cargoArea, editorCore.getAircraft().getCargoAreaContents());
         this.cargoWarehouse = new TableBuilder<>()
                 .core(editorCore)
@@ -113,22 +89,25 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
                 .core(editorCore)
                 .frame(this)
                 .db(cargoUnitSet)
-                .title(TITLE_R + aircraft.getType().getName())
+                .title(TITLE_R + cargoArea.getName())
                 .model(editorCore.getDatabaseBuilder().getDatabase(cargoUnitSet, CargoFreight.class))
                 .pos(BorderLayout.EAST)
                 .editView(2, 2)
                 .buildRemote();
+    }
 
-        this.cargoAmountPanel = new CargoAmountPanel(this);
-        this.cargoButtonPanel = new CargoButtonPanel(editorCore, this);
-        cargoWarehouse.setPreferredSize(new Dimension(520, 300));
-        cargoAircraft.setPreferredSize(new Dimension(520, 300));
+    /**
+     * Initializes and adds all JTables and internal JComponents for the frame;
+     */
+    private void addAllPanels() {
+        this.cargoAmountPanel = new CargoAmountPanel(this, editorCore.getController(), mediator);
+        this.cargoControlPanel = new CargoControlPanel(editorCore, cargoWarehouse, cargoAircraft, this);
         cargoAmountPanel.setPreferredSize(new Dimension(200, 40));
         addTableListeners();
         add(cargoWarehouse, BorderLayout.WEST);
         add(cargoAircraft, BorderLayout.EAST);
         add(cargoAmountPanel, BorderLayout.SOUTH);
-        add(cargoButtonPanel, BorderLayout.CENTER);
+        add(cargoControlPanel, BorderLayout.CENTER);
         cargoAmountPanel.setVisible(false);
     }
 
@@ -143,13 +122,15 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
     /**
      * A separate listener for the warehouse cargo set database
      */
-    public void addDatabaseSelectionListener(JTable table) {
+    public void addDatabaseSelectionListener(JTable table) {//TODO check integrity
+
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
                 cargoAircraft.getDatabaseTable().getSelectionModel().clearSelection();
-                selectedType = cargoHashMap.get(table.getValueAt(table.getSelectedRow(), 0).toString());
-                cargoButtonPanel.switchOne();
-                System.out.println(selectedType.getName());
+                mediator.setSelectedType(mediator.getCargoHashMap().
+                        get(table.getValueAt(table.getSelectedRow(), 0).toString()));
+            } else {
+                //TODO disabling selectively
             }
         });
     }
@@ -162,30 +143,11 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
                 cargoWarehouse.getDatabaseTable().getSelectionModel().clearSelection();
-                selectedFreight = freightHashMap.get(table.getValueAt(table.getSelectedRow(), 0).toString());
-                selectedType = cargoHashMap.get(table.getValueAt(table.getSelectedRow(), 1).toString());
-                cargoButtonPanel.switchTwo();
+                mediator.setSelectedFreight(mediator.getFreightHashMap().
+                        get(table.getValueAt(table.getSelectedRow(), 0).toString()));
+                mediator.setSelectedType(mediator.getSelectedFreight().getCargoType());
             }
         });
-    }
-
-    /**
-     * Delegate specific cargo exchange command
-     */
-    protected void delegateCommand() {
-        performPriorUpdates();
-        if (selectionCommand != null) {
-            selectionCommand.confirmExec();
-        }
-    }
-
-    /**
-     * Collect setting data and update values before delegating the execution of the selected command;
-     */
-    protected void performPriorUpdates() {
-        if (!cargoAmountPanel.getAmountField().getText().isBlank()) {
-            this.amount = Integer.parseInt(cargoAmountPanel.getAmountField().getText());
-        }
     }
 
     /**
@@ -198,7 +160,7 @@ public class CargoTradeFrame extends EditorWindows implements CargoUnitsListener
 
     @Override
     public void windowClosed(WindowEvent e) {
-        editorCore.getEditorFrame().getSettingsPanel().setCargoTradeFrame(null);
+        editorCore.getEditorFrame().getSettingsPanel().setCargoFrame(null);
         cargoPanel.getExCargoLoader().setEnabled(true);
     }
 }

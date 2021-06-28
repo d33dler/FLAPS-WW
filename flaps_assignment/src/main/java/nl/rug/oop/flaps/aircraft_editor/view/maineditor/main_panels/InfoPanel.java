@@ -62,8 +62,8 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
         editorCore.getBpSelectionModel().addListener(EditorCore.generalListenerID, this);
         setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
         setSize(new Dimension(WIDTH, HEIGHT));
-        this.fieldListADT = FileUtils.extractLocalFields(aircraftDataTracker.getClass());
-        this.fieldListCDT = FileUtils.extractLocalFields(commercialDataTracker.getClass());
+        this.fieldListADT = FileUtils.getLocalFields(aircraftDataTracker.getClass());
+        this.fieldListCDT = FileUtils.getLocalFields(commercialDataTracker.getClass());
         this.dataSetADT = new ArrayList<>();
         this.dataSetCDT = new ArrayList<>();
         addAircraftDataPanel();

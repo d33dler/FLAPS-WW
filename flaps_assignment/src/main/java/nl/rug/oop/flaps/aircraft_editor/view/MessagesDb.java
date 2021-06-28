@@ -40,5 +40,7 @@ public class MessagesDb {//TODO transfer to yaml
     public static final String END_MSG = "The weather is quite nice here!";
     public static final String TY_MSG = "Thank you for choosing F.L.A.P.S.© ";
     public static final String UNLOAD_TITLE = "The following cargo freights were unloaded at the destination airport: ";
+    public static final String ADD_ERR = "No warehouse cargo selected";
+    public static final String REM_ERR = "No aircraft cargo selected";
     public static final String OTHER_CONFIRM = "others";
 }

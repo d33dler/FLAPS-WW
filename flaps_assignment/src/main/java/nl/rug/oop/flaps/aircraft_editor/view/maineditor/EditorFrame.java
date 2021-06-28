@@ -2,12 +2,13 @@ package nl.rug.oop.flaps.aircraft_editor.view.maineditor;
 
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.InfoPanel;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SettingsPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 
@@ -20,24 +21,24 @@ import java.awt.event.WindowListener;
 
 /**
  * EditorFrame class - the main frame of the aircraft editor.
- *
  */
 
 @Getter
 public class EditorFrame extends EditorWindows implements WindowListener {
-    private static final int WIDTH = 1200;
-    private static final int HEIGHT = 920;
     public EditorCore editorCore;
     private BlueprintSelectionModel blueprintSelectionModel;
     private AircraftLoadingModel aircraftLoadingModel;
     private Aircraft aircraft;
     private BlueprintPanel blueprintPanel;
     private SettingsPanel settingsPanel;
-    private LogPanel logPanel;
+    private Logger logger;
     private InfoPanel infoPanel;
     private UndoManager undoManager;
     private JButton configInitButton;
     private AircraftDataTracker dataTracker;
+    private Controller controller;
+    private static final int WIDTH = 1200, HEIGHT = 920;
+
     public EditorFrame(Aircraft aircraft, BlueprintSelectionModel blueprintSelectionModel, AircraftLoadingModel cargoModel) {
         setTitle("Aircraft Editor");
         addWindowListener(this);
@@ -45,6 +46,7 @@ public class EditorFrame extends EditorWindows implements WindowListener {
         this.aircraftLoadingModel = cargoModel;
         this.aircraft = aircraft;
         this.editorCore = new EditorCore(aircraft, blueprintSelectionModel, this); //TODO code style M before V
+        this.controller = editorCore.getController();
         this.configInitButton = editorCore.getWorld().getFlapsFrame().getAircraftPanel().getOpenConfigurer();
         this.undoManager = editorCore.getUndoRedoManager().getUndoManager();
         editorInit();
@@ -67,8 +69,8 @@ public class EditorFrame extends EditorWindows implements WindowListener {
      * Initialize the logPanel and set the field value for the blueprintSelectionModel
      */
     private void addLog() {
-        logPanel = new LogPanel(this);
-        blueprintSelectionModel.setLogPanel(logPanel);
+        logger = new Logger(this);
+        blueprintSelectionModel.setLogger(logger);
     }
 
     /**
@@ -82,15 +84,17 @@ public class EditorFrame extends EditorWindows implements WindowListener {
         add(this.blueprintPanel, BorderLayout.WEST);
         add(this.settingsPanel, BorderLayout.NORTH);
         add(this.infoPanel, BorderLayout.CENTER);
-        add(this.logPanel, BorderLayout.SOUTH);
+        add(this.logger, BorderLayout.SOUTH);
         validate();
     }
+
     private void setTrackerPanels() {
         this.dataTracker = editorCore.getDataTracker();
         dataTracker.setDisplay(blueprintPanel.getBlueprintDisplay());
-        dataTracker.setDepartPanel(logPanel.getDepartPanel());
+        dataTracker.setDepartPanel(logger.getDepartPanel());
         dataTracker.setInfoPanel(infoPanel);
     }
+
     /**
      * Initializes and adds the menu bar
      */
@@ -118,15 +122,14 @@ public class EditorFrame extends EditorWindows implements WindowListener {
     }
 
     /**
-     *
      * All the methods below are overridden in order to limit the user ability to launch
      * only only a single editor per aircraft, but preserve the ability to open multiple editors
      * at once for different aircraft;
      */
     @Override
     public void windowClosed(WindowEvent e) {
-        if (settingsPanel.getCargoTradeFrame() != null) {
-            settingsPanel.getCargoTradeFrame().dispose();
+        if (settingsPanel.getCargoFrame() != null) {
+            settingsPanel.getCargoFrame().dispose();
         }
         editorCore.getWorld().getEditorTrack().remove(aircraft);
         this.windowClosing(e);

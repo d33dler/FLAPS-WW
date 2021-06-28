@@ -8,8 +8,7 @@ import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 
 public interface CargoUnitsListener extends ChangeListener {
     default void fireCargoUpdate(AircraftDataTracker dataTracker) {
-        dataTracker.performDepartureValidationCheck();
-        dataTracker.getDisplay().repaint();
-        dataTracker.refreshData();
+        ChangeListener.super.defaultUpdate(dataTracker);
     }
+
 }

@@ -5,7 +5,6 @@ import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import javax.swing.*;
@@ -36,10 +35,14 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
 
     public TableBuilder<T> model(DefaultTableModel model) {
         this.model = model;
-        this.init();
+        this.databaseTable = addTable();
         return this;
     }
-
+    public TableBuilder<T> size(int w, int h) {
+        this.WIDTH = w;
+        this.HEIGHT = h;
+        return this;
+    }
     public TableBuilder<T> area(CargoArea area) {
         this.cargoArea = area;
         return this;
@@ -60,22 +63,20 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
     public DatabaseTablePanel<CargoFreight> buildRemote() {
         DatabaseTablePanel<CargoFreight> tablesPanel = new TableBuilder<>() {
             @Override
-            protected void update() {
+            public void update() {
                 databaseTable.setModel(editorCore.getDatabaseBuilder().getDatabase(objectSet, CargoFreight.class));
                 editTableView(databaseTable, 2, 2);
                 super.update();
             }
         };
-        FileUtils.cloneFields(tablesPanel, TableBuilder.this, FileUtils.getFields(DatabaseTablePanel.class));
-        tablesPanel.add(new JScrollPane(databaseTable), pos);
+        init(tablesPanel,this);
         return tablesPanel;
     }
 
     @SneakyThrows
     public DatabaseTablePanel<CargoType> buildWarehouse() {
         DatabaseTablePanel<CargoType> tablesPanel = new TableBuilder<>();
-        FileUtils.cloneFields(tablesPanel, this, FileUtils.getFields(DatabaseTablePanel.class));
-        tablesPanel.add(new JScrollPane(databaseTable), pos);
+        init(tablesPanel,this);
         return tablesPanel;
     }
 
@@ -83,14 +84,13 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
     public DatabaseTablePanel<Passenger> buildPassengerDb() {
         DatabaseTablePanel<Passenger> tablesPanel = new TableBuilder<>() {
             @Override
-            protected void update() {
-
+            public void update() {
+                databaseTable.setModel(editorCore.getDatabaseBuilder().getDatabase(objectSet, Passenger.class));
+                super.update();
             }
         };
-        FileUtils.cloneFields(tablesPanel, this, FileUtils.getFields(DatabaseTablePanel.class));
-        tablesPanel.add(new JScrollPane(databaseTable), pos);
+        init(tablesPanel,this);
         return tablesPanel;
     }
-
 
 }

@@ -9,32 +9,36 @@ import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.AddCargoUnit;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.RemoveAllCargo;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.RemoveCargoUnit;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.fuel_comm.Refuel;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.pass_comm.AddPassenger;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.mediators.CargoMediator;
+import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
-import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoTradeFrame;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
-import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
+import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
+import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
- * Configurator class - creates the command objects and executes their methods,
+ * Controller class - creates the command objects and executes their methods,
  * also stores the commands in the UndoManagers edit archive.
  */
 @Getter
-public class Configurator {
+public class Controller {
     private Aircraft aircraft;
     private EditorCore editorCore;
     private AircraftDataTracker dataTracker;
@@ -42,14 +46,18 @@ public class Configurator {
     private AircraftLoadingModel aircraftLoadingModel;
     private UndoRedoManager undoRedoManager;
     @Setter
-    private LogPanel logPanel;
+    private Logger logger;
     @Setter
-    private CargoTradeFrame cargoTradeFrame;
+    private CargoMediator cargoMediator;
+    @Setter
+    private PassengerMediator passengerMediator;
     public static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());
     private List<Command> commandList;
+    @Setter
+    private SelectionCommand selectionCommand;
 
 
-    public Configurator(EditorCore editorCore) {
+    public Controller(EditorCore editorCore) {
         this.editorCore = editorCore;
         this.aircraft = editorCore.getAircraft();
         this.selectionModel = editorCore.getBpSelectionModel();
@@ -60,43 +68,50 @@ public class Configurator {
     }
 
     public void updateFuelStatus(FuelTank fuelTank, double level) {
-        commandList.add(new Refuel(this, fuelTank, level));
-        addExecuteLastCommand();
+        addExecuteLastCommand(new Refuel(this, fuelTank, level));
     }
 
     public void unitAdded(CargoType cargoType, int amount) {
-        commandList.add(new AddCargoUnit(this, (CargoArea) fetchArea(), cargoType, amount));
-        addExecuteLastCommand();
+        addExecuteLastCommand(new AddCargoUnit(this, (CargoArea) fetchArea(), cargoType, amount));
     }
 
     public void unitRemoved(CargoFreight cargoFreight, int amount) {
-        commandList.add(new RemoveCargoUnit(this, (CargoArea) fetchArea(), cargoFreight, amount));
-        addExecuteLastCommand();
+        addExecuteLastCommand(new RemoveCargoUnit(this, (CargoArea) fetchArea(), cargoFreight, amount));
     }
 
     public void allCargoRemove() {
-        commandList.add(new RemoveAllCargo(this, (CargoArea) fetchArea()));
-        addExecuteLastCommand();
+        addExecuteLastCommand(new RemoveAllCargo(this, (CargoArea) fetchArea()));
     }
 
-    public void updateHashedFreight(CargoFreight carriage) {
-        editorCore.getEditorFrame().getSettingsPanel().
-                getCargoTradeFrame().getFreightHashMap().
-                put(carriage.getId(), carriage);
+    public void passengerAdded(List<JTextField> set, PassengerType type) {
+        addExecuteLastCommand(new AddPassenger(this, fetchArea(),set,type));
+
     }
-    public void updateHashedPassenger(Passenger p) {
-        editorCore.getEditorFrame().getSettingsPanel().
-                getPassengerBoardFrame().getPassengerHashMap().
-                put(p.getTravellerId(), p);
+
+    public void passengerRemoved() {
+
     }
+
+    public void allPassengerRemove() {
+
+    }
+
+
+
     public Compartment fetchArea() {
-        return selectionModel.getCompartment();
+        return selectionModel.getFocusCompartment();
     }
 
 
-    private void addExecuteLastCommand() {
+    private void addExecuteLastCommand(Command command) {
+        commandList.add(command);
         undoRedoManager.mementoConfig(new ConfiguratorAction(lastCommand()));
         lastCommand().execute();
+    }
+
+    public void delegateCommand(ControlSolicitor solicitor) {
+        solicitor.performPriorUpdates();
+        if (selectionCommand != null) selectionCommand.confirmExec();
     }
 
     private Command lastCommand() {
@@ -110,6 +125,6 @@ public class Configurator {
     }
 
     public void relayConfiguratorMsg(String MSG) {
-        logPanel.updateLog(MSG);
+        logger.updateLog(MSG);
     }
 }

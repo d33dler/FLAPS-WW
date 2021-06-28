@@ -5,8 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
-import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -24,32 +23,29 @@ public class DatabaseTablePanel<T> extends JPanel {
     protected CargoArea cargoArea;
     protected EditorCore editorCore;
     protected JTable databaseTable;
-    protected JTextField searchDb, searchAircraft;
     protected JFrame holderFrame;
-    protected Set<CargoType> cargoTypeSet;
-    protected Set<CargoFreight> aircraftCargoUnits;
     protected Set<?> objectSet;
     protected String pos, tableName;
     protected DefaultTableModel model;
-
+    protected int WIDTH = 500 , HEIGHT = 300;
     /**
      *
      * Set common settings and construct
      * the appropriate JTable and its Table model according to the command;
      */
-    protected void init() {
-        setBorder(BorderFactory.createTitledBorder
+    protected void init(DatabaseTablePanel<?> tPanel, Object in) {
+        FileUtils.cloneFields(tPanel, in, FileUtils.getFields(DatabaseTablePanel.class));
+        tPanel.setBorder(BorderFactory.createTitledBorder
                 (BorderFactory.createEtchedBorder(1),
-                        tableName, TitledBorder.CENTER, TitledBorder.ABOVE_TOP));
-        setPreferredSize(new Dimension(500, 300));
-        databaseTable = addTable();
+                        tableName, TitledBorder.ABOVE_TOP, TitledBorder.TOP));
+        tPanel.add(new JScrollPane(databaseTable), pos);
     }
 
     /**
      *
      * @return configured JTable with the required JTable model;
      */
-    private JTable addTable() {
+    JTable addTable() {
         JTable table = new JTable() {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -60,7 +56,7 @@ public class DatabaseTablePanel<T> extends JPanel {
         table.getTableHeader().setReorderingAllowed(false);
         table.setFillsViewportHeight(true);
         table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        table.setPreferredScrollableViewportSize(new Dimension(500, 300));
+        table.setPreferredScrollableViewportSize(new Dimension(WIDTH, HEIGHT));
         return table;
     }
 
@@ -80,7 +76,7 @@ public class DatabaseTablePanel<T> extends JPanel {
     /**
      * repaints the view of the JTable
      */
-    protected void update() {
+    public void update() {
         databaseTable.repaint();
     }
 }

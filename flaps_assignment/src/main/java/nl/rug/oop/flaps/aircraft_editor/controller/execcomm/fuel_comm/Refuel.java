@@ -1,7 +1,7 @@
 package nl.rug.oop.flaps.aircraft_editor.controller.execcomm.fuel_comm;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -14,10 +14,10 @@ public class Refuel extends Command {
     private final double level;
     private double oldLevel;
 
-    public Refuel(Configurator configurator, FuelTank area, double level) {
+    public Refuel(Controller controller, FuelTank area, double level) {
         this.area = area;
         this.level = level;
-        this.configurator = configurator;
+        this.controller = controller;
     }
 
     /**
@@ -27,12 +27,12 @@ public class Refuel extends Command {
     @Override
     public void execute() {
         FuelTank area = (FuelTank) this.area;
-        Aircraft aircraft = configurator.getAircraft();
-        AircraftDataTracker dataTracker = configurator.getDataTracker();
+        Aircraft aircraft = controller.getAircraft();
+        AircraftDataTracker dataTracker = controller.getDataTracker();
         this.oldLevel = aircraft.getFuelAmountForFuelTank(area);
         if (dataTracker.performFuelCheck(oldLevel, level)) {
             aircraft.setFuelAmountForFuelTank(area, level);
-            configurator.getAircraftLoadingModel().fireFuelUpdate();
+            controller.getAircraftLoadingModel().fireFuelUpdate();
             fetchLogData(true);
         } else {
             fetchLogData(false);
@@ -43,9 +43,9 @@ public class Refuel extends Command {
     public void fetchLogData(boolean state) {
         String val = "Level: " + level + "; Fuel Tank: " + area.getName();
         if (state)
-            configurator.relayConfiguratorMsg(MessagesDb.FUEL_CONFIRM + val);
+            controller.relayConfiguratorMsg(MessagesDb.FUEL_CONFIRM + val);
         else
-            configurator.relayConfiguratorMsg(MessagesDb.FUEL_ERROR + val);
+            controller.relayConfiguratorMsg(MessagesDb.FUEL_ERROR + val);
     }
 
     /**
@@ -53,10 +53,10 @@ public class Refuel extends Command {
      */
     @Override
     public void undo() {
-        Aircraft aircraft = configurator.getAircraft();
+        Aircraft aircraft = controller.getAircraft();
         aircraft.setFuelAmountForFuelTank((FuelTank) area, oldLevel);
-        configurator.getAircraftLoadingModel().fireFuelUpdate();
-        configurator.relayConfiguratorMsg(MessagesDb.UNDO_FUEL + " : " + level);
+        controller.getAircraftLoadingModel().fireFuelUpdate();
+        controller.relayConfiguratorMsg(MessagesDb.UNDO_FUEL + " : " + level);
     }
 
     /**
@@ -65,6 +65,6 @@ public class Refuel extends Command {
     @Override
     public void redo() {
         execute();
-        configurator.relayConfiguratorMsg(MessagesDb.REDO_FUEL + " : " + level);
+        controller.relayConfiguratorMsg(MessagesDb.REDO_FUEL + " : " + level);
     }
 }

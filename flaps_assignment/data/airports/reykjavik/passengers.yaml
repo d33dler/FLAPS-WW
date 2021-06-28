@@ -1,0 +1,14 @@
+airport:
+  passengerTypes:
+    - name: Regular
+      id: GEN001
+    - name: Thief
+      id: TH001
+    - name: Karen
+      id: KAR001
+    - name: Pregnant Woman
+      id: PG001
+    - name: Rowdy bogan
+      id: RB001
+    - name: Terrorist
+      id: TER001

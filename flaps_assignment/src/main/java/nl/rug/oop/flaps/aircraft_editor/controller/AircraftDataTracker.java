@@ -3,6 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.controller;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
@@ -34,6 +35,7 @@ public class AircraftDataTracker {
     private DepartPanel departPanel;
     private Remapper remapper;
     private InfoPanel infoPanel;
+    private Controller controller;
 
     private double
             aircraftCapacity = 0,

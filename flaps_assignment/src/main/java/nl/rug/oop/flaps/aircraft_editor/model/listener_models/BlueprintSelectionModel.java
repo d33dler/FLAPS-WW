@@ -10,7 +10,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 
 import java.awt.geom.Point2D;
@@ -27,7 +27,7 @@ import java.util.*;
 public class BlueprintSelectionModel implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private AircraftDataTracker dataTracker;
-    private Compartment compartment = null;
+    private Compartment compartment = null, focusCompartment = null;
     private Remapper remapper;
 
 
@@ -38,7 +38,7 @@ public class BlueprintSelectionModel implements BlueprintSelectionListener {
     protected HashMap<String, List<BlueprintSelectionListener>> listenerMap;
 
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap;
-    private LogPanel logPanel;
+    private Logger logger;
     private static final double CURSOR_TOLERANCE = BlueprintDisplay.MK_SIZE * 3;
 
     public BlueprintSelectionModel() {
@@ -90,7 +90,7 @@ public class BlueprintSelectionModel implements BlueprintSelectionListener {
                 return Optional.empty();
             }
         } catch (NullPointerException e) {
-            logPanel.updateLog(MessagesDb.BP_CURSOR_OUT);
+            logger.updateLog(MessagesDb.BP_CURSOR_OUT);
             return Optional.empty();
         }
     }

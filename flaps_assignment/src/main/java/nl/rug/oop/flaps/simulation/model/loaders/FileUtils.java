@@ -82,7 +82,7 @@ public class FileUtils {
         return m.replaceAll(match -> " " + match.group().toLowerCase());
     }
 
-    public static List<Field> extractAllFieldsFiltered(Class<?> type) {
+    public static List<Field> getAllFieldsFiltered(Class<?> type) {
         List<Field> list = new ArrayList<>();
         List<Field> fieldsUnfiltered = getAllFields(type);
         fieldsUnfiltered.forEach(field -> {
@@ -98,7 +98,7 @@ public class FileUtils {
      * @param clazz some class
      * @return all declared fields (except static and non-primitive fields);
      */
-    public static List<Field> extractLocalFields(Class<?> clazz) {
+    public static List<Field> getLocalFields(Class<?> clazz) {
         List<Field> newFieldList = new ArrayList<>();
         List<Field> list = Arrays.asList(clazz.getDeclaredFields());
         list.forEach(field -> {
@@ -132,7 +132,6 @@ public class FileUtils {
 
     @SneakyThrows
     public static void cloneFields(Object obj_1, Object obj_2, List<Field> obj_1_fields) {
-        obj_1_fields.forEach(field -> System.out.println(field.getName()));
         obj_1_fields.forEach(field -> {
             field.setAccessible(true);
             try {
@@ -143,6 +142,25 @@ public class FileUtils {
         });
 
     }
-
-
+/*
+    public static Method getMethod(String methodId, Class<?> clazz, Annotation annotation) {
+        AtomicReference<Method> m = new AtomicReference<>();
+        AtomicBoolean found = new AtomicBoolean(false);
+        final List<Method> methods = clazz.getDeclaredMethods();
+        methods.forEach(method -> {
+            if(method.ge)
+        });
+        Arrays.stream(methods).sequential().forEach(method -> Arrays.stream(method.getAnnotation(annotation.getClass()).annotationType()
+                .getDeclaredFields()).sequential().forEach(field -> {
+            try {
+                if (field.get(annotation).equals(methodId)){
+                    m.set(method);
+                }
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }));
+        return m.get();
+    }
+*/
 }
