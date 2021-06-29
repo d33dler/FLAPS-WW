@@ -11,7 +11,7 @@ public class FlightSimApplication extends ApplicationTemplate {
         protected ApplicationTemplate.AppPanel wwjPanel;
         protected BasicOrbitView orbitView;
         protected SimulatorWindow simulatorWindow;
-        protected Dimension canvasSize = new Dimension(1024, 768);
+        protected Dimension canvasSize = new Dimension(1700, 1000);
 
     public FlightSimApplication() {
     }

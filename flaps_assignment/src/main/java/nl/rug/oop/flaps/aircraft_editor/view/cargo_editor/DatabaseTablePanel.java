@@ -3,8 +3,8 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargo_editor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.ControlSolicitor;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 
 import javax.swing.*;
@@ -20,13 +20,13 @@ import java.util.Set;
 @Setter
 @NoArgsConstructor
 public class DatabaseTablePanel<T> extends JPanel {
-    protected CargoArea cargoArea;
     protected EditorCore editorCore;
     protected JTable databaseTable;
     protected JFrame holderFrame;
     protected Set<?> objectSet;
     protected String pos, tableName;
     protected DefaultTableModel model;
+    protected ControlSolicitor solicitor;
     protected int WIDTH = 500 , HEIGHT = 300;
     /**
      *

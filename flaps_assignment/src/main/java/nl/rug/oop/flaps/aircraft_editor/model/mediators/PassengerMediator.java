@@ -7,10 +7,7 @@ import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashSet;
-import java.util.List;
+import java.util.*;
 
 @Setter
 @Getter
@@ -21,6 +18,7 @@ public class PassengerMediator implements ControlSolicitor {
     private HashMap<String, Passenger> passHashMap = new HashMap<>();
     private List<JTextField> blankSet = new ArrayList<>();
     private LinkedHashSet<JTextField> invalidFields = new LinkedHashSet<>();
+    private Set<Passenger> passengerSet;
 
     public PassengerMediator() {
     }
@@ -37,5 +35,10 @@ public class PassengerMediator implements ControlSolicitor {
     @Override
     public void performPriorUpdates() {
         //TODO
+    }
+
+    @Override
+    public Set<?> getDataSet() {
+        return passengerSet;
     }
 }

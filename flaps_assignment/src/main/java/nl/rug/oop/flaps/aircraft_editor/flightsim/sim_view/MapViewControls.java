@@ -23,19 +23,14 @@ public class MapViewControls {
     private void init() {
         this.layerTree = new LayerTree();
 
-        // Set up a layer to display the on-screen layer tree in the WorldWindow.
         this.hiddenLayer = new RenderableLayer();
         this.hiddenLayer.addRenderable(this.layerTree);
-        worldView.getWwd().getModel().getLayers().add(this.hiddenLayer);
+        worldView.getWwd().getModel().getLayers().add(hiddenLayer);
 
-        // Mark the layer as hidden to prevent it being included in the layer tree's model. Including the layer in
-        // the tree would enable the user to hide the layer tree display with no way of bringing it back.
         this.hiddenLayer.setValue(AVKey.HIDDEN, true);
 
-        // Refresh the tree model with the WorldWindow's current layer list.
         this.layerTree.getModel().refresh(worldView.getWwd().getModel().getLayers());
 
-        // Add a controller to handle input events on the layer tree.
         this.controller = new HotSpotController(worldView.getWwd());
     }
 }

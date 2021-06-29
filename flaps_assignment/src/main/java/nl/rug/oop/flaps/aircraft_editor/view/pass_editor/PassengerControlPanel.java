@@ -49,7 +49,8 @@ public class PassengerControlPanel extends GenericButtonPanel {
                 controller.delegateCommand(mediator);
                 execCommonUpdate();
             } else {
-                logger.notifyErrMsg(MessagesDb.REM_CARGO_ERR);
+                logger.notifyErrMsg(MessagesDb.REM_PASS_ERR);
+                controller.relayConfiguratorMsg(MessagesDb.REM_PASS_NEG);
             }
         }));
         add(newButton("RemoveAll", () -> {

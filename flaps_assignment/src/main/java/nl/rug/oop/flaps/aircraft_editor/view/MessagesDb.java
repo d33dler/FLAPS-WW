@@ -49,7 +49,8 @@ public class MessagesDb {//TODO transfer to yaml
     public static final String REM_PASS_POS = "Passenger was successfully removed from the boarding list ";
     public static final String REM_PASS_NEG = "Passenger could not be removed to the boarding list";
     public static final String REMALL_PASS_POS = "All passengers were deleted from the boarding list";
-    public static final String REMALL_PASS_UNDO = UNDO + "All deleted passengers were added back to the boarding list";
+    public static final String REMALL_PASS_UNDO = UNDO + "All passengers were added back to the boarding list";
+    public static final String REMALL_PASS_REDO = REDO + REMALL_PASS_POS;
     public static final String REM_PASS_UNDO = UNDO + ADD_PASS_POS;
     public static final String REM_PASS_REDO = REDO + REM_PASS_POS;
     public static final String ADD_PASS_UNDO = UNDO + REM_PASS_POS;

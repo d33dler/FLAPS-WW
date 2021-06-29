@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.pass_editor;
 
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
+import nl.rug.oop.flaps.aircraft_editor.view.generic_panels.GenericButtonPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SpecialComponent;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
@@ -19,16 +20,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class DataBlanksPanel extends JPanel {
+public class DataBlanksPanel extends GenericButtonPanel {
     private EditorCore core;
     private Aircraft aircraft;
     private PassengersFrame boardFrame;
     private List<Field> passFields = new ArrayList<>();
     private JComboBox<PassengerType> comboBox;
-    private static final int WIDTH = 500, HEIGHT = 500, F_WIDTH = 130, F_HEIGHT = 40, VAL_WDT = 400;
     private PassengerMediator mediator;
-    private final String TITLE = "Register Passenger", INV_IN = "Invalid input";
 
+    private static final String TITLE = "Register Passenger", INV_IN = "×";
+    private static final int WIDTH = 500, HEIGHT = 500, F_WIDTH = 130, F_HEIGHT = 40, VAL_WDT = 400;
     public static final Color
             R_BG = new Color(250, 74, 74, 81),
             OK_BG = new Color(146, 250, 76, 55);
@@ -50,6 +51,7 @@ public class DataBlanksPanel extends JPanel {
         this.passFields = FileUtils.getAllFieldsFiltered(Passenger.class);
         setUpBlanks();
         setUpComboBox();
+        setUpButtons();
     }
 
 
@@ -76,6 +78,15 @@ public class DataBlanksPanel extends JPanel {
         mediator.getBlankSet().add(blank);
         customizeBlankSlot(blankSlot, txtFieldHolder, fieldName);
         return blankSlot;
+    }
+    private void setUpButtons() {
+        JPanel btPanel = new JPanel(new FlowLayout());
+        btPanel.add(newButton("Clear fields", () -> {
+            mediator.getBlankSet().forEach(field -> {
+                field.setText("");
+            });
+        }));
+        add(btPanel);
     }
 
     private void customizeBlankSlot(JPanel blankSlot, JPanel txtFieldHolder, JLabel fieldName) {
@@ -153,7 +164,7 @@ public class DataBlanksPanel extends JPanel {
 
     private void setBorder(JTextField field, String title, Color bg) {
         field.setBorder(BorderFactory.createTitledBorder
-                (BorderFactory.createEtchedBorder(1), title, //TODO set border Color?
+                (BorderFactory.createEtchedBorder(1), title,
                         TitledBorder.BOTTOM, TitledBorder.BOTTOM));
         field.setBackground(bg);
     }

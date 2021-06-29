@@ -43,7 +43,7 @@ public class FlightSimFrame extends JFrame {
     private void init() {
         setLayout(new BorderLayout());
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setPreferredSize(new Dimension(1400, 1200));
+        setPreferredSize(new Dimension(1920, 1080));
         initWorld();
         addViewControls();
         addQuickAccessPanel();

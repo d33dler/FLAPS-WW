@@ -32,6 +32,11 @@ public class CargoMediator implements ControlSolicitor {
         }
     }
 
+    @Override
+    public Set<?> getDataSet() {
+        return null; //TODO
+    }
+
     /**
      * Store cargo type names and cargo freight IDs for fast retrieval during selections;
      * Storing is dynamical - based on current warehouse types and cargo area's freights;

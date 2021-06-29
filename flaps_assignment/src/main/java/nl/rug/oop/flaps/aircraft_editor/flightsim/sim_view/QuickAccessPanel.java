@@ -29,7 +29,7 @@ public class QuickAccessPanel extends JPanel implements SimWindowCallbackListene
     private static final double HEIGHT_LIM = 8e4, ZOOMOUT_LIM = 90;
     private JButton loadPlane;
     private GeographicCoordinates og, dest;
-    private static final double LAT_THOLD = 0.2, LONG_THOLD = 0.2, ELEV_THOLD = 1500;
+    private static final double LAT_THOLD = 0.3, LONG_THOLD = 0.3, ELEV_THOLD = 3000;
 
     public QuickAccessPanel(FlightSimFrame flightSimFrame, BasicOrbitView orbitView, EditorCore editorCore) {
         this.flightSimFrame = flightSimFrame;
@@ -67,7 +67,6 @@ public class QuickAccessPanel extends JPanel implements SimWindowCallbackListene
             @Override
             public void actionPerformed(ActionEvent e) {
                 travel(og.getLatitude(), og.getLongitude());
-                loadPlane.setEnabled(true);
             }
         });
         JButton arrival = new JButton("destination");
@@ -110,11 +109,9 @@ public class QuickAccessPanel extends JPanel implements SimWindowCallbackListene
         rollField.setPreferredSize(new Dimension(200, 25));
         rollField.setBackground(new Color(111, 51, 51, 223));
         this.azimuthField = new JTextField();
-        // azimuthField.setPreferredSize(new Dimension(200, 25));
         azimuthField.setColumns(10);
         azimuthField.setBackground(new Color(89, 123, 89, 216));
         this.elevateField = new JTextField();
-        // elevateField.setPreferredSize(new Dimension(200, 25));
         elevateField.setBackground(new Color(56, 89, 102, 216));
         elevateField.setColumns(10);
         textPanel.add(rollField);

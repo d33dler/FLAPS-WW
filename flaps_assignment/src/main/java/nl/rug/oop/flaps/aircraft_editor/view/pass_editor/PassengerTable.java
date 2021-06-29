@@ -13,7 +13,6 @@ import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Set;
 
 public class PassengerTable extends JPanel implements PassengerListener {
     private final EditorCore editorCore;
@@ -21,7 +20,7 @@ public class PassengerTable extends JPanel implements PassengerListener {
     private final PassengersFrame boardFrame;
     @Getter
     private DatabaseTablePanel<Passenger> passengerTable;
-    private Set<Passenger> passengerSet;
+
     private final String TITLE = "Passenger Database";
     private final int T_WIDTH = 850, T_HEIGHT = 300;
     private PassengerMediator mediator;
@@ -42,14 +41,15 @@ public class PassengerTable extends JPanel implements PassengerListener {
     }
 
     private void addTable() {
-        passengerSet = FileUtils.addUnitSet(boardFrame.getCabinArea(), aircraft.getCabinPassengers());
+        mediator.setPassengerSet(FileUtils.addUnitSet(boardFrame.getCabinArea(), aircraft.getCabinPassengers()));
         passengerTable = new TableBuilder<>()
                 .core(editorCore)
                 .frame(boardFrame)
-                .db(passengerSet)
+                .db(mediator.getPassengerSet())
                 .title(TITLE)
                 .size(T_WIDTH, T_HEIGHT)
-                .model(editorCore.getDatabaseBuilder().getDatabase(passengerSet, Passenger.class))
+                .model(editorCore.getDatabaseBuilder().getDatabase(mediator.getPassengerSet(), Passenger.class))
+                .mediator(mediator)
                 .pos(BorderLayout.CENTER)
                 .buildPassengerDb();
         add(passengerTable);

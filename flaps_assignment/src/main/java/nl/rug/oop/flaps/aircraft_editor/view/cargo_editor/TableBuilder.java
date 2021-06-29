@@ -1,8 +1,8 @@
 package nl.rug.oop.flaps.aircraft_editor.view.cargo_editor;
 
 import lombok.SneakyThrows;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.ControlSolicitor;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
@@ -38,16 +38,17 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
         this.databaseTable = addTable();
         return this;
     }
+
     public TableBuilder<T> size(int w, int h) {
         this.WIDTH = w;
         this.HEIGHT = h;
         return this;
     }
-    public TableBuilder<T> area(CargoArea area) {
-        this.cargoArea = area;
+
+    public TableBuilder<T> mediator(ControlSolicitor solicitor) {
+        this.solicitor = solicitor;
         return this;
     }
-
 
     public TableBuilder<T> editView(int st, int end) {
         editTableView(databaseTable, st, end);
@@ -69,14 +70,14 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
                 super.update();
             }
         };
-        init(tablesPanel,this);
+        init(tablesPanel, this);
         return tablesPanel;
     }
 
     @SneakyThrows
     public DatabaseTablePanel<CargoType> buildWarehouse() {
         DatabaseTablePanel<CargoType> tablesPanel = new TableBuilder<>();
-        init(tablesPanel,this);
+        init(tablesPanel, this);
         return tablesPanel;
     }
 
@@ -85,11 +86,12 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
         DatabaseTablePanel<Passenger> tablesPanel = new TableBuilder<>() {
             @Override
             public void update() {
+                objectSet = solicitor.getDataSet();
                 databaseTable.setModel(editorCore.getDatabaseBuilder().getDatabase(objectSet, Passenger.class));
                 super.update();
             }
         };
-        init(tablesPanel,this);
+        init(tablesPanel, this);
         return tablesPanel;
     }
 
