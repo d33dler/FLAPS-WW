@@ -15,6 +15,7 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
+import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import java.awt.geom.Point2D;
 
@@ -41,6 +42,7 @@ public class AircraftDataTracker {
             aircraftCapacity = 0,
             totalCargoLoadMass = 0,
             totalFuelLoadMass = 0,
+            totalPassengerPopMass = 0,
             totalAircraftLoadWeight = 0,
             totalAircraftWeight = 0,
             selectedAreaLoad = 0,
@@ -76,7 +78,7 @@ public class AircraftDataTracker {
                 .distanceTo(editorCore.getDestination().getGeographicCoordinates());
         this.defaultRange = aircraft.getType().getRange();
         this.aircraftRange = computeAircraftRange(totalFuelLoadMass);
-        this.emptyWeight =  aircraft.getType().getEmptyWeight();
+        this.emptyWeight = aircraft.getType().getEmptyWeight();
         this.maxTakeOffWeight = aircraft.getType().getMaxTakeoffWeight();
         this.maxLandingWeight = aircraft.getType().getMaxLandingWeight();
         this.cgTolerance = aircraft.getType().getCgTolerance();
@@ -104,7 +106,6 @@ public class AircraftDataTracker {
     }
 
     /**
-     *
      * @param amount weight of the cargo added to the cargo area by the user
      * @return true if the weight does not surpass any of the limiting parameters
      * (takeOff,Landing weight limits, area capacity..)
@@ -119,18 +120,18 @@ public class AircraftDataTracker {
                 && allCargo <= maxLandingWeight) {
             totalAircraftLoadWeight = allCargo;
             totalAircraftWeight += amount;
-            area.setLoadWeight(area.getLoadWeight()+amount);
+            area.setLoadWeight(area.getLoadWeight() + amount);
             return true;
         }
         return false;
     }
+
     public boolean performPassengerCheck(Cabin area, double weight) {
         double count = commercialData.getPassengerCount();
         return count < area.getSeats() && performWeightCheck(area, weight);
     }
 
     /**
-     *
      * @param oldLevel - fuel in kg in the tank area
      * @param newLevel - fuel in kg in the tank area
      * @return true if the new level does not surpass any of the limiting parameters
@@ -157,7 +158,6 @@ public class AircraftDataTracker {
     }
 
     /**
-     *
      * @return true if the computed decalage does not surpass the threshold tolerance of aircraft type;
      * We use the Pythagoras's theorem to compute the hypotenuse based on cathetuses(sides) obtained by calculating
      * the absolute value from subtraction from the default XY coordinate values of current Cg XY values and divide the results
@@ -173,7 +173,6 @@ public class AircraftDataTracker {
     }
 
     /**
-     *
      * @param totalFuel in all the aircraft's tanks
      * @return range based on the formula of fuel consumption and cruise speed
      */
@@ -183,7 +182,6 @@ public class AircraftDataTracker {
     }
 
     /**
-     *
      * @param area selected area Updates all native data plus the selected area specific data;
      */
     public void refreshData(Compartment area) {
@@ -227,7 +225,7 @@ public class AircraftDataTracker {
      */
     private void updateTotalLoadMass() {
         centerOfGravity_X = centerOfGravity_Y = 0.0;
-        totalCargoLoadMass = totalFuelLoadMass = 0;
+        totalCargoLoadMass = totalFuelLoadMass = totalPassengerPopMass = 0;
         aircraft.getCargoAreaContents().forEach((area, freightSet) ->
                 freightSet.forEach(freight -> {
                     totalCargoLoadMass += freight.getTotalWeight();
@@ -238,13 +236,21 @@ public class AircraftDataTracker {
             totalFuelLoadMass += amount;
             computeCenterOfGravity(tank, amount);
         });
-        this.totalAircraftLoadWeight = totalFuelLoadMass + totalCargoLoadMass;
-        this.totalAircraftWeight =  emptyWeight + totalFuelLoadMass + totalCargoLoadMass;
+        aircraft.getCabinPassengers().forEach((cabin, passengers) -> {
+                    for (Passenger p : passengers) {
+                        totalPassengerPopMass += Double.parseDouble(p.getWeight());
+                    }
+                    computeCenterOfGravity(cabin, totalPassengerPopMass);
+                }
+        );
+        this.totalAircraftLoadWeight = totalFuelLoadMass +
+                totalCargoLoadMass +
+                totalPassengerPopMass;
+        this.totalAircraftWeight = emptyWeight + totalAircraftLoadWeight;
     }
 
     /**
-     *
-     * @param area - currently examined area
+     * @param area   - currently examined area
      * @param weight - total weight of this particular area
      */
     private void computeCenterOfGravity(Compartment area, double weight) {
@@ -264,7 +270,6 @@ public class AircraftDataTracker {
     }
 
     /**
-     *
      * @param cgPos default position of the center of gravity according to the airplane type data;
      *              Methods remapCg, remaps it similarly to the way indicators are remapped;
      *              (only necessary for the initial (default) cG)

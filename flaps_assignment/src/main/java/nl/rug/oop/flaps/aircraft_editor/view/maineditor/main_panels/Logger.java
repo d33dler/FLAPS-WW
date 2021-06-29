@@ -146,7 +146,10 @@ public class Logger extends JPanel {
         return (java.time.LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd-MM-yyyy | HH:mm:ss")) + ": ");
     }
     public void notifyErrMsg(String string) {
-        JOptionPane.showMessageDialog(editorFrame.getSettingsPanel().getCargoFrame(),string,"!",JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(editorFrame.getSettingsPanel().getCargoFrame(),string,"Notice!",JOptionPane.ERROR_MESSAGE);
+    }
+    public void notifyConfirmMsg(String string) {
+        JOptionPane.showMessageDialog(editorFrame.getSettingsPanel().getCargoFrame(),string,"Info",JOptionPane.INFORMATION_MESSAGE);
     }
 
 }

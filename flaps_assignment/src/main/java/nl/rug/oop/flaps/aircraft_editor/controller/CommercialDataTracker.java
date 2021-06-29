@@ -45,6 +45,7 @@ public class CommercialDataTracker {
         computeFuelCosts();
         computeCargoRevenue();
         computeTotalProfit();
+        computePassengers();
     }
 
     /**
@@ -65,6 +66,12 @@ public class CommercialDataTracker {
             });
         });
     }
+    private void computePassengers() {
+        passengerCount = 0;
+        aircraft.getCabinPassengers().values().forEach(cabin ->
+                cabin.forEach(passenger -> passengerCount++));
+    }
+
 
     private void computeTotalProfit() {
         totalEstimatedProfit = cargoRevenue - estimatedFuelCosts;

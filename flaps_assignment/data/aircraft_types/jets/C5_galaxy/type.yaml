@@ -45,7 +45,7 @@ cabin:
     compartmentId: 300PASS_ml
     seats: 80
     x: 0
-    y: 0
+    y: 28
 
 cargoAreas:
   - name: Front Cargo Area

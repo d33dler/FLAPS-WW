@@ -6,8 +6,8 @@ import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.Selection
 /**
  * RemoveAllRelay - relays the RemoveAllCargo command
  */
-public class RemoveAllRelay extends SelectionCommand {
-    public RemoveAllRelay(Controller controller) {
+public class RemAllCargoRelay extends SelectionCommand {
+    public RemAllCargoRelay(Controller controller) {
       this.controller = controller;
     }
 

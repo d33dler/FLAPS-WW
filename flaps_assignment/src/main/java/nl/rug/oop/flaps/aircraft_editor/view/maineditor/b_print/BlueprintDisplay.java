@@ -96,14 +96,20 @@ public class BlueprintDisplay extends JPanel {
         }
         g2d.drawImage(this.cachedBpImage, (int) Remapper.BP_POS.x, (int) Remapper.BP_POS.y, this);
         addCoGindicator();
+        addCabinIndicator();
         addSpecificIndicators(aircraft.getType().getCargoAreas(), bpIcons.getCargoIcon(), C_ROYBLUE);
         addSpecificIndicators(aircraft.getType().getFuelTanks(), bpIcons.getFuelIcon(), C_HMAG);
         addSpecificIndicators(aircraft.getType().getEngines(), bpIcons.getEngineIcon(), ENGINE_TEMP);
-        addSpecificIndicators(aircraft.getType().getCabin(), bpIcons.getPassengerIcon(), C_CABIN);
     }
 
+    private int dynMK;
+    private boolean dynAdjust;
+
     private void addSpecificIndicators(List<?> list, Image icon, Color color) {
-        list.forEach(area -> addAreaIndicators((Compartment) area, icon, color));
+        list.forEach(area -> {
+            addAreaIndicators((Compartment) area, color);
+            addIndicator(remapper.getBlueprintCoords().get(area.hashCode()), dynMK, dynAdjust, icon);
+        });
     }
 
     /**
@@ -112,32 +118,30 @@ public class BlueprintDisplay extends JPanel {
      *             Configures the indicator according to the parameters
      *             and checks if the compartment is selected (if true - adjust indicator)
      */
-    private void addAreaIndicators(Compartment area, Image icon, Color c) {
-        int mk = MK_SIZE;
-        boolean adjust = false;
+    private void addAreaIndicators(Compartment area, Color c) {
+        dynMK = MK_SIZE;
+        dynAdjust = false;
         if (bpSelectionModel.getCompartment() != null && bpSelectionModel.getCompartment().equals(area)) {
             c = C_HGREEN;
-            mk *= 1.45;
-            adjust = true;
+            dynMK *= 1.45;
+            dynAdjust = true;
         }
         if (cursorHover != null && cursorHover.equals(area)) {
             c = C_HOVER;
-            mk *= 1.25;
+            dynMK *= 1.25;
             hover = true;
         }
         g2d.setColor(c);
-        addIndicator(area, mk, adjust, icon);
     }
 
     /**
-     * @param area   compartment of focus
+     * @param pos    position of the current area of focus
      * @param mk     indicator size
      * @param adjust true if the indicator's shape must be adjusted
      *               configures the shape of the indicators &
      * @param icon
      */
-    private void addIndicator(Compartment area, int mk, boolean adjust, Image icon) {
-        Point2D.Double pos = remapper.getLocalCoords().get(area.hashCode());
+    private void addIndicator(Point2D.Double pos, int mk, boolean adjust, Image icon) {
         int coordX = (int) (pos.x + OFFSET);
         int coordY = (int) (pos.y + OFFSET);
         if (adjust) {
@@ -163,6 +167,14 @@ public class BlueprintDisplay extends JPanel {
         g2d.fill(new RegularPolygon(coordX, coordY, MK_SIZE / 2, 10, 0));
     }
 
+    private void addCabinIndicator() {
+        double coordX = Remapper.BP_WIDTH - Remapper.BP_OFF;
+        double coordY = Remapper.BP_HEIGHT - Remapper.BP_OFF;
+        aircraft.getType().getCabin().forEach(cabin -> {
+            addAreaIndicators(cabin, C_CABIN);
+            addIndicator(new Point2D.Double(coordX, coordY), dynMK, dynAdjust, bpIcons.getPassengerIcon());
+        });
+    }
 
     @Override
     public String getToolTipText() {

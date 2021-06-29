@@ -44,6 +44,6 @@ public class CargoMediator implements ControlSolicitor {
 
     public void updateHashedFreight(CargoFreight carriage, int amount) {
         if (amount > 0) freightHashMap.put(carriage.getId(), carriage);
-        else freightHashMap.remove(carriage.getId()); //TODO check integrity
+        else freightHashMap.remove(carriage.getId());
     }
 }

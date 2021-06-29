@@ -4,6 +4,7 @@ import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.PassengerListener;
+import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.DatabaseTablePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.TableBuilder;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -23,11 +24,13 @@ public class PassengerTable extends JPanel implements PassengerListener {
     private Set<Passenger> passengerSet;
     private final String TITLE = "Passenger Database";
     private final int T_WIDTH = 850, T_HEIGHT = 300;
+    private PassengerMediator mediator;
 
     public PassengerTable(EditorCore editorCore, PassengersFrame boardFrame) {
         this.editorCore = editorCore;
         this.aircraft = editorCore.getAircraft();
         this.boardFrame = boardFrame;
+        this.mediator = boardFrame.getMediator();
         init();
     }
 
@@ -35,6 +38,7 @@ public class PassengerTable extends JPanel implements PassengerListener {
         editorCore.getAircraftLoadingModel().addListener(this);
         setLayout(new FlowLayout());
         addTable();
+        addTableListener(passengerTable.getDatabaseTable());
     }
 
     private void addTable() {
@@ -50,6 +54,16 @@ public class PassengerTable extends JPanel implements PassengerListener {
                 .buildPassengerDb();
         add(passengerTable);
     }
+    private void addTableListener(JTable table) {
+      table.getSelectionModel().addListSelectionListener(e -> {
+            if(!e.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()){
+                mediator.setSelectedPass(mediator.getPassHashMap().
+                        get(table.getValueAt(table.getSelectedRow(), 0).toString()));
+          }
+        });
+
+    }
+
 
     @Override
     public void firePassUpdate(AircraftDataTracker dataTracker) {

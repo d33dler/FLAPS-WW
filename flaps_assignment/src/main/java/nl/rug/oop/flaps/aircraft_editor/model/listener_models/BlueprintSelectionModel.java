@@ -27,7 +27,8 @@ import java.util.*;
 public class BlueprintSelectionModel implements BlueprintSelectionListener {
     private EditorCore editorCore;
     private AircraftDataTracker dataTracker;
-    private Compartment compartment = null, focusCompartment = null;
+    private Compartment compartment = null,
+            focusCompartment = null;
     private Remapper remapper;
 
 
@@ -102,7 +103,7 @@ public class BlueprintSelectionModel implements BlueprintSelectionListener {
      */
     private Optional<Compartment> identifyArea(Point2D.Double coords, Compartment compartment) {
         if (compartment != null) {
-            Point2D.Double closestAreaXY = editorCore.getRemapper().getLocalCoords().get(compartment.hashCode());
+            Point2D.Double closestAreaXY = editorCore.getRemapper().getBlueprintCoords().get(compartment.hashCode());
             double areaxy = closestAreaXY.getX() + closestAreaXY.getY();
             double cursorCoords = coords.x + coords.y;
             if (Math.abs(areaxy - cursorCoords) <= CURSOR_TOLERANCE) {

@@ -2,14 +2,13 @@ package nl.rug.oop.flaps.aircraft_editor.view.pass_editor;
 
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.pass_relay.AddPassRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.pass_relay.RemAllPassRelay;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.pass_relay.RemPassRelay;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
-import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.DatabaseTablePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.generic_panels.GenericButtonPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
-import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import javax.swing.*;
 import java.awt.*;
@@ -19,11 +18,11 @@ public class PassengerControlPanel extends GenericButtonPanel {
     private EditorCore editorCore;
     private PassengersFrame boardFrame;
     private Controller controller;
-    private DatabaseTablePanel<Passenger> passengerTable;
     private DataBlanksPanel panel;
     private JPanel confirmPanel;
     private PassengerMediator mediator;
     private Logger logger;
+
     public PassengerControlPanel(EditorCore editorCore, PassengersFrame boardFrame) {
         this.editorCore = editorCore;
         this.boardFrame = boardFrame;
@@ -36,27 +35,33 @@ public class PassengerControlPanel extends GenericButtonPanel {
 
     private void init() {
         add(newButton("Add", () -> {
-            if (!mediator.checkFields()) {
-                 controller.setSelectionCommand(new AddPassRelay(controller));
-                 controller.delegateCommand(mediator);
+            if (!mediator.checkFields() && mediator.getInvalidFields().size() == 0) {
+                controller.setSelectionCommand(new AddPassRelay(controller));
+                controller.delegateCommand(mediator);
+                execCommonUpdate();
             } else {
-                    logger.notifyErrMsg(MessagesDb.ADD_ERR);
+                logger.notifyErrMsg(MessagesDb.ADD_PASS_ERR);
             }
         }));
         add(newButton("Remove", () -> {
-            if (check(passengerTable)) {
-                controller.setSelectionCommand(new RemPassRelay());
+            if (check(boardFrame.getPassDb().getPassengerTable())) {
+                controller.setSelectionCommand(new RemPassRelay(controller));
                 controller.delegateCommand(mediator);
+                execCommonUpdate();
             } else {
-                 logger.notifyErrMsg(MessagesDb.REM_ERR);
+                logger.notifyErrMsg(MessagesDb.REM_CARGO_ERR);
             }
         }));
         add(newButton("RemoveAll", () -> {
-
-            //TODO confirm JPane
-            // settings.setSelectionCommand(new RemoveAllRelay(controller));
+            controller.setSelectionCommand(new RemAllPassRelay(controller));
+            controller.delegateCommand(mediator);
+            execCommonUpdate();
+            logger.notifyConfirmMsg(MessagesDb.REMALL_PASS_POS);
         }));
+    }
 
+    private void execCommonUpdate() {
+        boardFrame.getPassDb().getPassengerTable().getDatabaseTable().clearSelection();
     }
 
     private void initConfirmPanel() {

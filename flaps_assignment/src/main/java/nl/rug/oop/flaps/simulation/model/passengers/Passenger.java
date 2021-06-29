@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.FlapsDatabases;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.BlankField;
 import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
@@ -20,10 +21,11 @@ import java.util.Optional;
 @Setter
 @FlapsDatabases
 public class Passenger extends TravelMember {
-    @BlankField(id = "photo")
+    protected String database_id = Controller.freightIdGen.generateId();
+    @BlankField(id = "photo", pattern = "")
     protected Image passportPhoto;
     protected PassengerType type;
-    @BlankField(id = "weight")
+    @BlankField(id = "weight" , pattern = "[0-9]+", min = 10, max = 200)
     protected String weight;
     public final static int MIN_WEIGHT = 1, MAX_WEIGHT = 200;
     public final static int MIN_AGE = 10, MAX_AGE = 100;
@@ -46,7 +48,6 @@ public class Passenger extends TravelMember {
                 fieldList.forEach(field -> {
                     BlankField a = field.getAnnotation(BlankField.class);
                     if (a != null && a.id().equals(blank_id)) try {
-                        System.out.println("ANN: " + a.id() + " Fname:" + field.getName());
                         field.set(this, blank.getText());
                     } catch (IllegalAccessException e) {
                         System.out.println("Failed to set passenger data");

@@ -39,7 +39,7 @@ cabin:
     compartmentId: 300PASS_ml
     seats: 13
     x: 0
-    y: 0
+    y: 3.8
 
 engines:
   - name: Single Propeller Turbopop Engine

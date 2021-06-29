@@ -21,10 +21,9 @@ public class AddCargoUnit extends Command {
     private CargoFreight cargoFreight;
     private CargoMediator mediator;
     public AddCargoUnit(Controller controller, CargoArea area, CargoType cargoType, int amount) {
-        this.area = area;
+        super(controller,area, controller.getLogger());
         this.cargoType = cargoType;
         this.amount = amount;
-        this.controller = controller;
         this.mediator = controller.getCargoMediator();
     }
 
@@ -75,6 +74,7 @@ public class AddCargoUnit extends Command {
                 .getCargoAreaContents((CargoArea) area)
                 .remove(cargoFreight);
         controller.getAircraftLoadingModel().fireCargoUpdate();
+        mediator.updateHashedFreight(cargoFreight,-1);
         controller.relayConfiguratorMsg(MessagesDb.UNDO_ADD_C);
     }
 

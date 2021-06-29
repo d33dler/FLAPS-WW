@@ -15,9 +15,8 @@ public class Refuel extends Command {
     private double oldLevel;
 
     public Refuel(Controller controller, FuelTank area, double level) {
-        this.area = area;
+        super(controller,area, controller.getLogger());
         this.level = level;
-        this.controller = controller;
     }
 
     /**

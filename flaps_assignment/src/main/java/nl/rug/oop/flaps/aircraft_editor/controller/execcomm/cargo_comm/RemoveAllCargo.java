@@ -16,8 +16,7 @@ public class RemoveAllCargo extends Command {
     private HashMap<String, CargoFreight> freightSet = new HashMap<>();
 
     public RemoveAllCargo(Controller controller, CargoArea area) {
-        this.area = area;
-        this.controller = controller;
+        super(controller,area, controller.getLogger());
         getData();
     }
 

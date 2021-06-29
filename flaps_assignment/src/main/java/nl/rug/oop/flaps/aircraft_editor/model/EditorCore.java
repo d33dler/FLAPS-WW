@@ -34,8 +34,6 @@ public class EditorCore {
     private Airport source;
     private Airport destination;
 
-
-    private static final double NEARBY_UNIT_RANGE = 250.0;
     public static final String generalListenerID = "000AREA_abs";
     public static final String cargoListenerID = "100CARGO_ml";
     public static final String fuelListenerID = "100FUEL_ml";

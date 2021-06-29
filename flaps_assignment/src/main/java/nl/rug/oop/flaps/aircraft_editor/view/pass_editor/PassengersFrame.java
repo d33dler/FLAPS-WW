@@ -25,7 +25,7 @@ public class PassengersFrame extends EditorWindows  {
     private PassengerPanel passengerPanel;
     private DataBlanksPanel blanksPanel;
     private PassengerTable passDb;
-    private static final int WIDTH = 900, HEIGHT = 700;
+    private static final int WIDTH = 900, HEIGHT = 850;
 
     public PassengersFrame(EditorCore editorCore, Cabin cabinArea, PassengerPanel passengerPanel) {
         setTitle("Passenger Boarding Register");

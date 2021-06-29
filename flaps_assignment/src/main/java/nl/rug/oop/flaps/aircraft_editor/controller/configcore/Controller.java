@@ -12,6 +12,8 @@ import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.cargo_comm.RemoveCar
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.SelectionCommand;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.fuel_comm.Refuel;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.pass_comm.AddPassenger;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.pass_comm.RemoveAllPassengers;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.pass_comm.RemovePassenger;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
@@ -20,11 +22,13 @@ import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
 import javax.swing.*;
@@ -51,7 +55,7 @@ public class Controller {
     private CargoMediator cargoMediator;
     @Setter
     private PassengerMediator passengerMediator;
-    public static final Randomizers freightIdGen = new Randomizers(5, ThreadLocalRandom.current());
+    public static final Randomizers freightIdGen = new Randomizers(6, ThreadLocalRandom.current());
     private List<Command> commandList;
     @Setter
     private SelectionCommand selectionCommand;
@@ -84,18 +88,17 @@ public class Controller {
     }
 
     public void passengerAdded(List<JTextField> set, PassengerType type) {
-        addExecuteLastCommand(new AddPassenger(this, fetchArea(),set,type));
+        addExecuteLastCommand(new AddPassenger(this, fetchArea(), set, type));
 
     }
 
-    public void passengerRemoved() {
-
+    public void passengerRemoved(Passenger passenger) {
+        addExecuteLastCommand(new RemovePassenger(this, fetchArea(), passenger));
     }
 
     public void allPassengerRemove() {
-
+        addExecuteLastCommand(new RemoveAllPassengers(this, (Cabin) fetchArea()));
     }
-
 
 
     public Compartment fetchArea() {

@@ -16,9 +16,9 @@ public class RemoveCargoUnit extends Command {
     private CargoFreight cargoFreight;
     private final int amount, oldCount;
     private CargoMediator mediator;
+
     public RemoveCargoUnit(Controller controller, CargoArea area, CargoFreight cargoFreight, int amount) {
-        this.controller = controller;
-        this.area = area;
+        super(controller, area, controller.getLogger());
         this.cargoFreight = cargoFreight;
         this.amount = amount;
         this.oldCount = cargoFreight.getUnitCount();
@@ -35,6 +35,7 @@ public class RemoveCargoUnit extends Command {
         controller.getAircraftLoadingModel().fireCargoUpdate();
         fetchLogData(true);
     }
+
     /**
      * Sets the new unit count if the new amount is > 0 , else the cargo is removed ;
      */

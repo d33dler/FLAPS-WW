@@ -3,15 +3,13 @@ package nl.rug.oop.flaps.aircraft_editor.model.mediators;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.ControlSolicitor;
-import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.BlankField;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
 import javax.swing.*;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 
 @Setter
@@ -22,34 +20,18 @@ public class PassengerMediator implements ControlSolicitor {
     private PassengerType selectedType;
     private HashMap<String, Passenger> passHashMap = new HashMap<>();
     private List<JTextField> blankSet = new ArrayList<>();
-    private HashMap<BlankField, Field> fieldList = new HashMap<>();
+    private LinkedHashSet<JTextField> invalidFields = new LinkedHashSet<>();
 
     public PassengerMediator() {
-        setUpFieldAnnotations();
     }
 
-    public void updateHashedPassenger(Passenger p) {
-        passHashMap.put(p.getTravellerId(), p);
+    public void updateHashedPassenger(Passenger p, boolean b) {
+        if (b) passHashMap.put(p.getDatabase_id(), p);
+        else passHashMap.remove(p.getDatabase_id());
     }
 
     public boolean checkFields() {
-        blankSet.forEach(field -> {
-            System.out.println(field.getName());
-            if (field.getText() != null) {
-                System.out.println(field.getText());
-            }
-        });
-        return blankSet.stream().anyMatch(field -> field.getText() == null);
-
-    }
-
-    private void setUpFieldAnnotations() {
-        FileUtils.getAllFieldsFiltered(Passenger.class).forEach(field -> {
-            BlankField bf = field.getAnnotation(BlankField.class);
-            if (bf != null) {
-                fieldList.put(bf, field);
-            }
-        });
+        return blankSet.stream().anyMatch(field -> field.getText().isBlank());
     }
 
     @Override

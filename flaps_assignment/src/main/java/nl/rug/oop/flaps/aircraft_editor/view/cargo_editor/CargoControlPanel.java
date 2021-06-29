@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.cargo_editor;
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.cargo_relay.AddCargoRelay;
-import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.cargo_relay.RemoveAllRelay;
+import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.cargo_relay.RemAllCargoRelay;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.cargo_relay.RemoveCargoRelay;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
@@ -41,7 +41,7 @@ public class CargoControlPanel extends GenericButtonPanel {
                 controller.setSelectionCommand(new AddCargoRelay(controller));
                 settings.getCargoAmountPanel().enable();
             } else {
-                logger.notifyErrMsg(MessagesDb.ADD_ERR);
+                logger.notifyErrMsg(MessagesDb.ADD_CARGO_ERR);
             }
         }));
         add(newButton("Remove", () -> {
@@ -49,11 +49,11 @@ public class CargoControlPanel extends GenericButtonPanel {
                 controller.setSelectionCommand(new RemoveCargoRelay(controller));
                 settings.getCargoAmountPanel().enable();
             } else {
-                logger.notifyErrMsg(MessagesDb.REM_ERR);
+                logger.notifyErrMsg(MessagesDb.REM_CARGO_ERR);
             }
         }));
         add(newButton("RemoveAll", () -> {
-            controller.setSelectionCommand(new RemoveAllRelay(controller));
+            controller.setSelectionCommand(new RemAllCargoRelay(controller));
             settings.getCargoAmountPanel().question();
         }));
     }

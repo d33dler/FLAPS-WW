@@ -30,7 +30,7 @@ cabin:
     compartmentId: 300PASS_ml
     seats: 245
     x: 0
-    y: 0
+    y: 26
 cargoAreas:
   - name: Front Lower-Deck Compartment
     compartmentId: 100CARGO_ml

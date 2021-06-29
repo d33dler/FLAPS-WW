@@ -9,4 +9,7 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface BlankField {
     String  id() default "0";
+    String pattern() default "[a-zA-Z0-9]{1,50}";
+    int max() default -1;
+    int min() default -1;
 }

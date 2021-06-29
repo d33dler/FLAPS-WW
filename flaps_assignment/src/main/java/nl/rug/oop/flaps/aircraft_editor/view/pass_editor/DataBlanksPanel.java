@@ -15,9 +15,9 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 public class DataBlanksPanel extends JPanel {
     private EditorCore core;
@@ -25,9 +25,13 @@ public class DataBlanksPanel extends JPanel {
     private PassengersFrame boardFrame;
     private List<Field> passFields = new ArrayList<>();
     private JComboBox<PassengerType> comboBox;
-    private static final int WIDTH = 400, HEIGHT = 300, F_WIDTH = 400, F_HEIGHT = 30;
+    private static final int WIDTH = 500, HEIGHT = 500, F_WIDTH = 130, F_HEIGHT = 40, VAL_WDT = 400;
     private PassengerMediator mediator;
-    private final String TITLE = "Register Passenger";
+    private final String TITLE = "Register Passenger", INV_IN = "Invalid input";
+
+    public static final Color
+            R_BG = new Color(250, 74, 74, 81),
+            OK_BG = new Color(146, 250, 76, 55);
 
     public DataBlanksPanel(EditorCore core, Aircraft aircraft, PassengersFrame boardFrame) {
         this.core = core;
@@ -52,8 +56,7 @@ public class DataBlanksPanel extends JPanel {
     private void setUpBlanks() {
         for (Field field : passFields) {
             field.setAccessible(true);
-            if (FileUtils.isFieldPrimitiveDeserializable(field)
-                    && !Modifier.isStatic(field.getModifiers())) {
+            if (field.getAnnotation(BlankField.class) != null) {
                 JPanel fieldPanel = createBlankSlot(field);
                 add(new SpecialComponent(fieldPanel));
             }
@@ -62,14 +65,23 @@ public class DataBlanksPanel extends JPanel {
 
     private JPanel createBlankSlot(Field field) {
         JPanel blankSlot = new JPanel();
-        blankSlot.setLayout(new GridLayout(1, 2));
+        blankSlot.setLayout(new BoxLayout(blankSlot, BoxLayout.LINE_AXIS));
         JLabel fieldName = FileUtils.getFormattedName(field);
+        fieldName.setHorizontalAlignment(SwingConstants.LEFT);
+        fieldName.setPreferredSize(new Dimension(F_WIDTH, F_HEIGHT));
         JTextField blank = createCustomTextField(field.getAnnotation(BlankField.class));
-        blank.setColumns(13);
+        JPanel txtFieldHolder = new JPanel(new BorderLayout());
+        blank.setPreferredSize(new Dimension(VAL_WDT, F_HEIGHT));
+        txtFieldHolder.add(new SpecialComponent(blank), BorderLayout.CENTER);
         mediator.getBlankSet().add(blank);
-        blankSlot.add(fieldName);
-        blankSlot.add(blank);
+        customizeBlankSlot(blankSlot, txtFieldHolder, fieldName);
         return blankSlot;
+    }
+
+    private void customizeBlankSlot(JPanel blankSlot, JPanel txtFieldHolder, JLabel fieldName) {
+        blankSlot.add(fieldName, LEFT_ALIGNMENT);
+        blankSlot.add(txtFieldHolder);
+        blankSlot.setBorder(BorderFactory.createEtchedBorder());
     }
 
     private void setUpComboBox() {
@@ -90,25 +102,70 @@ public class DataBlanksPanel extends JPanel {
             JTextField blank = new JTextField();
             blank.setName(bf.id());
             blank.getDocument().addDocumentListener(new DocumentListener() {
+                public void checkConstraints() {
+                    if (!blank.getText().isBlank()
+                            && fieldCheck(blank, bf)
+                            && bf.min() != -1) {
+                        boundsCheck(blank, bf);
+                    }
+                    if (blank.getText().isBlank()) invalidate(blank);
+                }
 
                 @Override
                 public void insertUpdate(DocumentEvent e) {
-
+                    checkConstraints();
                 }
 
                 @Override
                 public void removeUpdate(DocumentEvent e) {
-
+                    checkConstraints();
                 }
 
                 @Override
                 public void changedUpdate(DocumentEvent e) {
-
+                    checkConstraints();
                 }
             });
             return blank;
         }
         return null;
+    }
+
+    private boolean fieldCheck(JTextField field, BlankField bf) {
+        if (!field.getText().matches(bf.pattern())) {
+            invalidate(field);
+            return false;
+        } else {
+            validate(field);
+            return true;
+        }
+    }
+
+    private void boundsCheck(JTextField field, BlankField bf) {
+        int val = Integer.parseInt(field.getText());
+        if (val < bf.min() || val > bf.max()) invalidate(field);
+        else validate(field);
+    }
+
+    private void setBorder(JTextField field, Color bg) {
+        setBorder(field, "✔", bg);
+    }
+
+    private void setBorder(JTextField field, String title, Color bg) {
+        field.setBorder(BorderFactory.createTitledBorder
+                (BorderFactory.createEtchedBorder(1), title, //TODO set border Color?
+                        TitledBorder.BOTTOM, TitledBorder.BOTTOM));
+        field.setBackground(bg);
+    }
+
+    private void invalidate(JTextField field) {
+        mediator.getInvalidFields().add(field);
+        setBorder(field, INV_IN, R_BG);
+    }
+
+    private void validate(JTextField field) {
+        mediator.getInvalidFields().remove(field);
+        setBorder(field, OK_BG);
     }
 
     private void setBoxSelect() {

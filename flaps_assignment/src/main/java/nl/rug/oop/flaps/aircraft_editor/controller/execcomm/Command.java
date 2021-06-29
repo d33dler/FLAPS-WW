@@ -11,9 +11,16 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 public abstract class Command {
     protected Controller controller;
     protected Compartment area;
-
     @Getter
-    private Logger logger;
+    protected Logger logger;
+
+    public Command(Controller controller, Compartment area, Logger logger) {
+        this.controller = controller;
+        this.area = area;
+        this.logger = logger;
+    }
+
+
     public abstract void execute();
     public abstract void fetchLogData(boolean state);
     public abstract void undo();
