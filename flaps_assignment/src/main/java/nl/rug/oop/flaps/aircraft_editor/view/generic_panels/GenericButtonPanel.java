@@ -11,6 +11,11 @@ import java.util.List;
 public abstract class GenericButtonPanel extends JPanel {
 
     protected List<JButton> buttonList = new ArrayList<>();
+    /**
+     * After click side-effects
+     */
+    public static final int SET_OFF = 0, SET_ON = 1;
+    private boolean after_click = true;
 
     protected JButton newButton(String text, Runnable r) {
         JButton button = new JButton(text);
@@ -18,17 +23,40 @@ public abstract class GenericButtonPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 r.run();
+                if (!after_click) {
+                    button.setEnabled(false);
+                }
             }
         });
         buttonList.add(button);   //list for special purposes
         return button;
     }
+
     protected JButton newButton(String text, Runnable r, boolean b) {
-        JButton bt = newButton(text,r);
+        JButton bt = newButton(text, r);
         bt.setEnabled(b);
         return bt;
     }
-    //TODO generify JTextfield creation
+
+    protected JButton newButton(String text, Runnable r, int c) {
+        after_click = c == 1;
+        JButton bt = newButton(text, r);
+        return bt;
+    }
+
+    protected JButton newButton(String text, Runnable r, boolean b, int c) {
+        JButton bt = newButton(text, r, c);
+        bt.setEnabled(b);
+        return bt;
+    }
+
+    protected JButton newButton(String text, Runnable r, String s) {
+        JButton bt = newButton(text, r);
+        bt.setToolTipText(s);
+        return bt;
+
+    }
+
 
     protected boolean check(DatabaseTablePanel<?> panel) {
         return !panel.getDatabaseTable().getSelectionModel().isSelectionEmpty();

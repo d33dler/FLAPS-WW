@@ -49,6 +49,6 @@ public class SpriteClickListener extends MouseAdapter {
 
     public void performCheck() {
         JButton openConfig = world.getFlapsFrame().getAircraftPanel().getOpenConfigurer();
-        openConfig.setEnabled(!world.getEditorTrack().contains(aircraft));
+        openConfig.setEnabled(!world.getEditorTrack().containsKey(aircraft));
     }
 }

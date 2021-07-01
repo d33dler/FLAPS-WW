@@ -128,20 +128,24 @@ public class EditorFrame extends EditorWindows implements WindowListener {
      */
     @Override
     public void windowClosed(WindowEvent e) {
-        if (settingsPanel.getCargoFrame() != null) {
-            settingsPanel.getCargoFrame().dispose();
-        }
-        editorCore.getWorld().getEditorTrack().remove(aircraft);
+        terminate();
         this.windowClosing(e);
     }
 
     @Override
     public void windowClosing(WindowEvent e) {
-        boolean check = editorCore.getWorld().getSelectionModel().getSelectedAircraft().
-                getIdentifier().equals(aircraft.getIdentifier());
-        if (check) {
+        terminate();
+        Aircraft aircraft = editorCore.getWorld().getSelectionModel().getSelectedAircraft();
+        if (aircraft != null && aircraft.getIdentifier().equals(this.aircraft.getIdentifier())) {
             configInitButton.setEnabled(true);
         }
+    }
+    private void terminate(){
+        if (settingsPanel.getCargoFrame() != null) {
+            settingsPanel.getCargoFrame().dispose();
+        }
+        editorCore.getWorld().getEditorTrack().remove(aircraft);
+        editorCore.getDestination().setHasEditor(false);
     }
 
     @Override

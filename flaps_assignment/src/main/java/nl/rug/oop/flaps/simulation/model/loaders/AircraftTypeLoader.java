@@ -5,6 +5,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.aircraft.FuelType;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;

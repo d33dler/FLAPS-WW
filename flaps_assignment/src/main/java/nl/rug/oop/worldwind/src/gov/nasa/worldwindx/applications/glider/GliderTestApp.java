@@ -28,6 +28,7 @@
 package gov.nasa.worldwindx.applications.glider;
 
 import gov.nasa.worldwind.WorldWindow;
+import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.util.*;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
@@ -49,8 +50,8 @@ public class GliderTestApp extends ApplicationTemplate {
 
     public static class GliderAppPanel extends AppPanel {
 
-        public GliderAppPanel(Dimension canvasSize, boolean includeStatusBar) {
-            super(canvasSize, includeStatusBar);
+        public GliderAppPanel(SimWindowChangeModel simChangeModel, Dimension canvasSize, boolean includeStatusBar) {
+            super(simChangeModel, canvasSize, includeStatusBar);
         }
 
         @Override
@@ -66,8 +67,8 @@ public class GliderTestApp extends ApplicationTemplate {
         }
 
         @Override
-        protected AppPanel createAppPanel(Dimension canvasSize, boolean includeStatusBar) {
-            return new GliderAppPanel(canvasSize, includeStatusBar);
+        protected AppPanel createAppPanel( Dimension canvasSize, boolean includeStatusBar) {
+            return new GliderAppPanel(null, canvasSize, includeStatusBar);
         }
     }
 

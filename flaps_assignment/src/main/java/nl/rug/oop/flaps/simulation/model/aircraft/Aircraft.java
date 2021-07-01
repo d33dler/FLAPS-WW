@@ -155,8 +155,11 @@ public class Aircraft implements Comparable<Aircraft> {
     }
 
     public void unLoadAircraft(Aircraft aircraft, AircraftDataTracker dataTracker, Logger logger) {
-        this.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
-        this.removeAllCargo(logger);
+        aircraft.removeFuel(aircraft.getFuelConsumption(dataTracker.getTravelDistance()));
+        aircraft.removeAllCargo(logger);
+    }
+    private void removeAllPassengers() {
+        cabinPassengers.forEach(((cabin, passengers) -> passengers.clear()));
     }
 
     @Override

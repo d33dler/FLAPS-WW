@@ -153,8 +153,7 @@ public class AircraftDataTracker {
      */
     public void performDepartureValidationCheck() {
         departPanel.getDepartButton().setEnabled(aircraftRange >= travelDistance
-                && validateDecalage()
-                && commercialData.getDestination().canAcceptIncomingAircraft());
+                && validateDecalage());
     }
 
     /**

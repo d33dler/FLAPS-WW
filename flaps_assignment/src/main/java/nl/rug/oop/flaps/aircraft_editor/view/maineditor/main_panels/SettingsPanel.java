@@ -15,7 +15,8 @@ import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.FuelPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.PassengerPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.PassengersFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.ViewUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -103,7 +104,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         this.areaData.setText("Selected compartment:\n");
         for (var field : FileUtils.getAllFields(area.getClass())) {
             field.setAccessible(true);
-            this.areaData.append(FileUtils.toNiceCase(field.getName()) + ": " + field.get(area).toString() + "\n");
+            this.areaData.append(ViewUtils.toNiceCase(field.getName()) + ": " + field.get(area).toString() + "\n");
         }
     }
 

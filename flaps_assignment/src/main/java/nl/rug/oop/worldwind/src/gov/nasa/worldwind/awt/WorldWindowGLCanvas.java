@@ -27,21 +27,30 @@
  */
 package gov.nasa.worldwind.awt;
 
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLCapabilitiesChooser;
+import com.jogamp.opengl.GLCapabilitiesImmutable;
+import com.jogamp.opengl.awt.GLCanvas;
 import gov.nasa.worldwind.*;
-import gov.nasa.worldwind.avlist.*;
+import gov.nasa.worldwind.avlist.AVKey;
+import gov.nasa.worldwind.avlist.AVList;
 import gov.nasa.worldwind.cache.GpuResourceCache;
 import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.exception.WWRuntimeException;
+import gov.nasa.worldwind.flaps_interfaces.SimWindowCallbackListener;
+import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.pick.PickedObjectList;
-import gov.nasa.worldwind.util.*;
-
-import com.jogamp.opengl.*;
-import com.jogamp.opengl.awt.GLCanvas;
+import gov.nasa.worldwind.util.BasicGLCapabilitiesChooser;
+import gov.nasa.worldwind.util.Logging;
+import gov.nasa.worldwind.util.PerformanceStatistic;
 
 import java.awt.*;
-import java.beans.*;
-import java.util.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * <code>WorldWindowGLCanvas</code> is a heavyweight AWT component for displaying WorldWind {@link Model}s (globe and
@@ -76,18 +85,25 @@ import java.util.*;
  * @author Tom Gaskins
  * @version $Id: WorldWindowGLCanvas.java 2924 2015-03-26 01:32:02Z tgaskins $
  */
-public class WorldWindowGLCanvas extends GLCanvas implements WorldWindow, PropertyChangeListener {
+public class WorldWindowGLCanvas extends GLCanvas implements WorldWindow, PropertyChangeListener, SimWindowCallbackListener {
     /**
      * The drawable to which {@link WorldWindow} methods are delegated.
      */
     protected final WorldWindowGLDrawable wwd; // WorldWindow interface delegates to wwd
 
+
+    public void setSimWindowChangeModel(SimWindowChangeModel simWindowChangeModel) {
+        this.simWindowChangeModel = simWindowChangeModel;
+    }
+
+    private SimWindowChangeModel simWindowChangeModel;
     /**
      * Constructs a new <code>WorldWindowGLCanvas</code> on the default graphics device.
      */
     public WorldWindowGLCanvas() {
 
         super(Configuration.getRequiredGLCapabilities(), new BasicGLCapabilitiesChooser(), null);
+
         try {
             this.wwd = ((WorldWindowGLDrawable) WorldWind.createConfigurationComponent(AVKey.WORLD_WINDOW_CLASS_NAME));
             this.wwd.initDrawable(this);
@@ -103,8 +119,12 @@ public class WorldWindowGLCanvas extends GLCanvas implements WorldWindow, Proper
             Logging.logger().severe(message);
             throw new WWRuntimeException(message, e);
         }
+
     }
 
+    public void  addSimListener(){
+        simWindowChangeModel.addListener(this);
+    }
     /**
      * Constructs a new <code>WorldWindowGLCanvas</code> on the default graphics device and shares graphics resources
      * with another <code>WorldWindow</code>.
@@ -279,6 +299,12 @@ public class WorldWindowGLCanvas extends GLCanvas implements WorldWindow, Proper
         this.repaint();
     }
 
+    @Override
+    public void repaint() {
+        super.repaint();
+
+    }
+
     public void redrawNow() {
         this.wwd.redrawNow();
     }
@@ -428,5 +454,10 @@ public class WorldWindowGLCanvas extends GLCanvas implements WorldWindow, Proper
 
     public Collection<PerformanceStatistic> getPerFrameStatistics() {
         return this.wwd.getPerFrameStatistics();
+    }
+
+    @Override
+    public void windowStateChanged(Position userPosition) {
+
     }
 }

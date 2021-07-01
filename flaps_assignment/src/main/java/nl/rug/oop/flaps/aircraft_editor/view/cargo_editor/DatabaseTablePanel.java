@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.ControlSolicitor;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;

@@ -30,7 +30,6 @@ public class BlueprintDisplay extends JPanel {
     private Remapper remapper;
     public static final int MK_SIZE = 18;
     private final static int OFFSET = MK_SIZE / 2;
-    private final BlueprintIcons bpIcons;
     private boolean hover;
     @Setter
     private Compartment cursorHover;
@@ -62,7 +61,6 @@ public class BlueprintDisplay extends JPanel {
         this.aircraft = aircraft;
         this.cargoModel = blueprintPanel.getModel().getAircraftLoadingModel();
         this.remapper = bpModel.getRemapper();
-        this.bpIcons = new BlueprintIcons();
         setBackground(BP_BG);
         getSizes();
     }
@@ -97,9 +95,9 @@ public class BlueprintDisplay extends JPanel {
         g2d.drawImage(this.cachedBpImage, (int) Remapper.BP_POS.x, (int) Remapper.BP_POS.y, this);
         addCoGindicator();
         addCabinIndicator();
-        addSpecificIndicators(aircraft.getType().getCargoAreas(), bpIcons.getCargoIcon(), C_ROYBLUE);
-        addSpecificIndicators(aircraft.getType().getFuelTanks(), bpIcons.getFuelIcon(), C_HMAG);
-        addSpecificIndicators(aircraft.getType().getEngines(), bpIcons.getEngineIcon(), ENGINE_TEMP);
+        addSpecificIndicators(aircraft.getType().getCargoAreas(), BlueprintIcons.cargoIcon, C_ROYBLUE);
+        addSpecificIndicators(aircraft.getType().getFuelTanks(), BlueprintIcons.fuelIcon, C_HMAG);
+        addSpecificIndicators(aircraft.getType().getEngines(), BlueprintIcons.engineIcon, ENGINE_TEMP);
     }
 
     private int dynMK;
@@ -172,7 +170,7 @@ public class BlueprintDisplay extends JPanel {
         double coordY = Remapper.BP_HEIGHT - Remapper.BP_OFF;
         aircraft.getType().getCabin().forEach(cabin -> {
             addAreaIndicators(cabin, C_CABIN);
-            addIndicator(new Point2D.Double(coordX, coordY), dynMK, dynAdjust, bpIcons.getPassengerIcon());
+            addIndicator(new Point2D.Double(coordX, coordY), dynMK, dynAdjust, BlueprintIcons.passengerIcon);
         });
     }
 

@@ -31,7 +31,6 @@ import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
-import javax.swing.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
@@ -87,8 +86,8 @@ public class Controller {
         addExecuteLastCommand(new RemoveAllCargo(this, (CargoArea) fetchArea()));
     }
 
-    public void passengerAdded(List<JTextField> set, PassengerType type) {
-        addExecuteLastCommand(new AddPassenger(this, fetchArea(), set, type));
+    public void passengerAdded( PassengerType type) {
+        addExecuteLastCommand(new AddPassenger(this, fetchArea(), type));
 
     }
 

@@ -31,6 +31,7 @@ package gov.nasa.worldwind;
 import gov.nasa.worldwind.avlist.AVList;
 import gov.nasa.worldwind.cache.GpuResourceCache;
 import gov.nasa.worldwind.event.*;
+import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.pick.PickedObjectList;
 import gov.nasa.worldwind.util.PerformanceStatistic;
@@ -76,6 +77,8 @@ public interface WorldWindow extends AVList
      */
     View getView();
 
+    void setSimWindowChangeModel(SimWindowChangeModel simWindowChangeModel);
+    void addSimListener();
     /**
      * Sets the model to display in this window and the view used to display it. If <code>null</code> is specified for
      * the model, the current model, if any, is disassociated with the window. If <code>null</code> is specified for the

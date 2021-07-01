@@ -8,7 +8,7 @@ import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.DatabaseTablePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.TableBuilder;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 
 import javax.swing.*;

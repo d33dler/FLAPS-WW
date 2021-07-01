@@ -76,7 +76,7 @@ public class Shapes {
         
         public AppFrame() {
             // Create the WorldWindow.
-            this.wwjPanel = new ApplicationTemplate.AppPanel(this.canvasSize, true);
+            this.wwjPanel = new ApplicationTemplate.AppPanel(null,this.canvasSize, true);
             this.wwjPanel.setPreferredSize(canvasSize);
             
             ApplicationTemplate.insertBeforePlacenames(this.wwjPanel.getWwd(), layer);

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
+import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view.FlightSimFrame;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
@@ -33,7 +34,7 @@ public class EditorCore {
     private GeographicCoordinates originCoordinates;
     private Airport source;
     private Airport destination;
-
+    private FlightSimFrame flightSimFrame;
     public static final String generalListenerID = "000AREA_abs";
     public static final String cargoListenerID = "100CARGO_ml";
     public static final String fuelListenerID = "100FUEL_ml";

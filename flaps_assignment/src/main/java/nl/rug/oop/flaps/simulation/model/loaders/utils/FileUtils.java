@@ -1,12 +1,9 @@
-package nl.rug.oop.flaps.simulation.model.loaders;
+package nl.rug.oop.flaps.simulation.model.loaders.utils;
 
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import org.apache.commons.lang3.ClassUtils;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.swing.*;
-import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -15,11 +12,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.*;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -58,11 +52,6 @@ public class FileUtils {
                 .orElseThrow(() -> new IOException("No match found for pattern " + pattern + " in directory " + directory + "."));
     }
 
-    public static String toSnakeCase(String camelCase) {
-        Matcher m = Pattern.compile("(?<=[a-z])[A-Z]").matcher(camelCase);
-        return m.replaceAll(match -> "_" + match.group().toLowerCase());
-    }
-
     public static boolean isFieldPrimitiveDeserializable(Field field) {
         return ClassUtils.isPrimitiveOrWrapper(field.getType()) ||
                 field.getType() == String.class ||
@@ -75,11 +64,6 @@ public class FileUtils {
             fields.addAll(Arrays.asList(c.getDeclaredFields()));
         }
         return fields;
-    }
-
-    public static String toNiceCase(String camelCase) {
-        Matcher m = Pattern.compile("(?<=[a-z])[A-Z]").matcher(camelCase);
-        return m.replaceAll(match -> " " + match.group().toLowerCase());
     }
 
     public static List<Field> getAllFieldsFiltered(Class<?> type) {
@@ -114,18 +98,6 @@ public class FileUtils {
         return Arrays.asList(clazz.getDeclaredFields());
     }
 
-    /**
-     * @param field field used to collect the name
-     * @return formatted field name
-     */
-    public static JLabel getFormattedName(Field field) {
-        JLabel fieldName = new JLabel();
-        String format = StringUtils.capitalize(toNiceCase(field.getName())) + " : ";
-        fieldName.setText(format);
-        fieldName.setFont(new Font(Font.DIALOG, Font.BOLD, 14));
-        return fieldName;
-    }
-
     public static <K, V> Set<K> addUnitSet(V area, Map<V, Set<K>> setMap) {
         return setMap.computeIfAbsent(area, k -> new HashSet<>());
     }
@@ -138,29 +110,7 @@ public class FileUtils {
                 field.set(obj_1, field.get(obj_2));
             } catch (IllegalAccessException ignored) {
             }
-
         });
+    }
 
-    }
-/*
-    public static Method getMethod(String methodId, Class<?> clazz, Annotation annotation) {
-        AtomicReference<Method> m = new AtomicReference<>();
-        AtomicBoolean found = new AtomicBoolean(false);
-        final List<Method> methods = clazz.getDeclaredMethods();
-        methods.forEach(method -> {
-            if(method.ge)
-        });
-        Arrays.stream(methods).sequential().forEach(method -> Arrays.stream(method.getAnnotation(annotation.getClass()).annotationType()
-                .getDeclaredFields()).sequential().forEach(field -> {
-            try {
-                if (field.get(annotation).equals(methodId)){
-                    m.set(method);
-                }
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-        }));
-        return m.get();
-    }
-*/
 }

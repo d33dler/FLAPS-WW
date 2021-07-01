@@ -30,6 +30,7 @@ package gov.nasa.worldwind.view.orbit;
 import gov.nasa.worldwind.*;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.ViewInputHandler;
+import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.render.DrawContext;
 import gov.nasa.worldwind.util.*;
@@ -115,6 +116,9 @@ public class BasicOrbitView extends BasicView implements OrbitView
         firePropertyChange(CENTER_STOPPED, null, null);
     }
 
+    public void setSimChangeModel(SimWindowChangeModel simChangeModel) {
+        this.simWindowChangeModel = simChangeModel;
+    }
     public void copyViewState(View view)
     {
         this.globe = view.getGlobe();
@@ -678,8 +682,8 @@ public class BasicOrbitView extends BasicView implements OrbitView
         // Compute the current clip plane distances. The near distance depends on the far distance, so we must compute
         // the far distance first.
         this.farClipDistance = computeFarClipDistance();
-       // this.nearClipDistance = computeNearClipDistance(); //TODO CHANGED CLIPPING
-        this.nearClipDistance = 3;
+        this.nearClipDistance = computeNearClipDistance(); //TODO CHANGED CLIPPING
+       // this.nearClipDistance = 3;
         // Compute the current viewport dimensions.
         double viewportWidth = this.viewport.getWidth() <= 0.0 ? 1.0 : this.viewport.getWidth();
         double viewportHeight = this.viewport.getHeight() <= 0.0 ? 1.0 : this.viewport.getHeight();

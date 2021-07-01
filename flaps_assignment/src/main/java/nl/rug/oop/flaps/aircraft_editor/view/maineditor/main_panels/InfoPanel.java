@@ -11,7 +11,8 @@ import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsLis
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.FuelSupplyListener;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.ViewUtils;
 
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
@@ -123,7 +124,7 @@ public class InfoPanel extends JPanel implements CargoUnitsListener, BlueprintSe
      * @return panel containing the labels with strings : *Field name* :  *variable*
      */
     private JPanel setupFieldPanel(Field field, List<JLabel> dataSet, Object object) {
-        JLabel fieldName = FileUtils.getFormattedName(field);
+        JLabel fieldName = ViewUtils.getFormattedName(field);
         JLabel data = getFieldData(field, object);
         JPanel fieldPanel = new JPanel(new GridLayout(1, 2));
         fieldPanel.setBackground(PANEL_BG);

@@ -15,6 +15,6 @@ public class AddPassRelay extends SelectionCommand {
 
     @Override
     public void confirmExec() {
-        controller.passengerAdded(mediator.getBlankSet(),mediator.getSelectedType());
+        controller.passengerAdded(mediator.getSelectedType());
     }
 }

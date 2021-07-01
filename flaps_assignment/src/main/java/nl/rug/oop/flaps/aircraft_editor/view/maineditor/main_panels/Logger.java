@@ -16,7 +16,7 @@ import java.util.ArrayList;
 
 /**
  * Class LogPanel - panel containing the Log component and the Depart button(in the Depart Panel)
- * The log component (logBook JTextArea) is used to notify the user about the successful execution of commands, and
+ * The log component (logBook JTextArea) is used to notifyError the user about the successful execution of commands, and
  * serves as a session archive;
  */
 
@@ -152,4 +152,7 @@ public class Logger extends JPanel {
         JOptionPane.showMessageDialog(editorFrame.getSettingsPanel().getCargoFrame(),string,"Info",JOptionPane.INFORMATION_MESSAGE);
     }
 
+    public static void notifyError(JComponent parent, String string) {
+        JOptionPane.showMessageDialog(parent,string,"Info",JOptionPane.ERROR_MESSAGE);
+    }
 }

@@ -38,7 +38,7 @@ public class World {
 
     @Getter
     @Setter
-    private HashSet<Aircraft> editorTrack = new HashSet<>();
+    private Map< Aircraft, Integer> editorTrack = new HashMap<>();
 
     @Getter
     private final WorldSelectionModel selectionModel;

@@ -11,20 +11,17 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
 import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import nl.rug.oop.flaps.simulation.model.passengers.PassengerType;
 
-import javax.swing.*;
-import java.util.List;
-
 public class AddPassenger extends Command {
 
     private Passenger passenger;
     private PassengerMediator mediator;
     private PassengerType type;
 
-    public AddPassenger(Controller controller, Compartment cabin, List<JTextField> blankDoc, PassengerType type) {
+    public AddPassenger(Controller controller, Compartment cabin, PassengerType type) {
         super(controller, cabin, controller.getLogger());
         this.mediator = controller.getPassengerMediator();
         this.type = type;
-        createPassenger(blankDoc);
+        createPassenger();
     }
 
 
@@ -46,8 +43,8 @@ public class AddPassenger extends Command {
         aircraft.getCabinPassengers().get((Cabin) area).add(passenger);
     }
 
-    private void createPassenger(List<JTextField> blankDoc) {
-        this.passenger = new Passenger.Builder(mediator).readBlanks(blankDoc, type.getId(), type);
+    private void createPassenger() {
+        this.passenger = new Passenger.Builder(mediator).readBlanks(type.getId(), type);
     }
 
     @Override

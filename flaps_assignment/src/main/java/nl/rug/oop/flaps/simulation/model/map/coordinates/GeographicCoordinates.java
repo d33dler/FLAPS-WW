@@ -16,8 +16,8 @@ import java.awt.geom.Point2D;
 public class GeographicCoordinates implements PointProvider {
     private static final double EARTH_RADIUS = 6371e3;
 
-    private double latitude;
-    private double longitude;
+    public double latitude;
+    public double longitude;
 
     public GeographicCoordinates(double longitude, double latitude) {
         this.latitude = latitude;

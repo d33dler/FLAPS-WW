@@ -7,14 +7,13 @@ import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.comm_relay.Selection
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.CargoUnitsListener;
 import nl.rug.oop.flaps.aircraft_editor.model.mediators.CargoMediator;
-import nl.rug.oop.flaps.aircraft_editor.view.generic_panels.TableSelectionListeners;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorWindows;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoFreight;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -42,7 +41,6 @@ public class CargoFrame extends EditorWindows implements CargoUnitsListener {
     private CargoControlPanel cargoControlPanel;
     private CargoPanel cargoPanel;
     private SelectionCommand selectionCommand;
-    private Set<TableSelectionListeners> buttonSet;
     protected static final String
             TITLE_L = "Warehouse: ", TITLE_R = "Aircraft Cargo: ";
     private static final int WIDTH = 1200, LENGTH = 500;
@@ -122,15 +120,13 @@ public class CargoFrame extends EditorWindows implements CargoUnitsListener {
     /**
      * A separate listener for the warehouse cargo set database
      */
-    public void addDatabaseSelectionListener(JTable table) {//TODO check integrity
-
+    public void addDatabaseSelectionListener(JTable table) {
         table.getSelectionModel().addListSelectionListener(event -> {
             if (!event.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()) {
                 cargoAircraft.getDatabaseTable().getSelectionModel().clearSelection();
                 mediator.setSelectedType(mediator.getCargoHashMap().
                         get(table.getValueAt(table.getSelectedRow(), 0).toString()));
-            } else {
-                //TODO disabling selectively
+                cargoControlPanel.setCargoImg(mediator.getSelectedType());
             }
         });
     }
@@ -146,6 +142,7 @@ public class CargoFrame extends EditorWindows implements CargoUnitsListener {
                 mediator.setSelectedFreight(mediator.getFreightHashMap().
                         get(table.getValueAt(table.getSelectedRow(), 0).toString()));
                 mediator.setSelectedType(mediator.getSelectedFreight().getCargoType());
+                cargoControlPanel.setCargoImg(mediator.getSelectedType());
             }
         });
     }

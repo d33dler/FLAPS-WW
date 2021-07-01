@@ -4,7 +4,8 @@ import lombok.Getter;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.FlapsDatabases;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.ViewUtils;
 import org.reflections.Reflections;
 
 import javax.swing.table.DefaultTableModel;
@@ -60,7 +61,7 @@ public class DatabaseBuilder extends DefaultTableModel {
         for (Field field : fields) {
             field.setAccessible(true);
             if (FileUtils.isFieldPrimitiveDeserializable(field) && !Modifier.isStatic(field.getModifiers())) {
-                columnIds.add(FileUtils.toSnakeCase(field.getName()));
+                columnIds.add(ViewUtils.toSnakeCase(field.getName()));
             } else {
                 var p = field.getType();
                 if (packageHashMap.get(p) == null) continue;

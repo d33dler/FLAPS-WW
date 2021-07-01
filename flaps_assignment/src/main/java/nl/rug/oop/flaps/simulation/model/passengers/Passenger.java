@@ -7,7 +7,7 @@ import nl.rug.oop.flaps.FlapsDatabases;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.mediators.PassengerMediator;
 import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.BlankField;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -25,7 +25,7 @@ public class Passenger extends TravelMember {
     @BlankField(id = "photo", pattern = "")
     protected Image passportPhoto;
     protected PassengerType type;
-    @BlankField(id = "weight" , pattern = "[0-9]+", min = 10, max = 200)
+    @BlankField(id = "weight", pattern = "[0-9]+", min = 10, max = 200)
     protected String weight;
     public final static int MIN_WEIGHT = 1, MAX_WEIGHT = 200;
     public final static int MIN_AGE = 10, MAX_AGE = 100;
@@ -41,9 +41,10 @@ public class Passenger extends TravelMember {
         public Builder(PassengerMediator mediator) {
             this.mediator = mediator;
         }
-        public Passenger readBlanks(List<JTextField> blanks, String id, PassengerType type) {//TODO here JComboBox extracted selection id
+
+        public Passenger readBlanks(String id, PassengerType type) {//TODO here JComboBox extracted selection id
             List<Field> fieldList = FileUtils.getAllFieldsFiltered(Passenger.class);
-            for (JTextField blank : blanks) {
+            for (JTextField blank : mediator.getBlankSet()) {
                 String blank_id = blank.getName();
                 fieldList.forEach(field -> {
                     BlankField a = field.getAnnotation(BlankField.class);
@@ -54,6 +55,7 @@ public class Passenger extends TravelMember {
                     }
                 });
             }
+
             idBehaviour(id);
             produce(type);
             return this.passenger;
@@ -143,6 +145,7 @@ public class Passenger extends TravelMember {
         }
 
         private void produce(PassengerType type) {
+            passportPhoto = mediator.getPass_photo();
             passenger.setType(type);
             FileUtils.cloneFields(passenger, this, FileUtils.getAllFieldsFiltered(Passenger.class));
         }
