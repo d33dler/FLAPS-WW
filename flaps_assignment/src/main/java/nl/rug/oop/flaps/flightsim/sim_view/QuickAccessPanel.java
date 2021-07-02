@@ -5,6 +5,7 @@ import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
 import gov.nasa.worldwind.osm.map.worldwind.gl.obj.ObjRenderable;
 import gov.nasa.worldwind.view.orbit.BasicOrbitView;
+import gov.nasa.worldwindx.examples.util.AudioPlayer;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.DepartAction;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
@@ -15,9 +16,13 @@ import nl.rug.oop.flaps.flightsim.sim_model.POVChangeModel;
 import nl.rug.oop.flaps.flightsim.sim_model.sim_utils.SimulationUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.nio.file.Path;
 
 public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCallbackListener {
     private POVChangeModel povChangeModel;
@@ -34,7 +39,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
     private JButton loadPlane;
     private GeographicCoordinates og, dest;
     private SimulatorWindow simulatorWindow;
-    public final static long TRAVEL_TIME = 40000;
+    public final static long TRAVEL_TIME = 40000, OFF_SET_TRAVEL = 12000;
 
     public QuickAccessPanel(FlightSimFrame flightSimFrame, BasicOrbitView orbitView, EditorCore editorCore) {
         this.flightSimFrame = flightSimFrame;
@@ -120,12 +125,28 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
 
     @SneakyThrows
     private void initDeparture(double lat, double longitude) {
-        Position destPos = Position.fromDegrees(lat, longitude, 5e3);
+        Position destPos = Position.fromDegrees(lat, longitude, 3e3);
+        playTakeoffClip();
         SimulationUtils.customFlyToFly(flightSimApp, destPos, TRAVEL_TIME);
         SimulationUtils.schedule(SimulationUtils.execServ, () -> new DepartAction(editorCore.getWorld().getSelectionModel(),
-                editorCore.getDataTracker()).actionPerformed(null), TRAVEL_TIME + 1000);
+                editorCore.getDataTracker()).actionPerformed(null), TRAVEL_TIME + 12000);
     }
 
+    private void playTakeoffClip() {
+        new Thread(() -> {
+            try {
+                Clip clip = AudioSystem.getClip();
+                AudioInputStream ais = AudioSystem.getAudioInputStream(Path.of("audio", "plane_distant.wav").toFile());
+                clip.open(ais);
+                clip.start();
+                AudioPlayer player = new AudioPlayer();
+                player.setClip(clip);
+                player.play();
+            } catch (Exception e) {
+                System.out.println("Could not play takeoff clip: " + e.getMessage());
+            }
+        }).start();
+    }
 
     @Override
     public void windowStateChanged(Position userPosition) {
