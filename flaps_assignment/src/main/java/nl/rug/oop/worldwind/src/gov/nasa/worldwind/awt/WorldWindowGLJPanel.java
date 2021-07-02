@@ -32,7 +32,6 @@ import gov.nasa.worldwind.avlist.*;
 import gov.nasa.worldwind.cache.GpuResourceCache;
 import gov.nasa.worldwind.event.*;
 import gov.nasa.worldwind.exception.WWRuntimeException;
-import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.pick.PickedObjectList;
 import gov.nasa.worldwind.util.*;
@@ -288,16 +287,6 @@ public class WorldWindowGLJPanel extends GLJPanel implements WorldWindow, Proper
     public View getView()
     {
         return this.wwd.getView();
-    }
-
-    @Override
-    public void setSimWindowChangeModel(SimWindowChangeModel simWindowChangeModel) {
-
-    }
-
-    @Override
-    public void addSimListener() {
-
     }
 
     public void setModelAndView(Model model, View view)

@@ -89,12 +89,7 @@ public class BasicView extends WWObjectImpl implements View {
     protected Vec4 lastEyePoint = null;
     protected Vec4 lastUpVector = null;
     protected Vec4 lastForwardVector = null;
-
-    public void setSimWindowChangeModel(SimWindowChangeModel simWindowChangeModel) {
-        this.simWindowChangeModel = simWindowChangeModel;
-    }
-
-    public SimWindowChangeModel simWindowChangeModel;
+    public SimWindowChangeModel simWindowChangeModel = new SimWindowChangeModel();
 
 
     /**
@@ -104,7 +99,7 @@ public class BasicView extends WWObjectImpl implements View {
     protected long viewStateID;
 
     // TODO: make configurable
-    protected static final double MINIMUM_NEAR_DISTANCE = 0;
+    protected static final double MINIMUM_NEAR_DISTANCE = 0.1;
     protected static final double MINIMUM_FAR_DISTANCE = 1000;
     /**
      * The views's default worst-case depth resolution, in meters. May be specified in the WorldWind configuration file
@@ -658,8 +653,7 @@ public class BasicView extends WWObjectImpl implements View {
      */
     protected void updateModelViewStateID() {
         this.viewStateID++;
-        if (simWindowChangeModel != null)
-            simWindowChangeModel.fireUpdate(getCurrentEyePosition());
+        simWindowChangeModel.fireUpdate(getCurrentEyePosition());
     }
 
     //**************************************************************//

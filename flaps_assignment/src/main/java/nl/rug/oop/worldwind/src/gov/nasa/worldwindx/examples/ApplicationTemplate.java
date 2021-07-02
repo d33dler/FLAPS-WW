@@ -36,7 +36,6 @@ import gov.nasa.worldwind.awt.WorldWindowGLCanvas;
 import gov.nasa.worldwind.event.SelectEvent;
 import gov.nasa.worldwind.event.SelectListener;
 import gov.nasa.worldwind.exception.WWAbsentRequirementException;
-import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.layers.*;
 import gov.nasa.worldwind.layers.placename.PlaceNameLayer;
 import gov.nasa.worldwind.util.StatisticsPanel;
@@ -62,14 +61,12 @@ public class ApplicationTemplate {
         protected StatusBar statusBar;
         protected ToolTipController toolTipController;
         protected HighlightController highlightController;
-        protected SimWindowChangeModel simChangeModel;
+        protected Image aircraft;
 
-        public AppPanel(SimWindowChangeModel simChangeModel, Dimension canvasSize, boolean includeStatusBar) {
+        public AppPanel(Dimension canvasSize, boolean includeStatusBar) {
             super(new BorderLayout());
-            this.simChangeModel = simChangeModel;
+
             this.wwd = this.createWorldWindow();
-            this.wwd.setSimWindowChangeModel(simChangeModel);
-            this.wwd.addSimListener();
             ((Component) this.wwd).setPreferredSize(canvasSize);
 
             // Create the default model as described in the current worldwind properties.
@@ -182,8 +179,8 @@ public class ApplicationTemplate {
             this.setResizable(true);
         }
 
-        protected AppPanel createAppPanel( Dimension canvasSize, boolean includeStatusBar) {
-            return new AppPanel(null, canvasSize, includeStatusBar);
+        protected AppPanel createAppPanel(Dimension canvasSize, boolean includeStatusBar) {
+            return new AppPanel(canvasSize, includeStatusBar);
         }
 
         public Dimension getCanvasSize() {

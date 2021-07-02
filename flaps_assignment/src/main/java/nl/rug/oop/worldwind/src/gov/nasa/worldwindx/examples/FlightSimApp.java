@@ -50,7 +50,7 @@ public class FlightSimApp extends ApplicationTemplate {
     protected Dimension canvasSize = new Dimension(800, 600);
 
     public ApplicationTemplate.AppPanel init() {
-        this.wwjPanel = new ApplicationTemplate.AppPanel(null,this.canvasSize, true);
+        this.wwjPanel = new ApplicationTemplate.AppPanel(this.canvasSize, true);
         this.orbitView = (BasicOrbitView) wwjPanel.getWwd().getView();
         wwjPanel.setPreferredSize(canvasSize);
         return wwjPanel;

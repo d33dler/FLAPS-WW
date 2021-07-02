@@ -30,7 +30,6 @@ package gov.nasa.worldwind.view.orbit;
 import gov.nasa.worldwind.*;
 import gov.nasa.worldwind.avlist.AVKey;
 import gov.nasa.worldwind.awt.ViewInputHandler;
-import gov.nasa.worldwind.flaps_interfaces.SimWindowChangeModel;
 import gov.nasa.worldwind.geom.*;
 import gov.nasa.worldwind.render.DrawContext;
 import gov.nasa.worldwind.util.*;
@@ -116,9 +115,6 @@ public class BasicOrbitView extends BasicView implements OrbitView
         firePropertyChange(CENTER_STOPPED, null, null);
     }
 
-    public void setSimChangeModel(SimWindowChangeModel simChangeModel) {
-        this.simWindowChangeModel = simChangeModel;
-    }
     public void copyViewState(View view)
     {
         this.globe = view.getGlobe();

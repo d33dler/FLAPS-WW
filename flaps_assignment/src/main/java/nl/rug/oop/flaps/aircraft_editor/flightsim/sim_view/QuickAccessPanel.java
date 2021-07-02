@@ -1,6 +1,5 @@
 package nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view;
 
-import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.flaps_interfaces.SimWindowCallbackListener;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
@@ -36,7 +35,6 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
     private static final double HEIGHT_LIM = 8e4, ZOOMOUT_LIM = 90;
     private JButton loadPlane;
     private GeographicCoordinates og, dest;
-    private WorldWindow worldWindow;
     private static final double LAT_THOLD = 0.14, LONG_THOLD = 0.14, ELEV_THOLD = 4000;
 
     public QuickAccessPanel(FlightSimFrame flightSimFrame, BasicOrbitView orbitView, EditorCore editorCore) {
@@ -46,7 +44,6 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
         this.editorCore = editorCore;
         this.planet = core.getEarth();
         this.flightSimApp = core.getSimApp();
-        this.worldWindow = core.getWorldWindow();
         orbitView.simWindowChangeModel.addListener(this);
         init();
     }
@@ -134,7 +131,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
                 if (!elevationH.getText().isBlank()) {
                     Position pos = core.getModels3DLoader().getHangar3d_obj().getPosition();
                     core.getModels3DLoader().getHangar3d_obj().setPosition(new Position(pos.latitude, pos.longitude, Double.parseDouble(elevationH.getText())));
-                    worldWindow.redrawNow();
+                    core.getWorldWindow().redrawNow();
                 }
             }
 
