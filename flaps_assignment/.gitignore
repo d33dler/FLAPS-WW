@@ -1,7 +1,5 @@
 # IntelliJ specific files
 out/
-.idea/
-.idea_modules/
 *.ipr
 *.iws
 
