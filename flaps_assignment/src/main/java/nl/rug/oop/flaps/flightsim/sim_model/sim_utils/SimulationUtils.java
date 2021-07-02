@@ -62,8 +62,7 @@ public class SimulationUtils {
         ww.redraw();
         BasicFlyView tempFly = simApp.getBasicFlyView();
         tempFly.setFarClipDistance(5000);
-        tempFly.getViewPropertyLimits().setEyeElevationLimits(0, 1200000);
-
+        tempFly.getViewPropertyLimits().setEyeElevationLimits(0, 1000000);
         ww.setView(tempFly);
         simApp.getCore().getSimRenderer().updateAircraftPosition();
         tempFly.setEyePosition(defaultView.getEyePosition());

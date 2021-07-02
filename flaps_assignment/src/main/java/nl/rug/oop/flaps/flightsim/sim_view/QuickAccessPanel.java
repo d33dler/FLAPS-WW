@@ -34,6 +34,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
     private JButton loadPlane;
     private GeographicCoordinates og, dest;
     private SimulatorWindow simulatorWindow;
+    public final static long TRAVEL_TIME = 40000;
 
     public QuickAccessPanel(FlightSimFrame flightSimFrame, BasicOrbitView orbitView, EditorCore editorCore) {
         this.flightSimFrame = flightSimFrame;
@@ -90,7 +91,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
         controlPanel.add(zoomIn);
         controlPanel.add(zoomOut);
         controlPanel.add((newButton("Depart", () ->
-                        travel(dest.latitude, dest.longitude),
+                        initDeparture(dest.latitude, dest.longitude),
                 false, GenericButtonPanel.SET_OFF)));
         add(controlPanel, BorderLayout.WEST);
     }
@@ -118,11 +119,11 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
     }
 
     @SneakyThrows
-    private void travel(double lat, double longitude) {
+    private void initDeparture(double lat, double longitude) {
         Position destPos = Position.fromDegrees(lat, longitude, 5e3);
-        SimulationUtils.customFlyToFly(flightSimApp, destPos, 40000);
+        SimulationUtils.customFlyToFly(flightSimApp, destPos, TRAVEL_TIME);
         SimulationUtils.schedule(SimulationUtils.execServ, () -> new DepartAction(editorCore.getWorld().getSelectionModel(),
-                editorCore.getDataTracker()).actionPerformed(null), 40000);
+                editorCore.getDataTracker()).actionPerformed(null), TRAVEL_TIME + 1000);
     }
 
 

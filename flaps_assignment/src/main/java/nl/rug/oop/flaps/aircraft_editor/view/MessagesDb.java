@@ -31,7 +31,7 @@ public class MessagesDb {//TODO transfer to yaml
     public static final String UNDO_REMALL_C = UNDO + ALLR_REV;
     public static final String UNDO_FUEL = UNDO + REF_REV;
     public static final String REDO_FUEL = REDO + REF_REV;
-    public static final String DEPART_1 = "Your plane is preparing for departure from ";
+    public static final String DEPART_1 = "Your plane has departed from ";
     public static final String ARRIVE_1 = "Your plane has arrived at ";
     public static final String DEPART_TIP_0 = "Departure is not possible due to unfulfilled requirements.";
     public static final String DEPART_TIP_1 = "Click to depart from the current airport";
