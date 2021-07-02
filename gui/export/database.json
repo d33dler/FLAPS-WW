@@ -1,0 +1,196 @@
+{
+	"NpcEntity": [
+	{
+	"id": 1,
+	"created_at": "1931-03-17T14:02",
+	"name": "Fëanor",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Warrior",
+		"hostile": true,
+		"race": "Human"
+		},
+	"description": "Deposed leader of the Noldor elves of Valinor, and creator of the Silmarils.",
+	"health": "120.0",
+	"attack_strength": "67.0",
+	"defense_strength": "150.0"
+	},
+	{
+	"id": 4,
+	"created_at": "1934-12-29T22:55",
+	"name": "Durin",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Miner",
+		"hostile": false,
+		"race": "Dwarf"
+		},
+	"description": "First king of the mines of Khazad-dûm (Moria), oldest of the seven fathers of the dwarves.",
+	"health": "70.0",
+	"attack_strength": "40.0",
+	"defense_strength": "180.0"
+	},
+	{
+	"id": 2,
+	"created_at": "1942-06-01T05:47:37",
+	"name": "Finwë",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Ranger",
+		"hostile": false,
+		"race": "Elf"
+		},
+	"description": "Father of Fëanor, and first king of the Noldor.",
+	"health": "60.0",
+	"attack_strength": "30.0",
+	"defense_strength": "89.0"
+	},
+	{
+	"id": 3,
+	"created_at": "1978-07-21T19:12:08",
+	"name": "Celebrimbor",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Archer",
+		"hostile": true,
+		"race": "Elf"
+		},
+	"description": "Grandson of Fëanor, and forger of the rings of power of Middle Earth.",
+	"health": "75.0",
+	"attack_strength": "55.0",
+	"defense_strength": "72.0"
+	},
+	{
+	"id": 5,
+	"created_at": "1982-02-27T09:45:54",
+	"name": "Elendil",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Trader",
+		"hostile": false,
+		"race": "Human"
+		},
+	"description": "First high king of the exiled Númenóreans in Middle Earth following the betrayal of Ar-Pharazôn, reigning king of Númenór.",
+	"health": "175.0",
+	"attack_strength": "132.0",
+	"defense_strength": "168.0"
+	},
+	{
+	"id": 6,
+	"created_at": "1982-05-06T13:25:12",
+	"name": "Aragorn II",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Warrior",
+		"hostile": true,
+		"race": "Human"
+		},
+	"description": "35th King of Gondor, following the War of the Ring.",
+	"health": "175.0",
+	"attack_strength": "132.0",
+	"defense_strength": "168.0"
+	},
+	{
+	"id": 7,
+	"created_at": "2001-01-24T08:03:44",
+	"name": "Meriadoc Brandybuck",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Brewer",
+		"hostile": false,
+		"race": "Hobbit"
+		},
+	"description": "One of the nine companions of the Fellowship of the Ring, and eighth Master of Buckland.",
+	"health": "50.0",
+	"attack_strength": "15.0",
+	"defense_strength": "35.0"
+	},
+	{
+	"id": 12,
+	"created_at": null,
+	"name": "Milo",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Miner",
+		"hostile": false,
+		"race": "Dwarf"
+		},
+	"description": "A teaching assistant.",
+	"health": "10.0",
+	"attack_strength": "5.0",
+	"defense_strength": "5.0"
+	},
+	{
+	"id": 15,
+	"created_at": null,
+	"name": "Andrew",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Miner",
+		"hostile": false,
+		"race": "Dwarf"
+		},
+	"description": "A teaching assistant.",
+	"health": "10.0",
+	"attack_strength": "5.0",
+	"defense_strength": "5.0"
+	},
+	{
+	"id": 16,
+	"created_at": null,
+	"name": "Dijkstra",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Miner",
+		"hostile": false,
+		"race": "Dwarf"
+		},
+	"description": "A teaching assistant.",
+	"health": "10.0",
+	"attack_strength": "5.0",
+	"defense_strength": "5.0"
+	},
+	{
+	"id": 17,
+	"created_at": null,
+	"name": "Success",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Miner",
+		"hostile": false,
+		"race": "Dwarf"
+		},
+	"description": "A teaching assistant.",
+	"health": "10.0",
+	"attack_strength": "5.0",
+	"defense_strength": "5.0"
+	},
+	{
+	"id": 18,
+	"created_at": null,
+	"name": "Frikandel",
+	"profile_image_path": null,
+	"type": 
+		{
+		"name": "Warrior",
+		"hostile": true,
+		"race": "Human"
+		},
+	"description": "AH basic, basically.",
+	"health": "10.0",
+	"attack_strength": "5.0",
+	"defense_strength": "5.0"
+	}
+	]
+}

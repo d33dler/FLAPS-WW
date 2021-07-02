@@ -26,6 +26,7 @@ engines:
     engineModel: Trent 772C-60
     x: 9
     y: 22
+
 cabin:
   - name: Aircraft Passenger Cabin
     compartmentId: 300PASS_ml
