@@ -48,7 +48,7 @@ public class PassengerTable extends JPanel implements PassengerListener {
                 .db(mediator.getPassengerSet())
                 .title(TITLE)
                 .size(T_WIDTH, T_HEIGHT)
-                .model(editorCore.getDatabaseBuilder().getDatabase(mediator.getPassengerSet(), Passenger.class))
+                .model(editorCore.getDatabaseLoader().getDatabase(mediator.getPassengerSet(), Passenger.class))
                 .mediator(mediator)
                 .pos(BorderLayout.CENTER)
                 .buildPassengerDb();

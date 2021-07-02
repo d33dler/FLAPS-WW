@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.flightsim.model_loaders;
+package nl.rug.oop.flaps.flightsim.model_loaders;
 
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.geom.Position;
@@ -7,7 +7,7 @@ import gov.nasa.worldwind.layers.RenderableLayer;
 import gov.nasa.worldwind.osm.map.worldwind.gl.obj.ObjRenderable;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 import lombok.Getter;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_model.sim_utils.SimulationUtils;
+import nl.rug.oop.flaps.flightsim.sim_model.sim_utils.SimulationUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
 import java.io.File;
@@ -33,6 +33,7 @@ public class StructuresLoader extends ModelLoader implements Loader {
         hangar_3d_obj.setSize(3);
         layer.addRenderable(hangar_3d_obj);
         ApplicationTemplate.insertBeforePlacenames(worldWindow, layer);
+        hangar_3d_obj.setVisible(false);
         return hangar_3d_obj;
     }
 }

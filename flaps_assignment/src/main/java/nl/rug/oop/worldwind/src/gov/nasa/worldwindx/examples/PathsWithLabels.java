@@ -120,9 +120,7 @@ public class PathsWithLabels extends ApplicationTemplate
             attrs.setFont(Font.decode("Arial-PLAIN-12"));
             attrs.setTextAlign(AVKey.CENTER);
             attrs.setInsets(new Insets(5, 5, 5, 5));
-
             ga.setAttributes(attrs);
-
             return ga;
         }
     }

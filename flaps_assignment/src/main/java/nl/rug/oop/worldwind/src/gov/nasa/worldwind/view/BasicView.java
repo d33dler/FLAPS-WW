@@ -99,8 +99,8 @@ public class BasicView extends WWObjectImpl implements View {
     protected long viewStateID;
 
     // TODO: make configurable
-    protected static final double MINIMUM_NEAR_DISTANCE = 0.1;
-    protected static final double MINIMUM_FAR_DISTANCE = 1000;
+    public static final double MINIMUM_NEAR_DISTANCE = 0.1;
+    public static final double MINIMUM_FAR_DISTANCE = 2000;
     /**
      * The views's default worst-case depth resolution, in meters. May be specified in the WorldWind configuration file
      * as the <code>gov.nasa.worldwind.avkey.DepthResolution</code> property. The default if not specified in the
@@ -242,7 +242,7 @@ public class BasicView extends WWObjectImpl implements View {
         return this.farClipDistance;
     }
 
-    protected void setFarClipDistance(double clipDistance) {
+    public void setFarClipDistance(double clipDistance) {
         this.farClipDistance = clipDistance;
     }
 

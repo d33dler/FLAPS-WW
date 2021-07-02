@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.flightsim.model_loaders;
+package nl.rug.oop.flaps.flightsim.model_loaders;
 
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.geom.Position;
@@ -8,7 +8,7 @@ import gov.nasa.worldwind.osm.map.worldwind.gl.obj.ObjRenderable;
 import gov.nasa.worldwindx.examples.ApplicationTemplate;
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_model.sim_utils.SimulationUtils;
+import nl.rug.oop.flaps.flightsim.sim_model.sim_utils.SimulationUtils;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
 import java.io.File;
@@ -33,6 +33,7 @@ public class AircraftLoader extends ModelLoader implements Loader {
         aircraftObj_3d.setSize(10);
         layer.addRenderable(aircraftObj_3d);
         ApplicationTemplate.insertBeforePlacenames(worldWindow, layer);
+        aircraftObj_3d.setVisible(false);
         return this.aircraftObj_3d;
     }
 }

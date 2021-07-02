@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.flightsim.model_loaders;
+package nl.rug.oop.flaps.flightsim.model_loaders;
 
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.globes.Globe;

@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
 import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view.FlightSimFrame;
+import nl.rug.oop.flaps.flightsim.sim_view.FlightSimFrame;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.AircraftLoadingModel;
 import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.undomodel.UndoRedoManager;
@@ -29,7 +29,7 @@ public class EditorCore {
     private UndoRedoManager undoRedoManager;
     private EditorFrame editorFrame;
     private Controller controller;
-    private DatabaseBuilder databaseBuilder;
+    private DatabaseLoader databaseLoader;
     private AircraftDataTracker dataTracker;
     private GeographicCoordinates originCoordinates;
     private Airport source;
@@ -48,7 +48,7 @@ public class EditorCore {
         this.editorFrame = editorFrame;
         this.bpSelectionModel = bpSelectionModel;
         this.bpSelectionModel.setEditorCore(this);
-        this.databaseBuilder = new DatabaseBuilder();
+        this.databaseLoader = new DatabaseLoader();
         init();
     }
 

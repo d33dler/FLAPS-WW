@@ -2,7 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels;
 
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view.FlightSimFrame;
+import nl.rug.oop.flaps.flightsim.sim_view.FlightSimFrame;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.view.MessagesDb;
 import nl.rug.oop.flaps.simulation.model.world.WorldSelectionModel;

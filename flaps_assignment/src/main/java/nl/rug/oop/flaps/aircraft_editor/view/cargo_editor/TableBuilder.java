@@ -65,7 +65,7 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
         DatabaseTablePanel<CargoFreight> tablesPanel = new TableBuilder<>() {
             @Override
             public void update() {
-                databaseTable.setModel(editorCore.getDatabaseBuilder().getDatabase(objectSet, CargoFreight.class));
+                databaseTable.setModel(editorCore.getDatabaseLoader().getDatabase(objectSet, CargoFreight.class));
                 editTableView(databaseTable, 2, 2);
                 super.update();
             }
@@ -87,7 +87,7 @@ public class TableBuilder<T> extends DatabaseTablePanel<T> {
             @Override
             public void update() {
                 objectSet = solicitor.getDataSet();
-                databaseTable.setModel(editorCore.getDatabaseBuilder().getDatabase(objectSet, Passenger.class));
+                databaseTable.setModel(editorCore.getDatabaseLoader().getDatabase(objectSet, Passenger.class));
                 super.update();
             }
         };

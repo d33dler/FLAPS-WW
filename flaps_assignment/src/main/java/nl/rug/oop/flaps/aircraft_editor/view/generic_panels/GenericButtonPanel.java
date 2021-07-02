@@ -4,13 +4,13 @@ import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.DatabaseTablePanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public abstract class GenericButtonPanel extends JPanel {
 
-    protected List<JButton> buttonList = new ArrayList<>();
+    protected Map<String, JButton> buttonList = new HashMap<>();
     /**
      * After click side-effects
      */
@@ -28,7 +28,7 @@ public abstract class GenericButtonPanel extends JPanel {
                 }
             }
         });
-        buttonList.add(button);   //list for special purposes
+        buttonList.put(text,button);   //list for special purposes
         return button;
     }
 

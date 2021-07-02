@@ -80,7 +80,7 @@ public class CargoFrame extends EditorWindows implements CargoUnitsListener {
                 .frame(this)
                 .db(cargoTypeSet)
                 .title(TITLE_L + editorCore.getSource().getName())
-                .model(editorCore.getDatabaseBuilder().getDatabase(cargoTypeSet, CargoType.class))
+                .model(editorCore.getDatabaseLoader().getDatabase(cargoTypeSet, CargoType.class))
                 .pos(BorderLayout.EAST)
                 .buildWarehouse();
         this.cargoAircraft = new TableBuilder<>()
@@ -88,7 +88,7 @@ public class CargoFrame extends EditorWindows implements CargoUnitsListener {
                 .frame(this)
                 .db(cargoUnitSet)
                 .title(TITLE_R + cargoArea.getName())
-                .model(editorCore.getDatabaseBuilder().getDatabase(cargoUnitSet, CargoFreight.class))
+                .model(editorCore.getDatabaseLoader().getDatabase(cargoUnitSet, CargoFreight.class))
                 .pos(BorderLayout.EAST)
                 .editView(2, 2)
                 .buildRemote();

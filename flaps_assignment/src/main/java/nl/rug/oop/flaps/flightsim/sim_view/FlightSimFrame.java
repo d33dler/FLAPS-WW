@@ -1,4 +1,4 @@
-package nl.rug.oop.flaps.aircraft_editor.flightsim.sim_view;
+package nl.rug.oop.flaps.flightsim.sim_view;
 
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.globes.Globe;
@@ -6,8 +6,8 @@ import gov.nasa.worldwind.osm.map.worldwind.gl.obj.ObjRenderable;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_model.FlightSimApplication;
-import nl.rug.oop.flaps.aircraft_editor.flightsim.sim_model.FlightSimCore;
+import nl.rug.oop.flaps.flightsim.sim_model.FlightSimApplication;
+import nl.rug.oop.flaps.flightsim.sim_model.FlightSimCore;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 
@@ -36,6 +36,7 @@ public class FlightSimFrame extends JFrame {
         this.flightSimApp = new FlightSimApplication();
         this.core = new FlightSimCore(editorCore, flightSimApp,this);
         this.simulatorWindow = core.getSimulatorWindow();
+        flightSimApp.setCore(core);
         init();
     }
 

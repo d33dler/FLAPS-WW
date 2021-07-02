@@ -21,13 +21,13 @@ import java.util.Vector;
  */
 @Log
 @Getter
-public class DatabaseBuilder extends DefaultTableModel {
+public class DatabaseLoader extends DefaultTableModel {
     private static final String DATA_OBJ_Pkg = "nl.rug.oop.flaps.simulation.model.cargo";
     private final Set<Class<?>> flapsDbClasses; //flaps database related classes
     private final HashMap<Class<?>, Package> packageHashMap = new HashMap<>();
     private final Reflections reflections = new Reflections("nl.rug.oop.flaps");
 
-    public DatabaseBuilder() {
+    public DatabaseLoader() {
         flapsDbClasses = reflections.getTypesAnnotatedWith(FlapsDatabases.class);
         flapsDbClasses.forEach(aClass -> packageHashMap.put(aClass, aClass.getPackage()));
     }

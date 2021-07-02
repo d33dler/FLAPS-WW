@@ -1,8 +1,8 @@
 # FLAPS Report
 
-**First author**:  Radu Rebeja (s4051297)
-
-**Second author**: Eugen Falca (s)
+**Author**:  Radu Rebeja (s4051297)
+##Competition Info Update
+Load the project to IntelliJ from the "/flaps_assignment" path and run _nl.rug.oop.flaps.Main_ to run the program app.
 
 ## Introduction
 
