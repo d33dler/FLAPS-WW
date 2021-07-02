@@ -39,7 +39,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
     private JButton loadPlane;
     private GeographicCoordinates og, dest;
     private SimulatorWindow simulatorWindow;
-    public final static long TRAVEL_TIME = 40000, OFF_SET_TRAVEL = 12000;
+    public final static long TRAVEL_TIME = 40000, OFF_SET_TRAVEL = 14000;
 
     public QuickAccessPanel(FlightSimFrame flightSimFrame, BasicOrbitView orbitView, EditorCore editorCore) {
         this.flightSimFrame = flightSimFrame;
@@ -129,7 +129,7 @@ public class QuickAccessPanel extends GenericButtonPanel implements SimWindowCal
         playTakeoffClip();
         SimulationUtils.customFlyToFly(flightSimApp, destPos, TRAVEL_TIME);
         SimulationUtils.schedule(SimulationUtils.execServ, () -> new DepartAction(editorCore.getWorld().getSelectionModel(),
-                editorCore.getDataTracker()).actionPerformed(null), TRAVEL_TIME + 12000);
+                editorCore.getDataTracker()).actionPerformed(null), TRAVEL_TIME + OFF_SET_TRAVEL);
     }
 
     private void playTakeoffClip() {

@@ -91,7 +91,7 @@ public class SimulationUtils {
             simApp.getCore().getModels3DLoader().getAircraft3d_obj().
                     setPosition(new Position(pos.latitude,pos.longitude,
                             getElevation(defaultView.getGlobe(), pos.latitude.degrees, pos.longitude.degrees)));
-        }, flightTime + 4000);
+        }, flightTime + 6000);
     }
 
     public static void moveWithDelay(BasicOrbitView view, Position future, long delay) {
