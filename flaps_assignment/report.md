@@ -7,6 +7,15 @@
 ####* Update 02.07. :
 
 **!** Load the project to IntelliJ from the "/flaps_assignment" path and run _nl.rug.oop.flaps.Main_ to run the program app.
+Due to some dependency issues in the multi-module project, the project can't be loaded with 
+`mvn install compile mvn exec:java -Dexec(...)`.
+
+The possible cause: the project depends on classes found in the worldwind module 
+(WorldWind JAVA by NASA) which is not automatically loaded as it resides in a separate module.
+
+Maven builder throws `ClassNotFoundException ` .
+
+Attempts were made to fix the dependency issues, but the problem persisted.
 
 ####_ChangeLog:_
 **~~@~~** `aicraft_editor.package`
