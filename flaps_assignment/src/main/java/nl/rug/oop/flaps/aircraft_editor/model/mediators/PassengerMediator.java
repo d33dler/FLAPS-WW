@@ -16,6 +16,9 @@ import java.io.File;
 import java.util.List;
 import java.util.*;
 
+/**
+ * Mediator class for Passenger class object interaction mediation with other components
+ */
 @Setter
 @Getter
 public class PassengerMediator implements ControlSolicitor {
@@ -28,7 +31,7 @@ public class PassengerMediator implements ControlSolicitor {
     private Set<Passenger> passengerSet;
     private JFileChooser fileChooser;
     private Image pass_photo;
-    public static final double MAX_IMG_SZ = 6e6;
+    public static final double MAX_IMG_SZ = 6e6;    //This can be configured for bigger image file sizes
 
     public PassengerMediator() {
     }
@@ -44,9 +47,13 @@ public class PassengerMediator implements ControlSolicitor {
 
     @Override
     public void performPriorUpdates() {
-        //TODO
+        //TODO ?
     }
 
+    /**
+     *
+     * @param panel parent component for the JFileChooser (for passenger picture selection)
+     */
     public void initPhotoChooser(DataBlanksPanel panel) {
         fileChooser = new JFileChooser();
         fileChooser.setFileFilter(
@@ -60,6 +67,10 @@ public class PassengerMediator implements ControlSolicitor {
         return passengerSet;
     }
 
+    /**
+     *
+     * @param panel panel concerned with JFileChooser output
+     */
     @SneakyThrows
     public void initUpload(int confirm, DataBlanksPanel panel) {
         if (confirm == JFileChooser.APPROVE_OPTION) {

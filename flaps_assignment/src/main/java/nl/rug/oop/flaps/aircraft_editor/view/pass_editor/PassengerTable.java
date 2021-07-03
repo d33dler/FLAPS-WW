@@ -14,6 +14,9 @@ import nl.rug.oop.flaps.simulation.model.passengers.Passenger;
 import javax.swing.*;
 import java.awt.*;
 
+/**
+ * Panel holding the Database JTable of the listed registered passengers;
+ */
 public class PassengerTable extends JPanel implements PassengerListener {
     private final EditorCore editorCore;
     private final Aircraft aircraft;
@@ -40,6 +43,9 @@ public class PassengerTable extends JPanel implements PassengerListener {
         addTableListener(passengerTable.getDatabaseTable());
     }
 
+    /**
+     * Init Table
+     */
     private void addTable() {
         mediator.setPassengerSet(FileUtils.addUnitSet(boardFrame.getCabinArea(), aircraft.getCabinPassengers()));
         passengerTable = new TableBuilder<>()
@@ -54,6 +60,11 @@ public class PassengerTable extends JPanel implements PassengerListener {
                 .buildPassengerDb();
         add(passengerTable);
     }
+
+    /**
+     *
+     * @param table passenger list JTable
+     */
     private void addTableListener(JTable table) {
       table.getSelectionModel().addListSelectionListener(e -> {
             if(!e.getValueIsAdjusting() && !table.getSelectionModel().isSelectionEmpty()){

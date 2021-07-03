@@ -30,6 +30,10 @@ public class SimulatorRenderer implements SimWindowCallbackListener {
 
     }
 
+    /**
+     * It was planned that the aircraft moves synchronously below the scripted camera,
+     * but something causes the plane to not display: e.g. clipping distance (reconfiguration didn't work)
+     */
     public void updateAircraftPosition() {
         aircraft_3d.setSize(40);
         new Thread(() -> {

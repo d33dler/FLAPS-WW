@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.rug.oop.flaps.FlapsDatabases;
 
+
 @Setter
 @Getter
 @FlapsDatabases

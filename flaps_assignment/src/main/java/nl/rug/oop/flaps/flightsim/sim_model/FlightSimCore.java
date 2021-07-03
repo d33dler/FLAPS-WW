@@ -12,6 +12,9 @@ import nl.rug.oop.flaps.flightsim.sim_view.SimulatorWindow;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.map.coordinates.GeographicCoordinates;
 
+/**
+ * Model core of the Flight Simulator
+ */
 @Getter
 public class FlightSimCore {
     private EditorCore editorCore;

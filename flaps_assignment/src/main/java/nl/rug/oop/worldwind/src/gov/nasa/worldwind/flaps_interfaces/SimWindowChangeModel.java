@@ -5,6 +5,7 @@ import gov.nasa.worldwind.geom.Position;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class SimWindowChangeModel {
     public List<SimWindowCallbackListener> callbackListeners = new ArrayList<>();
 

@@ -10,6 +10,10 @@ import nl.rug.oop.flaps.flightsim.sim_view.SimulatorWindow;
 
 import java.awt.*;
 
+/**
+ * WorldWind API extending component class which initializes WorldWindow
+ * (the generated WorldWind world and it's functions)
+ */
 @Getter
 public class FlightSimApplication extends ApplicationTemplate {
     @Setter

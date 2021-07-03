@@ -49,7 +49,7 @@ public class CompassLayer extends AbstractLayer
 {
     protected String iconFilePath = "images/notched-compass.dds"; // TODO: make configurable
     protected double compassToViewportScale = 0.2; // TODO: make configurable
-    protected double iconScale = 0.5;
+    protected double iconScale = 0.4;
     protected int borderWidth = 20; // TODO: make configurable
     protected String position = AVKey.NORTHEAST; // TODO: make configurable
     protected String resizeBehavior = AVKey.RESIZE_SHRINK_ONLY;
