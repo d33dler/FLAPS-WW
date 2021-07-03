@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.flightsim.sim_model;
 import gov.nasa.worldwind.geom.Position;
 import lombok.Getter;
 import lombok.Setter;
-import nl.rug.oop.flaps.flightsim.sim_model.sim_listeners.POVChangeListeners;
+import nl.rug.oop.flaps.flightsim.sim_controller.sim_listeners.POVChangeListeners;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import java.util.ArrayList;

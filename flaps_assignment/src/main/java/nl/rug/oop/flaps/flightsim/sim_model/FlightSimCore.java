@@ -6,6 +6,7 @@ import gov.nasa.worldwind.globes.Globe;
 import lombok.Getter;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.flightsim.model_loaders.Models3DLoader;
+import nl.rug.oop.flaps.flightsim.sim_controller.SimulatorRenderer;
 import nl.rug.oop.flaps.flightsim.sim_view.FlightSimFrame;
 import nl.rug.oop.flaps.flightsim.sim_view.SimulatorWindow;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;

@@ -1,10 +1,11 @@
-package nl.rug.oop.flaps.flightsim.sim_model;
+package nl.rug.oop.flaps.flightsim.sim_controller;
 
 import gov.nasa.worldwind.WorldWindow;
 import gov.nasa.worldwind.flaps_interfaces.SimWindowCallbackListener;
 import gov.nasa.worldwind.geom.Position;
 import gov.nasa.worldwind.osm.map.worldwind.gl.obj.ObjRenderable;
 import gov.nasa.worldwind.view.firstperson.BasicFlyView;
+import nl.rug.oop.flaps.flightsim.sim_model.FlightSimCore;
 import nl.rug.oop.flaps.flightsim.sim_model.sim_utils.SimulationUtils;
 import nl.rug.oop.flaps.flightsim.sim_view.SimulatorWindow;
 

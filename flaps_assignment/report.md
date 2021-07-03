@@ -1,13 +1,67 @@
 # FLAPS Report
 
 **Author**:  Radu Rebeja (s4051297)
-##Competition Info Update
-Load the project to IntelliJ from the "/flaps_assignment" path and run _nl.rug.oop.flaps.Main_ to run the program app.
+
+
+#Competition Notes:
+####* Update 02.07. :
+
+**!** Load the project to IntelliJ from the "/flaps_assignment" path and run _nl.rug.oop.flaps.Main_ to run the program app.
+
+####_ChangeLog:_
+**~~@~~** `aicraft_editor.package`
+- New pivotal classes added: `CargoMediator.class`, `PassengerMediator.class` : _(both are applying the Mediator pattern
+  and were created to unload the cargo & passenger Model/Controller classes by transferring the responsibility to their 
+  specific mediators)_
+- Passenger related commands classes `AddPassenger`, `RemovePassenger` _(...)_ and their command Relay classes.
+- `PassengerListener` interface added. 
+-  `ChangeListener` interface extends to all other interfaces contracting 
+Aircraft Editor related changes.
+
+**~~@~~** `simulation.package`
+
+- `Cabin.class` , `Engine.class` added as a new Compartment subclass.
+- `AircraftLoader.class` was updated to load multiple yaml files into objects.
+- `Passenger.class` , `PassengerType` , `TravelMember` classes and `PassengerFactory.@interface`, 
+  `PassengerSignature.@interface` annotations added _(nl/rug/oop/flaps/simulation/model/passengers.package)_ 
+- `FlapsDatabases.@interface`, `BlankField.@interface` added for the passenger registration process .
+
+**~~@~~** `flightsim.package` 
+
+-  **Controller** : `SimulationRenderer.class` - used to manipulate the aircraft's states (positions, etc). 
+- **Model** : `FlightSimApplication.class` - initializer for the WorldWind Java API's projects app. 
+  
+  `FlightSimCore.class` - central hub class initializing other classes.
+  `SimulationUtils.class` - utilities for the Flight Simulator and camera scripted movements
+- **View** :
+  `FlightSimFrame` - flight simulator's main frame window, 
+  
+  `MapViewControls` - layer tree mini-window constructor and initializer, 
+  
+  `QuickAccessPanel` - button control panel, 
+  
+  `SimLayersLoader` - loads all the necessary layers and activates hidden layers depending on the user's position,
+  
+  `SimulatorWindow` - initializes the world window;
+
+**~~#@#~~** `worldwind.module`
+- All packages & jars here are part of the **WorldWind JAVA API** , **_@Author_: NASA** .
+  
+_!Note:_ Some changes were 
+  introduced in their project files to fit the needs of the Flight Simulator : 
+  - e.g.,  A shared interface `SimWindowCallbackListener.interface` and its related `SimWindowChangeModel.class` is used to
+track changes in the matrix of the world display _(any camera changes)_ and dynamically changing properties of 
+    Flight-simulator components (e.g., dynamic layer representation, button enabling/disabling);
+  -   Configuration (.properties) file changes. Other minor class changes.
+
+
+
 
 ## Introduction
 
 Our Aircraft Editor offers Cargo manipulation and Aircraft refuel features. 
-The blueprint graphical interface offers the ability to select compartments based on their location and track the position of the center of gravity.
+The blueprint graphical interface offers the ability to select compartments based on their location and track the
+position of the center of gravity.
 ![img_2.png](img_2.png)
 
 
