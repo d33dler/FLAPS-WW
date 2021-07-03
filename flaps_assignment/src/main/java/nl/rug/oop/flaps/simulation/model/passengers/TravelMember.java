@@ -5,6 +5,11 @@ import lombok.Setter;
 import nl.rug.oop.flaps.FlapsDatabases;
 import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.BlankField;
 
+/**
+ * Abstract class defining attributes of any Traveler object (e.g. Pilots, Load-masters, etc)
+ * All fields here contain annotation meta-data from BlankField, which defines the field's id (to id specific fields
+ * and install constraints for each of them)
+ */
 @Getter
 @Setter
 @FlapsDatabases

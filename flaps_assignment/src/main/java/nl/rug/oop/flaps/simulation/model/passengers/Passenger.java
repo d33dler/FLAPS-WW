@@ -17,6 +17,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Passenger class : defines Passenger specific member fields and extends from abstract class
+ * TravelMember. A Builder static class is used to produce different Passenger subtypes. Only the signature behaviour
+ * varies among different types - thus, we build the Passenger through a specific method which overrides the default
+ * signature behaviour.
+ */
 @Getter
 @Setter
 @FlapsDatabases
@@ -102,7 +108,7 @@ public class Passenger extends TravelMember {
                 @Override
                 protected void signatureAction() {
                     super.signatureAction();
-                    System.out.println("PG");
+                    System.out.println("PG");//anything goes
                 }
             };
         }
@@ -113,7 +119,7 @@ public class Passenger extends TravelMember {
                 @Override
                 protected void signatureAction() {
                     super.signatureAction();
-                    System.out.println("RB");
+                    System.out.println("RB"); //TODO define specific behaviour, output to PassengerMediator
                 }
             };
         }
@@ -124,11 +130,16 @@ public class Passenger extends TravelMember {
                 @Override
                 protected void signatureAction() {
                     super.signatureAction();
-                    System.out.println("TERROR");
+                    System.out.println("TERROR");//anything goes
                 }
             };
         }
 
+        /**
+         *
+         * @param id - of the Passenger type
+         *        Identifies the correct method for the passenger build
+         */
         @SneakyThrows
         private void idBehaviour(String id) {
             List<Method> methods = Arrays.asList(this.getClass().getDeclaredMethods());
