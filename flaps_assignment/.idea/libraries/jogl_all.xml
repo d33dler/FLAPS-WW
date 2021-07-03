@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="jogl-all">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/src/main/java/nl/rug/oop/worldwind/jogl-all.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/java/nl/rug/oop/worldwind/gluegen-rt.jar!/" />
+      <root url="jar://$PROJECT_DIR$/src/main/java/nl/rug/oop/worldwind/gdal.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
