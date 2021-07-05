@@ -6,7 +6,26 @@
 #Competition Notes:
 ####* Update 02.07. :
 
-**!** Load the project to IntelliJ from the "/flaps_assignment" path and run _nl.rug.oop.flaps.Main_ to run the program app.
+HOW TO SET UP:
+  - **!** Make sure you have the latest version from the development branch
+
+  - **!** Add the following commands  to the VM-Options
+ in the Edit Configuration setting :
+
+`--add-exports java.base/java.lang=ALL-UNNAMED`\
+`--add-exports java.desktop/sun.awt=ALL-UNNAMED`\
+`--add-exports java.desktop/sun.java2d=ALL-UNNAMED`
+
+- **!** Load the project to IntelliJ from the "/flaps_assignment" path 
+and run _nl.rug.oop.flaps.Main_ to run the program app.
+  - **!** _If the compiler shows that the jogamp library is missing_  - > you can find the jars in the worldwind directory, please
+    add : gluegen-rt, gdal, jogl-all, junit JAR files as libraries in the Project Structure and set the dependencies for all project modules
+    to the aforementioned jar libraries.
+  - **!** If you encounter any world rendering errors in the worldWind component -> update your graphics card 
+    drivers to the latest version.
+    - sometimes the WorldWind world layers don't render themselves and restarting the program fixes the issue
+
+
 Due to some dependency issues in the multi-module project, the project can't be loaded with 
 `mvn install compile mvn exec:java -Dexec(...)`.
 
