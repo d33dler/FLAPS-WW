@@ -17,10 +17,11 @@ public abstract class Compartment {
     protected String compartmentId;
     protected double x;
     protected double y;
-
+    protected double loadWeight = 0;
     public abstract float requestCapacity();
 
-    public abstract void getAreaLoad(AircraftDataTracker dataTracker);
+    public abstract void getUpdateAreaLoad(AircraftDataTracker dataTracker);
+
 
     public Point2D.Double getCoords() {
         return new Point2D.Double(x, y);

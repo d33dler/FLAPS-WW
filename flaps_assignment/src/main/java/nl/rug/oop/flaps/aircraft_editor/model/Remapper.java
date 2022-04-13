@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.aircraft_editor.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print.BlueprintDisplay;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
@@ -26,12 +27,15 @@ public class Remapper {
     private BlueprintSelectionModel bpSelectionModel;
     public static double AIRCRAFT_LEN, BP_WIDTH, BP_HEIGHT, BP_RATIO, Pixels_per_M;
     public final static Point2D.Double BP_POS = new Point2D.Double(0, 20);
-    public static final double BP_MARGIN = 30;
+    public static final double BP_MARGIN = 30, BP_OFF = 50;
     private static final double BP_DEF_H = 500;
     private static final double BP_DEF_W = 500;
+    protected HashMap<Integer, Point2D.Double>
+            localCoords = new HashMap<>(),
+            blueprintCoords = new HashMap<>();
 
-    protected HashMap<Integer, Point2D.Double> localCoords = new HashMap<>();
     private NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = new TreeMap<>();
+    private HashMap<Compartment, Point2D.Double> alternative = new HashMap<>();
 
     public Remapper(EditorCore editorCore, BlueprintSelectionModel bpSelectionModel) {
         this.editorCore = editorCore;
@@ -59,21 +63,30 @@ public class Remapper {
      * Updates XY coordinates for all cargoAreas and fuel tanks
      */
     public void updateCompartmentCoords() {
-        updateXY(this.aircraft.getType().getCargoAreas());
-        updateXY(this.aircraft.getType().getFuelTanks());
-        updateXY(this.aircraft.getType().getEngines());
+        updateXY(this.aircraft.getType().getCargoAreas(), null);
+        updateXY(this.aircraft.getType().getFuelTanks(), null);
+        updateXY(this.aircraft.getType().getEngines(), null);
+        updateXY(this.aircraft.getType().getCabin(), remapCabins());
     }
 
+    private HashMap<Compartment, Point2D.Double> remapCabins() {
+        this.aircraft.getType().getCabin().forEach(cabin -> alternative.put(cabin, new Point2D.Double(
+                Remapper.BP_WIDTH - Remapper.BP_OFF,
+                Remapper.BP_HEIGHT - Remapper.BP_OFF)));
+        return alternative;
+    }
 
-    private void updateXY(List<? extends Compartment> units) {
+    private void updateXY(List<? extends Compartment> units, HashMap<Compartment, Point2D.Double> alternative) {
         units.forEach(area -> {
             var p = remap(area.getCoords());
-            this.localCoords.put(area.hashCode(), p);
+            localCoords.put(area.hashCode(), p);
+            if (alternative != null) blueprintCoords.put(area.hashCode(), alternative.get(area));
+            else blueprintCoords.put(area.hashCode(), p);
         });
     }
 
+
     /**
-     *
      * @param source original coordinates of a specific compartment area
      * @return remapped coordinates based on aircraft length, indicator size, image display margins.
      */
@@ -86,14 +99,13 @@ public class Remapper {
     }
 
     /**
-     *
      * @param list of compartments;
      *             fills the areas map of coordinates with the XY coordinates and the compartment area;
      */
     public void listToCoordsMap(List<? extends Compartment> list) {
         NavigableMap<Double, NavigableMap<Double, Compartment>> areasMap = bpSelectionModel.getAreasMap();
         list.forEach(area -> {
-            Point2D.Double pos = this.localCoords.get(area.hashCode());
+            Point2D.Double pos = blueprintCoords.get(area.hashCode());
             if (areasMap.containsKey(pos.x)) {
                 areasMap.get(pos.x).put(pos.y, area);
             } else {
@@ -124,7 +136,7 @@ public class Remapper {
             navMap.put(0.0, null);
         }
         if (!navMap.containsKey(bound)) {
-            navMap.put(bound , null);
+            navMap.put(bound, null);
         }
     }
 }

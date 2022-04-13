@@ -76,7 +76,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
             @SneakyThrows
             @Override
             public void actionPerformed(ActionEvent e) {
-                editorCore.getConfigurator().updateFuelStatus(fuelTank, fuelSlider.getValue());
+                editorCore.getController().updateFuelStatus(fuelTank, fuelSlider.getValue());
             }
         });
         return confirm;
@@ -111,7 +111,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
      *           sets this panel as visible and hides the concurrent cargo panel;
      */
     @Override
-    public void compartmentSelected(Compartment fuelTank, AircraftDataTracker dataTracker) {
+    public void fireBpUpdate(Compartment fuelTank, AircraftDataTracker dataTracker) {
         this.fuelTank = (FuelTank) fuelTank;
         settingsPanel.setActivePanel(this);
         displaySlider();
@@ -119,7 +119,7 @@ public class FuelPanel extends JPanel implements BlueprintSelectionListener, Cha
 
 
     @Override
-    public void fireFuelSupplyUpdate(AircraftDataTracker dataTracker) {
+    public void fireFuelUpdate(AircraftDataTracker dataTracker) {
         if (this.isVisible()) {
             fuelSlider.setValue((int) editorCore.getAircraft().getFuelAmountForFuelTank(fuelTank));
         }

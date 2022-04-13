@@ -3,9 +3,9 @@ package nl.rug.oop.flaps.aircraft_editor.controller.actions;
 import lombok.SneakyThrows;
 import lombok.extern.java.Log;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.EditorFrame;
-import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.LogPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.Logger;
 import nl.rug.oop.flaps.simulation.model.aircraft.Aircraft;
 import nl.rug.oop.flaps.simulation.model.aircraft.AircraftType;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
@@ -47,17 +47,17 @@ public class DepartAction extends AbstractAction {
     public void actionPerformed(ActionEvent event) {
         var sm = this.selectionModel;
         var aircraft = sm.getSelectedAircraft();
-        LogPanel logPanel = editorFrame.getLogPanel();
+        Logger logger = editorFrame.getLogger();
         super.setEnabled(false);
         hideFrames();
-        logPanel.notifyDepart(Airport.changeLocation(sm, aircraft));
+        logger.notifyDepart(Airport.changeLocation(sm, aircraft));
         if (aircraft.getType().getTakeoffClipPath() != null) {
             this.playTakeoffClip(aircraft.getType());
         }
-        logPanel.notifyArrive(sm.getSelectedAirport());
+        logger.notifyArrive(sm.getSelectedAirport());
         showEditor();
-        initAircraftUpdate(aircraft, logPanel);
-        closeOperations(logPanel);
+        initAircraftUpdate(aircraft, logger);
+        closeOperations(logger);
 
     }
 
@@ -66,7 +66,7 @@ public class DepartAction extends AbstractAction {
      */
     private void hideFrames() {
         editorFrame.setVisible(false);
-        CargoTradeFrame tradeFrame = editorFrame.getSettingsPanel().getCargoTradeFrame();
+        CargoFrame tradeFrame = editorFrame.getSettingsPanel().getCargoFrame();
         if (tradeFrame != null) {
             tradeFrame.dispose();
         }
@@ -83,23 +83,23 @@ public class DepartAction extends AbstractAction {
     /**
      *
      * @param aircraft aircraft the cargo of which must be unloaded;
-     * @param logPanel used to relay information;
+     * @param logger used to relay information;
      */
-    private void initAircraftUpdate(Aircraft aircraft, LogPanel logPanel) {
-        aircraft.unLoadAircraft(aircraft, dataTracker, logPanel);
+    private void initAircraftUpdate(Aircraft aircraft, Logger logger) {
+        aircraft.unLoadAircraft(aircraft, dataTracker, logger);
         dataTracker.getEditorCore().getAircraftLoadingModel().fireAllUpdates();
     }
 
     /**
      *
-     * @param logPanel - contains the methods used to inform the user about the list of unloaded cargo
+     * @param logger - contains the methods used to inform the user about the list of unloaded cargo
      *                 etc;
      *                 Disposes of the editor frame upon conclusion;
      */
     @SneakyThrows
-    private void closeOperations(LogPanel logPanel) {
-        logPanel.notifyUnloadList();
-        logPanel.notifyArrivalUpdates(selectionModel.getSelectedAirport());
+    private void closeOperations(Logger logger) {
+        logger.notifyUnloadList();
+        logger.notifyArrivalUpdates(selectionModel.getSelectedAirport());
         editorFrame.dispose();
     }
 

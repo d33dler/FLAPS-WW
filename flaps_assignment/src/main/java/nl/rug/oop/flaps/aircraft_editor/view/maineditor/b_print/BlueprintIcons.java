@@ -1,28 +1,25 @@
 package nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print;
 
 import lombok.Getter;
-import lombok.SneakyThrows;
+import lombok.extern.java.Log;
+import nl.rug.oop.flaps.aircraft_editor.view.Icons;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
-import java.nio.file.Path;
 
 @Getter
-public class BlueprintIcons {
-    private Image engineIcon, fuelIcon, cargoIcon;
-    public static final int WIDTH = 25, HEIGHT = 25;
+@Log
+public class BlueprintIcons extends Icons {
 
-    public BlueprintIcons() {
-        init();
+    public static Image engineIcon, fuelIcon, cargoIcon, passengerIcon;
+
+    static {
+        WIDTH = 25;
+        HEIGHT = 25;
+        engineIcon = getImg("icons", "engine_icon.png", WIDTH, HEIGHT, scale_smooth);
+        fuelIcon = getImg("icons", "fuel_tank_icon.png", WIDTH, HEIGHT, scale_smooth);
+        cargoIcon = getImg("icons", "cargo_icon.png", WIDTH, HEIGHT, scale_smooth);
+        passengerIcon = getImg("icons", "passenger_icon.png", WIDTH, HEIGHT, scale_smooth);
     }
 
-    @SneakyThrows
-    private void init() {
-        this.engineIcon = ImageIO.read(Path.of("icons", ("engine_icon.png")).toFile()).
-                getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
-        this.fuelIcon = ImageIO.read(Path.of("icons", ("fuel_tank_icon.png")).toFile()).
-                getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
-        this.cargoIcon = ImageIO.read(Path.of("icons", ("cargo_icon.png")).toFile()).
-                getScaledInstance(WIDTH, HEIGHT, Image.SCALE_SMOOTH);
-    }
+
 }

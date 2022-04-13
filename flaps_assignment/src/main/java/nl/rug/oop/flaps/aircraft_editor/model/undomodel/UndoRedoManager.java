@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.model.undomodel;
 import lombok.Getter;
 import lombok.Setter;
 import nl.rug.oop.flaps.aircraft_editor.controller.execcomm.Command;
-import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Configurator;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 
 import javax.swing.undo.UndoManager;
@@ -19,7 +19,7 @@ import java.util.List;
 @Setter
 public class UndoRedoManager {
     private final EditorCore editorCore;
-    private Configurator configurator;
+    private Controller controller;
     private final UndoManager undoManager;
     private final UndoAdapter undoAdapter;
     protected UndoableEditSupport undoSupport;

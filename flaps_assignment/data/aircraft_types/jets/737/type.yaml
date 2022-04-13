@@ -46,6 +46,12 @@ cargoAreas:
     maxWeight: 80000
     x: 0
     y: 30
+cabin:
+  - name: Passenger Cabin Area
+    compartmentId: 300PASS_ml
+    seats: 162
+    x: 0
+    y: 19
 
 fuelTanks:
   - name: Left Wing Main Tank

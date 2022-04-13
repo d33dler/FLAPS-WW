@@ -3,7 +3,7 @@ package nl.rug.oop.flaps.aircraft_editor.view.maineditor.b_print;
 import lombok.Getter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.controller.actions.AreaSelectionAction;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
 import nl.rug.oop.flaps.aircraft_editor.model.Remapper;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.main_panels.SpecialComponent;

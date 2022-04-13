@@ -1,13 +1,95 @@
 # FLAPS Report
 
-**First author**:  Radu Rebeja (s4051297)
+**Author**:  Radu Rebeja (s4051297)
 
-**Second author**: Eugen Falca (s)
+
+#Competition Notes:
+####* Update 02.07. :
+
+HOW TO SET UP:
+  - **!** Make sure you have the latest version from the development branch
+
+  - **!** Add the following commands  to the VM-Options
+ in the Edit Configuration setting :
+
+`--add-exports java.base/java.lang=ALL-UNNAMED`\
+`--add-exports java.desktop/sun.awt=ALL-UNNAMED`\
+`--add-exports java.desktop/sun.java2d=ALL-UNNAMED`
+
+- **!** Load the project to IntelliJ from the "/flaps_assignment" path 
+and run _nl.rug.oop.flaps.Main_ to run the program app.
+  - **!** _If the compiler shows that the jogamp library is missing_  - > you can find the jars in the worldwind directory, please
+    add : gluegen-rt, gdal, jogl-all, junit JAR files as libraries in the Project Structure and set the dependencies for all project modules
+    to the aforementioned jar libraries.
+  - **!** If you encounter any world rendering errors in the worldWind component -> update your graphics card 
+    drivers to the latest version.
+    - sometimes the WorldWind world layers don't render themselves and restarting the program fixes the issue
+
+
+Due to some dependency issues in the multi-module project, the project can't be loaded with 
+`mvn install compile mvn exec:java -Dexec(...)`.
+
+The possible cause: the project depends on classes found in the worldwind module 
+(WorldWind JAVA by NASA) which is not automatically loaded as it resides in a separate module.
+
+Maven builder throws `ClassNotFoundException ` .
+
+Attempts were made to fix the dependency issues, but the problem persisted.
+
+####_ChangeLog:_
+**~~@~~** `aicraft_editor.package`
+- New pivotal classes added: `CargoMediator.class`, `PassengerMediator.class` : _(both are applying the Mediator pattern
+  and were created to unload the cargo & passenger Model/Controller classes by transferring the responsibility to their 
+  specific mediators)_
+- Passenger related commands classes `AddPassenger`, `RemovePassenger` _(...)_ and their command Relay classes.
+- `PassengerListener` interface added. 
+-  `ChangeListener` interface extends to all other interfaces contracting 
+Aircraft Editor related changes.
+
+**~~@~~** `simulation.package`
+
+- `Cabin.class` , `Engine.class` added as a new Compartment subclass.
+- `AircraftLoader.class` was updated to load multiple yaml files into objects.
+- `Passenger.class` , `PassengerType` , `TravelMember` classes and `PassengerFactory.@interface`, 
+  `PassengerSignature.@interface` annotations added _(nl/rug/oop/flaps/simulation/model/passengers.package)_ 
+- `FlapsDatabases.@interface`, `BlankField.@interface` added for the passenger registration process .
+
+**~~@~~** `flightsim.package` 
+
+-  **Controller** : `SimulationRenderer.class` - used to manipulate the aircraft's states (positions, etc). 
+- **Model** : `FlightSimApplication.class` - initializer for the WorldWind Java API's projects app. 
+  
+  `FlightSimCore.class` - central hub class initializing other classes.
+  `SimulationUtils.class` - utilities for the Flight Simulator and camera scripted movements
+- **View** :
+  `FlightSimFrame` - flight simulator's main frame window, 
+  
+  `MapViewControls` - layer tree mini-window constructor and initializer, 
+  
+  `QuickAccessPanel` - button control panel, 
+  
+  `SimLayersLoader` - loads all the necessary layers and activates hidden layers depending on the user's position,
+  
+  `SimulatorWindow` - initializes the world window;
+
+**~~#@#~~** `worldwind.module`
+- All packages & jars here are part of the **WorldWind JAVA API** , **_@Author_: NASA** .
+  
+_!Note:_ Some changes were 
+  introduced in their project files to fit the needs of the Flight Simulator : 
+  - e.g.,  A shared interface `SimWindowCallbackListener.interface` and its related `SimWindowChangeModel.class` is used to
+track changes in the matrix of the world display _(any camera changes)_ and dynamically changing properties of 
+    Flight-simulator components (e.g., dynamic layer representation, button enabling/disabling);
+  -   Configuration (.properties) file changes. Other minor class changes.
+
+
+
 
 ## Introduction
 
 Our Aircraft Editor offers Cargo manipulation and Aircraft refuel features. 
-The blueprint graphical interface offers the ability to select compartments based on their location and track the position of the center of gravity.
+The blueprint graphical interface offers the ability to select compartments based on their location and track the
+position of the center of gravity.
 ![img_2.png](img_2.png)
 
 

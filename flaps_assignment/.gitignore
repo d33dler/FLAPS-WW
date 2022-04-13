@@ -1,8 +1,5 @@
 # IntelliJ specific files
 out/
-.idea/
-.idea_modules/
-*.iml
 *.ipr
 *.iws
 
@@ -53,7 +50,6 @@ target
 .mtj.tmp/
 
 # Package Files #
-*.jar
 *.war
 *.nar
 *.ear

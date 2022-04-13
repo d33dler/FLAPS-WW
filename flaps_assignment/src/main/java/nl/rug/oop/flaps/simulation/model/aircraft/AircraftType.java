@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import nl.rug.oop.flaps.simulation.model.aircraft.areas.Cabin;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.CargoArea;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Engine;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.FuelTank;
@@ -109,6 +110,7 @@ public class AircraftType implements Comparable<AircraftType> {
      */
     private List<FuelTank> fuelTanks;
 
+    private List<Cabin> cabin;
     /**
      * The name of the type of fuel that this type of aircraft uses. It should
      * correspond to the name of a {@link FuelType} in {@link World#getFuelTypes()}.

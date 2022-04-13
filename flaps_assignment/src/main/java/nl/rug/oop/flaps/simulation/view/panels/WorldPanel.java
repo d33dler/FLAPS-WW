@@ -1,6 +1,7 @@
 package nl.rug.oop.flaps.simulation.view.panels;
 
 import lombok.extern.java.Log;
+import nl.rug.oop.flaps.aircraft_editor.view.Icons;
 import nl.rug.oop.flaps.simulation.controller.AirportSelectionController;
 import nl.rug.oop.flaps.simulation.model.airport.Airport;
 import nl.rug.oop.flaps.simulation.model.world.World;
@@ -26,17 +27,28 @@ import java.nio.file.Path;
  */
 @Log
 public class WorldPanel extends JPanel implements WorldSelectionModelListener {
-    public static final double INDICATOR_SIZE = 8;
+    public static final double INDICATOR_SIZE = 10;
 
     private final BufferedImage worldMapImage;
     private final World world;
-
     private Image cachedWorldMapImage;
+    private Image stopImg, planeIcon;
+
+    public static double t = 1.5;
+    /**
+     * Color palette
+     */
+    public static final Color
+            HL_AP = new Color(25, 255, 0, 213),
+            DEF_AP = new Color(255, 0, 0, 205),
+            SELECT_AP = new Color(0, 255, 235, 203);
 
     public WorldPanel(World world) {
         this.world = world;
         try {
             worldMapImage = ImageIO.read(Path.of("images", "map", "world_map_satellite.jpg").toFile());
+            stopImg = Icons.getImg("icons", "closed_airport.png", 100, 100, Icons.scale_smooth);
+            planeIcon = Icons.getImg("icons", "plane_mini_icon_bl.png", 100, 100, Icons.scale_smooth);
         } catch (IOException e) {
             log.severe("Could not load world map image.");
             throw new IllegalStateException(e);
@@ -49,20 +61,28 @@ public class WorldPanel extends JPanel implements WorldSelectionModelListener {
 
     private void drawAirportIndicator(Graphics2D g, Airport airport) {
         double s = INDICATOR_SIZE;
-        Color c = Color.RED;
+        Color c = DEF_AP;
         var sm = this.world.getSelectionModel();
         if (sm.getSelectedAirport() != null && sm.getSelectedAirport().equals(airport)) {
-            c = Color.CYAN;
+            c = SELECT_AP;
             s *= 2;
         } else if (sm.getSelectedDestinationAirport() != null && sm.getSelectedDestinationAirport().equals(airport)) {
-            c = Color.GREEN;
+            c = HL_AP;
             s *= 1.5;
         }
         var p = ProjectionMapping.mercatorToWorld(this.world.getDimensions())
                 .map(airport.getGeographicCoordinates()).asPoint();
         g.setColor(c);
-        Shape marker = new Ellipse2D.Double(p.x - s/2, p.y - s/2, s, s);
-        g.fill(marker);
+        if (!airport.canAcceptIncomingAircraft())
+            g.drawImage(stopImg, (int) (p.x - s), (int) (p.y - s), (int) (s * t), (int) (s * t), null);
+        else {
+            Shape marker = new Ellipse2D.Double(p.x - s / 2, p.y - s / 2, s, s);
+            g.fill(marker);
+        }
+        if (airport.isHasEditor()) {
+            g.drawImage(planeIcon, (int) (p.x - s/t), (int) (p.y - s/t), (int) (s * t), (int) (s * t), null);
+        }
+
     }
 
     private void drawTrajectory(Graphics2D g) {

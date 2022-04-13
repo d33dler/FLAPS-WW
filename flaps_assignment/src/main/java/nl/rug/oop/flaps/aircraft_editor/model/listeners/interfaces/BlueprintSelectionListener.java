@@ -7,8 +7,9 @@ import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
  * Used to avoid code duplication and store default update method routine in a single location;
  */
 
-public interface BlueprintSelectionListener {
-    default void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
+public interface BlueprintSelectionListener extends ChangeListener {
+
+    default void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
         dataTracker.getDisplay().repaint();
         dataTracker.refreshData(area);
     }

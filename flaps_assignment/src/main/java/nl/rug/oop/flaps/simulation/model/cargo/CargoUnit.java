@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.cargo;
 
 import lombok.Getter;
 import lombok.Setter;
+import nl.rug.oop.flaps.FlapsDatabases;
 
 /**
  * Represents a unit of cargo
@@ -9,6 +10,7 @@ import lombok.Setter;
  * @author T.O.W.E.R.
  */
 @Getter
+@FlapsDatabases
 public class CargoUnit {
     /**
      * The type that this cargo unit has

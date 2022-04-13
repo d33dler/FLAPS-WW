@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/flight_sim.flaps.iml" filepath="$PROJECT_DIR$/flight_sim.flaps.iml" />
+      <module fileurl="file://$PROJECT_DIR$/src/main/java/nl/rug/oop/worldwind/flight_sim.worldwind.iml" filepath="$PROJECT_DIR$/src/main/java/nl/rug/oop/worldwind/flight_sim.worldwind.iml" />
+    </modules>
+  </component>
+</project>

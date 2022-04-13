@@ -10,14 +10,14 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Engine extends Components {
-
     private String type, engineModel;
+    private static final double MAX_HEALTH = 100.0;
 
-    private int healthFan,
-            healthCompressor,
-            healthNozzle,
-            healthTurbines,
-            healthCombustor;
+    private double healthFan = MAX_HEALTH,
+            healthCompressor = MAX_HEALTH,
+            healthNozzle = MAX_HEALTH,
+            healthTurbines = MAX_HEALTH,
+            healthCombustor = MAX_HEALTH;
 
 
     @Override
@@ -26,17 +26,17 @@ public class Engine extends Components {
     }
 
     @Override
-    public void getAreaLoad(AircraftDataTracker dataTracker) {
+    public void getUpdateAreaLoad(AircraftDataTracker dataTracker) {
         this.requestCapacity();
     }
 
     @Override
     public float getTotalHealth() {
-        return (float)(healthCombustor+
-                healthFan+
-                healthNozzle+
-                healthTurbines+
-                healthCompressor)/5;
+        return (float) (healthCombustor +
+                healthFan +
+                healthNozzle +
+                healthTurbines +
+                healthCompressor) / 5;
     }
 
     @Override

@@ -44,7 +44,7 @@ public class CargoArea extends Compartment {
     }
 
     @Override
-    public void getAreaLoad(AircraftDataTracker dataTracker) {
+    public void getUpdateAreaLoad(AircraftDataTracker dataTracker) {
             dataTracker.updateCargoAreaMass();
     }
 

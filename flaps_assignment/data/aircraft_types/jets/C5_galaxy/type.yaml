@@ -40,6 +40,13 @@ engines:
     x: 19
     y: 29
 
+cabin:
+  - name: Upper Deck Aircraft Cabin
+    compartmentId: 300PASS_ml
+    seats: 80
+    x: 0
+    y: 28
+
 cargoAreas:
   - name: Front Cargo Area
     compartmentId: 100CARGO_ml

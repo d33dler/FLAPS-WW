@@ -33,7 +33,7 @@ public class EnginePanel extends JPanel implements BlueprintSelectionListener {
     }
 
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
+    public void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
        settingsPanel.setActivePanel(this);
     }
 }

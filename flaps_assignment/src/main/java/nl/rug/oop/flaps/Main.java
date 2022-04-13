@@ -20,6 +20,7 @@ public class Main {
     public static void main(String[] args) {
         FlatDarculaLaf.install();
         System.setProperty("sun.java2d.opengl", "true");
+
         try {
             World world = new WorldInitializer().initializeWorld();
             SwingUtilities.invokeLater(() -> world.setFlapsFrame(new FlapsFrame(world)));

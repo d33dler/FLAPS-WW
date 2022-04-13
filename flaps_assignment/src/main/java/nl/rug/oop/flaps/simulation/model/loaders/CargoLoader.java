@@ -2,6 +2,7 @@ package nl.rug.oop.flaps.simulation.model.loaders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.rug.oop.flaps.simulation.model.cargo.CargoType;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;

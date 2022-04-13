@@ -31,7 +31,7 @@ public class MessagesDb {//TODO transfer to yaml
     public static final String UNDO_REMALL_C = UNDO + ALLR_REV;
     public static final String UNDO_FUEL = UNDO + REF_REV;
     public static final String REDO_FUEL = REDO + REF_REV;
-    public static final String DEPART_1 = "Your plane is preparing for departure from ";
+    public static final String DEPART_1 = "Your plane has departed from ";
     public static final String ARRIVE_1 = "Your plane has arrived at ";
     public static final String DEPART_TIP_0 = "Departure is not possible due to unfulfilled requirements.";
     public static final String DEPART_TIP_1 = "Click to depart from the current airport";
@@ -40,5 +40,20 @@ public class MessagesDb {//TODO transfer to yaml
     public static final String END_MSG = "The weather is quite nice here!";
     public static final String TY_MSG = "Thank you for choosing F.L.A.P.S.© ";
     public static final String UNLOAD_TITLE = "The following cargo freights were unloaded at the destination airport: ";
+    public static final String ADD_CARGO_ERR = "No warehouse cargo selected";
+    public static final String REM_CARGO_ERR = "No aircraft cargo selected";
+    public static final String ADD_PASS_ERR = "Error while process the passenger registration. Invalid blank statements were detected.";
+    public static final String ADD_PASS_POS = "New passenger was successfully added to the boarding list";
+    public static final String ADD_PASS_NEG = "New passenger could not be added to the boarding list";
+    public static final String REM_PASS_ERR = "No passenger was selected!";
+    public static final String REM_PASS_POS = "Passenger was successfully removed from the boarding list ";
+    public static final String REM_PASS_NEG = "Passenger could not be removed to the boarding list";
+    public static final String REMALL_PASS_POS = "All passengers were deleted from the boarding list";
+    public static final String REMALL_PASS_UNDO = UNDO + "All passengers were added back to the boarding list";
+    public static final String REMALL_PASS_REDO = REDO + REMALL_PASS_POS;
+    public static final String REM_PASS_UNDO = UNDO + ADD_PASS_POS;
+    public static final String REM_PASS_REDO = REDO + REM_PASS_POS;
+    public static final String ADD_PASS_UNDO = UNDO + REM_PASS_POS;
+    public static final String ADD_PASS_REDO = REDO + ADD_PASS_POS;
     public static final String OTHER_CONFIRM = "others";
 }

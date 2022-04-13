@@ -4,15 +4,19 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.SneakyThrows;
 import nl.rug.oop.flaps.aircraft_editor.controller.AircraftDataTracker;
-import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
-import nl.rug.oop.flaps.aircraft_editor.model.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.controller.configcore.Controller;
 import nl.rug.oop.flaps.aircraft_editor.model.EditorCore;
-import nl.rug.oop.flaps.aircraft_editor.view.cargoeditor.CargoTradeFrame;
+import nl.rug.oop.flaps.aircraft_editor.model.listener_models.BlueprintSelectionModel;
+import nl.rug.oop.flaps.aircraft_editor.model.listeners.interfaces.BlueprintSelectionListener;
+import nl.rug.oop.flaps.aircraft_editor.view.cargo_editor.CargoFrame;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.CargoPanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.EnginePanel;
 import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.FuelPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.maineditor.area_panels.PassengerPanel;
+import nl.rug.oop.flaps.aircraft_editor.view.pass_editor.PassengersFrame;
 import nl.rug.oop.flaps.simulation.model.aircraft.areas.Compartment;
-import nl.rug.oop.flaps.simulation.model.loaders.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.FileUtils;
+import nl.rug.oop.flaps.simulation.model.loaders.utils.ViewUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -24,20 +28,24 @@ import java.awt.*;
 
 @Getter
 public class SettingsPanel extends JPanel implements BlueprintSelectionListener {
-    private EditorCore editorCore;
+    private final EditorCore editorCore;
     private BlueprintSelectionModel selectionModel;
     private JTextArea areaData;
     private Compartment compartmentArea;
     private static final String listener_Id = EditorCore.generalListenerID;
     @Setter
-    private CargoTradeFrame cargoTradeFrame;
-    @Getter
+    private CargoFrame cargoFrame;
+    @Setter
+    private PassengersFrame passengersFrame;
     private JPanel activePanel;
+
+    private final Controller controller;
 
     public SettingsPanel(EditorCore editorCore) {
         this.editorCore = editorCore;
         this.selectionModel = editorCore.getBpSelectionModel();
         this.selectionModel.addListener(listener_Id, this);
+        this.controller = editorCore.getController();
         init();
     }
 
@@ -72,7 +80,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
         add(new FuelPanel(editorCore, this));
         add(new CargoPanel(editorCore, this));
         add(new EnginePanel(editorCore, this));
-        //activePanel = (JPanel) this.getComponent(4);
+        add(new PassengerPanel(editorCore,this));
     }
 
     /**
@@ -82,7 +90,7 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
      */
 
     @Override
-    public void compartmentSelected(Compartment area, AircraftDataTracker dataTracker) {
+    public void fireBpUpdate(Compartment area, AircraftDataTracker dataTracker) {
         this.compartmentArea = area;
         displayPrimaryData(area);
     }
@@ -94,10 +102,9 @@ public class SettingsPanel extends JPanel implements BlueprintSelectionListener 
     @SneakyThrows
     private void displayPrimaryData(Compartment area) {
         this.areaData.setText("Selected compartment:\n");
-        FileUtils.getAllFields(area.getClass()).forEach(field -> System.out.println(field.getName()));
         for (var field : FileUtils.getAllFields(area.getClass())) {
             field.setAccessible(true);
-            this.areaData.append(FileUtils.toNiceCase(field.getName()) + ": " + field.get(area).toString() + "\n");
+            this.areaData.append(ViewUtils.toNiceCase(field.getName()) + ": " + field.get(area).toString() + "\n");
         }
     }
 

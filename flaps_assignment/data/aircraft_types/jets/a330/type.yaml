@@ -27,6 +27,13 @@ engines:
     x: 9
     y: 22
 
+cabin:
+  - name: Aircraft Passenger Cabin
+    compartmentId: 300PASS_ml
+    seats: 332
+    x: 0
+    y: 29
+
 cargoAreas:
   - name: Front Lower-Deck Compartment
     compartmentId: 100CARGO_ml
